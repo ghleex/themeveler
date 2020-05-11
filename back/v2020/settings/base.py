@@ -111,3 +111,4 @@ SITE_ID = 1
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
 MEDIA_URL = '/uploads/'
+AUTH_USER_MODEL = 'accounts.User'
