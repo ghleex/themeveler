@@ -1,17 +1,20 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="container-fluid p-0">
+    <nav-bar bgcolor="#FFD6AA" />
+    <div id="app">
+      <img alt="image01" width="70%" src="./assets/image/image01.jpg">
+      <h3>점검 중입니다..</h3>
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import axios from 'axios'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+
   }
 }
 </script>
