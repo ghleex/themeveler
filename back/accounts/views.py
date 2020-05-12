@@ -97,6 +97,7 @@ class Nickname(APIView):
         if serializer.is_valid(raise_exception=True):
             return Response({'message' : ['사용하실수 있는 닉네임입니다.']})
         return Response({'message' : ['닉네임 중복체크를 실패하였습니다.']}, serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class Username(APIView):
     @permission_classes((AllowAny, ))
     def get(self, request, format=None):
@@ -109,7 +110,7 @@ class UserMgmt(APIView):
     @permission_classes((AllowAny, ))
     def post(self, request, format=None):
         username = request.data.get('username')
-        waiting_user = Waiting.objects.filter(username=username)[0]
+        waiting_user = Waiting.objects.filter(username=username).first()
         if waiting_user and waiting_user.username == username and waiting_user.is_confirm:
             serializer = UserCreationSerializer(data=request.data)
             if serializer.is_valid(raise_exception=True):
