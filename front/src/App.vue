@@ -1,23 +1,25 @@
 <template>   
-  <div class="container-fluid p-0">
+  <div id="app">
     <Navbar />
-    <div id="app">
-      <Home />
-    </div>
+    <Home />
+    <!-- <router-view></router-view> -->
+    <!-- <router-view :key="$route.fullPath" /> -->
+    <Footer />
   </div>
 </template>
 
 <script>
-/// mport axios from 'axios'
+// import axios from 'axios'
 import Navbar from './components/Navbar.vue'
-import Home from './views/Home'
+import Home from './views/Home.vue'
+import Footer from './components/Footer.vue'
 
 export default {
   name: 'App',
-
   components: {
     Navbar, 
     Home,
+    Footer
   }
 }
 </script>
