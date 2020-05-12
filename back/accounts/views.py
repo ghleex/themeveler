@@ -61,7 +61,6 @@ class Mail(APIView):
                 'confirm_code': confirm_code
             }
             waiting_user = Waiting.objects.filter(username=username).first()
-            print(data)
             if waiting_user and waiting_user.username == username:
                 data['is_confirm'] = False
                 serializer = WaitingSerializer(waiting_user, data=data)
