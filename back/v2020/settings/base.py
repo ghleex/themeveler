@@ -23,8 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 # Application definition
 
 INSTALLED_APPS = [
-    'accounts.apps.AccountsConfig',
     'travels.apps.TravelsConfig',
+    'articles.apps.ArticlesConfig',
+    'accounts.apps.AccountsConfig',
     'rest_framework',
     'drf_yasg',
     'django.contrib.admin',
@@ -111,3 +112,4 @@ SITE_ID = 1
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
 MEDIA_URL = '/uploads/'
+AUTH_USER_MODEL = 'accounts.User'

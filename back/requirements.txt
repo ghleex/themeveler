@@ -13,6 +13,7 @@ Jinja2==2.11.2
 MarkupSafe==1.1.1
 mysqlclient==1.4.6
 packaging==20.3
+Pillow==7.1.2
 pyparsing==2.4.7
 python-decouple==3.3
 pytz==2020.1
