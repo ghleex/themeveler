@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 # Create your models here.
 class Theme(models.Model):
@@ -8,6 +9,8 @@ class Theme(models.Model):
     image = models.ImageField()
     created_at = models.DateTimeField(auto_now_add=True) # date is updated just created
     updated_at = models.DateTimeField(auto_now=True) # date is updated when created and updated
+    visitors = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='visited_theme') # User.visited_theme.all()
+    like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='liked_theme')
     
 
 class Destination(models.Model):
@@ -17,4 +20,4 @@ class Destination(models.Model):
     image = models.ImageField()
     created_at = models.DateTimeField(auto_now_add=True) # date is updated just created
     updated_at = models.DateTimeField(auto_now=True) # date is updated when created and updated
-    
+    visitors = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='dests') # User.dests.all()
