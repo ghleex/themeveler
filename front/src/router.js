@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from './views/Home.vue'
+import Account from './views/Account.vue'
 import SearchResult from './views/SearchResult.vue'
 
 Vue.use(VueRouter)
@@ -14,7 +15,7 @@ const routes = [
   {
     path: '/login',
     name: 'login',
-    component: { template: '<div>Login</div>' }
+    component: Account,
   },
   // {
   //   path: '/logout',
@@ -26,11 +27,11 @@ const routes = [
     name: 'search-result',
     component: SearchResult
   },
-  {
-    path: '*',
-    name: 'e404',
-    component: { template: '<div>404 not found</div>' }
-  },
+  // {
+  //   path: '*',
+  //   name: 'e404',
+  //   component: { template: '<div>404 not found</div>' }
+  // },
 ]
 
 const router = new VueRouter({

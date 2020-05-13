@@ -2,7 +2,6 @@
   <div id="app">
     <Navbar />
     <router-view></router-view>
-    <!-- <router-view :key="$route.fullPath" /> -->
     <Footer />
   </div>
 </template>
@@ -11,6 +10,7 @@
 // import axios from 'axios'
 import Navbar from './components/Navbar.vue'
 import Footer from './components/Footer.vue'
+
 
 export default {
   name: 'App',
