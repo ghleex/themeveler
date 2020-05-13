@@ -5,7 +5,7 @@
 
         <div class="container" id="container">
           <div class="form-container sign-up-container">
-            <form action="#">
+            <form name="signup" action="" method="post" @submit.prevent="regiCheck()">
               <h1>Create Account</h1>
               <!-- <div class="social-container">
                 <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
@@ -13,22 +13,24 @@
                 <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
               </div> -->
               <span>or use your email for registration</span>
-              <input type="text" placeholder="Name" />
-              <input type="email" placeholder="Email" />
-              <input type="password" placeholder="Password" />
+
+              <input type="text" placeholder="Name" v-model="credentials.username" />
+              <input type="email" placeholder="Email" v-model="credentials.email" />
+              <input type="password" name="pw" placeholder="Password" v-model="credentials.pw" />
+              <input type="password" name="rpw" placeholder="Confirm Password" v-model="credentials.rpw" />
               <button>Sign Up</button>
             </form>
           </div>
           <div class="form-container sign-in-container">
-            <form action="#">
+            <form name="signin" action="" method="post" @submit.prevent="signinCheck()">
               <h1>Sign in</h1>
               <div class="social-container">
                 <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
                 <a href="#" class="social"><i class="fab fa-kaggle"></i></a>
               </div>
               <span>or use your account</span>
-              <input type="email" placeholder="Email" />
-              <input type="password" placeholder="Password" />
+              <input type="email" placeholder="Email" v-model="credentials.email" />
+              <input type="password" placeholder="Password"  v-model="credentials.pw" />
               <a href="#">Forgot your password?</a>
               <button>Sign In</button>
             </form>
@@ -55,17 +57,90 @@
 </template>
 
 <script>
+  import Swal from 'sweetalert2'
+
   export default {
     name: 'Account',
     data() {
-
+      return {
+        credentials: {
+          username: '',
+          email: '',
+          pw: '',
+          rpw: '',
+        },
+        csrf: '',
+      }
     },
     methods: {
+      // 로그인 폼 체크
+      signinCheck() {
+        if (!this.credentials.email) {
+          Swal.fire({
+            title: "Check Email",
+            text: "이메일을 입력하세요.",
+            type: "warning",
+            timer: 3000
+          })
+        } else if (!this.credentials.pw) {
+          Swal.fire({
+            title: "Check Password",
+            text: "비밀번호를 입력하세요.",
+            type: "warning",
+            timer: 3000
+          })
+        }
+        // else {} // 검수 후 로그인
+      },
+
+      // 회원가입 폼 체크
+      regiCheck() {
+        // 검증 form
+        // 입력하지 않는 경우 (비어있는 경우)
+        if (this.credentials.username == "") {
+          Swal.fire({
+            title: "Check Name",
+            text: "이름을 입력하세요.",
+            type: "warning",
+            timer: 3000
+          })
+        } else if (!this.credentials.email) {
+          Swal.fire({
+            title: "Check Email",
+            text: "이메일을 입력하세요.",
+            type: "warning",
+            timer: 3000
+          })
+        }
+        // 길이가 너무 짧은 경우 (8자 이하)
+        else if (this.credentials.pw.length < 8) {
+          Swal.fire({
+            title: "Check Password",
+            text: "비밀번호는 8자 이상 입력해주세요.",
+            type: "warning",
+            timer: 3000
+          })
+        }
+        // 비밀번호 확인이 맞는지 확인
+        else if (this.credentials.pw !== this.credentials.rpw) {
+          Swal.fire({
+            title: "Repeat Password",
+            text: "비밀번호가 일치하지 않습니다.",
+            type: "warning",
+            timer: 3000
+          })
+        }
+        // else {} // 검수를 다 거치고 난 후 회원가입
+      },
       a() {
         document.querySelector('#footer').style.display = 'none'
       }
     },
     mounted() {
+      // footer none
+      this.a()
+
+      // signin&up js
       const signUpButton = document.getElementById('signUp');
       const signInButton = document.getElementById('signIn');
       const container = document.getElementById('container');
@@ -77,20 +152,23 @@
       signInButton.addEventListener('click', () => {
         container.classList.remove("right-panel-active");
       });
-      this.a()
+
+      // csrf // :value="scrf"
+      // this.$scrfToken;
+      // this.csrf = this.$csrf.get();
     }
   }
 </script>
 
 <style lang="scss" scoped>
-.account-box {
-  // margin-top: 64px;
-  width: 100vw;
-  height: 100vh;
-  background-image: url('../assets/image/bg-2.jpg');
-  background-repeat: no-repeat;
-  background-size: cover;
-}
+  .account-box {
+    // margin-top: 64px;
+    width: 100vw;
+    height: 100vh;
+    background-image: url('../assets/image/bg-2.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
 
   .bg-darker {
     background-color: rgba(0, 0, 0, 0.8);
@@ -114,7 +192,7 @@
     flex-direction: column;
     font-family: 'Montserrat', sans-serif;
     height: 100vh;
-    margin: 0px 0 50px;
+    // margin: 0px 0 50px;
   }
 
   .account-div h1 {
@@ -140,10 +218,12 @@
     text-decoration: none;
     margin: 15px 0;
   }
-  .account-div .social-container > a:hover {
+
+  .account-div .social-container>a:hover {
     background-color: rgb(224, 224, 224);
   }
-  .account-div .social-container > a:active {
+
+  .account-div .social-container>a:active {
     background-color: rgb(126, 126, 126);
     color: white;
   }
@@ -164,9 +244,11 @@
   .account-div button:active {
     transform: scale(0.95);
   }
+
   .account-div button:focus {
     outline: none;
   }
+
   .account-div button:hover {
     background-color: rgb(255, 111, 86);
   }
@@ -338,4 +420,3 @@
     width: 40px;
   }
 </style>
-
