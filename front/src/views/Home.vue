@@ -23,15 +23,19 @@
 <style scoped>
   .banner {
     position: relative;
+    overflow: hidden;
+    height: 500px;
   }
 
   .banner>img {
     width: 100%;
+    /* max-height: initial; */
+    margin-top: -15%;
   }
 
   .home-search-bar {
     position: absolute;
-    top: 30%;
+    top: 20vw;
     left: 50%;
     transform: translate(-50%, -50%);
   }
