@@ -1,21 +1,21 @@
 <template>   
-  <v-app>
+  <div id="app">
     <Navbar />
     <router-view></router-view>
     <Footer />
-  </v-app>
+  </div>
 </template>
 
 <script>
 // import axios from 'axios'
 import Navbar from './components/Navbar.vue'
-// import Home from './views/Home.vue'
 import Footer from './components/Footer.vue'
+
 
 export default {
   name: 'App',
   components: {
-    Navbar, 
+    Navbar,
     Footer
   }
 }

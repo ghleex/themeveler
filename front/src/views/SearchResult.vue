@@ -2,18 +2,18 @@
   <div id="search-result">
     <div class="container">
       <div class="sresultheader">
-        <h3>"{{ $route.query.q }}" 에 대해 검색하여</h3>
-        <h4>{{ cafeData.length }} 개의 결과를 찾았습니다</h4>
+        <h3>"{{ $route.query.q }}" 에 대한 검색결과</h3>
+        <h4>{{ spotData.length }} 개를 찾았습니다</h4>
         <SearchBar class="mx-auto my-3 pb-4" />
       </div>
     </div>
     <div class="container border">
       <div class="spot-container">
-        <review-list spotData="spotData" />
+        <spot-list spotData="spotData" />
       </div>
 
       <div class="theme-container">
-        <cafe-list :themeData="themeData" />
+        <theme-list :themeData="themeData" />
       </div>
     </div>
   </div>
@@ -67,7 +67,7 @@ export default {
 
 <style>
 .sresultheader {
-  background: #89B0AE;
+  background: #11A0DC;
   border-radius: 10px 10px 0 0;
   border: 1px solid lightgray;  
 }
