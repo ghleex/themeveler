@@ -1,14 +1,15 @@
 <template>
   <div id="footer" class="container-fluid">
-    <a href="#" target="_blank">
+    <!-- <a href="#" target="_blank">
       <i
         @mouseover="githover(1)"
         @mouseleave="githover(0)"
-        class="m-4 gitlink fab fa-github"
+        class="m-4 gitlink fab fa-gitlab"
         size="3x"
         style="color: lightgray"
       ></i>
-    </a>
+    </a> -->
+    <a href="#" class="m-4"></a>
     <div class="row m-0 mx-auto text-white-50 justify-content-around align-items-center" style="max-width: 550px;">
 			<p style="color:lightgray;">|</p>
       <p>이길현</p>
@@ -36,7 +37,7 @@
         <div class="row justify-content-around">
           <router-link to="#" class="footer-right">이용 약관</router-link>
           <router-link to="#" class="footer-right">개인 정보 취급 방침</router-link>
-          <router-link to="#" class="footer-right">GitLab</router-link>
+          <router-link to="#" class="footer-right"><i class="fab fa-gitlab" /> GitLab</router-link>
         </div>
       </div>
     </div>
