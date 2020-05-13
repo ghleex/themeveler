@@ -15,7 +15,7 @@
       flat
       hide-no-data
       hide-details
-      label="What state are you from?"
+      label="Where do you want to go?"
       solo-inverted
     ></v-autocomplete>
     <v-btn icon>

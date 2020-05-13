@@ -6,8 +6,11 @@ import SearchResult from '../views/SearchResult.vue'
 
 Vue.use(VueRouter)
 
-const routes = [
-  { path: '/', name: 'home', component: Home },
+const routes = [{
+    path: '/',
+    name: 'home',
+    component: Home,
+  },
   {
     path: '/login',
     name: 'login',
@@ -15,7 +18,11 @@ const routes = [
   },
   // { path: '/login', name: 'login', component: { template: '<div>Login</div>' }},
   // { path: '/logout', name: 'logout', component: { template: '<div>Logout</div>' }},
-  { path: '/searchresult', name: 'search-result', component: SearchResult },
+  {
+    path: '/searchresult',
+    name: 'search-result',
+    component: SearchResult
+  },
   // { path: '*', name: 'e404', component: { template: '<div>404 not found</div>' }},
 ]
 
