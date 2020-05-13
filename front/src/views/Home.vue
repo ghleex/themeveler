@@ -26,14 +26,14 @@
     <div class="container">
       <div class="main-section">
         <h2 class="article-header my-5">
-          <fa icon="pen-nib" /> 인기 테마</h2>
+          <i class="fas fa-pen-nib" /> 인기 테마</h2>
         <!-- <revi-list limits="4" :themeData="themeData" /> -->
         <br>
       </div>
 
       <div class="main-section">
         <h2 class="article-header my-5">
-          <fa icon="pen-nib" /> 인기 여행지</h2>
+          <i class="fas fa-pen-nib" /> 인기 여행지</h2>
         <!-- <revi-list limits="4" :spotData="spotData" /> -->
         <div class="hspot d-inline width:80% col-md-6 col-12">
           <div>
@@ -57,9 +57,9 @@
   import SearchBar from '../components/SearchBar.vue'
 
   export default {
+    name: 'Home',
     components: {
       SearchBar,
-
     },
     data() {
       return {
