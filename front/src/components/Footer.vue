@@ -25,7 +25,7 @@
     </div>
 
     <div class="row m-0 text-white-50 justify-content-center align-items-center">
-      <p> © 2020 Copyright <fa icon="copyright" />All rights reserved.</p>
+      <p> © 2020 Copyright. <fa icon="copyright" />All rights reserved.</p>
     </div>
 
     <div class="row align-items-center m-0">
