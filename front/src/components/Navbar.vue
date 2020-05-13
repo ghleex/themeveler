@@ -123,7 +123,7 @@
   .navbar_box>img {
     width: 100%;
   }
-
+  
   .dropdown-content {
     display: none;
     position: absolute;
@@ -150,3 +150,4 @@
 
 
 </style>
+

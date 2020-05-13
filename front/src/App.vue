@@ -1,22 +1,22 @@
 <template>   
-  <div class="container-fluid p-0">
+  <v-app>
     <Navbar />
-    <div id="app">
-      <Home />
-    </div>
-  </div>
+    <router-view></router-view>
+    <Footer />
+  </v-app>
 </template>
 
 <script>
-/// mport axios from 'axios'
+// import axios from 'axios'
 import Navbar from './components/Navbar.vue'
-import Home from './views/Home'
+// import Home from './views/Home.vue'
+import Footer from './components/Footer.vue'
 
 export default {
   name: 'App',
   components: {
     Navbar, 
-    Home,
+    Footer
   }
 }
 </script>
