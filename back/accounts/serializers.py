@@ -25,6 +25,15 @@ class UsernameSerializer(serializers.ModelSerializer):
         model = User
         fields = ('username', )
 
+class UserPasswordSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('password', )
+
+    def validate_password(self, value):
+        validate_password(value)
+        return value
+
 
 class WaitingSerializer(serializers.ModelSerializer):
     class Meta:
@@ -35,3 +44,4 @@ class ConfirmCodeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Waiting
         fields = ('username', 'confirm_code')
+
