@@ -9,25 +9,10 @@
 
     <!-- Carousels -->
     <div class="carousel">
-      <v-carousel
-        cycle
-        height="500"
-        hide-delimiter-background
-        show-arrows-on-hover
-      >
-        <v-carousel-item
-          v-for="(slide, i) in slides"
-          :key="i"
-          :src="slide"
-        >
-          <v-sheet
-            width="100%"
-          >
-            <v-row
-              class="fill-height"
-              align="center"
-              justify="center"
-            >
+      <v-carousel cycle height="500" hide-delimiter-background show-arrows-on-hover>
+        <v-carousel-item v-for="(slide, i) in slides" :key="i" :src="slide">
+          <v-sheet width="100%" >
+            <v-row class="fill-height" align="center" justify="center">
               <div></div>
               <!-- <div class="display-3">{{ slide }} Slide</div> -->
             </v-row>
@@ -40,13 +25,13 @@
 
     <div class="container">
       <div class="main-section">
-        <h2 class="article-header my-5"><fa icon="pen-nib"/> 인기 테마</h2>
+        <h2 class="article-header my-5"><fa icon="pen-nib"/>인기 테마</h2>
         <!-- <revi-list limits="4" :themeData="themeData" /> -->
         <br>
       </div>
 
       <div class="main-section">
-        <h2 class="article-header my-5"><fa icon="pen-nib"/> 인기 여행지</h2>
+        <h2 class="article-header my-5"><fa icon="pen-nib"/>인기 여행지</h2>
         <!-- <revi-list limits="4" :spotData="spotData" /> -->
         <div class="hspot d-inline width:80% col-md-6 col-12">
           <div>
@@ -93,25 +78,33 @@ export default {
         require('../assets/image/image01.jpg')
       ]
     }
-  }
+  },
+  // methods: {
+  //   a() {
+  //     document.querySelector('#footer').style.display = 'flex'
+  //   }
+  // },
+  // mounted() {
+  //   this.a()
+  // }
 }
 </script>
 
 <style scoped>
-  .banner {
-    position: relative;
-    overflow: hidden;
-    height: 500px;
-  }
-  .banner>img {
-    width: 100%;
-    /* max-height: initial; */
-    margin-top: -15%;
-  }
-  .home-search-bar {
-    position: absolute;
-    top: 20vw;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
+.banner {
+  position: relative;
+  overflow: hidden;
+  height: 500px;
+}
+.banner>img {
+  width: 100%;
+  /* max-height: initial; */
+  margin-top: -15%;
+}
+.home-search-bar {
+  position: absolute;
+  top: 20vw;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 </style>
