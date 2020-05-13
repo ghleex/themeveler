@@ -1,14 +1,13 @@
 <template>
   <div id="footer" class="container-fluid">
     <a href="#" target="_blank">
-      <fa
+      <i
         @mouseover="githover(1)"
         @mouseleave="githover(0)"
-        class="m-4 gitlink"
-        :icon="github"
+        class="m-4 gitlink fab fa-github"
         size="3x"
         style="color: lightgray"
-      />
+      ></i>
     </a>
     <div class="row m-0 mx-auto text-white-50 justify-content-around align-items-center" style="max-width: 550px;">
 			<p style="color:lightgray;">|</p>
@@ -25,7 +24,7 @@
     </div>
 
     <div class="row m-0 text-white-50 justify-content-center align-items-center">
-      <p> © 2020 Copyright. All rights reserved.</p>
+      <p> © 2020 Copyright. <i icon="copyright" class="far fa-copyright mr-1" />All rights reserved.</p>
     </div>
 
     <div class="row align-items-center m-0">
@@ -48,11 +47,9 @@
 export default {
   data() {
     return {
-      github: ["fab", "github"]
     };
   },
   methods: {
-
   }
 };
 </script>

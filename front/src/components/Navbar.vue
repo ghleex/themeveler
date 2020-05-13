@@ -83,7 +83,7 @@
           },
           {
             title: 'Travel',
-            icon: ' mdi-image-album'
+            icon: 'mdi-image-album'
           },
           {
             title: 'Contact',

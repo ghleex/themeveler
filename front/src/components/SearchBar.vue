@@ -1,4 +1,5 @@
 <template>
+<!-- https://codepen.io/pen/?&editable=true&editors=101=https%3A%2F%2Fvuetifyjs.com%2Fen%2Fcomponents%2Fautocompletes%2F -->
   <v-toolbar
     color="rgba(255, 255, 255, 0.85)"
     class="search-box"
@@ -15,7 +16,7 @@
       flat
       hide-no-data
       hide-details
-      label="What state are you from?"
+      label="Where do you want to go?"
       solo-inverted
     ></v-autocomplete>
     <v-btn icon>
