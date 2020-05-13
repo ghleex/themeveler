@@ -7,4 +7,5 @@ urlpatterns = [
     path('nickname/', views.Nickname.as_view()),
     path('username/', views.Username.as_view()),
     path('mail/', views.Mail.as_view()),
+    path('travel/<int:pk>/', views.TravelMgmt.as_view()),
 ]
