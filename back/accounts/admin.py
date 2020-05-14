@@ -12,4 +12,8 @@ admin.site.register(User, CustomUserAdmin)
 class WaitingAdmin(admin.ModelAdmin):
     list_display = ('id', 'username', 'is_confirm', 'confirm_code', 'updated_at',)
 
+<<<<<<< HEAD
 admin.site.register(Waiting, WaitingAdmin)
+=======
+admin.site.register(Waiting, WaitingAdmin)
+>>>>>>> b548bc0df81668e4db542243c0f1e90b97bc68a0
