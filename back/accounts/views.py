@@ -169,3 +169,29 @@ class Password(APIView):
                 return Response({'message' : ['회원정보가 정상적으로 변경되었습니다.']})
             return Response({'message' : ['비밀번호가 올바르지않습니다.']}, status=status.HTTP_400_BAD_REQUEST)
         return Response({'message' : ['비밀번호 변경이 실패하였습니다.']}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class TravelMgmt(APIView):
+    def get_person(self, pk, format=None):
+        if User.objects.filter(pk=pk).exists():
+            return User.objects.get(pk=pk)
+        else:
+            return None
+    
+    def get(self, request, pk, format=None):
+        # try:
+            user = self.get_person(pk)
+            print(user)
+            themes = user.favorite_themes
+            dests = user.favorite_destinations
+            data = {
+                'message': 'ok',
+                'favourite_themes': themes,
+                'favourite_dests': dests,
+            }
+            return Response(data, status=status.HTTP_200_OK)
+        # except:
+        #     data = {
+        #         'message': 'Error has occurred'
+        #     }
+        #     return Response(data, status=status.HTTP_400_BAD_REQUEST)
