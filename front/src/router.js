@@ -6,7 +6,7 @@ import SearchResult from './views/SearchResult.vue'
 import NoticeRead from './views/Notice/NoticeRead.vue'
 import NoticeCreate from './views/Notice/NoticeCreate.vue'
 import NoticeDetail from './views/Notice/NoticeDetail.vue'
-import e404 from './views/e404.vue'
+import Error404 from './views/Error404.vue'
 
 Vue.use(VueRouter)
 
@@ -37,19 +37,19 @@ const routes = [
     component: NoticeRead
   },
   {
-    path: '/notice/create/:contentId?',
+    path: '/notice/create/:noticeId?',
     name: 'notice-create',
     component: NoticeCreate
   },
   {
-    path: '/notice/detail/:contentId',
+    path: '/notice/detail/:noticeId',
     name: 'notice-detail',
     component: NoticeDetail
   },
   {
     path: '*',
-    name: 'e404',
-    component: e404
+    name: 'error404',
+    component: Error404
   }
 ]
 

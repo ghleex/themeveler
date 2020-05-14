@@ -25,19 +25,19 @@
     </div>
 
     <div class="row m-0 text-white-50 justify-content-center align-items-center">
-      <p> © 2020 Copyright. <i icon="copyright" class="far fa-copyright mr-1" />All rights reserved.</p>
+      <p> © 2020 Vision2020. All rights reserved.</p>
     </div>
 
     <div class="row align-items-center m-0">
       <div class="d-none d-md-flex col-md-5">
-        <p class="footer-brand">Vision</p>
-        <p class="footer-brand">2020</p>
+        <p class="footer-brand"></p>
+        <p class="footer-brand">Themeveler</p>
       </div>
       <div class="col offset-md-3">
         <div class="row justify-content-around">
-          <router-link to="#" class="footer-right">이용 약관</router-link>
-          <router-link to="#" class="footer-right">개인 정보 취급 방침</router-link>
-          <router-link to="#" class="footer-right"><i class="fab fa-gitlab" /> GitLab</router-link>
+          <router-link to="#" class="footer-right">이용약관</router-link>
+          <router-link to="#" class="footer-right">개인정보처리방침</router-link>
+          <a href="https://lab.ssafy.com/" target="_blank" class="footer-right"><i class="fab fa-gitlab" /> GitLab</a>
         </div>
       </div>
     </div>
