@@ -7,6 +7,7 @@
       <SearchBar />
     </div>
 
+
     <!-- Carousels -->
     <div class="carousel">
       <v-carousel cycle height="500" hide-delimiter-background show-arrows-on-hover>
@@ -20,22 +21,53 @@
         </v-carousel-item>
       </v-carousel>
     </div>
-    <br><br><br><br>
-    <br><br><br><br>
+    <br>
+    <br>
+
 
     <div class="container">
       <div class="main-section">
-        <h2 class="article-header my-5">
-          <i class="fas fa-pen-nib" /> 인기 테마</h2>
+        <h2 class="article-header my-5"><i class="fas fa-pen-nib" />인기 테마</h2>
         <!-- <revi-list limits="4" :themeData="themeData" /> -->
-        <br>
+        <!-- <br> -->
+        <!-- 인기 테마 Card -->
+        <v-container fluid dense :cols="4" class="d-inline">
+          <v-card class="mx-auto my-2" max-width="40%">
+            <v-img class="white--text align-end" height="200px" src="https://cdn.vuetifyjs.com/images/cards/docks.jpg">
+              <v-card-title>Top 10 Daejeon Theme</v-card-title>
+            </v-img>
+            <v-card-subtitle class="pb-0">Number 10</v-card-subtitle>
+            <v-card-text class="text--primary">
+              <div>Whitehaven Beach</div>
+              <div>Whitsunday Island, Whitsunday Islands</div>
+            </v-card-text>
+            <v-card-actions>
+              <v-btn color="orange" text>Share</v-btn>
+              <v-btn color="orange" text>Explore</v-btn>
+            </v-card-actions>
+          </v-card>
+          <v-card class="mx-auto my-2" max-width="40%">
+            <v-img class="white--text align-end" height="200px" src="https://cdn.vuetifyjs.com/images/cards/docks.jpg">
+              <v-card-title>Top 10 Seoul Theme</v-card-title>
+            </v-img>
+            <v-card-subtitle class="pb-0">May 15</v-card-subtitle>
+            <v-card-text class="text--primary">
+              <div>City</div>
+              <div>City, Seoul</div>
+            </v-card-text>
+            <v-card-actions>
+              <v-btn color="orange" text>Share</v-btn>
+              <v-btn color="orange" text>Explore</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-container>
       </div>
 
+
       <div class="main-section">
-        <h2 class="article-header my-5">
-          <i class="fas fa-pen-nib" /> 인기 여행지</h2>
+        <h2 class="article-header my-5">인기 여행지</h2>
         <!-- <revi-list limits="4" :spotData="spotData" /> -->
-        <div class="hspot d-inline width:80% col-md-6 col-12">
+        <!-- <div class="hspot d-inline width:80% col-md-6 col-12">
           <div>
             <p :src="spotData[0]" width="300" height="300"></p>
             <p :src="spotData[1]" width="300" height="300"></p>
@@ -44,71 +76,99 @@
             <p :src="spotData[2]" width="300" height="300"></p>
             <p :src="spotData[3]" width="300" height="300"></p>
           </div>
-
         </div>
-        <br>
+        <br> -->
+        <!-- 인기 여행지 Card -->
+        <v-card class="mx-auto" max-width="75%">
+          <v-container fluid>
+            <v-row dense>
+              <v-col v-for="card in cards" :key="card.title" :cols="card.flex">
+                <v-card>
+                  <v-img :src="card.src" class="white--text align-end"
+                    gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)" height="200px">
+                    <v-card-title v-text="card.title"></v-card-title>
+                  </v-img>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn icon><v-icon>mdi-heart</v-icon></v-btn>
+                    <v-btn icon><v-icon>mdi-bookmark</v-icon></v-btn>
+                    <v-btn icon><v-icon>mdi-share-variant</v-icon></v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card>
+        <br><br>
       </div>
     </div>
-
   </div>
 </template>
 
 <script>
-  import SearchBar from '../components/SearchBar.vue'
+import SearchBar from '../components/SearchBar.vue'
 
-  export default {
-    name: 'Home',
-    components: {
-      SearchBar,
-    },
-    data() {
-      return {
-        slides: [
-          require('../assets/image/bg.jpg'),
-          'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
-          'https://cdn.vuetifyjs.com/images/carousel/bird.jpg',
-          'https://cdn.vuetifyjs.com/images/carousel/planet.jpg',
-          'https://cdn.vuetifyjs.com/images/carousel/sky.jpg'
-        ],
-        themeData: [
+export default {
+  name: 'Home',
+  components: {
+    SearchBar,
+  },
+  data() {
+    return {
+      slides: [
+        require('../assets/image/bg.jpg'),
+        require('../assets/image/squirrel.jpg'),
+        require('../assets/image/sky.jpg'),
+        require('../assets/image/planet.jpg'),
+        require('../assets/image/sky.jpg'),
+      ],
+      themeData: [
 
-        ],
-        spotData: [
-          require('../assets/image/bg.jpg'),
-          require('../assets/image/image01.jpg'),
-          require('../assets/image/bg.jpg'),
-          require('../assets/image/image01.jpg')
-        ]
-      }
-    },
-    // methods: {
-    //   a() {
-    //     document.querySelector('#footer').style.display = 'flex'
-    //   }
-    // },
-    // mounted() {
-    //   this.a()
-    // },
-  }
+      ],
+      spotData: [
+        require('../assets/image/bg.jpg'),
+        require('../assets/image/image01.jpg'),
+        require('../assets/image/bg.jpg'),
+        require('../assets/image/image01.jpg')
+      ],
+      cards: [
+        { title: 'Pre-fab homes', src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg', flex: 3 },
+        { title: 'Favorite road trips', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg', flex: 3 },
+        { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 3 },
+        { title: 'Favorite road trips', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg', flex: 3 },
+        { title: 'Pre-fab homes', src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg', flex: 3 },
+        { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 3 },
+        { title: 'Favorite road trips', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg', flex: 3 },
+        { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 3 }
+      ]
+    }
+  },
+  // methods: {
+  //   a() {
+  //     document.querySelector('#footer').style.display = 'flex'
+  //   }
+  // },
+  // mounted() {
+  //   this.a()
+  // }
+}
 </script>
 
 <style scoped>
-  .banner {
-    position: relative;
-    overflow: hidden;
-    height: 500px;
-  }
-
-  .banner>img {
-    width: 100%;
-    /* max-height: initial; */
-    margin-top: -15%;
-  }
-
-  .home-search-bar {
-    position: absolute;
-    top: 20vw;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
+.banner {
+  position: relative;
+  overflow: hidden;
+  height: 500px;
+}
+.banner>img {
+  width: 100%;
+  /* max-height: initial; */
+  margin-top: -15%;
+}
+.home-search-bar {
+  position: absolute;
+  top: 20vw;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 </style>
