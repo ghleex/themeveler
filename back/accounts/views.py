@@ -50,10 +50,6 @@ class Mail(APIView):
         
         return Response({'message' : ['인증에 실패하였습니다.']}, status=status.HTTP_400_BAD_REQUEST)
 
-<<<<<<< HEAD
-=======
-    @permission_classes((AllowAny, ))
->>>>>>> b548bc0df81668e4db542243c0f1e90b97bc68a0
     def post(self, request, format=None):
         if UsernameSerializer(data=request.data).is_valid(raise_exception=True):
             confirm_code = ''
@@ -101,11 +97,7 @@ class Mail(APIView):
             return Response({'message' : ['메일 전송에 실패하였습니다.']}, status=status.HTTP_400_BAD_REQUEST)
         return Response({'message':['이미 가입된 이메일입니다.']},status=status.HTTP_400_BAD_REQUEST)
 
-<<<<<<< HEAD
 @permission_classes((AllowAny, ))
-=======
-
->>>>>>> b548bc0df81668e4db542243c0f1e90b97bc68a0
 class Nickname(APIView):
     def get(self, request, format=None):
         serializer = UserNicknameSerializer(data=request.data)
@@ -113,11 +105,7 @@ class Nickname(APIView):
             return Response({'message' : ['사용하실수 있는 닉네임입니다.']})
         return Response({'message' : ['닉네임 중복체크를 실패하였습니다.']}, status=status.HTTP_400_BAD_REQUEST)
 
-<<<<<<< HEAD
 @permission_classes((AllowAny, ))
-=======
-
->>>>>>> b548bc0df81668e4db542243c0f1e90b97bc68a0
 class Username(APIView):
     def get(self, request, format=None):
         serializer = UsernameSerializer(data=request.data)
@@ -125,14 +113,8 @@ class Username(APIView):
             return Response({'message' : ['사용하실수 있는 이메일입니다.']})
         return Response({'message' : ['아이디 중복체크를 실패하였습니다.']}, status=status.HTTP_400_BAD_REQUEST)
 
-<<<<<<< HEAD
 @permission_classes((AllowAny, ))
 class SignUp(APIView):
-=======
-
-class UserMgmt(APIView):
-    @permission_classes((AllowAny, ))
->>>>>>> b548bc0df81668e4db542243c0f1e90b97bc68a0
     def post(self, request, format=None):
         username = request.data.get('username')
         if Waiting.objects.filter(username=username).exists():
@@ -153,7 +135,6 @@ class UserMgmt(APIView):
         return Response({'message' : ['회원가입이 실패하였습니다.']}, status=status.HTTP_400_BAD_REQUEST)
 
 
-<<<<<<< HEAD
 class UserMgmt(APIView):
     def delete(self, request, format=None):
         jwt_data = decoder(request.headers['Authorization'].split(' ')[1])
@@ -188,34 +169,3 @@ class Password(APIView):
                 return Response({'message' : ['회원정보가 정상적으로 변경되었습니다.']})
             return Response({'message' : ['비밀번호가 올바르지않습니다.']}, status=status.HTTP_400_BAD_REQUEST)
         return Response({'message' : ['비밀번호 변경이 실패하였습니다.']}, status=status.HTTP_400_BAD_REQUEST)
-=======
-class TravelMgmt(APIView):
-    """
-    사용자의 여행지 관리
-
-    ---
-    """
-    def get_person(self, pk, format=None):
-        if User.objects.filter(pk=pk).exists():
-            return User.objects.get(pk=pk)
-        else:
-            return None
-    
-    def get(self, request, pk, format=None):
-        # try:
-            user = self.get_person(pk)
-            print(user)
-            themes = user.favorite_themes
-            dests = user.favorite_destinations
-            data = {
-                'message': 'ok',
-                'favourite_themes': themes,
-                'favourite_dests': dests,
-            }
-            return Response(data, status=status.HTTP_200_OK)
-        # except:
-        #     data = {
-        #         'message': 'Error has occurred'
-        #     }
-        #     return Response(data, status=status.HTTP_400_BAD_REQUEST)
->>>>>>> b548bc0df81668e4db542243c0f1e90b97bc68a0
