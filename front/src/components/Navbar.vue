@@ -51,7 +51,7 @@
             <v-icon class="mr-2">{{ item.icon }}</v-icon>
             {{ item.title }}
             <div class="dropdown-content">
-              <a href="#" class="mt-3">공지사항</a>
+              <a href="/notice" class="mt-3">공지사항</a>
               <hr>
               <a href="#" class="mb-3">고객센터</a>
             </div>
@@ -83,7 +83,7 @@
           },
           {
             title: 'Travel',
-            icon: ' mdi-image-album'
+            icon: 'mdi-image-album'
           },
           {
             title: 'Contact',

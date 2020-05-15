@@ -2,9 +2,8 @@
   <div id="search-result">
     <div class="container">
       <div class="sresultheader">
-        <h3>"{{ $route.query.q }}" 에 대한 검색결과</h3>
-        <h4>{{ spotData.length }} 개를 찾았습니다</h4>
-        <SearchBar class="mx-auto my-3 pb-4" />
+        <h4 class="my-3">"{{ $route.query.q }}" 에 대한 검색결과 ({{ spotData.length }} 개)</h4>
+        <SearchBar class="sresult-search-bar mx-auto my-3 pb-4" />
       </div>
     </div>
     <div class="container border">
@@ -67,8 +66,12 @@ export default {
 
 <style>
 .sresultheader {
+  margin-top: 60px;
   background: #11A0DC;
   border-radius: 10px 10px 0 0;
   border: 1px solid lightgray;  
+}
+.sresult-search-bar {
+  width: 75%;
 }
 </style>

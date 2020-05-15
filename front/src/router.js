@@ -3,6 +3,10 @@ import VueRouter from 'vue-router'
 import Home from './views/Home.vue'
 import Account from './views/Account.vue'
 import SearchResult from './views/SearchResult.vue'
+import NoticeRead from './views/Notice/NoticeRead.vue'
+import NoticeCreate from './views/Notice/NoticeCreate.vue'
+import NoticeDetail from './views/Notice/NoticeDetail.vue'
+import Error404 from './views/Error404.vue'
 
 Vue.use(VueRouter)
 
@@ -27,11 +31,26 @@ const routes = [
     name: 'search-result',
     component: SearchResult
   },
-  // {
-  //   path: '*',
-  //   name: 'e404',
-  //   component: { template: '<div>404 not found</div>' }
-  // },
+  {
+    path: '/notice',
+    name: 'notice-read',
+    component: NoticeRead
+  },
+  {
+    path: '/notice/create/:noticeId?',
+    name: 'notice-create',
+    component: NoticeCreate
+  },
+  {
+    path: '/notice/detail/:noticeId',
+    name: 'notice-detail',
+    component: NoticeDetail
+  },
+  {
+    path: '*',
+    name: 'error404',
+    component: Error404
+  }
 ]
 
 const router = new VueRouter({
