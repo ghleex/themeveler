@@ -8,9 +8,14 @@ from decouple import config
 User = get_user_model()
 # Create your views here.
 class TravelMgmt(APIView):
-    def get_person(self, pk, format=None):
-        if User.objects.filter(pk=pk).exists():
-            return User.objects.get(pk=pk)
+    """
+    사용자의 여행 코스 관리
+
+    ---
+    """
+    def get_person(self, user_id, format=None):
+        if User.objects.filter(pk=user_id).exists():
+            return User.objects.get(pk=user_id)
         else:
             return None
     
@@ -31,6 +36,11 @@ class TravelMgmt(APIView):
         #         'message': 'Error has occurred'
         #     }
         #     return Response(data, status=status.HTTP_400_BAD_REQUEST)
+    
+    def post(self, request, pk, format=None):
+        user = self.get_person(pk)
+        # theme 을 어떻게 저장할지 생각해야 함
+        pass
 
 
 def map(request):
