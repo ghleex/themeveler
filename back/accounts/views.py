@@ -13,6 +13,8 @@ from rest_framework_jwt.views import obtain_jwt_token
 from .serializers import UserCreationSerializer, UserNicknameSerializer, WaitingSerializer
 from .serializers  import UsernameSerializer, ConfirmCodeSerializer, UserPasswordSerializer
 from .models import Waiting
+from travels.models import Message
+from travels.serializers import MessageSerializer
 from random import SystemRandom
 from datetime import datetime, timedelta, timezone
 import re
@@ -142,17 +144,24 @@ class SignUp(APIView):
         return Response({'message' : ['회원가입이 실패하였습니다.']}, status=status.HTTP_400_BAD_REQUEST)
 
 class UserMgmt(APIView):
-    def delete(self, request, format=None):
-        jwt_data = decoder(request.headers['Authorization'].split(' ')[1])
+    def get_user(self, token, format=None):
+        jwt_data = decoder(token)[1]
         user = get_object_or_404(User, id=jwt_data['user_id'])
+        return user
+
+    def delete(self, request, format=None):
+        user = self.get_user(request.headers['Authorization'].split(' '))
         user.delete()
         return Response({'message' : ['회원탈퇴가 정상적으로 처리되었습니다.']}, status=status.HTTP_204_NO_CONTENT)
 
     def put(self, request, format=None):
-        jwt_data = decoder(request.headers['Authorization'].split(' ')[1])
-        user = get_object_or_404(User, id=jwt_data['user_id'])
+        user = self.get_user(request.headers['Authorization'].split(' '))
         serializer = UserNicknameSerializer(user, data=request.data)
         if serializer.is_valid(raise_exception=True):
+            messages = Message.objects.filter(nickname=user.nickname)
+            for message in messages:
+                message.nickname = request.data.get('nickname')
+                message.save()
             user = serializer.save()
             user.save()
             return Response({'message' : ['회원정보가 정상적으로 변경되었습니다.']})
