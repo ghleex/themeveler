@@ -1,5 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 from django.contrib.auth import get_user_model
 from django.http import HttpRequest 
 from rest_framework import status
@@ -13,6 +15,8 @@ from rest_framework_jwt.views import obtain_jwt_token
 from .serializers import UserCreationSerializer, UserNicknameSerializer, WaitingSerializer
 from .serializers  import UsernameSerializer, ConfirmCodeSerializer, UserPasswordSerializer
 from .models import Waiting
+from travels.models import Message
+from travels.serializers import MessageSerializer
 from random import SystemRandom
 from datetime import datetime, timedelta, timezone
 import re
@@ -39,6 +43,14 @@ def Check_request(request, check_list):
 
 @permission_classes((AllowAny, ))
 class Mail(APIView):
+    def mail_send(self, data):
+        subject = 'Themevler 인증메일입니다.'
+        html_message = render_to_string('keyMail.html', {'confirm_code': data.get('confirm_code')})
+        plain_message = strip_tags(html_message)
+        from_email = '<from@example.com>'
+        to = data.get('username')
+        send_mail(subject, plain_message, from_email, [to], html_message=html_message)    
+
     def get(self, request, format=None):
         check_result = Check_request(request.data, ['username', 'confirm_code'])
         if check_result:
@@ -48,7 +60,7 @@ class Mail(APIView):
             if waiting_user.is_confirm:
                 return Response({'message' : ['이미 인증된 유저입니다.']})
             if waiting_user.username == request.data.get('username') and waiting_user.confirm_code == request.data.get('confirm_code'):
-                if waiting_user.updated_at > datetime.now(timezone.utc) - timedelta(minutes=10):
+                if waiting_user.updated_at > datetime.now() - timedelta(minutes=10):
                     waiting_user.is_confirm = True
                     waiting_user.confirm_code = None
                     waiting_user.save()
@@ -79,24 +91,12 @@ class Mail(APIView):
                     serializer = WaitingSerializer(waiting_user, data=data)
                     if serializer.is_valid(raise_exception=True):
                         waiting = serializer.save()
-                        # send_mail(
-                        #     'Themevler 인증메일입니다.',         # 제목
-                        #     str(confirm_code), # 내용
-                        #     'from@example.com',     
-                        #     ['gagle637@gmail.com'],     # 받는 이메일 리스트
-                        #     fail_silently=False,
-                        # )
+                        self.mail_send(data)
                         return Response({'message' : ['메일 재전송 완료.']})
                     return Response({'message' : ['메일 전송에 실패하였습니다.']}, status=status.HTTP_400_BAD_REQUEST)
             serializer = WaitingSerializer(data=data)
             if serializer.is_valid(raise_exception=True):
-                # send_mail(
-                #     'Themevler 인증메일입니다.',         # 제목
-                #     str(confirm_code), # 내용
-                #     'from@example.com',     
-                #     ['gagle637@gmail.com'],     # 받는 이메일 리스트
-                #     fail_silently=False,
-                # )
+                self.mail_send(data)
                 waiting = serializer.save()
                 return Response({'message' : ['메일 전송 완료.']})
             return Response({'message' : ['메일 전송에 실패하였습니다.']}, status=status.HTTP_400_BAD_REQUEST)
@@ -142,17 +142,24 @@ class SignUp(APIView):
         return Response({'message' : ['회원가입이 실패하였습니다.']}, status=status.HTTP_400_BAD_REQUEST)
 
 class UserMgmt(APIView):
-    def delete(self, request, format=None):
-        jwt_data = decoder(request.headers['Authorization'].split(' ')[1])
+    def get_user(self, token, format=None):
+        jwt_data = decoder(token)[1]
         user = get_object_or_404(User, id=jwt_data['user_id'])
+        return user
+
+    def delete(self, request, format=None):
+        user = self.get_user(request.headers['Authorization'].split(' '))
         user.delete()
         return Response({'message' : ['회원탈퇴가 정상적으로 처리되었습니다.']}, status=status.HTTP_204_NO_CONTENT)
 
     def put(self, request, format=None):
-        jwt_data = decoder(request.headers['Authorization'].split(' ')[1])
-        user = get_object_or_404(User, id=jwt_data['user_id'])
+        user = self.get_user(request.headers['Authorization'].split(' '))
         serializer = UserNicknameSerializer(user, data=request.data)
         if serializer.is_valid(raise_exception=True):
+            messages = Message.objects.filter(nickname=user.nickname)
+            for message in messages:
+                message.nickname = request.data.get('nickname')
+                message.save()
             user = serializer.save()
             user.save()
             return Response({'message' : ['회원정보가 정상적으로 변경되었습니다.']})

@@ -21,3 +21,11 @@ class Destination(models.Model):
     created_at = models.DateTimeField(auto_now_add=True) # date is updated just created
     updated_at = models.DateTimeField(auto_now=True) # date is updated when created and updated
     visitors = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='dests') # User.dests.all()
+
+class Message(models.Model):
+    theme = models.ForeignKey(Theme, on_delete=models.CASCADE)
+    nickname = models.CharField(blank=False, max_length=20)
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    class Meta:
+        ordering = ('-pk',)
