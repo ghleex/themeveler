@@ -6,6 +6,9 @@ import SearchResult from './views/SearchResult.vue'
 import NoticeRead from './views/Notice/NoticeRead.vue'
 import NoticeCreate from './views/Notice/NoticeCreate.vue'
 import NoticeDetail from './views/Notice/NoticeDetail.vue'
+import ServiceRead from './views/ServiceCenter/ServiceRead.vue'
+import ServiceCreate from './views/ServiceCenter/ServiceCreate.vue'
+import ServiceDetail from './views/ServiceCenter/ServiceDetail.vue'
 // import CustomerCenterRead from './views/CustomerCenter/CustomerCenterRead.vue'
 // import CustomerCenterCreate from './views/CustomerCenter/CustomerCenterCreate.vue'
 // import CustomerCenterDetail from './views/CustomerCenter/CustomerCenterDetail.vue'
@@ -44,6 +47,21 @@ const routes = [
     path: '/notice/detail/:noticeId',
     name: 'notice-detail',
     component: NoticeDetail
+  },
+  {
+    path: '/service',
+    name: 'service-read',
+    component: ServiceRead
+  },
+  {
+    path: '/service/create/:serviceId?',
+    name: 'service-create',
+    component: ServiceCreate
+  },
+  {
+    path: '/service/detail/:serviceId',
+    name: 'service-detail',
+    component: ServiceDetail
   },
   // {
   //   path: '/customercenter',
