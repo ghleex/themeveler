@@ -1,9 +1,8 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.contrib.auth import get_user_model
-from django.http import HttpRequest 
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -15,9 +14,8 @@ from rest_framework_jwt.views import obtain_jwt_token
 from .serializers import UserCreationSerializer, UserNicknameSerializer, WaitingSerializer
 from .serializers  import UsernameSerializer, ConfirmCodeSerializer, UserPasswordSerializer
 from .models import Waiting
-from travels.models import Message
 from travels.serializers import MessageSerializer
-from random import SystemRandom
+from random import SystemRandom, choice
 from datetime import datetime, timedelta, timezone
 import re
 
@@ -25,6 +23,11 @@ import re
 # Create your views here.
 User = get_user_model()
 decoder = api_settings.JWT_DECODE_HANDLER
+prefix = [
+        '게으른 ', '쾌화한 ', '유쾌한 ', '아름다운 ', '부지런한 ', '예쁜 ', '근면한 ', 
+        '무서운 ', '우스운 ', '아리따운 ', '자비로운 ', '자애로운 ', '우아한 '
+        ]
+suffix = ['사자', '호랑이', '독수리', '개미핥기', '상어', '고양이', '기린', '치타', '표범', '코끼리', '고릴라', '원숭이', '강아지']
 
 def Check_request(request, check_list):
     data = {}
@@ -128,13 +131,14 @@ class SignUp(APIView):
         if Waiting.objects.filter(username=username).exists():
             waiting_user = Waiting.objects.get(username=username)
             if waiting_user.username == username and waiting_user.is_confirm:
-                if waiting_user.updated_at > datetime.now(timezone.utc) - timedelta(minutes=10):
+                if waiting_user.updated_at > datetime.now() - timedelta(minutes=10):
                     serializer = UserCreationSerializer(data=request.data)
                     if serializer.is_valid(raise_exception=True):
                         user = serializer.save()
                         user.set_password(request.data.get('password'))
+                        user.anonymous = choice(prefix) + choice(suffix) + str(user.id)
                         user.save()
-                        return Response({'message' : ['환영합니다! 회원가입이 정상적으로 처리되었습니다.']})
+                    return Response({'message' : ['환영합니다! 회원가입이 정상적으로 처리되었습니다.']})
                 else:
                     return Response({'message' : ['유효시간이 지났습니다.']}, status=status.HTTP_400_BAD_REQUEST)
         else:
@@ -143,7 +147,7 @@ class SignUp(APIView):
 
 class UserMgmt(APIView):
     def get_user(self, token, format=None):
-        jwt_data = decoder(token)[1]
+        jwt_data = decoder(token[1])
         user = get_object_or_404(User, id=jwt_data['user_id'])
         return user
 
@@ -156,10 +160,6 @@ class UserMgmt(APIView):
         user = self.get_user(request.headers['Authorization'].split(' '))
         serializer = UserNicknameSerializer(user, data=request.data)
         if serializer.is_valid(raise_exception=True):
-            messages = Message.objects.filter(nickname=user.nickname)
-            for message in messages:
-                message.nickname = request.data.get('nickname')
-                message.save()
             user = serializer.save()
             user.save()
             return Response({'message' : ['회원정보가 정상적으로 변경되었습니다.']})
@@ -185,10 +185,10 @@ class Password(APIView):
 @permission_classes((AllowAny, ))
 class SignIn(APIView):
     def post(self, request, format=None):
-        username=request.data.get("username")
+        username=request.data.get('username')
         if User.objects.filter(username=username).exists():
             sign_in_user = User.objects.get(username=username)
-            if sign_in_user.banning_period and str(sign_in_user.banning_period) < datetime.today().strftime("%Y-%m-%d"):
+            if sign_in_user.banning_period and str(sign_in_user.banning_period) < datetime.today().strftime('%Y-%m-%d'):
                 sign_in_user.is_active = True
                 sign_in_user.banning_period = None
             sign_in_user.save()
@@ -201,18 +201,18 @@ class UserBan(APIView):
         check_result = Check_request(request.data, ['username', 'banning_period',])
         if check_result:
             return Response(check_result, status=status.HTTP_400_BAD_REQUEST)
-        username=request.data.get("username")
+        username = request.data.get('username')
         sign_in_user = User.objects.get(username=username)
-        sign_in_user.banning_period = (datetime.today() + timedelta(days=int(request.data.get("banning_period")))).strftime("%Y-%m-%d")
+        sign_in_user.banning_period = (datetime.today() + timedelta(days=int(request.data.get('banning_period')))).strftime('%Y-%m-%d')
         sign_in_user.is_active = False
         sign_in_user.save()
-        return Response({'message' : [username + '가 '+ sign_in_user.banning_period +'까지 정지처리 되었습니다.']})
+        return Response({'message' : [username + '가 '+ sign_in_user.banning_period + '까지 정지처리 되었습니다.']})
 
     def delete(self, request, format=None):
         check_result = Check_request(request.data, ['username'])
         if check_result:
             return Response(check_result, status=status.HTTP_400_BAD_REQUEST)
-        username=request.data.get("username")
+        username=request.data.get('username')
         sign_in_user = User.objects.get(username=username)
         sign_in_user.banning_period = None
         sign_in_user.is_active = True
