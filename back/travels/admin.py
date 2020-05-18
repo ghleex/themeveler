@@ -16,7 +16,6 @@ class DestinationAdmin(admin.ModelAdmin):
         return DestContent.objects.filter(destination=obj)
 
 
-
 @admin.register(Message)
-class DestinationAdmin(admin.ModelAdmin):
+class MessageAdmin(admin.ModelAdmin):
     list_display = ('id', 'theme', 'nickname', 'message', 'created_at')
