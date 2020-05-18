@@ -1,15 +1,15 @@
 <template>
   <div id="footer" class="container-fluid">
-    <a href="#" target="_blank">
-      <fa
+    <!-- <a href="#" target="_blank">
+      <i
         @mouseover="githover(1)"
         @mouseleave="githover(0)"
-        class="m-4 gitlink"
-        :icon="github"
+        class="m-4 gitlink fab fa-gitlab"
         size="3x"
         style="color: lightgray"
-      />
-    </a>
+      ></i>
+    </a> -->
+    <a href="#" class="m-4"></a>
     <div class="row m-0 mx-auto text-white-50 justify-content-around align-items-center" style="max-width: 550px;">
 			<p style="color:lightgray;">|</p>
       <p>이길현</p>
@@ -25,19 +25,19 @@
     </div>
 
     <div class="row m-0 text-white-50 justify-content-center align-items-center">
-      <p> © 2020 Copyright. <fa icon="copyright" />All rights reserved.</p>
+      <p> © 2020 Vision2020. All rights reserved.</p>
     </div>
 
     <div class="row align-items-center m-0">
       <div class="d-none d-md-flex col-md-5">
-        <p class="footer-brand">Vision</p>
-        <p class="footer-brand">2020</p>
+        <p class="footer-brand"></p>
+        <p class="footer-brand">Themeveler</p>
       </div>
       <div class="col offset-md-3">
         <div class="row justify-content-around">
-          <router-link to="#" class="footer-right">이용 약관</router-link>
-          <router-link to="#" class="footer-right">개인 정보 취급 방침</router-link>
-          <router-link to="#" class="footer-right">GitLab</router-link>
+          <router-link to="#" class="footer-right">이용약관</router-link>
+          <router-link to="#" class="footer-right">개인정보처리방침</router-link>
+          <a href="https://lab.ssafy.com/" target="_blank" class="footer-right"><i class="fab fa-gitlab" /> GitLab</a>
         </div>
       </div>
     </div>
@@ -48,11 +48,9 @@
 export default {
   data() {
     return {
-      github: ["fab", "github"]
     };
   },
   methods: {
-
   }
 };
 </script>

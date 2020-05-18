@@ -1,16 +1,15 @@
-<template>   
-  <div id="app">
+<template>
+  <v-app id="app">
     <Navbar />
     <router-view></router-view>
     <Footer />
-  </div>
+  </v-app>
 </template>
 
 <script>
 // import axios from 'axios'
 import Navbar from './components/Navbar.vue'
 import Footer from './components/Footer.vue'
-
 
 export default {
   name: 'App',
