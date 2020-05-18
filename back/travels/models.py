@@ -1,6 +1,6 @@
 from django.db import models
 from django.conf import settings
-
+from django_mysql.models import ListTextField
 # Create your models here.
 class Theme(models.Model):
     name = models.CharField(max_length=50)
@@ -9,14 +9,18 @@ class Theme(models.Model):
     image = models.ImageField()
     created_at = models.DateTimeField(auto_now_add=True) # date is updated just created
     updated_at = models.DateTimeField(auto_now=True) # date is updated when created and updated
-    visitors = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='visited_theme') # User.visited_theme.all()
-    like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='liked_theme')
+    visitors = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='visited_themes') # User.visited_themes.all()
+    like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='like_themes') # User.like_themes.all()
+    dests = ListTextField(
+        base_field = models.CharField(max_length=255),
+        size = 100
+    )
+
     
 
 class Destination(models.Model):
     name = models.CharField(max_length=50)
     themes = models.ManyToManyField(Theme, related_name='spots') # Theme.spots.all() / # Destination.themes.all -> return list
-    content = models.TextField()
     image = models.ImageField()
     created_at = models.DateTimeField(auto_now_add=True) # date is updated just created
     updated_at = models.DateTimeField(auto_now=True) # date is updated when created and updated
@@ -29,3 +33,9 @@ class Message(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     class Meta:
         ordering = ('-pk',)
+
+class DestContent(models.Model):
+    theme = models.ForeignKey(Theme, on_delete=models.CASCADE) # Content.objects.get(theme=theme_id, destination=destination_id)
+    destination = models.ForeignKey(Destination, on_delete=models.CASCADE)
+    text = models.TextField()
+
