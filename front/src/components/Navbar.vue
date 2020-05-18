@@ -5,11 +5,8 @@
     <v-navigation-drawer v-model="drawer" absolute temporary>
       <v-list-item class="mt-2">
         <v-list-item-avatar>
-          <v-img
-            src='https://user-images.githubusercontent.com/52684457/81582000-7606aa00-93ea-11ea-86e9-06324fd4b39c.png'>
-          </v-img>
+          <v-img src='../assets/navlogo.png'></v-img>
         </v-list-item-avatar>
-
         <v-list-item-content>
           <v-list-item-title class="ml-2"><b>Themeveler</b></v-list-item-title>
         </v-list-item-content>
@@ -36,12 +33,11 @@
       <!-- 메뉴를 click하면 사이드에 메뉴가 뜸 -->
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" class="d-block d-md-none"></v-app-bar-nav-icon>
       <v-list-item-avatar class="mr-2 d-none d-md-block">
-        <v-img
-          src='https://user-images.githubusercontent.com/52684457/81582000-7606aa00-93ea-11ea-86e9-06324fd4b39c.png'>
-        </v-img>
+        <v-img src='../assets/navlogo.png'></v-img>
       </v-list-item-avatar>
-      <v-toolbar-title>Themeveler</v-toolbar-title>
-
+      <router-link to="/" class="navtitle">
+        <v-toolbar-title>Themeveler</v-toolbar-title>
+      </router-link>
       <v-spacer></v-spacer>
       <v-toolbar-items class="d-none d-md-block">
 
@@ -51,9 +47,9 @@
             <v-icon class="mr-2">{{ item.icon }}</v-icon>
             {{ item.title }}
             <div class="dropdown-content">
-              <a href="/notice" class="mt-3">공지사항</a>
-              <hr>
-              <a href="#" class="mb-3">고객센터</a>
+              <a href="/notice" class="mt-2">공지사항</a>
+              <hr class="my-2">
+              <a href="/servicecenter" class="mb-2">고객센터</a>
             </div>
           </div>
 
@@ -68,7 +64,6 @@
     </v-toolbar>
   </div>
 </template>
-
 
 <script>
   export default {
@@ -135,7 +130,7 @@
     top: 25px;
   }
 
-    .drop-yes:hover .dropdown-content {
+  .drop-yes:hover .dropdown-content {
     display: block;
   }
 
@@ -146,8 +141,17 @@
     display: block;
   }
 
-  .dropdown-content a:hover {background-color: #f1f1f1}
+  .dropdown-content a:hover {
+    background-color: #f1f1f1
+  }
 
+  .navtitle {
+    color: black;
+    text-decoration: none;
+  }
+
+  .drop-yes:hover {
+    text-decoration: none;
+  }
 
 </style>
-

@@ -6,6 +6,10 @@ import SearchResult from './views/SearchResult.vue'
 import NoticeRead from './views/Notice/NoticeRead.vue'
 import NoticeCreate from './views/Notice/NoticeCreate.vue'
 import NoticeDetail from './views/Notice/NoticeDetail.vue'
+// import CustomerCenterRead from './views/CustomerCenter/CustomerCenterRead.vue'
+// import CustomerCenterCreate from './views/CustomerCenter/CustomerCenterCreate.vue'
+// import CustomerCenterDetail from './views/CustomerCenter/CustomerCenterDetail.vue'
+// import Map from './views/Map/Map.vue'
 import Error404 from './views/Error404.vue'
 
 Vue.use(VueRouter)
@@ -21,11 +25,6 @@ const routes = [
     name: 'login',
     component: Account,
   },
-  // {
-  //   path: '/logout',
-  //   name: 'logout',
-  //   component: { template: '<div>Logout</div>' }
-  // },
   {
     path: '/searchresult',
     name: 'search-result',
@@ -46,6 +45,30 @@ const routes = [
     name: 'notice-detail',
     component: NoticeDetail
   },
+  // {
+  //   path: '/customercenter',
+  //   name: 'customercenter-read',
+  //   component: CustomerCenterRead
+  // },
+  // {
+  //   path: '/customercenter/create/:customercenterId?',
+  //   name: 'customercenter-create',
+  //   component: CustomerCenterCreate
+  // },
+  // {
+  //   path: '/customercenter/detail/:customercenterId',
+  //   name: 'customercenter-detail',
+  //   component: CustomerCenterDetail
+  // },
+  // {
+  //   path: '/map',
+  //   name: 'map',
+  //   component: Map
+  // },
+
+
+
+  
   {
     path: '*',
     name: 'error404',
