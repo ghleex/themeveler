@@ -24,7 +24,7 @@ class Destination(models.Model):
 
 class Message(models.Model):
     theme = models.ForeignKey(Theme, on_delete=models.CASCADE)
-    nickname = models.CharField(blank=False, max_length=254)
+    nickname = models.CharField(blank=False, max_length=20)
     message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     class Meta:
