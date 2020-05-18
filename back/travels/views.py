@@ -69,7 +69,7 @@ class Chating(APIView):
         user = User.objects.get(id=jwt_data.get('user_id'))
         data = {
             'theme' : request.data.get('theme'),
-            'nickname' : user.nickname,
+            'nickname' : user.anonymous,
             'message' : request.data.get('message')
         }
         serializer = MessageSerializer(data=data)
