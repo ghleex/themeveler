@@ -2,27 +2,45 @@
   <div class="navbar_box">
 
     <!-- 사이드바 -->
-    <v-navigation-drawer v-model="drawer" absolute temporary>
+    <v-navigation-drawer class="text-start" v-model="drawer" absolute temporary>
       <v-list-item class="mt-2">
         <v-list-item-avatar>
-          <v-img src='../assets/navlogo.png'></v-img>
+          <v-img class="nav-avartar" src='../assets/navlogo.png'></v-img>
         </v-list-item-avatar>
         <v-list-item-content>
-          <v-list-item-title class="ml-2"><b>Themeveler</b></v-list-item-title>
+          <v-list-item-title><b>Themeveler</b></v-list-item-title>
         </v-list-item-content>
       </v-list-item>
 
       <v-divider></v-divider>
 
-      <v-list dense>
-        <v-list-item v-for="item in items" :key="item.title" link :to="item.path">
+      <v-list>
+        <v-list-item class="side-no-padding" color="#263238" v-for="item in items" :key="item.title" link :to="item.path">
           <!-- <router-link :to="item.path"></router-link> -->
+          <template v-if="item.title != 'Contact'">
+          <v-list-item-icon>
+            <v-icon class="pl-4">{{ item.icon }}</v-icon>
+          </v-list-item-icon>
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </template>
+
+          <v-list-group class="side-width-100" color="#263238" no-action value="true" v-else-if="item.title == 'Contact'">
+            <template class="contact-custom" v-slot:activator>
           <v-list-item-icon>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title class="ml-2">{{ item.title }}</v-list-item-title>
-          </v-list-item-content>
+              <!-- <v-list-item-content> -->
+                <v-list-item-title>{{ item.title }}</v-list-item-title>
+              <!-- </v-list-item-content> -->
+            </template>
+              <v-list-item link>
+                <v-list-item-title class="contact-list-group"><router-link to="/notice">공지사항</router-link></v-list-item-title>
+              </v-list-item>
+              <v-list-item link>
+                <v-list-item-title class="contact-list-group"><router-link to="/service">고객센터</router-link></v-list-item-title>
+              </v-list-item>
+          </v-list-group>
+
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
@@ -49,7 +67,7 @@
             <div class="dropdown-content">
               <a href="/notice" class="mt-2">공지사항</a>
               <hr class="my-2">
-              <a href="/servicecenter" class="mb-2">고객센터</a>
+              <a href="/service" class="mb-2">고객센터</a>
             </div>
           </div>
 
@@ -115,10 +133,16 @@
 </script>
 
 <style lang="scss" scoped>
+@media (max-width: 767px) {
+  .navbar_box {
+    // position: fixed;
+  }
+}
+
   .navbar_box>img {
     width: 100%;
   }
-  
+
   .dropdown-content {
     display: none;
     position: absolute;
@@ -150,8 +174,42 @@
     text-decoration: none;
   }
 
+  .nav-avartar {
+    margin-right: 0 !important;
+  }
+
+  .navbar_box .v-list-item__icon {
+    margin-right: 1rem !important;
+  }
+
+  .navbar_box {
+    z-index: 15;
+  }
+
+  .navbar_box header {
+    z-index: 15;
+  }
+
   .drop-yes:hover {
     text-decoration: none;
   }
+
+  .navbar_box .v-list-group__header {
+    padding : 0 !important;
+  }
+
+  .contact-list-group > a {
+    color: rgb(40, 40, 44);
+  }
+
+  .side-width-100 {
+    width: 100%;
+  }
+
+  .side-no-padding {
+    padding: 0;
+  }
+
+// ["role":"button"]
 
 </style>
