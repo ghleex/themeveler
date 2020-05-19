@@ -1,8 +1,21 @@
-from .models import Improvement
+from .models import VoiceCategory, CustomersVoice, ManagersReply
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 
-class ServiceCenterSerializer(serializers.ModelSerializer):
+
+class VoiceCategorySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Improvement
+        model = VoiceCategory
+        fields = ('id', 'category',)
+
+
+class CustomersVoiceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomersVoice
         fields = ('id', 'title', 'content', 'category', 'request_user', 'manager', 'is_fixed',)
+
+
+class ManagerReplySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ManagersReply
+        fields = ('id', 'title', 'content', 'is_fixed',)
