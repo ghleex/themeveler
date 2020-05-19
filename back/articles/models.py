@@ -27,7 +27,8 @@ class Comment(models.Model):
     destination = models.ForeignKey(Destination, on_delete=models.CASCADE, related_name='destination_comments') # Destination.destinaion_comments.all()
     writed_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
+    def __str__(self):
+        return self.content
 
 class ReComment(models.Model):
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name='original_comment')
@@ -35,3 +36,9 @@ class ReComment(models.Model):
     content = models.TextField()
     writed_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return self.content
+
+
+
+    

@@ -188,10 +188,15 @@ class SignIn(APIView):
         username=request.data.get('username')
         if User.objects.filter(username=username).exists():
             sign_in_user = User.objects.get(username=username)
-            if sign_in_user.banning_period and str(sign_in_user.banning_period) < datetime.today().strftime('%Y-%m-%d'):
-                sign_in_user.is_active = True
-                sign_in_user.banning_period = None
-            sign_in_user.save()
+            if sign_in_user.banning_period:
+                if str(sign_in_user.banning_period) < datetime.today().strftime('%Y-%m-%d'):
+                    sign_in_user.is_active = True
+                    sign_in_user.banning_period = None
+                    sign_in_user.save()
+                else:
+                    sign_in_user.is_active = False
+                    sign_in_user.save()
+                    return Response({'message' : ['해당 유저는 ' + str(sign_in_user.banning_period) + '까지 접근이 제한되었습니다.' ]}, status=status.HTTP_401_UNAUTHORIZED)
         return obtain_jwt_token(request._request)
 
 
