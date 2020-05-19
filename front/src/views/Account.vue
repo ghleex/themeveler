@@ -30,7 +30,7 @@
               </div>
               <span>or use your account</span>
               <input type="email" placeholder="Email" v-model="credentials.email" />
-              <input type="password" placeholder="Password"  v-model="credentials.pw" />
+              <input type="password" placeholder="Password" v-model="credentials.pw" />
               <a href="#">Forgot your password?</a>
               <button>Sign In</button>
             </form>
@@ -63,6 +63,10 @@
     name: 'Account',
     data() {
       return {
+        // emailRules: [
+        //   v => !!v || 'E-mail is required',
+        //   v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+        // ],
         credentials: {
           username: '',
           email: '',
@@ -111,14 +115,24 @@
             type: "warning",
             timer: 3000
           })
-          } else if (!this.credentials.email) {
+        } 
+        else if (!this.credentials.email) {
           Swal.fire({
             title: "Check Email",
             text: "이메일을 입력하세요.",
             type: "warning",
             timer: 3000
           })
-        }
+          // 이메일 valid From
+        } 
+        else if (!this.validEmail(this.credentials.email)) {
+          Swal.fire({
+            title: "Check Email",
+            text: "이메일 형식을 확인하세요.",
+            type: "warning",
+            timer: 3000
+          })
+          }
         // 길이가 너무 짧은 경우 (8자 이하)
         else if (this.credentials.pw.length < 8) {
           Swal.fire({
@@ -141,7 +155,11 @@
       },
       a() {
         document.querySelector('#footer').style.display = 'none'
-      }
+      },
+      validEmail: function (email) {
+        var mailForm =
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;        return mailForm.test(email);
+      },
     },
     mounted() {
       // footer none

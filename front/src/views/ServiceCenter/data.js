@@ -110,7 +110,7 @@ export default [
     category: '건의',
     writer: '이순희',
     title: '다음테마는 언제쯤 나오나요?',
-    content: '12',
+    content: '일단 출석체크 열심히 해요 여러분~ 예를들면 해인이~',
     createddate: '2002-05-18 | 10:27'
 
   }
