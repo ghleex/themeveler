@@ -10,6 +10,8 @@ import NoticeDetail from './views/Notice/NoticeDetail.vue'
 // import CustomerCenterCreate from './views/CustomerCenter/CustomerCenterCreate.vue'
 // import CustomerCenterDetail from './views/CustomerCenter/CustomerCenterDetail.vue'
 // import Map from './views/Map/Map.vue'
+import Profile from './views/Profile.vue'
+import EditProfile from './views/EditProfile.vue'
 import Error404 from './views/Error404.vue'
 
 Vue.use(VueRouter)
@@ -46,29 +48,39 @@ const routes = [
     component: NoticeDetail
   },
   // {
-  //   path: '/customercenter',
-  //   name: 'customercenter-read',
-  //   component: CustomerCenterRead
-  // },
-  // {
-  //   path: '/customercenter/create/:customercenterId?',
-  //   name: 'customercenter-create',
-  //   component: CustomerCenterCreate
-  // },
-  // {
-  //   path: '/customercenter/detail/:customercenterId',
-  //   name: 'customercenter-detail',
-  //   component: CustomerCenterDetail
-  // },
-  // {
-  //   path: '/map',
-  //   name: 'map',
-  //   component: Map
-  // },
+    //   path: '/customercenter',
+    //   name: 'customercenter-read',
+    //   component: CustomerCenterRead
+    // },
+    // {
+      //   path: '/customercenter/create/:customercenterId?',
+      //   name: 'customercenter-create',
+      //   component: CustomerCenterCreate
+      // },
+      // {
+        //   path: '/customercenter/detail/:customercenterId',
+        //   name: 'customercenter-detail',
+        //   component: CustomerCenterDetail
+        // },
+        // {
+          //   path: '/map',
+          //   name: 'map',
+          //   component: Map
+          // },
+  {
+    path: '/profile',
+    name: 'profile',
+    component: Profile
+  },
+  {
+    path: '/editprofile',
+    name: 'editprofile',
+    component: EditProfile
+  },
+
+          
 
 
-
-  
   {
     path: '*',
     name: 'error404',

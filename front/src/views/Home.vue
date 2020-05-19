@@ -24,10 +24,11 @@
     <br>
     <br>
 
+    <v-btn color="primary" outlined to="/profile">유저페이지>>>>임시버튼</v-btn>
 
     <div class="container">
       <div class="main-section">
-        <h2 class="article-header my-5">인기 테마 <i class="fas fa-walking" /></h2>
+        <h2 class="article-header my-5">인기 테마 <i class="fas fa-walking"></i></h2>
         <!-- <revi-list limits="4" :themeData="themeData" /> -->
         <!-- <br> -->
         <!-- 인기 테마 Card -->
@@ -82,7 +83,7 @@
 
 
       <div class="main-section">
-        <h2 class="article-header my-5">인기 여행지 <i class="fas fa-walking" /></h2>
+        <h2 class="article-header my-5">인기 여행지 <i class="fas fa-walking"></i></h2>
         <!-- <revi-list limits="4" :spotData="spotData" /> -->
         <!-- <div class="hspot d-inline width:80% col-md-6 col-12">
           <div>
@@ -108,7 +109,7 @@
                   <v-spacer></v-spacer>
                   <v-btn icon><v-icon>mdi-heart</v-icon></v-btn>
                   <v-btn icon><v-icon>mdi-bookmark</v-icon></v-btn>
-                  <v-btn icon><v-icon>mdi-share-variant</v-icon></v-btn>
+                  <!-- <v-btn icon><v-icon>mdi-share-variant</v-icon></v-btn> -->
                 </v-card-actions>
               </v-card>
             </v-col>
