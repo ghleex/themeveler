@@ -15,7 +15,8 @@ class Theme(models.Model):
         base_field = models.CharField(max_length=255),
         size = 100
     )
-
+    def __str__(self):
+        return self.name
     
 
 class Destination(models.Model):
@@ -25,6 +26,8 @@ class Destination(models.Model):
     created_at = models.DateTimeField(auto_now_add=True) # date is updated just created
     updated_at = models.DateTimeField(auto_now=True) # date is updated when created and updated
     visitors = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='dests') # User.dests.all()
+    def __str__(self):
+        return self.name
 
 class Message(models.Model):
     theme = models.ForeignKey(Theme, on_delete=models.CASCADE)
