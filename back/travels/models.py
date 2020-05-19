@@ -6,25 +6,25 @@ class Theme(models.Model):
     name = models.CharField(max_length=50)
     content = models.TextField()
     region = models.CharField(max_length=50)
-    image = models.ImageField()
+    image = models.ImageField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True) # date is updated just created
     updated_at = models.DateTimeField(auto_now=True) # date is updated when created and updated
-    visitors = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='visited_themes') # User.visited_themes.all()
-    like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='like_themes') # User.like_themes.all()
+    visitors = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='visited_themes', blank=True) # User.visited_themes.all()
+    like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='like_themes', blank=True) # User.like_themes.all()
     dests = ListTextField(
         base_field = models.CharField(max_length=255),
-        size = 100
+        size = 100,
     )
 
     
 
 class Destination(models.Model):
     name = models.CharField(max_length=50)
-    themes = models.ManyToManyField(Theme, related_name='spots') # Theme.spots.all() / # Destination.themes.all -> return list
-    image = models.ImageField()
+    themes = models.ManyToManyField(Theme, related_name='spots', blank=True) # Theme.spots.all() / # Destination.themes.all -> return list
+    image = models.ImageField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True) # date is updated just created
     updated_at = models.DateTimeField(auto_now=True) # date is updated when created and updated
-    visitors = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='dests') # User.dests.all()
+    visitors = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='dests', blank=True) # User.dests.all()
 
 class Message(models.Model):
     theme = models.ForeignKey(Theme, on_delete=models.CASCADE)

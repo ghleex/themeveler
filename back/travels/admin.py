@@ -13,7 +13,8 @@ class DestinationAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'contents', 'image', 'created_at', 'updated_at',)
 
     def contents(self, obj):
-        return DestContent.objects.filter(destination=obj)
+        contents = DestContent.objects.filter(destination=obj)
+        return contents if contents else None
 
 
 @admin.register(Message)
