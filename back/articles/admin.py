@@ -1,9 +1,10 @@
 from django.utils.translation import ugettext_lazy
 from django.contrib.admin import SimpleListFilter
 from django.contrib import admin
-from .models import Notice, Improvement, Comment, ReComment
+from .models import Notice, VoiceCategory, CustomersVoice, ManagersReply, Comment, ReComment
 from accounts.models import ReportComment, ReportReComment
 from django.db.models.aggregates import Count
+
 # Register your models here.
 class ReportCommentInline(admin.TabularInline):
     model = ReportComment
@@ -34,9 +35,20 @@ class NoticeAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'content', 'writed_at', 'writer', 'theme',)
 
 
-@admin.register(Improvement)
-class ImprovementAdmin(admin.ModelAdmin):
+@admin.register(VoiceCategory)
+class VoiceCategoryAdmin(admin.ModelAdmin):
+    list_display = ('id', 'category',)
+
+
+@admin.register(CustomersVoice)
+class CustomersVoiceAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'content', 'category', 'request_user', 'manager', 'is_fixed',)
+
+
+@admin.register(ManagersReply)
+class ManagersReplyAdmin(admin.ModelAdmin):
+    list_display = ('id', 'title', 'content', 'voice', 'manager', 'is_fixed',)
+
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
