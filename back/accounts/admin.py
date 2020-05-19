@@ -1,8 +1,8 @@
-from django.contrib import admin
+from django.db.models.aggregates import Count
 from django.contrib.auth.admin import UserAdmin
+from django.contrib import admin
 from .models import User, Waiting, ReportComment, ReportReComment
 from datetime import datetime, timedelta
-from django.db.models.aggregates import Count
 
 
 # Register your models here.
@@ -10,8 +10,10 @@ from django.db.models.aggregates import Count
 class ReportCommentInline(admin.TabularInline):
     model = ReportComment
 
+
 class ReportReCommentInline(admin.TabularInline):
     model = ReportReComment
+
 
 class CustomUserAdmin(UserAdmin):
     def reports(self, obj):
