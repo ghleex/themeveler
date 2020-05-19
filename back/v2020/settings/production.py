@@ -28,3 +28,21 @@ DATABASES = {
         },
     }
 }
+
+
+JWT_AUTH = {
+    'JWT_DECODE_HANDLER':'rest_framework_jwt.utils.jwt_decode_handler',
+    'JWT_SECRET_KEY': SECRET_KEY,
+    'JWT_ALGORITHM': config('JWT_ALGORITHM'),
+    'JWT_ALLOW_REFRESH': True,
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),
+    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=31),
+}
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = config('EMAIL_HOST')
+EMAIL_HOST_USER = config('EMAIL_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_PW')
+EMAIL_PORT = config('EMAIL_PORT')
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

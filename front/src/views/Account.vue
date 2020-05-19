@@ -104,7 +104,14 @@
             type: "warning",
             timer: 3000
           })
-        } else if (!this.credentials.email) {
+        } else if (this.credentials.username.length >= 7) {
+          Swal.fire({
+            title: "Check Name",
+            text: "이름은 6자 이하로 가능합니다..",
+            type: "warning",
+            timer: 3000
+          })
+          } else if (!this.credentials.email) {
           Swal.fire({
             title: "Check Email",
             text: "이메일을 입력하세요.",
@@ -343,7 +350,7 @@
     height: 100%;
     overflow: hidden;
     transition: transform 0.6s ease-in-out;
-    z-index: 100;
+    z-index: 10;
   }
 
   .account-div .container.right-panel-active .overlay-container {
