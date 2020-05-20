@@ -69,10 +69,21 @@ class Chating(APIView):
         user = User.objects.get(id=jwt_data.get('user_id'))
         data = {
             'theme' : request.data.get('theme'),
-            'nickname' : user.nickname,
+            'nickname' : user.anonymous,
             'message' : request.data.get('message')
         }
         serializer = MessageSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data)
+
+class AdminTravelMgmt(APIView):
+    def add(self, theme, dests):
+        # Theme를 form 형태로 저장할지, object create로 저장할지
+        # Theme의 destinations 순서(dests)는 list 형태로 바로 저장 (ListTetField)
+        pass
+
+    def fetch(self, theme, ):
+        # 운영자의 테마 수정은 form으로 받아오는 게 편할 것 같다
+        
+        pass

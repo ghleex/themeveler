@@ -14,7 +14,6 @@ class UserCreationSerializer(serializers.ModelSerializer):
         validate_password(value)
         return value
 
-
 class UserNicknameSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
