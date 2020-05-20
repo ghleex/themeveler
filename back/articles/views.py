@@ -3,11 +3,14 @@ from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from .models import VoiceCategory, CustomersVoice, ManagersReply
 from .serializers import VoiceCategorySerializer, CustomersVoiceSerializer, ManagerReplySerializer
 
 User = get_user_model()
 # Create your views here.
+@permission_classes((IsAdminUser,))
 class SetVoiceCategory(APIView):
     """
         고객센터(관리자) - "요청 유형" 항목 조회/생성
@@ -51,6 +54,7 @@ class SetVoiceCategory(APIView):
         return Response(data, status=status.HTTP_400_BAD_REQUEST)
 
 
+@permission_classes((IsAdminUser,))
 class ChangeVoiceCategory(APIView):
     """
         고객센터(관리자) - "요청 유형" 항목 수정/삭제
@@ -84,6 +88,7 @@ class ChangeVoiceCategory(APIView):
         return Response(msg, status=status.HTTP_204_NO_CONTENT)
 
 
+@permission_classes((IsAuthenticated,))
 class CustomersVoices(APIView):
     """
         고객센터(사용자) - 요청 글 조회/등록
@@ -97,7 +102,7 @@ class CustomersVoices(APIView):
     def get(self, request, user_pk, format=None):
         request_user = request.user
         if user_pk == request_user.pk:
-            voices = CustomersVoice.objects.filter(request_user=user_pk)
+            voices = CustomersVoice.objects.filter(request_user=user_pk).order_by('-created_at')
             voice = []
             for v in voices:
                 serializer = CustomersVoiceSerializer(v)
@@ -120,8 +125,7 @@ class CustomersVoices(APIView):
                 'title': request.data.get('title'),
                 'content': request.data.get('content'),
                 'category': request.data.get('category'),
-                'request_user': user,
-                'manager': request.data.get('manager'),
+                'writer': user,
             }
             serializer = CustomersVoiceSerializer(data=data)
             if serializer.is_valid():
@@ -139,6 +143,7 @@ class CustomersVoices(APIView):
             return Response(data, status=status.HTTP_401_UNAUTHORIZED)
 
 
+@permission_classes((IsAuthenticated,))
 class CustomersVoiceChange(APIView):
     """
         고객센터(사용자) - 요청 글 내용 수정
@@ -178,6 +183,7 @@ class CustomersVoiceChange(APIView):
             return Response(data, status=status.HTTP_403_FORBIDDEN)
 
 
+@permission_classes((IsAdminUser,))
 class ManagersReplying(APIView):
     """
         고객센터(관리자) - 처리할 일 목록/등록
@@ -203,9 +209,13 @@ class ManagersReplying(APIView):
 
     def get(self, request, manager_pk, format=None):
         manager = self.get_manager(manager_pk)
-        todos = CustomersVoice.objects.filter(manager=manager_pk)
+        todos = CustomersVoice.objects.filter(manager=manager_pk).order_by('-created_at')
+        todo = []
+        for t in todos:
+            serializer = CustomersVoiceSerializer(t)
+            todo.append(serializer.data)
         data = {
-            'todos': todos,
+            'todos': todo,
         }
         return Response(data, status=status.HTTP_200_OK)
 
@@ -222,6 +232,7 @@ class ManagersReplying(APIView):
         return Response(data, status=status.HTTP_400_BAD_REQUEST)
 
 
+@permission_classes((IsAdminUser,))
 class ManagersReplyChange(APIView):
     """
         고객센터(관리자) - 관리자의 답변 수정
