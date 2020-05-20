@@ -40,6 +40,9 @@ class ManagersReplyAdmin(admin.ModelAdmin):
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
+    def reports(self, obj):
+        return ReportComment.objects.filter(comment_id=obj.id).count()
+
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
         queryset = queryset.annotate(
@@ -48,8 +51,6 @@ class CommentAdmin(admin.ModelAdmin):
         return queryset
     reports.admin_order_field = '_reports'
 
-    def reports(self, obj):
-        return ReportComment.objects.filter(comment_id=obj.id).count()
 
     list_display = ('id', 'content', 'writer', 'destination', 'writed_at', 'updated_at', 'reports')
     list_per_page = 10
@@ -61,15 +62,15 @@ class CommentAdmin(admin.ModelAdmin):
 
 @admin.register(ReComment)
 class ReCommentAdmin(admin.ModelAdmin):
+    def reports(self, obj):
+        return ReportReComment.objects.filter(re_comment_id=obj.id).count()
+
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
         queryset = queryset.annotate(
             _reports=Count("reportrecomment", distinct=True),
         )
         return queryset
-
-    def reports(self, obj):
-        return ReportReComment.objects.filter(re_comment_id=obj.id).count()
     reports.admin_order_field = '_reports'
 
     list_display = ('id', 'comment', 'writer', 'content', 'writed_at', 'updated_at', 'reports')
