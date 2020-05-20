@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework_jwt.settings import api_settings
 from decouple import config
 from .serializers import MessageSerializer
-from .models import Message
+from .models import Message, Theme
 
 User = get_user_model()
 decoder = api_settings.JWT_DECODE_HANDLER
@@ -79,11 +79,19 @@ class Chating(APIView):
 
 class AdminTravelMgmt(APIView):
     def add(self, theme, dests):
-        # Theme를 form 형태로 저장할지, object create로 저장할지
-        # Theme의 destinations 순서(dests)는 list 형태로 바로 저장 (ListTetField)
+        
         pass
 
     def fetch(self, theme, ):
-        # 운영자의 테마 수정은 form으로 받아오는 게 편할 것 같다
-        
+        # django form으로 직접 받아오는건 vue.js customizing이 너무 번거롭다.
+        # 일반 form으로 받아온 뒤 django ORM 객체에 직접 넣으면서 validation 진행하는 방식으로 진행.
         pass
+    
+    # Theme의 ListTextField가 list 형태로 출력되는지 확인하기 위한 test 함수, list로 잘 출력됨
+
+    # def test(request):
+    #     theme = Theme.objects.get(id=1)
+    #     print(type(theme.dests))
+    #     for t in theme.dests:
+    #         print(t)
+    #     return Response()
