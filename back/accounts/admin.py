@@ -42,7 +42,6 @@ class CustomUserAdmin(UserAdmin):
     actions = [
         ban_users
     ]
-admin.site.register(User, CustomUserAdmin)
 
 
 @admin.register(Waiting)
