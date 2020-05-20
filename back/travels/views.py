@@ -18,15 +18,15 @@ class TravelMgmt(APIView):
 
     ---
     """
-    def get_person(self, user_id, format=None):
-        if User.objects.filter(pk=user_id).exists():
-            return User.objects.get(pk=user_id)
+    def get_person(self, user_pk, format=None):
+        if User.objects.filter(pk=user_pk).exists():
+            return User.objects.get(pk=user_pk)
         else:
             return None
     
-    def get(self, request, pk, format=None):
+    def get(self, request, user_pk, format=None):
         # try:
-            user = self.get_person(pk)
+            user = self.get_person(user_pk)
             print(user)
             themes = user.favorite_themes
             dests = user.favorite_destinations
@@ -76,6 +76,7 @@ class Chating(APIView):
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data)
+
 
 class AdminTravelMgmt(APIView):
     def add(self, theme, dests):

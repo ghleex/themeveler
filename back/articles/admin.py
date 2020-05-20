@@ -46,11 +46,10 @@ class CommentAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
         queryset = queryset.annotate(
-            _reports=Count("reportcomment", distinct=True),
+            _reports=Count('reportcomment', distinct=True),
         )
         return queryset
     reports.admin_order_field = '_reports'
-
 
     list_display = ('id', 'content', 'writer', 'destination', 'writed_at', 'updated_at', 'reports')
     list_per_page = 10
@@ -68,7 +67,7 @@ class ReCommentAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
         queryset = queryset.annotate(
-            _reports=Count("reportrecomment", distinct=True),
+            _reports=Count('reportrecomment', distinct=True),
         )
         return queryset
     reports.admin_order_field = '_reports'

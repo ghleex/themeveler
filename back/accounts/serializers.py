@@ -14,15 +14,18 @@ class UserCreationSerializer(serializers.ModelSerializer):
         validate_password(value)
         return value
 
+
 class UserNicknameSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('nickname', )
 
+
 class UsernameSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('username', )
+
 
 class UserPasswordSerializer(serializers.ModelSerializer):
     class Meta:
@@ -39,15 +42,18 @@ class WaitingSerializer(serializers.ModelSerializer):
         model = Waiting
         fields = '__all__'
 
+
 class ConfirmCodeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Waiting
         fields = ('username', 'confirm_code')
 
+
 class ReporCommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReportComment
         fields = '__all__'
+
 
 class ReporReCommentSerializer(serializers.ModelSerializer):
     class Meta:
