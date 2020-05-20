@@ -9,4 +9,6 @@ urlpatterns = [
     path('cv_change/<int:user_pk>/<int:voice_pk>/', views.CustomersVoiceChange.as_view()),
     path('cv_reply/<int:manager_pk>/', views.ManagersReplying.as_view()),
     path('cv_reply_change/<int:manager_pk>/<int:todo_pk>/', views.ManagersReplyChange.as_view()),
+    path('report/comment/', views.ReportCommentMgmt.as_view()),
+    path('report/recomment/', views.ReportReCommentMgmt.as_view()),
 ]
