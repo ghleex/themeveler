@@ -91,7 +91,7 @@ export default [
     id: '10',
     category: '신고',
     writer: '싸피1',
-    title: 'ID 조현호 님을 신고합니다.',
+    title: 'ID 쭈노 님을 신고합니다.',
     content: '10',
     createddate: '2002-05-18 | 10:27'
 

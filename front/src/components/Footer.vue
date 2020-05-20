@@ -9,7 +9,7 @@
         style="color: lightgray"
       ></i>
     </a> -->
-    <a href="#" class="m-4"></a>
+    <a class="m-4"></a>
     <div class="row m-0 mx-auto text-white-50 justify-content-around align-items-center" style="max-width: 550px;">
 			<p style="color:lightgray;">|</p>
       <p>이길현</p>
@@ -30,7 +30,6 @@
 
     <div class="row align-items-center m-0">
       <div class="d-none d-md-flex col-md-5">
-        <p class="footer-brand"></p>
         <p class="footer-brand">Themeveler</p>
       </div>
       <div class="col offset-md-3">
@@ -68,7 +67,7 @@ export default {
   color: lightgray;
   font-family: sans-serif;
   user-select: none;
-  margin: 0;
+  margin: 0 !important;
 }
 .footer-right {
   font-size: calc(6px + 0.5vw);

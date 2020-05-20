@@ -10,20 +10,20 @@
 
 
     <!-- Carousels -->
-    <div class="carousel">
+    <!-- <div class="carousel">
       <v-carousel cycle height="500" hide-delimiter-background show-arrows-on-hover>
         <v-carousel-item v-for="(slide, i) in slides" :key="i" :src="slide">
           <v-sheet width="100%">
             <v-row class="fill-height" align="center" justify="center">
               <div></div>
-              <!-- <div class="display-3">{{ slide }} Slide</div> -->
+              <div class="display-3">{{ slide }} Slide</div>
             </v-row>
           </v-sheet>
         </v-carousel-item>
       </v-carousel>
     </div>
     <br>
-    <br>
+    <br> -->
 
 
     <div class="container">
