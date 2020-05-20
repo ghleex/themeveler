@@ -18,6 +18,7 @@
       hide-details
       label="Where do you want to go?"
       solo-inverted
+      color="#651FFF"
     ></v-autocomplete>
     <v-btn icon>
       <v-icon>mdi-dots-vertical</v-icon>
