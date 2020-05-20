@@ -2,13 +2,13 @@
   <div id="notice-create">
     <h4>공지사항 작성</h4>
     <div class="reset">
-      <v-btn color="warning" @click="reset">다시 작성</v-btn>
+      <v-btn color="warning" @click="reset"><i class="fas fa-redo-alt mr-1"></i>다시 작성</v-btn>
     </div>
     <v-form ref="form" v-model="valid" lazy-validation>
       <v-select v-model="select" :items="categorys" :rules="categoryRules" label="분류" required></v-select>
       <v-text-field v-model="title" :counter="30" :rules="titleRules" label="제목" required></v-text-field>
-      <v-text-field v-model="content" :rules="contentRules" label="내용" required></v-text-field>
-      <v-text-field v-model=" writer" label="작성자" required></v-text-field>
+      <v-textarea v-model="content" :rules="contentRules" label="내용" class="mt-4" outlined></v-textarea>
+      <v-text-field v-model=" writer" label="작성자" disabled></v-text-field>
       <v-btn :disabled="!valid" color="success" class="mr-4" 
         @click="index !== undefined ? update() : write()">{{index !== undefined ? '수정' : '작성'}}</v-btn>
       <v-btn color="error" @click="index !== undefined ? updatecancel() : addcancel()">취소</v-btn>
@@ -53,7 +53,8 @@ export default {
         category: this.select,
         title: this.title,
         content: this.content,
-        writer: this.writer
+        writer: this.writer,
+        createddate: this.createddate,
       })
       this.$router.push({
         path: '/notice'
@@ -63,7 +64,6 @@ export default {
       data[this.index].category = this.select
       data[this.index].title = this.title
       data[this.index].content = this.content
-      data[this.index].writer = this.writer
       this.$router.push({
         path: '/notice/detail/'+this.index
       })

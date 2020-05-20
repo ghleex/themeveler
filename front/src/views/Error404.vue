@@ -6,3 +6,20 @@
     </v-alert>
   </v-container>
 </template>
+
+<script>
+export default {
+  methods: {
+    a() {
+      document.querySelector('#footer').style.display = 'none'
+    }
+  },
+  mounted() {
+    this.a()
+  }
+}
+</script>
+
+<style scoped>
+
+</style>

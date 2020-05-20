@@ -2,6 +2,7 @@
   <div class="header">
     <div class="banner">
       <img src="../assets/image/bg.jpg" alt="">
+      <v-btn style="position:absolute; margin-top:70px; left:80%; z-index:2;" color="primary" outlined to="/profile">유저페이지>>>>임시버튼</v-btn>
     </div>
     <div class="home-search-bar">
       <SearchBar />
@@ -24,7 +25,6 @@
     <br>
     <br>
 
-    <v-btn color="primary" outlined to="/profile">유저페이지>>>>임시버튼</v-btn>
 
     <div class="container">
       <div class="main-section">
@@ -99,19 +99,21 @@
         <!-- 인기 여행지 Card -->
         <v-container fluid class="mx-auto" max-width="95%">
           <v-row dense>
-            <v-col v-for="card in cards" :key="card.title" :cols="card.flex">
-              <v-card class="mx-auto" max-width="90%">
-                <v-img :src="card.src" class="white--text align-end"
-                  gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)" height="200px">
-                  <v-card-title v-text="card.title"></v-card-title>
-                </v-img>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn icon><v-icon>mdi-heart</v-icon></v-btn>
-                  <v-btn icon><v-icon>mdi-bookmark</v-icon></v-btn>
-                  <!-- <v-btn icon><v-icon>mdi-share-variant</v-icon></v-btn> -->
-                </v-card-actions>
-              </v-card>
+            <v-col v-for="card in spotcards" :key="card.title" :cols="12" :sm="3">
+              <v-hover v-slot:default="{ hover }">
+                <v-card class="mx-auto" max-width="90%" :elevation="hover ? 12 : 2">
+                  <v-img :src="card.src" class="white--text align-end"
+                    gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)" height="200px">
+                    <v-card-title v-text="card.title"></v-card-title>
+                  </v-img>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn icon><v-icon color="red">mdi-heart-outline</v-icon></v-btn>
+                    <v-btn icon><v-icon color="green">mdi-bookmark-outline</v-icon></v-btn>
+                    <!-- <v-btn icon><v-icon>mdi-share-variant</v-icon></v-btn> -->
+                  </v-card-actions>
+                </v-card>
+              </v-hover>
             </v-col>
           </v-row>
         </v-container>
@@ -147,7 +149,7 @@ export default {
         require('../assets/image/bg.jpg'),
         require('../assets/image/image01.jpg')
       ],
-      cards: [
+      spotcards: [
         { title: 'Pre-fab homes', src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg', flex: 3 },
         { title: 'Favorite road trips', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg', flex: 3 },
         { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 3 },

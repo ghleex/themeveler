@@ -47,9 +47,10 @@ export default {
     return {
       drawer: true,
       items: [
-        { title: 'Profile', icon: 'mdi-view-dashboard', path: "/profile" },
+        { title: '마이페이지', icon: 'mdi-view-dashboard', path: "/profile" },
         { title: '회원정보수정', icon: 'mdi-help-box', path: "/editprofile" },
-        { title: '미정', icon: 'mdi-image', path: "/profile/0" },
+        { title: '댓글 관리', icon: 'mdi-image', path: "/profile/comment" },
+        { title: '미정', icon: 'mdi-image', path: "/profiletest" },
       ],
       color: "primary",
       miniVariant: false,

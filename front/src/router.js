@@ -9,12 +9,10 @@ import NoticeDetail from './views/Notice/NoticeDetail.vue'
 import ServiceRead from './views/ServiceCenter/ServiceRead.vue'
 import ServiceCreate from './views/ServiceCenter/ServiceCreate.vue'
 import ServiceDetail from './views/ServiceCenter/ServiceDetail.vue'
-// import CustomerCenterRead from './views/CustomerCenter/CustomerCenterRead.vue'
-// import CustomerCenterCreate from './views/CustomerCenter/CustomerCenterCreate.vue'
-// import CustomerCenterDetail from './views/CustomerCenter/CustomerCenterDetail.vue'
 // import Map from './views/Map/Map.vue'
 import Profile from './views/Profile.vue'
 import EditProfile from './views/EditProfile.vue'
+import ProfileTest from './views/ProfileTest.vue'
 import Error404 from './views/Error404.vue'
 
 Vue.use(VueRouter)
@@ -66,25 +64,10 @@ const routes = [
     component: ServiceDetail
   },
   // {
-    //   path: '/customercenter',
-    //   name: 'customercenter-read',
-    //   component: CustomerCenterRead
-    // },
-    // {
-      //   path: '/customercenter/create/:customercenterId?',
-      //   name: 'customercenter-create',
-      //   component: CustomerCenterCreate
-      // },
-      // {
-        //   path: '/customercenter/detail/:customercenterId',
-        //   name: 'customercenter-detail',
-        //   component: CustomerCenterDetail
-        // },
-        // {
-          //   path: '/map',
-          //   name: 'map',
-          //   component: Map
-          // },
+  //   path: '/map',
+  //   name: 'map',
+  //   component: Map
+  // },
   {
     path: '/profile',
     name: 'profile',
@@ -94,6 +77,11 @@ const routes = [
     path: '/editprofile',
     name: 'editprofile',
     component: EditProfile
+  },
+  {
+    path: '/profiletest',
+    name: 'profiletest',
+    component: ProfileTest
   },
 
           
