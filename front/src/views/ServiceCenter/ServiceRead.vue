@@ -12,11 +12,6 @@
           <v-toolbar class="service-center-header" flat color="white">
             <v-toolbar-title></v-toolbar-title>
             <v-spacer></v-spacer>
-            <!-- <v-dialog v-model="dialog" max-width="500px">
-            <template v-slot:activator="{ on }">
-              <v-btn color="primary" dark class="mb-2" v-on="on">New Item</v-btn>
-            </template>
-          </v-dialog> -->
             <v-btn color="#607D8B" dark class="mb-2" @click="write">글쓰기</v-btn>
           </v-toolbar>
         </template>
@@ -28,14 +23,12 @@
         <template v-slot:item.title="{ item }">
           <div class="service-list-body" @click="detail(item.id)">{{ item.title }}</div>
         </template>
-
         <!-- data가 없을 시 -->
         <template slot="no-data">
           <v-alert :value="true" color="error" icon="warning">
             Sorry, nothing to display here :(
           </v-alert>
         </template>
-
       </v-data-table>
       <!-- 페이지 번호 -->
       <div class="text-center pt-2">
@@ -54,7 +47,7 @@
   import data from '@/views/ServiceCenter/data'
 
   export default {
-    name: 'serviece-read',
+    name: 'service-read',
     data() {
       return {
         page: 1,
@@ -114,12 +107,13 @@
 
 <style scoped>
   #service-read {
-    margin-top: 80px;
+    /* margin-top: 80px; */
     /* margin-bottom: 60px; */
     margin-left: auto;
     margin-right: auto;
     text-align: center;
     width: 100%;
+    height: 100%;
     background-color: rgb(238, 240, 247);
   }
 
@@ -131,7 +125,7 @@
   #service-read .service-center-title {
     font-family: 'Cafe24Simplehae';
     font-size: 40px;
-    margin: 5rem auto 0 auto;
+    margin: 8rem auto 0 auto;
     /* background-color: rgb(255, 187, 0); */
     width: 80%;
     border-radius: 7px 7px 0 0;
@@ -145,8 +139,15 @@
   }
 
   .service-dataTable {
+    height: 400px;
     /* white-space: nowrap; */
   }
+  @media (max-width: 599px) {
+   .service-dataTable {
+    height: auto;
+  }
+  }
+
   .service-list-body {
     width: 100%;
     height: 1.2rem;
@@ -166,7 +167,7 @@
     }
     .service-body {
       width: 95% !important;
-      margin: 0 auto !important;
+      margin: 0 auto 5rem auto !important;
     }
   }
 

@@ -2,13 +2,13 @@
   <div class="navbar_box">
 
     <!-- 사이드바 -->
-    <v-navigation-drawer class="text-start" v-model="drawer" absolute temporary>
+    <v-navigation-drawer class="text-start sideBar-zIndex" v-model="drawer" absolute temporary>
       <v-list-item class="mt-2">
         <v-list-item-avatar>
           <v-img class="nav-avartar" src='../assets/navlogo.png'></v-img>
         </v-list-item-avatar>
         <v-list-item-content>
-          <v-list-item-title><b>Themeveler</b></v-list-item-title>
+          <v-list-item-title><router-link to="/" class="text-dark"> <b>Themeveler</b></router-link></v-list-item-title>
         </v-list-item-content>
       </v-list-item>
 
@@ -141,6 +141,10 @@
 
   .navbar_box>img {
     width: 100%;
+  }
+
+  .sideBar-zIndex {
+    z-index: 20;
   }
 
   .dropdown-content {

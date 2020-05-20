@@ -23,7 +23,7 @@
         ></v-textarea>
 
         <v-text-field color="#607D8B" class="mb-7" v-model=" writer" label="작성자" required></v-text-field>
-        <v-btn color="#607D8B" :disabled="!valid" class="mr-4 text-light btn-create"
+        <v-btn color="#607D8B" :disabled="!valid" class="text-light btn-create btn-create-mr4"
           @click="index !== undefined ? update() : write()">
           {{index !== undefined ? '수정' : '작성'}} <i class="fas fa-check-circle ml-1"></i></v-btn>
         <v-btn type="submit" value="submit" color="error" class="btn-create" @click="index !== undefined ? updatecancel() : addcancel()">취소<i
@@ -201,6 +201,15 @@
     margin: 0 auto 5rem auto;
     border-radius: 0 0 7px 7px;
     box-shadow: 1px 2px 2px 1px rgb(100, 105, 109);
+  }
+
+  .btn-create-mr4 {
+    margin-right: 2rem;
+  }
+  @media (max-width: 439px) {
+    .btn-create {
+      margin: .5rem;
+    }
   }
 
   @media (min-width: 1000px) {

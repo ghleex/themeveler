@@ -10,6 +10,8 @@
       class="elevation-1"
       @page-count="pageCount = $event"
       :search="search"
+      :sort-by="['id']"
+      :sort-desc="true"
     >
       <template v-slot:top>
         <v-toolbar flat color="white">
@@ -56,9 +58,9 @@ export default {
       itemsPerPage: 10,
       search: '',
       headers: [
-        { text: '번호', align: 'start', sortable: false, value: 'id' },
+        { text: '번호', align: 'start', value: 'id', sortable: false },
         { text: '분류', value: 'category' },
-        { text: '제목', value: 'title' },
+        { text: '제목', value: 'title', sortable: false },
         { text: '작성자', value: 'writer', sortable: false },
         { text: '등록일', value: 'createddate' }
       ],
@@ -95,7 +97,7 @@ export default {
   margin-left: auto;
   margin-right: auto;
   text-align: center;
-  width: 95%;
+  width: 80%;
 }
 .searchbar {
   margin-left: auto;
