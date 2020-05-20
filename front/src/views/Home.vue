@@ -4,7 +4,6 @@
       <SearchBar />
     </div>
 
-
     <!-- Carousels -->
     <div class="carousel">
       <v-carousel cycle height="400px" hide-delimiters hide-delimiter-background show-arrows-on-hover>
@@ -12,8 +11,9 @@
         </v-carousel-item>
       </v-carousel>
     </div>
-    <br>
-    <br>
+
+    <v-btn color="primary" class="mt-6" outlined to="/profile">
+      유저페이지>>>>임시버튼</v-btn>
 
     <!-- 인기 테마 -->
     <h2 class="home-h2-title"><i class="fas fa-bookmark mr-2"></i>인기 테마</h2>
@@ -70,10 +70,11 @@
 
 
 
-      <div class="main-section">
-        <h2 class="home-h2-title mt-12"><i class="fas fa-bus-alt mr-2"></i>인기 여행지</h2>
-        <!-- <revi-list limits="4" :spotData="spotData" /> -->
-        <!-- <div class="hspot d-inline width:80% col-md-6 col-12">
+    <div class="main-section">
+      <h2 class="home-h2-title mt-12"><i class="fas fa-bus-alt mr-2"></i>인기 여행지</h2>
+
+      <!-- <revi-list limits="4" :spotData="spotData" /> -->
+      <!-- <div class="hspot d-inline width:80% col-md-6 col-12">
           <div>
             <p :src="spotData[0]" width="300" height="300"></p>
             <p :src="spotData[1]" width="300" height="300"></p>
@@ -84,8 +85,8 @@
           </div>
         </div>
         <br> -->
-        <!-- 인기 여행지 Card -->
-        <!-- <v-container fluid class="mx-auto" max-width="95%">
+      <!-- 인기 여행지 Card -->
+      <!-- <v-container fluid class="mx-auto" max-width="95%">
           <v-row dense>
             <v-col v-for="card in cards" :key="card.title" :cols="card.flex">
               <v-card class="mx-auto" max-width="90%">
@@ -109,9 +110,9 @@
             </v-col>
           </v-row>
         </v-container> -->
-        <br><br>
-      </div>
+      <br><br>
     </div>
+  </div>
 
 </template>
 

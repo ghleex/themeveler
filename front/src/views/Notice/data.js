@@ -4,90 +4,103 @@ export default [
     category: '중요',
     writer: '아이린',
     title: '레드벨벳',
-    content: '0'
+    content: '0',
+    createddate: '2020-05-15 16:27:00'
   },
   {
     id: '1',
     category: '중요',
     writer: '아이린',
     title: '레드벨벳',
-    content: '1'
+    content: '1',
+    createddate: '2020-05-15 16:27:00'
   },
   {
     id: '2',
     category: '중요',
     writer: '슬기',
     title: '레드벨벳',
-    content: '2'
+    content: '2',
+    createddate: '2020-05-15 16:27:00'
   },
   {
     id: '3',
     category: '일반',
     writer: '웬디',
     title: '레드벨벳',
-    content: '3'
+    content: '3',
+    createddate: '2020-05-15 16:27:00'
   },
   {
     id: '4',
     category: '일반',
     writer: '현',
     title: '싸파',
-    content: '4'
+    content: '4',
+    createddate: '2020-05-15 16:27:00'
   },
   {
     id: '5',
     category: '일반',
     writer: '쭈노',
     title: '싸퍼',
-    content: '5'
+    content: '5',
+    createddate: '2020-05-15 16:27:00'
   },
   {
     id: '6',
     category: '일반',
     writer: '덕',
     title: '싸프',
-    content: '6'
+    content: '6',
+    createddate: '2020-05-15 16:27:00'
   },
   {
     id: '7',
     category: '일반',
     writer: '현',
     title: '피자',
-    content: '7'
+    content: '7',
+    createddate: '2020-05-15 16:27:00'
   },
   {
     id: '8',
     category: '일반',
     writer: '쭈노',
     title: '치킨',
-    content: '8'
+    content: '8',
+    createddate: '2020-05-15 16:27:00'
   },
   {
     id: '9',
     category: '일반',
     writer: '핸',
     title: '빠바',
-    content: '9'
+    content: '9',
+    createddate: '2020-05-15 16:27:00'
   },
   {
     id: '10',
     category: '일반',
     writer: '싸피1',
     title: '빵',
-    content: '10'
+    content: '10',
+    createddate: '2020-05-15 16:27:00'
   },
   {
     id: '11',
     category: '일반',
     writer: '슬기',
     title: '레드벨벳',
-    content: '11'
+    content: '11',
+    createddate: '2020-05-15 16:27:00'
   },
   {
     id: '12',
     category: '일반',
     writer: '이순희',
     title: '라이브',
-    content: '12'
+    content: '12',
+    createddate: '2020-05-15 16:27:00'
   }
 ]
