@@ -14,16 +14,19 @@ class User(AbstractUser):
     favorite_themes = models.ManyToManyField(Theme, blank=True, related_name='theme_like_users') # Theme.theme_like_users.all()
     favorite_destinations = models.ManyToManyField(Destination, blank=True, related_name='destination_like_users') # Destination.destination_like_users.all()
 
+
 class Waiting(models.Model):
     username = models.EmailField(blank=False, max_length=254)
     is_confirm = models.BooleanField(default=False, blank=False)
     confirm_code = models.CharField(max_length=50, null=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+
 class ReportComment(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
     report_text = models.TextField()
+
     class Meta:
         ordering = ('-pk',)
 
@@ -32,5 +35,6 @@ class ReportReComment(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     re_comment = models.ForeignKey(ReComment, on_delete=models.CASCADE)
     report_text = models.TextField()
+
     class Meta:
         ordering = ('-pk',)
