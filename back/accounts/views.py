@@ -12,9 +12,9 @@ from rest_framework_jwt.settings import api_settings
 from rest_framework_jwt.utils import jwt_decode_handler
 from rest_framework_jwt.views import obtain_jwt_token
 from .serializers import UserCreationSerializer, UserNicknameSerializer, WaitingSerializer
-from .serializers  import UsernameSerializer, ConfirmCodeSerializer, UserPasswordSerializer
-from .models import Waiting
-from travels.serializers import MessageSerializer
+from .serializers import UsernameSerializer, ConfirmCodeSerializer, UserPasswordSerializer
+from .serializers import ReporCommentSerializer, ReporReCommentSerializer
+from .models import Waiting, ReportComment, ReportReComment
 from random import SystemRandom, choice
 from datetime import datetime, timedelta, timezone
 import re
@@ -43,6 +43,10 @@ def Check_request(request, check_list):
             data[form] = ['이 필드는 INT형식이여야 합니다.']
     return data
 
+def get_user(token, format=None):
+    jwt_data = decoder(token[1])
+    user = get_object_or_404(User, id=jwt_data['user_id'])
+    return user
 
 @permission_classes((AllowAny, ))
 class Mail(APIView):
@@ -146,18 +150,13 @@ class SignUp(APIView):
         return Response({'message' : ['회원가입이 실패하였습니다.']}, status=status.HTTP_400_BAD_REQUEST)
 
 class UserMgmt(APIView):
-    def get_user(self, token, format=None):
-        jwt_data = decoder(token[1])
-        user = get_object_or_404(User, id=jwt_data['user_id'])
-        return user
-
     def delete(self, request, format=None):
-        user = self.get_user(request.headers['Authorization'].split(' '))
+        user = get_user(request.headers['Authorization'].split(' '))
         user.delete()
         return Response({'message' : ['회원탈퇴가 정상적으로 처리되었습니다.']}, status=status.HTTP_204_NO_CONTENT)
 
     def put(self, request, format=None):
-        user = self.get_user(request.headers['Authorization'].split(' '))
+        user = get_user(request.headers['Authorization'].split(' '))
         serializer = UserNicknameSerializer(user, data=request.data)
         if serializer.is_valid(raise_exception=True):
             user = serializer.save()
@@ -224,3 +223,36 @@ class UserBan(APIView):
         sign_in_user.save()
         return Response({'message' : [username + '의 정지처리가 취소되었습니다.']})
 
+class ReportCommentMgmt(APIView):
+    def post(self, request, format=None):
+        user = get_user(request.headers['Authorization'].split(' '))
+        if not ReportComment.objects.filter(user=user.id).exists():
+            data = {
+                'user':user.id,
+                'comment':request.data.get('comment'),
+                'report_text':request.data.get('report_text')
+            }
+            serializer = ReporCommentSerializer(data=data)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                return Response({'message':['해당 댓글이 성공적으로 신고되었습니다.']})
+            return Response({'message' : ['해당 댓글에 대한 신고가 실패하였습니다.']}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({'message' : ['이미 신고가 접수된 댓글입니다.']}, status=status.HTTP_400_BAD_REQUEST)
+
+class ReportReCommentMgmt(APIView):
+    def post(self, request, format=None):
+        user = get_user(request.headers['Authorization'].split(' '))
+        if not ReportReComment.objects.filter(user=user.id).exists():
+            data = {
+                'user':user.id,
+                're_comment':request.data.get('re_comment'),
+                'report_text':request.data.get('report_text')
+            }
+            serializer = ReporReCommentSerializer(data=data)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                return Response({'message':['해당 댓글이 성공적으로 신고되었습니다.']})
+            return Response({'message' : ['해당 댓글에 대한 신고가 실패하였습니다.']}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({'message' : ['이미 신고가 접수된 댓글입니다.']}, status=status.HTTP_400_BAD_REQUEST)

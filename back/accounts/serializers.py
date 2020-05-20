@@ -1,4 +1,4 @@
-from .models import Waiting
+from .models import Waiting, ReportComment, ReportReComment
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
@@ -44,3 +44,12 @@ class ConfirmCodeSerializer(serializers.ModelSerializer):
         model = Waiting
         fields = ('username', 'confirm_code')
 
+class ReporCommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ReportComment
+        fields = '__all__'
+
+class ReporReCommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ReportReComment
+        fields = '__all__'
