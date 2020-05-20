@@ -9,7 +9,7 @@
         </v-btn>
       </div>
       <v-form ref="form" class="service-create-form" v-model="valid" lazy-validation>
-        <v-select color="#607D8B" v-model="select" :items="categorys" :rules="categoryRules" label="분류" required>
+        <v-select color="#607D8B" v-model="select" :items="categorys" :rules="[v => !!v || '분류를 선택해주세요.']" label="분류" required>
         </v-select>
         <v-text-field color="#607D8B" v-model="title" :counter="30" :rules="titleRules" label="제목" required>
         </v-text-field>
@@ -26,7 +26,7 @@
         <v-btn color="#607D8B" :disabled="!valid" class="mr-4 text-light btn-create"
           @click="index !== undefined ? update() : write()">
           {{index !== undefined ? '수정' : '작성'}} <i class="fas fa-check-circle ml-1"></i></v-btn>
-        <v-btn color="error" class="btn-create" @click="index !== undefined ? updatecancel() : addcancel()">취소<i
+        <v-btn type="submit" value="submit" color="error" class="btn-create" @click="index !== undefined ? updatecancel() : addcancel()">취소<i
             class="fas fa-times-circle ml-1"></i></v-btn>
       </v-form>
       <!-- <button @click="index !== undefined ? update() : write()">{{index !== undefined ? '수정' : '작성'}}</button> -->
@@ -36,6 +36,7 @@
 
 <script>
   import data from '@/views/ServiceCenter/data'
+  import Swal from 'sweetalert2'
 
   export default {
     name: 'service-create',
@@ -49,9 +50,6 @@
         content: index !== undefined ? data[index].content : "",
         writer: index !== undefined ? data[index].writer : "",
         valid: false,
-        categoryRules: [
-          [v => !!v || '분류를 선택해주세요']
-        ],
         titleRules: [
           v => !!v || '제목을 작성해주세요',
           v => (v && v.length <= 30) || '제목을 30자 이내로 작성해주세요',
@@ -64,18 +62,19 @@
         ]
       }
     },
-    methods: {
+    methods: {   
       write() {
         var today = new Date();
         var year = today.getFullYear(); // 년도
         var month = today.getMonth() + 1; // 월
         var date = today.getDate(); // 날짜
         // var day = today.getDay(); // 요일
-        var hour = today.getHours() // 시간
-        var min = today.getMinutes()
+        // var hour = today.getHours() // 시간
+        // var min = today.getMinutes()
 
-        this.createddate = `${year}-${month}-${date} | ${hour}:${min}`
-        console.log(this.createddate)
+        // this.createddate = `${year}-${month}-${date} | ${hour}:${min}`
+        this.createddate = `${year}-${month}-${date}`
+        // console.log(this.createddate)
 
         this.data.push({
           category: this.select,
@@ -84,19 +83,78 @@
           writer: this.writer,
           createddate: this.createddate
         })
-        this.$router.push({
-          path: '/service'
-        })
+
+        if (!this.select) {
+           Swal.fire({
+            title: "Check Categorys",
+            text: "분류를 선택해주세요.",
+            type: "warning",
+            timer: 3000
+          })
+        } else if (!this.title) {
+           Swal.fire({
+            title: "Check Title",
+            text: "제목을 입력하세요.",
+            type: "warning",
+            timer: 3000
+          })
+        } else if (this.title.length > 30) {
+           Swal.fire({
+            title: "Check Title",
+            text: "제목을 30자 이내로 작성해주세요",
+            type: "warning",
+            timer: 3000
+          })
+        } else if (!this.content) {
+           Swal.fire({
+            title: "Check Content",
+            text: "내용을 입력하세요.",
+            type: "warning",
+            timer: 3000
+          })
+        }
+
+        if (this.$refs.form.validate()) {
+          this.$router.push({
+            path: '/service'
+          })
+        }
       },
       update() {
+        this.$refs.form.validate()
         data[this.index].category = this.select
         data[this.index].title = this.title
         data[this.index].content = this.content
         data[this.index].writer = this.writer
 
-        this.$router.push({
-          path: '/service/detail/' + this.index
-        })
+        if (!this.select) {
+           Swal.fire({
+            title: "Check Categorys",
+            text: "분류를 선택해주세요.",
+            type: "warning",
+            timer: 3000
+          })
+        } else if (!this.title) {
+           Swal.fire({
+            title: "Check Title",
+            text: "제목을 입력하세요.",
+            type: "warning",
+            timer: 3000
+          })
+        } else if (!this.content) {
+           Swal.fire({
+            title: "Check Content",
+            text: "내용을 입력하세요.",
+            type: "warning",
+            timer: 3000
+          })
+        }
+
+        if (this.$refs.form.validate()) {
+          this.$router.push({
+            path: '/service'
+          })
+        }
       },
       reset() {
         this.$refs.form.reset()
