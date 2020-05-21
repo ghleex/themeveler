@@ -1,47 +1,23 @@
 <template>
-  <v-app id="profile">
+  <v-app id="profile-comment">
     <Drawer class="drawer" />
-
-    <v-content id="profile-content">
-      <h2 class="content-title">작성한 댓글</h2>
-      <v-divider></v-divider>
-      <v-row justify="center" class="content-body">
-        <v-col cols="12" md="12">
-          <v-card>
-            <h5 class="card-title">작성한 댓글 관리
-              <v-chip class="ma-2 px-2" small color="orange" text-color="white">12</v-chip>
-            </h5>
-            <v-divider></v-divider>
-            <v-list>
-              <v-list-item v-for="item in items" :key="item.title" link>
-                <v-list-item-avatar>
-                  <v-icon :class="[item.iconClass]">{{ item.icon }}</v-icon>
-                </v-list-item-avatar>
-                <v-list-item-content>
-                  <v-list-item-title>{{ item.title }}</v-list-item-title>
-                  <!-- <v-list-item-subtitle>{{ item.subtitle }}</v-list-item-subtitle> -->
-                </v-list-item-content>
-                <v-list-item-action>
-                  <v-btn icon :to="'/spot/'+item.id"><v-icon color="grey lighten-1">mdi-information</v-icon></v-btn>
-                </v-list-item-action>
-              </v-list-item>
-            </v-list>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-content>
-
 
     <div class="comment">
       <v-data-table :headers="headers" :items="commentData" :page.sync="page" :items-per-page="itemsPerPage"
         hide-default-footer class="elevation-1" @page-count="pageCount = $event" :search="search"
-        :sort-by="['id']" :sort-desc="true">
+        :sort-by="['id']" :sort-desc="true" dense>
         <template v-slot:top>
           <v-toolbar flat color="white">
             <h5 class="card-title">작성한 댓글 목록
               <v-chip class="ma-2 px-2" small color="amber" text-color="white">{{ commentCount }}</v-chip>
               <!-- <v-badge color="blue" content="5" inline="true"></v-badge> -->
             </h5>
+            <v-spacer></v-spacer>
+            <!-- 검색바 -->
+            <div>
+              <v-text-field v-model="search" append-icon="mdi-magnify" label="검색"
+                single-line hide-details class="searchbar"></v-text-field>
+            </div>
           </v-toolbar>
         </template>
         <!-- 리스트 제목 -->
@@ -53,13 +29,7 @@
       <div class="text-center pt-2">
         <v-pagination v-model="page" :length="pageCount"></v-pagination>
       </div>
-      <!-- 검색바 -->
-      <div>
-        <v-text-field v-model="search" append-icon="mdi-magnify" label="검색"
-          single-line hide-details class="searchbar"></v-text-field>
-      </div>
     </div>
-
   </v-app>
 </template>
 
@@ -68,7 +38,7 @@ import Drawer from '../components/Drawer.vue'
 import data from '@/views/Notice/data'
 
 export default {
-  name: 'Profile',
+  name: 'ProfileComment',
   components: {
     Drawer
   },
@@ -87,7 +57,7 @@ export default {
       search: '',
       headers: [
         { text: '번호', align: 'start', value: 'id', sortable: false },
-        { text: '분류', value: 'category' },
+        { text: '작성위치', value: 'category' },
         { text: '댓글내용', value: 'title', sortable: false },
         { text: '등록일', value: 'createddate', sortable: false }
       ],
@@ -110,7 +80,7 @@ export default {
 </script>
 
 <style scoped>
-#profile {
+#profile-comment {
   margin-top: 64px;
 }
 
@@ -161,6 +131,6 @@ export default {
 .searchbar {
   margin-left: auto;
   margin-right: auto;
-  width: 30%;
+  width: 80%;
 }
 </style>

@@ -51,9 +51,10 @@ export default {
       items: [
         { title: '마이페이지', icon: 'mdi-view-dashboard', path: "/profile" },
         { title: '회원정보수정', icon: 'mdi-account-edit', path: "/editprofile" },
+        { title: '작성한 글', icon: 'mdi-inbox-full', path: "/profile/article" },
         { title: '작성한 댓글', icon: 'mdi-comment-text', path: "/profile/comment" },
         { title: '미정', icon: 'mdi-help-box', path: "/profiletest" },
-        { title: '라이브.?', icon: 'mdi-image', path: "/profiletest" },
+        { title: '미정..', icon: 'mdi-image', path: "/profiletest" },
       ],
       color: "primary",
       miniVariant: false,
