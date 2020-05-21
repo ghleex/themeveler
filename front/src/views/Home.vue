@@ -33,17 +33,39 @@
       </v-slide-group>
 
       <v-expand-transition>
-        <v-sheet v-if="model != null" color="grey lighten-4" height="300" tile class="home-pop-theme-subBox">
+        <v-sheet v-if="model != null" color="grey lighten-4" height="250" width="95%" tile class="home-pop-theme-subBox mx-auto">
           <div class="pop-theme-disc">
-            <!-- {{pt.context}} {{model}} -->
+            <v-text v-if="toggle == active ? cardBypopThemeContext(model):false"></v-text>
+            <div class="popTheme-context">
+              "{{ eachContext }}"
+            </div>
           </div>
-          <v-row class="fill-height" align="center" justify="center">
+          <v-row class="mt-0" align="center" justify="center">
             <div class="pop-sub-img">
               <v-sheet class="ml-0 mr-auto" max-width="90vw">
-                <v-slide-group class="pa-4" center-active show-arrows>
-                  <v-slide-item v-for="i in 4" :key="i">
-                    <v-card class="ma-4" height="100" width="100">
-                      <!-- <v-img :src="popTheme.imgs[i]"></v-img> -->
+                <v-slide-group class="pa-4 pop-theme-slide-group" center-active show-arrows>
+                  <!-- <v-slide-item v-for="(img, index) in cardBypopTheme(model)" :key="img"> -->
+                  <v-slide-item v-for="(img) in cardBypopTheme(model)" :key="img">
+                    <v-card class="ma-4 popTheme-sub-img" height="123" width="120">
+
+                      <!-- modal -->
+                      <v-dialog v-model="dialog" width="500">
+                        <template v-slot:activator="{ on }">
+                          <v-img :src="img" v-on="on" height="123"></v-img>
+                        </template>
+                        <!-- <v-card v-if="img == img[index]"> -->
+                        <v-card>
+                          <v-img :src="img"></v-img>
+                          <!-- <v-divider></v-divider> -->
+                          <v-card-actions style="justify-content: flex-end;">
+                            <v-btn color="#2c3e50" class="text-light" @click="dialog = false">
+                              확인
+                            </v-btn>
+                          </v-card-actions>
+                          <!-- <v-divider></v-divider> -->
+                        </v-card>
+                      </v-dialog>
+
                       <v-row class="fill-height" align="center" justify="center">
                       </v-row>
                     </v-card>
@@ -55,7 +77,9 @@
         </v-sheet>
       </v-expand-transition>
     </v-sheet>
-
+    <div style="text-align: end;">
+    <v-btn class="home-more-bt text-light" color="#2c3e50">MORE</v-btn>
+</div>
 
 
 
@@ -126,8 +150,11 @@
     },
     data() {
       return {
+        dialog: false,
         model: null,
+        eachContext: "",
         popTheme: [{
+            id: 0,
             img: require('../assets/image/pop1.webp'),
             title: '타지 사람들 집합',
             context: '지역 사람들만 아는 숨겨진 맛집과 명소를 소개합니다.',
@@ -140,24 +167,34 @@
             ]
           },
           {
+            id: 1,
             img: require('../assets/image/pop2.jpg'),
             title: '서울사람도 잘 몰라',
             context: '일단 아무말이나 적어보자.',
-            imgs: []
+            imgs: [
+              
+            ]
           },
           {
+            id: 2,
             img: require('../assets/image/pop3.jpg'),
             title: '홍콩 어디까지 가봤니?',
             context: '홍콩 에그타르트 JMT.',
-            imgs: []
+            imgs: [
+
+            ]
           },
           {
+            id: 3,
             img: require('../assets/image/pop4.jpg'),
             title: '최고의 디즈니 랜드',
             context: '도쿄는 생각보다 별롭니다. 플로리다 올랜도는 쩔어요. 가장 큰 디즈니 월드(world) 클라쓰~',
-            imgs: []
+            imgs: [
+              require('../assets/image/pop4sub1.jpg'),
+            ]
           },
           {
+            id: 4,
             img: require('../assets/image/pop5.jpg'),
             title: '혼저옵서예',
             context: '유일한 제주 남부의 시장을 가면 싱싱한 회 팩이 마치 3만원!',
@@ -224,15 +261,58 @@
     methods: {
       a() {
         document.querySelector('#footer').style.display = 'block'
+      },
+      cardBypopTheme(id) {
+        var theme = this.popTheme.filter(theme => {
+          return theme.id == id
+        })
+        // console.log(theme[0].imgs)
+        return theme[0].imgs
+      },
+      cardBypopThemeContext(id) {
+        var theme = this.popTheme.filter(theme => {
+          return theme.id == id
+        })
+        // console.log(theme[0].context)
+        this.eachContext = theme[0].context
       }
     },
     mounted() {
       this.a()
-    }
+    },
   }
 </script>
 
 <style scoped>
+  .home-more-bt {
+    margin-top: 2rem;
+    margin-right: 3.2rem;
+    font-size: 1.3vw;
+  }
+
+@media (max-width: 750px) {
+  .home-more-bt {
+    font-size: 14px;
+  }
+}
+
+  .popTheme-sub-img:hover {
+    cursor: pointer;
+    box-shadow: 1px 1px 8px 3px gray;
+    transition: .3s;
+  }
+
+  .pop-theme-slide-group {
+    background-color: #f5f5f5;
+  }
+
+  .popTheme-context {
+    font-family: 'Cafe24Simplehae';
+    font-size: 25px;
+    font-style: italic;
+    padding: 1rem 2rem 0 2rem;
+  }
+
   .pop-theme-card-text {
     background: #2c3e50;
     font-size: 1.5vw;
@@ -255,12 +335,20 @@
     font-size: 40px;
   }
 
+  /* media query가 좀 이상하게 작동 함 */
   @media (max-width: 950px) {
     .pop-theme-card-text {
-      height: 5vw;
+      height: 3.5vw;
       padding: 0 .5rem 2rem .5rem;
+      font-size: .8rem;
+    }
+
+    .popTheme-context {
+      font-size: 1rem;
+      font-weight: 700;
     }
   }
+
 
   .banner>img {
     width: 100%;
@@ -274,6 +362,12 @@
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 10;
+  }
+
+  @media (max-width: 520px) {
+    .home-search-bar {
+      width: 80%;
+    }
   }
 
   .themecard {

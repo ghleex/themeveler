@@ -4,8 +4,8 @@
     color="rgba(255, 255, 255, 0.85)"
     class="search-box"
   >
-  <v-icon class="mr-2">mdi-magnify</v-icon>
-    <v-toolbar-title>Search</v-toolbar-title>
+  <v-icon>mdi-magnify</v-icon>
+    <!-- <v-toolbar-title class="d-none d-sm-none">Search</v-toolbar-title> -->
     <v-autocomplete
       v-model="select"
       :loading="loading"
@@ -20,8 +20,9 @@
       solo-inverted
       color="#651FFF"
     ></v-autocomplete>
-    <v-btn icon>
-      <v-icon>mdi-dots-vertical</v-icon>
+    <!-- <v-btn icon> -->
+    <v-btn color="#2c3e50" class="text-light">
+      검색
     </v-btn>
   </v-toolbar>
 </template>
@@ -66,5 +67,4 @@
     // width: 50%;
     border-radius: 20px;
   }
-  
 </style>
