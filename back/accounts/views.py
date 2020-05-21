@@ -3,6 +3,7 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.contrib.auth import get_user_model
+from django.shortcuts import redirect
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -19,11 +20,14 @@ from .serializers import UserSignInSerializer, UserBanSerializer
 from .models import Waiting
 from random import SystemRandom, choice
 from datetime import datetime, timedelta
+from decouple import config
+import requests
 import re
 
 # Create your views here.
 User = get_user_model()
 decoder = api_settings.JWT_DECODE_HANDLER
+encoder = api_settings.JWT_ENCODE_HANDLER
 
 # prefix, suffix: SignUp - anonymous
 prefix = [
@@ -59,7 +63,6 @@ def get_user(token, format=None):
 
 
 @permission_classes((AllowAny, ))
-@parser_classes((FormParser, ))
 class Mail(APIView):
     def mail_send(self, data):
         subject = 'Themevler 인증메일입니다.'
@@ -168,7 +171,6 @@ class Username(APIView):
 
 
 @permission_classes((AllowAny, ))
-@parser_classes((FormParser, ))
 class SignUp(APIView):
     @swagger_auto_schema(request_body=UserCreationSerializer)
     def post(self, request, format=None):
@@ -201,7 +203,6 @@ class SignUp(APIView):
         return Response({'message': ['회원가입이 실패하였습니다.']}, status=status.HTTP_400_BAD_REQUEST)
 
 
-@parser_classes((FormParser, ))
 class UserMgmt(APIView):
     def delete(self, request, format=None):
         """
@@ -232,7 +233,6 @@ class UserMgmt(APIView):
         return Response({'message': ['회원정보 변경이 실패하였습니다.']}, status=status.HTTP_400_BAD_REQUEST)
 
 
-@parser_classes((FormParser, ))
 class Password(APIView):
     """
         비밀번호 변경 - 유저의 비밀번호를 변경합니다.
@@ -260,7 +260,6 @@ class Password(APIView):
 
 
 @permission_classes((AllowAny, ))
-@parser_classes((FormParser, ))
 class SignIn(APIView):
     @swagger_auto_schema(request_body=UserSignInSerializer)
     def post(self, request, format=None):
@@ -287,7 +286,6 @@ class SignIn(APIView):
 
 
 @permission_classes((IsAdminUser, ))
-@parser_classes((FormParser, ))
 class UserBan(APIView):
     @swagger_auto_schema(request_body=UserBanSerializer)
     def post(self, request, format=None):
@@ -325,3 +323,66 @@ class UserBan(APIView):
         sign_in_user.is_active = True
         sign_in_user.save()
         return Response({'message': [username + '의 정지처리가 취소되었습니다.']})
+
+
+@permission_classes((AllowAny, ))
+class KakaoSignInView(APIView):
+    def get(self, request):
+        client_id = config('KAKAO_REST_API_KEY')
+        redirect_uri = 'http://127.0.0.1:8000/api/accounts/social/kakao/callback/'
+        url = f'https://kauth.kakao.com/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&response_type=code'
+        return redirect(url)
+
+
+@permission_classes((AllowAny, ))
+class KakaoSignInCallbackView(APIView):
+    def get(self, request):
+        try:
+            code = request.GET.get('code')                                
+            client_id = config('KAKAO_REST_API_KEY')
+            redirect_uri = 'http://127.0.0.1:8000/api/accounts/social/kakao/callback/'
+            url = f'https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id={client_id}&redirect_uri={redirect_uri}&code={code}'
+            token_request = requests.get(url)
+            token_json = token_request.json()                                 
+            access_token = token_json.get('access_token')        
+            error = token_json.get('error', None)
+            if error is not None :
+                return Response({'message': 'code'}, status = 400)
+        except KeyError:
+            return Response({'message': 'INVALID_TOKEN'}, status = 400)
+        except access_token.DoesNotExist:
+            return Response({'message': 'INVALID_TOKEN'}, status = 400)
+        
+        profile_request = requests.get(                          
+            'https://kapi.kakao.com/v2/user/me', headers={'Authorization': f'Bearer {access_token}'},
+        )
+        profile_json = profile_request.json()
+        kakao_account = profile_json.get('kakao_account')
+        email = kakao_account.get('email', None)                   
+        kakao_id = profile_json.get('id')
+        data = {
+            'username': email
+        }
+        social_user = User.objects.filter(username=email).first()
+        if social_user and social_user.username == email:
+            # if not social_user.has_usable_password():
+            user=social_user
+                # return Response({'msg':'이프문걸림'})
+            # else:
+            #     return Response({'message': ['해당 유저는 소셜로그인 유저가 아닙니다.']})
+        else:
+            serializer = UsernameSerializer(data=data)
+            if serializer.is_valid(raise_exception=True):
+                user = serializer.save()
+                user.set_password('test12!@')
+                user.nickname = 'KAKAO 유저 ' + str(user.id)
+                user.anonymous = choice(prefix) + choice(suffix) + str(user.id)
+                user.save()
+        jwt = encoder(
+            {
+                'user_id': user.id,
+                'username': user.username,
+            }
+        )
+        return Response({'msg':jwt})      
+
