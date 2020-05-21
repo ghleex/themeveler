@@ -107,12 +107,13 @@
 
 <style scoped>
   #service-read {
-    margin-top: 64px;
+    /* margin-top: 80px; */
     /* margin-bottom: 60px; */
     margin-left: auto;
     margin-right: auto;
     text-align: center;
     width: 100%;
+    height: 100%;
     background-color: rgb(238, 240, 247);
   }
 
@@ -124,7 +125,7 @@
   #service-read .service-center-title {
     font-family: 'Cafe24Simplehae';
     font-size: 40px;
-    margin: 5rem auto 0 auto;
+    margin: 8rem auto 0 auto;
     /* background-color: rgb(255, 187, 0); */
     width: 80%;
     border-radius: 7px 7px 0 0;
@@ -138,8 +139,15 @@
   }
 
   .service-dataTable {
+    height: 400px;
     /* white-space: nowrap; */
   }
+  @media (max-width: 599px) {
+   .service-dataTable {
+    height: auto;
+  }
+  }
+
   .service-list-body {
     width: 100%;
     height: 1.2rem;
@@ -159,7 +167,7 @@
     }
     .service-body {
       width: 95% !important;
-      margin: 0 auto !important;
+      margin: 0 auto 5rem auto !important;
     }
   }
 

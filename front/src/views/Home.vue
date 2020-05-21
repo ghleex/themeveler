@@ -69,67 +69,69 @@
 
 
 
+    <v-btn color="primary" class="mt-6" outlined to="/profile">
+      유저페이지>>>>임시버튼</v-btn>
 
-    <div class="container">
-      <div class="main-section">
-        <h2 class="article-header my-5">인기 테마 <i class="fas fa-walking"></i></h2>
-        <!-- <revi-list limits="4" :themeData="themeData" /> -->
-        <!-- <br> -->
-        <!-- 인기 테마 Card -->
-        <v-container fluid :cols="4" class="d-inline">
-          <v-row dense>
-            <v-card class="mx-auto my-2 themecard" max-width="30%">
-              <v-img class="white--text align-end" height="200px" src="https://cdn.vuetifyjs.com/images/cards/docks.jpg">
-                <v-card-title>Top 10 Daejeon Theme</v-card-title>
-              </v-img>
-              <v-card-subtitle class="pb-0">Number 10</v-card-subtitle>
-              <v-card-text class="text--primary">
-                <div>Whitehaven Beach</div>
-                <div>Whitsunday Island, Whitsunday Islands</div>
-              </v-card-text>
-              <v-card-actions>
-                <v-btn color="orange" text>Share</v-btn>
-                <v-btn color="orange" text>Explore</v-btn>
-              </v-card-actions>
-            </v-card>
+    <!-- 인기 테마 -->
+    <h2 class="home-h2-title"><i class="fas fa-bookmark mr-2"></i>인기 테마</h2>
+    <v-sheet class="mx-auto" max-width="100vw">
+      <v-slide-group v-model="model" center-active show-arrows>
+        <v-slide-item v-for="pt in popTheme" :key="pt.title" v-slot:default="{ active, toggle }">
+          <v-card class="ma-4" min-height="320px" max-height="35vw" min-width="238px" max-width="30vw" @click="toggle">
+            <v-img :src="pt.img" min-height="260px" max-height="18vw" />
+            <v-card-title class="pop-card-title">
+              <div class="mx-auto text-light pop-theme-card-text"><i class="fas fa-quote-left"></i>{{pt.title}}<i
+                  class="fas fa-quote-right"></i></div>
+            </v-card-title>
+            <v-row class="fill-height" align="center" justify="center">
+            </v-row>
+          </v-card>
+        </v-slide-item>
+      </v-slide-group>
 
-            <v-card class="mx-auto my-2 themecard" max-width="30%">
-              <v-img class="white--text align-end" height="200px" src="https://cdn.vuetifyjs.com/images/cards/docks.jpg">
-                <v-card-title>Top 10 Seoul Theme</v-card-title>
-              </v-img>
-              <v-card-subtitle class="pb-0">May 15</v-card-subtitle>
-              <v-card-text class="text--primary">
-                <div>City</div>
-                <div>City, Seoul</div>
-              </v-card-text>
-              <v-card-actions>
-                <v-btn color="orange" text>Share</v-btn>
-                <v-btn color="orange" text>Explore</v-btn>
-              </v-card-actions>
-            </v-card>
-            <v-card class="mx-auto my-2 themecard" max-width="30%">
-              <v-img class="white--text align-end" height="200px" src="https://cdn.vuetifyjs.com/images/cards/docks.jpg">
-                <v-card-title>Top 10 Gangwon-do Theme</v-card-title>
-              </v-img>
-              <v-card-subtitle class="pb-0">May 15</v-card-subtitle>
-              <v-card-text class="text--primary">
-                <div>City</div>
-                <div>City, Gangwon-do</div>
-              </v-card-text>
-              <v-card-actions>
-                <v-btn color="orange" text>Share</v-btn>
-                <v-btn color="orange" text>Explore</v-btn>
-              </v-card-actions>
-            </v-card>
+      <v-expand-transition>
+        <v-sheet v-if="model != null" color="grey lighten-4" height="300" tile class="home-pop-theme-subBox">
+          <div class="pop-theme-disc">
+            <!-- {{pt.context}} {{model}} -->
+          </div>
+          <v-row class="fill-height" align="center" justify="center">
+            <div class="pop-sub-img">
+              <v-sheet class="ml-0 mr-auto" max-width="90vw">
+                <v-slide-group class="pa-4" center-active show-arrows>
+                  <v-slide-item v-for="i in 4" :key="i">
+                    <v-card class="ma-4" height="100" width="100">
+                      <!-- <v-img :src="popTheme.imgs[i]"></v-img> -->
+                      <v-row class="fill-height" align="center" justify="center">
+                      </v-row>
+                    </v-card>
+                  </v-slide-item>
+                </v-slide-group>
+              </v-sheet>
+            </div>
           </v-row>
-        </v-container>
-      </div>
+        </v-sheet>
+      </v-expand-transition>
+    </v-sheet>
 
 
-      <div class="main-section">
-        <h2 class="article-header my-5">인기 여행지 <i class="fas fa-walking"></i></h2>
-        <!-- <revi-list limits="4" :spotData="spotData" /> -->
-        <!-- <div class="hspot d-inline width:80% col-md-6 col-12">
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="main-section">
+      <h2 class="home-h2-title mt-12"><i class="fas fa-bus-alt mr-2"></i>인기 여행지</h2>
+
+      <!-- <revi-list limits="4" :spotData="spotData" /> -->
+      <!-- <div class="hspot d-inline width:80% col-md-6 col-12">
           <div>
             <p :src="spotData[0]" width="300" height="300"></p>
             <p :src="spotData[1]" width="300" height="300"></p>
@@ -140,31 +142,35 @@
           </div>
         </div>
         <br> -->
-        <!-- 인기 여행지 Card -->
-        <v-container fluid class="mx-auto" max-width="95%">
+      <!-- 인기 여행지 Card -->
+      <!-- <v-container fluid class="mx-auto" max-width="95%">
           <v-row dense>
-            <v-col v-for="card in spotcards" :key="card.title" :cols="12" :sm="3">
-              <v-hover v-slot:default="{ hover }">
-                <v-card class="mx-auto" max-width="90%" :elevation="hover ? 12 : 2">
-                  <v-img :src="card.src" class="white--text align-end"
-                    gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)" height="200px">
-                    <v-card-title v-text="card.title"></v-card-title>
-                  </v-img>
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn icon><v-icon color="red">mdi-heart-outline</v-icon></v-btn>
-                    <v-btn icon><v-icon color="green">mdi-bookmark-outline</v-icon></v-btn>
-                    <!-- <v-btn icon><v-icon>mdi-share-variant</v-icon></v-btn> -->
-                  </v-card-actions>
-                </v-card>
-              </v-hover>
+            <v-col v-for="card in cards" :key="card.title" :cols="card.flex">
+              <v-card class="mx-auto" max-width="90%">
+                <v-img :src="card.src" class="white--text align-end"
+                  gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)" height="200px">
+                  <v-card-title v-text="card.title"></v-card-title>
+                </v-img>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn icon>
+                    <v-icon>mdi-heart</v-icon>
+                  </v-btn>
+                  <v-btn icon>
+                    <v-icon>mdi-bookmark</v-icon>
+                  </v-btn>
+                  <v-btn icon>
+                    <v-icon>mdi-share-variant</v-icon>
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
             </v-col>
           </v-row>
-        </v-container>
-        <br><br>
-      </div>
+        </v-container> -->
+      <br><br>
     </div>
   </div>
+
 </template>
 
 <script>
