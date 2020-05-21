@@ -89,6 +89,13 @@ export default {
   width: 80%;
 }
 
+@media (max-width: 600px) {
+  #profile-content {
+    margin-left: 56px;
+    width: 80%;
+  }
+}
+
 .content-title {
   text-align: left;
   margin-left: 20px;
