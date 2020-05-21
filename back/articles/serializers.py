@@ -21,13 +21,13 @@ class ManagerReplySerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'content', 'is_fixed',)
 
 
-class ReporCommentSerializer(serializers.ModelSerializer):
+class ReportCommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReportComment
         fields = '__all__'
 
 
-class ReporReCommentSerializer(serializers.ModelSerializer):
+class ReportReCommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReportReComment
         fields = '__all__'

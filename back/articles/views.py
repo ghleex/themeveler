@@ -10,7 +10,7 @@ from rest_framework_jwt.settings import api_settings
 from drf_yasg.utils import swagger_auto_schema
 from .models import VoiceCategory, CustomersVoice, ManagersReply, ReportComment, ReportReComment
 from .serializers import VoiceCategorySerializer, CustomersVoiceSerializer, ManagerReplySerializer
-from .serializers import ReporCommentSerializer, ReporReCommentSerializer
+from .serializers import ReportCommentSerializer, ReportReCommentSerializer
 
 User = get_user_model()
 decoder = api_settings.JWT_DECODE_HANDLER
@@ -272,7 +272,7 @@ class ManagersReplyChange(APIView):
 
 @parser_classes((FormParser, ))
 class ReportCommentMgmt(APIView):
-    @swagger_auto_schema(request_body=ReporCommentSerializer)
+    @swagger_auto_schema(request_body=ReportCommentSerializer)
     def post(self, request, format=None):
         """
             댓글 신고 - 해당 댓글을 신고합니다.
@@ -289,7 +289,7 @@ class ReportCommentMgmt(APIView):
                 'comment': request.data.get('comment'),
                 'report_text': request.data.get('report_text')
             }
-            serializer = ReporCommentSerializer(data=data)
+            serializer = ReportCommentSerializer(data=data)
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
                 return Response({'message': ['해당 댓글이 성공적으로 신고되었습니다.']})
@@ -300,7 +300,7 @@ class ReportCommentMgmt(APIView):
 
 @parser_classes((FormParser, ))
 class ReportReCommentMgmt(APIView):
-    @swagger_auto_schema(request_body=ReporReCommentSerializer)
+    @swagger_auto_schema(request_body=ReportReCommentSerializer)
     def post(self, request, format=None):
         """
             대댓글 신고 - 해당 대댓글을 신고합니다.
@@ -317,7 +317,7 @@ class ReportReCommentMgmt(APIView):
                 're_comment': request.data.get('re_comment'),
                 'report_text': request.data.get('report_text')
             }
-            serializer = ReporReCommentSerializer(data=data)
+            serializer = ReportReCommentSerializer(data=data)
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
                 return Response({'message': ['해당 댓글이 성공적으로 신고되었습니다.']})

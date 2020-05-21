@@ -57,6 +57,7 @@ def get_user(token, format=None):
     user = get_object_or_404(User, id=jwt_data['user_id'])
     return user
 
+
 @permission_classes((AllowAny, ))
 @parser_classes((FormParser, ))
 class Mail(APIView):
