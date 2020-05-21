@@ -8,63 +8,154 @@ from rest_framework.decorators import parser_classes
 from rest_framework.parsers import FormParser
 from drf_yasg.utils import swagger_auto_schema
 from decouple import config
-from .serializers import MessageSerializer, MessageViewSerializer
-from .models import Message, Theme
+from .serializers import MessageSerializer, MessageViewSerializer, ThemeSerializer, DestinationSerializer
+from .models import Message, Theme, Destination
 
 User = get_user_model()
 decoder = api_settings.JWT_DECODE_HANDLER
 
+not_valid_message = {
+    'message': 'THE SERIALIZER IS NOT VALID'
+}
+error_message = {
+    'message': 'AN ERROR HAS BEEN OCCURRED'
+}
+
 # Create your views here.
-def get_user(token, format=None):
-    jwt_data = decoder(token[1])
-    user = get_object_or_404(User, id=jwt_data['user_id'])
-    return user
-
-
-class TravelMgmt(APIView):
-    """
-    사용자의 여행 코스 관리
-
-    ---
-    """
-    def get_person(self, user_pk, format=None):
-        if User.objects.filter(pk=user_pk).exists():
-            return User.objects.get(pk=user_pk)
-        else:
-            return None
-    
-    def get(self, request, user_pk, format=None):
-        # try:
-            user = self.get_person(user_pk)
-            print(user)
-            themes = user.favorite_themes
-            dests = user.favorite_destinations
-            data = {
-                'message': 'ok',
-                'favourite_themes': themes,
-                'favourite_dests': dests,
-            }
-            return Response(data, status=status.HTTP_200_OK)
-        # except:
-        #     data = {
-        #         'message': 'Error has occurred'
-        #     }
-        #     return Response(data, status=status.HTTP_400_BAD_REQUEST)
-    
-    def post(self, request, pk, format=None):
-        user = self.get_person(pk)
-        # theme 을 어떻게 저장할지 생각해야 함
-        pass
-
-
 def map(request):
     KAKAO_API_KEY = config('KAKAO_API_KEY')
     context = {'KAKAO_API_KEY': KAKAO_API_KEY} 
     return render(request, 'travels/map.html', context)
 
 
+def get_user(token, format=None):
+    # JWT 통하여 유저 확인하기 위한 범용 함수
+    jwt_data = decoder(token[1])
+    user = get_object_or_404(User, id=jwt_data['user_id'])
+    return user
+
+
+@permission_classes((IsAuthenticated,))
+class VisitedThemes(APIView):
+    """
+        사용자의 여행 코스 관리
+
+        ---
+        # 내용
+            * 방문했던 코스(테마) 목록 열람, 추가/삭제
+    """
+    def get(self, request, format=None):
+        user = get_user(request.headers['Authorization'].split(' '))
+        try:
+            themes = user.favorite_themes
+            dests = user.favorite_destinations
+            theme, dest = [], []
+            for t in themes:
+                serializer_t = ThemeSerializer(t)
+                theme.append(t)
+            for d in dests:
+                serializer_d = DestinationSerializer(d)
+                dest.append(d)
+            
+            data = {
+                'message': 'ok',
+                'favourite_themes': theme,
+                'favourite_dests': dest,
+            }
+            return Response(data, status=status.HTTP_200_OK)
+        except:
+            return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
+    
+    def post(self, request, format=None):
+        try:
+            message = {
+                'message': '',
+            }
+            if Theme.visitors.filter(pk=user_pk).exists():
+                Theme.visitors.remove(user_pk)
+                message['message'] = f'{request.user} is removed from visited'
+            else:
+                Theme.visitors.add(user_pk)
+                message['message'] = f'{request.user} is added to visited'
+            return Response(message, status=status.HTTP_200_OK)
+        except:
+            return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
+
+
+@permission_classes((IsAuthenticated,))
+class VisitedDest(APIView):
+    """
+        사용자가 방문한 장소 목록/추가
+        
+        ---
+    """    
+    def get(self, request, format=None):
+        user = get_user(request.headers['Authorization'].split(' '))
+        try:
+            data = {
+                'visitors': user.dests.all(),
+            }
+            return Response(data, status=status.HTTP_200_OK)
+        except:
+            return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
+    
+    def post(self, request, format=None):
+        user = get_user(request.headers['Authorization'].split(' '))
+        message = {
+            'message': '',
+        }
+        try:
+            if Destination.visitors.filter(pk=user.pk).exists():
+                Destination.visitors.remove(user)
+                message['message'] = f'{user.username} is removed from visitors'
+            else:
+                Destination.visitors.add(user)
+                message['message'] = f'{user.username} is added to visitors'
+            return Response(message, status=status.HTTP_200_OK)
+        except:
+            return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
+
+
+@permission_classes((IsAuthenticated,))
+class Like(APIView):
+    """
+        사용자의 테마 좋아요/취소
+        
+        ---
+    """
+    def get_theme(self, theme_pk, format=None):
+        return get_object_or_404(Theme, pk=theme_pk)
+
+    def get(self, request, theme_pk, format=None):
+        theme = self.get_theme(theme_pk)
+        try:
+            data = {
+                'like_users': theme.theme_like_users.count()
+            }
+            return Response(data, status=status.HTTP_200_OK)
+        except:
+            return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
+    
+    def post(self, request, theme_pk, format=None):
+        theme = self.get_theme(theme_pk)
+        try:
+            user =  get_user(request.headers['Authorization'].split(' '))
+            message = {
+                'message': '',
+            }
+            if theme.theme_like_users.filter(pk=user.pk).exists():
+                theme.theme_like_users.remove(user)
+                message['message'] = f'{user.username} is removed from like_users'
+            else:
+                theme.theme_like_users.add(user)
+                message['message'] = f'{user.username} added to like_users'
+            return Response(message, status=status.HTTP_200_OK)
+        except:
+            return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
+
+
 @parser_classes((FormParser, ))
-class Chating(APIView):
+class Chatting(APIView):
     @swagger_auto_schema(query_serializer=MessageViewSerializer)
     def get(self, request, format=None):
         """
@@ -103,23 +194,3 @@ class Chating(APIView):
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data)
-
-
-class AdminTravelMgmt(APIView):
-    def add(self, theme, dests):
-        
-        pass
-
-    def fetch(self, theme, ):
-        # django form으로 직접 받아오는건 vue.js customizing이 너무 번거롭다.
-        # 일반 form으로 받아온 뒤 django ORM 객체에 직접 넣으면서 validation 진행하는 방식으로 진행.
-        pass
-    
-    # Theme의 ListTextField가 list 형태로 출력되는지 확인하기 위한 test 함수, list로 잘 출력됨
-
-    # def test(request):
-    #     theme = Theme.objects.get(id=1)
-    #     print(type(theme.dests))
-    #     for t in theme.dests:
-    #         print(t)
-    #     return Response()

@@ -39,6 +39,16 @@ class ManagersReplyAdmin(admin.ModelAdmin):
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
+    list_display = ('id', 'content', 'writer', 'destination', 'writed_at', 'updated_at',)
+
+
+@admin.register(ReComment)
+class ReCommentAdmin(admin.ModelAdmin):
+    list_display = ('id', 'content', 'writer', 'comment', 'writed_at', 'updated_at',)
+
+
+@admin.register(ReportComment)
+class ReportCommentAdmin(admin.ModelAdmin):
     def reports(self, obj):
         return ReportComment.objects.filter(comment_id=obj.id).count()
 
@@ -58,8 +68,8 @@ class CommentAdmin(admin.ModelAdmin):
     ]
 
 
-@admin.register(ReComment)
-class ReCommentAdmin(admin.ModelAdmin):
+@admin.register(ReportReComment)
+class ReportReCommentAdmin(admin.ModelAdmin):
     def reports(self, obj):
         return ReportReComment.objects.filter(re_comment_id=obj.id).count()
 
