@@ -1,16 +1,73 @@
 <template>
-  <div class="home-box">
+  <div class="header">
+    <v-btn style="position:absolute; margin-top:70px; left:80%; z-index:2;" color="primary" outlined to="/profile">유저페이지>>>>임시버튼</v-btn>
     <div class="home-search-bar">
       <SearchBar />
     </div>
 
     <!-- Carousels -->
     <div class="carousel">
-      <v-carousel cycle height="400px" hide-delimiters hide-delimiter-background show-arrows-on-hover>
+      <v-carousel cycle height="480" hide-delimiter-background show-arrows-on-hover hide-delimiters>
         <v-carousel-item v-for="(slide, i) in slides" :key="i" :src="slide">
+          <!-- <v-sheet width="100%">
+            <v-row class="fill-height" align="center" justify="center">
+              <div></div>
+              <div class="display-3">{{ slide }} Slide</div>
+            </v-row>
+          </v-sheet> -->
         </v-carousel-item>
       </v-carousel>
-    </div>
+    </div><br><br>
+
+
+    <!-- 인기 테마 -->
+    <h2 class="home-h2-title"><i class="fas fa-bookmark mr-2"></i>인기 테마</h2>
+    <v-sheet class="mx-auto" max-width="100vw">
+      <v-slide-group v-model="model" center-active show-arrows>
+        <v-slide-item v-for="pt in popTheme" :key="pt.title" v-slot:default="{ active, toggle }">
+          <v-card class="ma-4" min-height="320px" max-height="35vw" min-width="238px" max-width="30vw" @click="toggle">
+            <v-img :src="pt.img" min-height="260px" max-height="18vw" />
+            <v-card-title class="pop-card-title">
+              <div class="mx-auto text-light pop-theme-card-text"><i class="fas fa-quote-left"></i>{{pt.title}}<i
+                  class="fas fa-quote-right"></i></div>
+            </v-card-title>
+            <v-row class="fill-height" align="center" justify="center">
+            </v-row>
+          </v-card>
+        </v-slide-item>
+      </v-slide-group>
+
+      <v-expand-transition>
+        <v-sheet v-if="model != null" color="grey lighten-4" height="300" tile class="home-pop-theme-subBox">
+          <div class="pop-theme-disc">
+            <!-- {{pt.context}} {{model}} -->
+          </div>
+          <v-row class="fill-height" align="center" justify="center">
+            <div class="pop-sub-img">
+              <v-sheet class="ml-0 mr-auto" max-width="90vw">
+                <v-slide-group class="pa-4" center-active show-arrows>
+                  <v-slide-item v-for="i in 4" :key="i">
+                    <v-card class="ma-4" height="100" width="100">
+                      <!-- <v-img :src="popTheme.imgs[i]"></v-img> -->
+                      <v-row class="fill-height" align="center" justify="center">
+                      </v-row>
+                    </v-card>
+                  </v-slide-item>
+                </v-slide-group>
+              </v-sheet>
+            </div>
+          </v-row>
+        </v-sheet>
+      </v-expand-transition>
+    </v-sheet>
+
+
+
+
+
+
+
+
 
     <v-btn color="primary" class="mt-6" outlined to="/profile">
       유저페이지>>>>임시버튼</v-btn>
@@ -328,12 +385,12 @@
     /* align-items: flex-start; */
   }
 
-  .home-h2-title {
-    font-family: 'Cafe24Simplehae';
-    text-align: start;
-    margin-left: 4rem;
-    font-size: 40px;
-  }
+      slides: [
+        require('../assets/image/bg.jpg'),
+        require('../assets/image/bg-3.jpg'),
+        require('../assets/image/sky.jpg')
+      ],
+      themeData: [
 
   /* media query가 좀 이상하게 작동 함 */
   @media (max-width: 950px) {
@@ -373,4 +430,20 @@
   .themecard {
     text-align: left;
   }
+}
+.banner>img {
+  width: 100%;
+  /* max-height: initial; */
+  margin-top: -15%;
+}
+.home-search-bar {
+  position: absolute;
+  top: 20rem;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+}
+.themecard {
+  text-align: left;
+}
 </style>

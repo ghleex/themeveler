@@ -2,7 +2,7 @@
   <v-app id="editprofile">
     <Drawer class="drawer" />
 
-    <v-content id="editprofile-content">
+    <v-content id="profile-content">
       <h2 class="content-title">회원정보수정</h2>
       <hr>
       <v-row justify="center">
@@ -14,7 +14,7 @@
                   <v-file-input label="Profile Image" class="purple-input" type="file" />
                 </v-col>
                 <v-col cols="12" md="6" class="content-col">
-                  <v-text-field label="Email" class="purple-input" disabled />
+                  <v-text-field label="Email (ID)" class="purple-input" disabled />
                 </v-col>
                 <v-col md="6" class="content-col">
                 </v-col>
@@ -24,14 +24,11 @@
                 <v-col cols="12" md="6" class="content-col">
                   <v-text-field label="Password Confirm" class="purple-input" />
                 </v-col>
-                <v-col cols="12" md="4" class="content-col">
+                <v-col cols="12" md="6" class="content-col">
                   <v-text-field label="User Name" class="purple-input" />
                 </v-col>
-                <v-col cols="12" md="4" class="content-col">
-                  <v-text-field label="First Name" class="purple-input" />
-                </v-col>
-                <v-col cols="12" md="4" class="content-col">
-                  <v-text-field label="Last Name" class="purple-input" />
+                <v-col cols="12" md="6" class="content-col">
+                  <v-text-field label="Name" class="purple-input" />
                 </v-col>
                 <v-col cols="12" md="4" class="content-col">
                   <v-select :items="['남','여']" label="Gender"></v-select>
@@ -49,12 +46,12 @@
                   <v-text-field label="Phone Number" />
                 </v-col>
                 <v-col cols="12" class="content-col">
-                  <v-text-field label="Adress" class="purple-input" />
+                  <v-text-field label="Address" class="purple-input" />
                 </v-col>
-                <v-col cols="12" md="6" class="text-left">
+                <v-col cols="4" md="6" class="text-left">
                   <v-btn color="red" class="mr-0" @click="userdelete">회원탈퇴</v-btn>
                 </v-col>
-                <v-col cols="12" md="6" class="text-right">
+                <v-col cols="8" md="6" class="text-right">
                   <v-btn color="success" class="mr-4" @click="update">수정</v-btn>
                   <v-btn color="success" class="mr-0" @click="updatecancel">취소</v-btn>
                 </v-col>
@@ -124,9 +121,16 @@ export default {
   margin-top: 64px;
 }
 
-#editprofile-content {
+#profile-content {
   margin-left: 256px;
   width: 80%;
+}
+
+@media (max-width: 600px) {
+  #profile-content {
+    margin-left: 56px;
+    width: 80%;
+  }
 }
 
 .content-title {

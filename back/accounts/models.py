@@ -1,15 +1,19 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from travels.models import Theme, Destination
+from articles.models import Comment, ReComment
+from django.conf import settings
+
 # Create your models here.
 
 class User(AbstractUser):
     username = models.EmailField(blank=False, max_length=254, unique=True)
     nickname = models.CharField(blank=False, max_length=20, unique=True)
-    banning_period = models.DateField(null=True)
-    favorite_themes = models.ManyToManyField(Theme, related_name='theme_like_users') # Theme.theme_like_users.all()
-    favorite_destinations = models.ManyToManyField(Destination, related_name='destination_like_users') # Destination.destination_like_users.all()
-    # Destination.like_users.all()
+    anonymous = models.CharField(blank=False, max_length=20, unique=True)
+    banning_period = models.DateField(blank=True, null=True)
+    favorite_themes = models.ManyToManyField(Theme, blank=True, related_name='theme_like_users') # Theme.theme_like_users.all()
+    favorite_destinations = models.ManyToManyField(Destination, blank=True, related_name='destination_like_users') # Destination.destination_like_users.all()
+
 
 class Waiting(models.Model):
     username = models.EmailField(blank=False, max_length=254)

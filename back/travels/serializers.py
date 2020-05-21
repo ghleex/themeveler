@@ -1,4 +1,4 @@
-from .models import Theme, Destination
+from .models import Theme, Destination, Message
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 
@@ -12,3 +12,20 @@ class DestinationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Destination
         fields = ('id', 'name', 'content', 'image', 'created_at', 'updated_at',)
+
+
+class MessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Message
+        fields = '__all__'
+        extra_kwargs = {
+            'nickname': {
+                'read_only': True,
+            },
+        }
+
+
+class MessageViewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Message
+        fields = ('theme', )

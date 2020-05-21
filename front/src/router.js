@@ -12,6 +12,8 @@ import ServiceDetail from './views/ServiceCenter/ServiceDetail.vue'
 // import Map from './views/Map/Map.vue'
 import Profile from './views/Profile.vue'
 import EditProfile from './views/EditProfile.vue'
+import ProfileArticle from './views/ProfileArticle.vue'
+import ProfileComment from './views/ProfileComment.vue'
 import ProfileTest from './views/ProfileTest.vue'
 import Error404 from './views/Error404.vue'
 
@@ -77,6 +79,16 @@ const routes = [
     path: '/editprofile',
     name: 'editprofile',
     component: EditProfile
+  },
+  {
+    path: '/profile/article',
+    name: 'profile-article',
+    component: ProfileArticle
+  },
+  {
+    path: '/profile/comment',
+    name: 'profile-comment',
+    component: ProfileComment
   },
   {
     path: '/profiletest',
