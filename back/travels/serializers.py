@@ -18,3 +18,14 @@ class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
         fields = '__all__'
+        extra_kwargs = {
+            'nickname': {
+                'read_only': True,
+            },
+        }
+
+
+class MessageViewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Message
+        fields = ('theme', )

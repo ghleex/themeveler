@@ -20,21 +20,3 @@ class Waiting(models.Model):
     is_confirm = models.BooleanField(default=False, blank=False)
     confirm_code = models.CharField(max_length=50, null=True)
     updated_at = models.DateTimeField(auto_now=True)
-
-
-class ReportComment(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
-    report_text = models.TextField()
-
-    class Meta:
-        ordering = ('-pk',)
-
-        
-class ReportReComment(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    re_comment = models.ForeignKey(ReComment, on_delete=models.CASCADE)
-    report_text = models.TextField()
-
-    class Meta:
-        ordering = ('-pk',)

@@ -3,13 +3,25 @@ from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.decorators import permission_classes
+from rest_framework.decorators import permission_classes, parser_classes
+from rest_framework.parsers import FormParser
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
-from .models import VoiceCategory, CustomersVoice, ManagersReply
+from rest_framework_jwt.settings import api_settings
+from drf_yasg.utils import swagger_auto_schema
+from .models import VoiceCategory, CustomersVoice, ManagersReply, ReportComment, ReportReComment
 from .serializers import VoiceCategorySerializer, CustomersVoiceSerializer, ManagerReplySerializer
+from .serializers import ReporCommentSerializer, ReporReCommentSerializer
 
 User = get_user_model()
+decoder = api_settings.JWT_DECODE_HANDLER
+
 # Create your views here.
+def get_user(token, format=None):
+    jwt_data = decoder(token[1])
+    user = get_object_or_404(User, id=jwt_data['user_id'])
+    return user
+
+
 @permission_classes((IsAdminUser,))
 class SetVoiceCategory(APIView):
     """
@@ -256,3 +268,59 @@ class ManagersReplyChange(APIView):
             serializer.save()
             return Response(todo.id, status=status.HTTP_200_OK)
         return Response(data, status=status.HTTP_400_BAD_REQUEST)
+
+
+@parser_classes((FormParser, ))
+class ReportCommentMgmt(APIView):
+    @swagger_auto_schema(request_body=ReporCommentSerializer)
+    def post(self, request, format=None):
+        """
+            댓글 신고 - 해당 댓글을 신고합니다.
+
+            # 내용
+                report_text: 신고 내용을 작성합니다.
+                user: 해당 유저의 user_id 값을 작성합니다. Int 형식이어야 합니다.
+                comment: 해당 댓글의 comment_id 값을 작성합니다. Int 형식이어야 합니다.
+        """
+        user = get_user(request.headers['Authorization'].split(' '))
+        if not ReportComment.objects.filter(user=user.id).exists():
+            data = {
+                'user': user.id,
+                'comment': request.data.get('comment'),
+                'report_text': request.data.get('report_text')
+            }
+            serializer = ReporCommentSerializer(data=data)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                return Response({'message': ['해당 댓글이 성공적으로 신고되었습니다.']})
+            return Response({'message': ['해당 댓글에 대한 신고가 실패하였습니다.']}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({'message': ['이미 신고가 접수된 댓글입니다.']}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@parser_classes((FormParser, ))
+class ReportReCommentMgmt(APIView):
+    @swagger_auto_schema(request_body=ReporReCommentSerializer)
+    def post(self, request, format=None):
+        """
+            대댓글 신고 - 해당 대댓글을 신고합니다.
+
+            # 내용
+                report_text: 신고 내용을 작성합니다.
+                user: 해당 유저의 user_id 값을 작성합니다. Int 형식이어야 합니다.
+                re_comment: 해당 댓글의 comment_id 값을 작성합니다. Int 형식이어야 합니다.
+        """
+        user = get_user(request.headers['Authorization'].split(' '))
+        if not ReportReComment.objects.filter(user=user.id).exists():
+            data = {
+                'user': user.id,
+                're_comment': request.data.get('re_comment'),
+                'report_text': request.data.get('report_text')
+            }
+            serializer = ReporReCommentSerializer(data=data)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                return Response({'message': ['해당 댓글이 성공적으로 신고되었습니다.']})
+            return Response({'message': ['해당 댓글에 대한 신고가 실패하였습니다.']}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({'message': ['이미 신고가 접수된 댓글입니다.']}, status=status.HTTP_400_BAD_REQUEST)

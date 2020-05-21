@@ -68,5 +68,20 @@ class ReComment(models.Model):
         return self.content
 
 
+class ReportComment(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
+    report_text = models.TextField()
 
+    class Meta:
+        ordering = ('-pk',)
+
+        
+class ReportReComment(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    re_comment = models.ForeignKey(ReComment, on_delete=models.CASCADE)
+    report_text = models.TextField()
+
+    class Meta:
+        ordering = ('-pk',)
     

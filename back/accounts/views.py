@@ -6,19 +6,20 @@ from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, parser_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from rest_framework_jwt.settings import api_settings
 from rest_framework_jwt.utils import jwt_decode_handler
 from rest_framework_jwt.views import obtain_jwt_token
+from rest_framework.parsers import FormParser
+from drf_yasg.utils import swagger_auto_schema
 from .serializers import UserCreationSerializer, UserNicknameSerializer, WaitingSerializer
 from .serializers import UsernameSerializer, ConfirmCodeSerializer, UserPasswordSerializer
-from .serializers import ReporCommentSerializer, ReporReCommentSerializer
-from .models import Waiting, ReportComment, ReportReComment
+from .serializers import UserSignInSerializer, UserBanSerializer
+from .models import Waiting
 from random import SystemRandom, choice
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 import re
-
 
 # Create your views here.
 User = get_user_model()
@@ -56,8 +57,8 @@ def get_user(token, format=None):
     user = get_object_or_404(User, id=jwt_data['user_id'])
     return user
 
-
 @permission_classes((AllowAny, ))
+@parser_classes((FormParser, ))
 class Mail(APIView):
     def mail_send(self, data):
         subject = 'Themevler 인증메일입니다.'
@@ -65,17 +66,25 @@ class Mail(APIView):
         plain_message = strip_tags(html_message)
         from_email = '<from@example.com>'
         to = data.get('username')
-        send_mail(subject, plain_message, from_email, [to], html_message=html_message)    
-
+        send_mail(subject, plain_message, from_email, [to], html_message=html_message)
+    
+    @swagger_auto_schema(query_serializer=ConfirmCodeSerializer)
     def get(self, request, format=None):
-        check_result = check_request(request.data, ['username', 'confirm_code'])
+        """
+            인증메일(확인) - 발송된 인증 메일을 확인합니다.
+
+            # 내용
+                * username: Email 형식이어야 합니다.
+                * confirm_code: '-' 포함 12자리의 숫자입니다.
+        """
+        check_result = check_request(request.GET, ['username', 'confirm_code'])
         if check_result:
             return Response(check_result, status=status.HTTP_400_BAD_REQUEST)
-        if Waiting.objects.filter(username=request.data.get('username')).exists():
-            waiting_user = Waiting.objects.get(username=request.data.get('username'))
+        if Waiting.objects.filter(username=request.GET.get('username')).exists():
+            waiting_user = Waiting.objects.get(username=request.GET.get('username'))
             if waiting_user.is_confirm:
                 return Response({'message': ['이미 인증된 유저입니다.']})
-            if waiting_user.username == request.data.get('username') and waiting_user.confirm_code == request.data.get('confirm_code'):
+            if waiting_user.username == request.GET.get('username') and waiting_user.confirm_code == request.GET.get('confirm_code'):
                 if waiting_user.updated_at > datetime.now() - timedelta(minutes=10):
                     waiting_user.is_confirm = True
                     waiting_user.confirm_code = None
@@ -83,10 +92,17 @@ class Mail(APIView):
                     return Response({'message': ['메일 인증 성공.']})
                 else:
                     return Response({'message': ['유효시간이 지났습니다.']}, status=status.HTTP_400_BAD_REQUEST)
-        
         return Response({'message': ['인증에 실패하였습니다.']}, status=status.HTTP_400_BAD_REQUEST)
 
+    @swagger_auto_schema(request_body=WaitingSerializer)
     def post(self, request, format=None):
+        """
+            인증메일(발송) - 인증 메일을 발송합니다.
+            
+
+            # 내용
+                * username: Email 형식이어야 합니다.
+        """
         if UsernameSerializer(data=request.data).is_valid(raise_exception=True):
             confirm_code = ''
             username = request.data.get('username')
@@ -120,6 +136,13 @@ class Mail(APIView):
 
 @permission_classes((AllowAny, ))
 class Nickname(APIView):
+    """
+        닉네임 중복체크 - 닉네임의 중복을 체크합니다.
+
+        # 내용
+            * nickname: 최대 20자의 String을 받습니다.
+    """
+    @swagger_auto_schema(query_serializer=UserNicknameSerializer)
     def get(self, request, format=None):
         serializer = UserNicknameSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
@@ -129,6 +152,13 @@ class Nickname(APIView):
 
 @permission_classes((AllowAny, ))
 class Username(APIView):
+    """
+        아이디 중복체크 - 아이디를 중복체크합니다.
+
+        # 내용
+            * username: Email 형식이어야 합니다.
+    """
+    @swagger_auto_schema(query_serializer=UsernameSerializer)
     def get(self, request, format=None):
         serializer = UsernameSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
@@ -137,8 +167,20 @@ class Username(APIView):
 
 
 @permission_classes((AllowAny, ))
+@parser_classes((FormParser, ))
 class SignUp(APIView):
+    @swagger_auto_schema(request_body=UserCreationSerializer)
     def post(self, request, format=None):
+        """
+            회원 가입 - 회원정보를 생성합니다.
+
+            # 내용
+                * username: Email 형식이어야 합니다.
+                * nickname: 최대 20자의 String을 받습니다.
+                * password: 8자 이상이어야 합니다.
+                            1자 이상 문자가 포함되어야합니다.
+                            보안이 취약한 비밀번호는 사용할 수 없습니다. (예: 12345678)
+        """
         username = request.data.get('username')
         if Waiting.objects.filter(username=username).exists():
             waiting_user = Waiting.objects.get(username=username)
@@ -158,13 +200,28 @@ class SignUp(APIView):
         return Response({'message': ['회원가입이 실패하였습니다.']}, status=status.HTTP_400_BAD_REQUEST)
 
 
+@parser_classes((FormParser, ))
 class UserMgmt(APIView):
     def delete(self, request, format=None):
+        """
+            회원탈퇴 - 회원정보를 삭제합니다.
+
+            # 내용
+                * headers에서 포함된 jwt 데이터의 user_id를 이용합니다.
+        """
         user = get_user(request.headers['Authorization'].split(' '))
         user.delete()
         return Response({'message': ['회원탈퇴가 정상적으로 처리되었습니다.']}, status=status.HTTP_204_NO_CONTENT)
 
+    @swagger_auto_schema(request_body=UserNicknameSerializer)
     def put(self, request, format=None):
+        """
+            회원정보수정 - 회원정보를 수정합니다.
+
+            # 내용
+                * headers에서 포함된 jwt 데이터의 user_id를 이용합니다.
+                * nickname: 최대 20자의 String을 받습니다.
+        """
         user = get_user(request.headers['Authorization'].split(' '))
         serializer = UserNicknameSerializer(user, data=request.data)
         if serializer.is_valid(raise_exception=True):
@@ -174,7 +231,18 @@ class UserMgmt(APIView):
         return Response({'message': ['회원정보 변경이 실패하였습니다.']}, status=status.HTTP_400_BAD_REQUEST)
 
 
+@parser_classes((FormParser, ))
 class Password(APIView):
+    """
+        비밀번호 변경 - 유저의 비밀번호를 변경합니다.
+
+        # 내용
+            * headers에서 포함된 jwt 데이터의 user_id를 이용합니다.
+            * password: 8자 이상이어야 합니다.
+                        1자 이상 문자가 포함되어야합니다.
+                        보안이 취약한 비밀번호는 사용할 수 없습니다. (예: 12345678)
+    """
+    @swagger_auto_schema(request_body=UserPasswordSerializer)
     def put(self, request, format=None):
         jwt_data = decoder(request.headers['Authorization'].split(' ')[1])
         user = get_object_or_404(User, id=jwt_data['user_id'])
@@ -191,8 +259,17 @@ class Password(APIView):
 
 
 @permission_classes((AllowAny, ))
+@parser_classes((FormParser, ))
 class SignIn(APIView):
+    @swagger_auto_schema(request_body=UserSignInSerializer)
     def post(self, request, format=None):
+        """
+            로그인
+
+            # 내용
+                * 회원가입에서 생성한 유저정보를 작성합니다.
+                * return: jwt가 반환됩니다.
+        """
         username = request.data.get('username')
         if User.objects.filter(username=username).exists():
             sign_in_user = User.objects.get(username=username)
@@ -209,8 +286,17 @@ class SignIn(APIView):
 
 
 @permission_classes((IsAdminUser, ))
+@parser_classes((FormParser, ))
 class UserBan(APIView):
+    @swagger_auto_schema(request_body=UserBanSerializer)
     def post(self, request, format=None):
+        """
+            유저 정지(관리자) - 유저의 접근을 금지 처리합니다.
+
+            # 내용
+                * username: Email 형식이어야 합니다.
+                * banning_period: Int 형식이어야 합니다. N일 후까지 접근을 금지합니다.
+        """
         check_result = check_request(request.data, ['username', 'banning_period',])
         if check_result:
             return Response(check_result, status=status.HTTP_400_BAD_REQUEST)
@@ -221,7 +307,14 @@ class UserBan(APIView):
         sign_in_user.save()
         return Response({'message': [username + '가 '+ sign_in_user.banning_period + '까지 정지처리 되었습니다.']})
 
+    @swagger_auto_schema(request_body=UsernameSerializer)
     def delete(self, request, format=None):
+        """
+            유저 정지 취소(관리자) - 유저 접근 금지 처리를 취소합니다.
+
+            # 내용
+                * username: Email 형식이어야 합니다.
+        """
         check_result = check_request(request.data, ['username'])
         if check_result:
             return Response(check_result, status=status.HTTP_400_BAD_REQUEST)
@@ -231,39 +324,3 @@ class UserBan(APIView):
         sign_in_user.is_active = True
         sign_in_user.save()
         return Response({'message': [username + '의 정지처리가 취소되었습니다.']})
-
-
-class ReportCommentMgmt(APIView):
-    def post(self, request, format=None):
-        user = get_user(request.headers['Authorization'].split(' '))
-        if not ReportComment.objects.filter(user=user.id).exists():
-            data = {
-                'user': user.id,
-                'comment': request.data.get('comment'),
-                'report_text': request.data.get('report_text')
-            }
-            serializer = ReporCommentSerializer(data=data)
-            if serializer.is_valid(raise_exception=True):
-                serializer.save()
-                return Response({'message': ['해당 댓글이 성공적으로 신고되었습니다.']})
-            return Response({'message': ['해당 댓글에 대한 신고가 실패하였습니다.']}, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response({'message': ['이미 신고가 접수된 댓글입니다.']}, status=status.HTTP_400_BAD_REQUEST)
-
-
-class ReportReCommentMgmt(APIView):
-    def post(self, request, format=None):
-        user = get_user(request.headers['Authorization'].split(' '))
-        if not ReportReComment.objects.filter(user=user.id).exists():
-            data = {
-                'user': user.id,
-                're_comment': request.data.get('re_comment'),
-                'report_text': request.data.get('report_text')
-            }
-            serializer = ReporReCommentSerializer(data=data)
-            if serializer.is_valid(raise_exception=True):
-                serializer.save()
-                return Response({'message': ['해당 댓글이 성공적으로 신고되었습니다.']})
-            return Response({'message': ['해당 댓글에 대한 신고가 실패하였습니다.']}, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response({'message': ['이미 신고가 접수된 댓글입니다.']}, status=status.HTTP_400_BAD_REQUEST)

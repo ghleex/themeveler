@@ -2,8 +2,7 @@ from django.contrib.admin import SimpleListFilter
 from django.contrib import admin
 from django.db.models.aggregates import Count
 from django.utils.translation import ugettext_lazy
-from accounts.models import ReportComment, ReportReComment
-from .models import Notice, VoiceCategory, CustomersVoice, ManagersReply, Comment, ReComment
+from .models import Notice, VoiceCategory, CustomersVoice, ManagersReply, Comment, ReComment, ReportComment, ReportReComment
 
 # Register your models here.
 class ReportCommentInline(admin.TabularInline):

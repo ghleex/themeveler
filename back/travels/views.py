@@ -1,17 +1,26 @@
 from django.contrib.auth import get_user_model
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework_jwt.settings import api_settings
+from rest_framework.decorators import parser_classes
+from rest_framework.parsers import FormParser
+from drf_yasg.utils import swagger_auto_schema
 from decouple import config
-from .serializers import MessageSerializer
+from .serializers import MessageSerializer, MessageViewSerializer
 from .models import Message, Theme
 
 User = get_user_model()
 decoder = api_settings.JWT_DECODE_HANDLER
 
 # Create your views here.
+def get_user(token, format=None):
+    jwt_data = decoder(token[1])
+    user = get_object_or_404(User, id=jwt_data['user_id'])
+    return user
+
+
 class TravelMgmt(APIView):
     """
     사용자의 여행 코스 관리
@@ -54,17 +63,35 @@ def map(request):
     return render(request, 'travels/map.html', context)
 
 
+@parser_classes((FormParser, ))
 class Chating(APIView):
+    @swagger_auto_schema(query_serializer=MessageViewSerializer)
     def get(self, request, format=None):
+        """
+            채팅 내역 확인(테마) - 테마별 채팅 내역을 확인합니다.
+
+            # 내용
+                * headers에서 포함된 jwt 데이터의 user_id를 이용합니다.
+                * theme: theme의 theme_id를 작성합니다. Int 형식입니다.
+        """
         data = {}
-        value = request.data.get('theme')
-        if not value:
-            data[form] = ['이 필드는 필수항목 입니다.']
+        theme = request.GET.get('theme')
+        if not theme:
+            data[theme] = ['이 필드는 필수항목 입니다.']
             return Response(data)
-        serializer = MessageSerializer(Message.objects.filter(theme=request.data.get('theme')), many=True)
+        serializer = MessageSerializer(Message.objects.filter(theme=theme), many=True)
         return Response(serializer.data)
 
+    @swagger_auto_schema(query_serializer=MessageSerializer)
     def post(self, request, format=None):
+        """
+            채팅 저장(테마) - 테마별 채팅을 저장합니다..
+
+            # 내용
+                * headers에서 포함된 jwt 데이터의 user_id를 이용합니다.
+                * theme: theme의 theme_id를 작성합니다. Int 형식입니다.
+                * message: 메시지를 작성합니다.
+        """
         jwt_data = decoder(request.headers['Authorization'].split(' ')[1])
         user = User.objects.get(id=jwt_data.get('user_id'))
         data = {

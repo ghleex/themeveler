@@ -1,7 +1,8 @@
 from django.db.models.aggregates import Count
 from django.contrib.auth.admin import UserAdmin
 from django.contrib import admin
-from .models import User, Waiting, ReportComment, ReportReComment
+from .models import User, Waiting
+from articles.models import ReportComment, ReportReComment
 from datetime import datetime, timedelta
 
 
