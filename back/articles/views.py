@@ -12,17 +12,13 @@ from .models import Notice, VoiceCategory, CustomersVoice, ManagersReply, Commen
 from .serializers import NoticeSerializer, VoiceCategorySerializer, CustomersVoiceSerializer
 from .serializers import ManagerReplySerializer, CommentSerializer, ReCommentSerializer
 from .serializers import ReportCommentSerializer, ReportReCommentSerializer
-from travels.models import Destination
+from travels.models import Theme, Destination
 
 User = get_user_model()
 decoder = api_settings.JWT_DECODE_HANDLER
 
 access_message = {
     'message': 'INVALID ACCESS'
-}
-
-not_valid_message = {
-    'message': 'THE SERIALIER IS NOT VALID'
 }
 
 error_message = {
@@ -75,7 +71,7 @@ class SetVoiceCategory(APIView):
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             else:
-                Response(not_valid_message, status=status.HTTP_202_ACCEPTED)
+                Response(serializer.errors, status=status.HTTP_202_ACCEPTED)
         except:
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
@@ -105,7 +101,7 @@ class ChangeVoiceCategory(APIView):
                 serializer.save()
                 return Response(data, status=status.HTTP_200_OK)
             else:
-                return Response(not_valid_message, status=status.HTTP_202_ACCEPTED)
+                return Response(serializer.errors, status=status.HTTP_202_ACCEPTED)
         except:
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
@@ -159,7 +155,7 @@ class CustomersVoices(APIView):
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             else:
-                return Response(not_valid_message, status=status.HTTP_202_ACCEPTED)
+                return Response(serializer.errors, status=status.HTTP_202_ACCEPTED)
         else:
             return Response(access_message, status=status.HTTP_401_UNAUTHORIZED)
 
@@ -196,7 +192,7 @@ class CustomersVoiceChange(APIView):
                 serializer.save()
                 return Response(voice.id, status=status.HTTP_200_OK)
             else:
-                return Response(not_valid_message, status=status.HTTP_202_ACCEPTED)
+                return Response(serializer.errors, status=status.HTTP_202_ACCEPTED)
         else:
             return Response(access_message, status=status.HTTP_403_FORBIDDEN)
 
@@ -251,7 +247,7 @@ class ManagersReplying(APIView):
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             else:
-                return Response(not_valid_message, status=status.HTTP_202_ACCEPTED)
+                return Response(serializer.errors, status=status.HTTP_202_ACCEPTED)
         except:
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
@@ -283,7 +279,7 @@ class ManagersReplyChange(APIView):
                 serializer.save()
                 return Response(data, status=status.HTTP_200_OK)
             else:
-                return Response(not_valid_message, status=status.HTTP_202_ACCEPTED)
+                return Response(serializer.errors, status=status.HTTP_202_ACCEPTED)
         except:
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
@@ -297,17 +293,20 @@ class ThemeNoticesView(APIView):
 
     """
     def get_theme(self, theme_pk, format=None):
-        return get_object_or_404(Notice, pk=theme_pk)
+        return get_object_or_404(Theme, pk=theme_pk)
     
     def get(self, request, theme_pk, format=None):
+        theme = self.get_theme(theme_pk)
         try:
-            notices = self.get_theme(theme_pk)
+            notices = theme.theme_notices.all()
             notice = []
             for n in notices:
+                print(n)
                 serializer = NoticeSerializer(n)
                 notice.append(serializer.data)
+            print(f'notice: {notice}')
             data = {
-                'notice': notice,
+                'notices': notice,
             }
             return Response(data, status=status.HTTP_200_OK)
         except:
@@ -327,14 +326,14 @@ class ThemeNoticesPost(APIView):
             data = {
                 'title': requests.get('title'),
                 'content': requests.get('content'),
-                'writer': request.user,
+                'writer': request.user.pk,
                 'theme': requests.get('theme'),
             }
-            serializer = NoticeSerializer(data)
+            serializer = NoticeSerializer(data=data)
             if serializer.is_valid():
                 serializer.save()
                 return Response(data, status=status.HTTP_201_CREATED)
-            return Response(not_valid_message, status=status.HTTP_202_ACCEPTED)
+            return Response(serializer.errors, status=status.HTTP_202_ACCEPTED)
         except:
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
@@ -355,28 +354,26 @@ class ThemeNoticesChange(APIView):
             requests = request.data
             notice.title = requests.get('title')
             notice.content = requests.get('content')
-            notice.writer = request.user
-            notice.theme = requests.get('theme')
-
+            notice.writer_id = request.user.pk
             data = {
                 'title': notice.title,
                 'content': notice.content,
-                'writer': notice.writer,
-                'theme': notice.theme,
+                'writer': notice.writer_id,
+                'theme': requests.get('theme'),
             }
-            serializer = NoticeSerializer(data)
+            serializer = NoticeSerializer(notice, data=data)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
             else:
-                return Response(not_valid_message, status=status.HTTP_202_ACCEPTED)
+                return Response(serializer.errors, status=status.HTTP_202_ACCEPTED)
         except:
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, notice_pk, format=None):
         try:
-            notice = self.get_notice(notice_pk)
-            if request.user == notice.user:
+            notice = self.get_notices(notice_pk)
+            if request.user == notice.writer:
                 notice.delete()
                 message = {
                     'message': 'SUCCESSFULLY DELETED THE NOTICE'
@@ -419,7 +416,7 @@ class Comments(APIView):
             requests = request.data
             data = {
                 'content': requests.get('content'),
-                'writer': request.user,
+                'writer': request.user.pk,
                 'destination': dest_pk,
             }
             serializer = CommentSerializer(data=data)
@@ -428,7 +425,7 @@ class Comments(APIView):
                 comment.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             else:
-                return Response(not_valid_message, status=status.HTTP_202_ACCEPTED)
+                return Response(serializer.errors, status=status.HTTP_202_ACCEPTED)
         except:
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
@@ -441,35 +438,31 @@ class CommentChange(APIView):
         ---
     """
     def get_comment(self, comment_pk, format=None):
-        if Destination.destination_comments.filter(pk=comment_pk).exists():
-            return Destination.destination_comments.get(pk=comment_pk)
-        else:
-            message = {
-                'message': 'NOT FOUND'
-            }
-            return Response(message, status=status.HTTP_404_NOT_FOUND)
+        return get_object_or_404(Comment, pk=comment_pk)
 
     def put(self, request, comment_pk, format=None):
         comment = self.get_comment(comment_pk)
         try:
-            comment.content = request.data.get['content']
+            comment.content = request.data.get('content')
             data = {
                 'content': comment.content,
+                'writer': comment.writer_id,
+                'destination': comment.destination_id,
             }
-            serializer = CommentSerializer(data)
+            serializer = CommentSerializer(comment, data=data)
             if serializer.is_valid():
                 comment = serializer.save()
                 comment.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
             else:
-                return Response(not_valid_message, status=status.HTTP_202_ACCEPTED)
+                return Response(serializer.errors, status=status.HTTP_202_ACCEPTED)
         except:
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, comment_pk, format=None):
         comment = self.get_comment(comment_pk)
         try:
-            if request.user == comment.user:
+            if request.user == comment.writer:
                 comment.delete()
                 message = {
                     'message': 'SUCCESSFULLY DELETED THE COMMENT'
@@ -511,14 +504,14 @@ class ReComments(APIView):
             data = {
                 'content': request.data.get('content'),
                 'comment': comment_pk,
-                'writer': request.user,
+                'writer': request.user.pk,
             }
             serializer = ReCommentSerializer(data=data)
             if serializer.is_valid():
                 serializer.save()
                 return Response(data, status=status.HTTP_201_CREATED)
             else:
-                return Response(not_valid_message, status=status.HTTP_202_ACCEPTED)
+                return Response(serializer.errors, status=status.HTTP_202_ACCEPTED)
         except:
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
@@ -539,21 +532,23 @@ class ReCommentChange(APIView):
             recomment.content = request.data.get('content')
             data = {
                 'content': recomment.content,
+                'comment': recomment.comment_id,
+                'writer': request.user.pk,
             }
-            serializer = ReCommentSerializer(data=data)
+            serializer = ReCommentSerializer(recomment, data=data)
             if serializer.is_valid():
                 re_comment = serializer.save()
                 re_comment.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
             else:
-                return Response(not_valid_message, status=status.HTTP_202_ACCEPTED)
+                return Response(serializer.errors, status=status.HTTP_202_ACCEPTED)
         except:
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, recomment_pk, format=None):
         recomment = self.get_recomment(recomment_pk)
         try:
-            if request.user == recomment.user:
+            if request.user == recomment.writer:
                 recomment.delete()
                 message = {
                     'message': 'SUCCESSFULLY DELETED THE RECOMMENT'
