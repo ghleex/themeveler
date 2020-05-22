@@ -23,10 +23,10 @@ class WaitingSerializer(serializers.ModelSerializer):
         fields = '__all__'
         extra_kwargs = {
             'is_confirm': {
-                'read_only': True,
+                'required': False,
             },
             'confirm_code': {
-                'read_only': True,
+                'required': False,
             }
         }
 
@@ -34,7 +34,7 @@ class WaitingSerializer(serializers.ModelSerializer):
 class ConfirmCodeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Waiting
-        fields = ('username', 'confirm_code')
+        fields = ('username', 'confirm_code', )
         extra_kwargs = {
             'confirm_code': {
                 'required': True,
@@ -45,7 +45,7 @@ class ConfirmCodeSerializer(serializers.ModelSerializer):
 class UserCreationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'password', 'nickname')
+        fields = ('id', 'username', 'password', 'nickname', )
     
     def validate_password(self, value):
         validate_password(value)
@@ -73,9 +73,20 @@ class UserBanSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = User
-        fields = ('username', 'banning_period')
+        fields = ('username', 'banning_period', )
         extra_kwargs = {
             'banning_period': {
                 'required': True,
             }
         }
+
+
+class SocialLoginSerializer(serializers.ModelSerializer):
+    user_id = serializers.SerializerMethodField('get_user_name')
+
+    class Meta:
+        model = User
+        fields = ('user_id', 'username', 'nickname', )
+
+    def get_user_name(self, obj):
+        return obj.id

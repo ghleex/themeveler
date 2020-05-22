@@ -20,7 +20,7 @@ class MessageSerializer(serializers.ModelSerializer):
         fields = '__all__'
         extra_kwargs = {
             'nickname': {
-                'read_only': True,
+                'required': False,
             },
         }
 

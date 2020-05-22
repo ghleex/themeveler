@@ -182,7 +182,6 @@ class Like(APIView):
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
 
-@parser_classes((FormParser, ))
 class Chatting(APIView):
     @swagger_auto_schema(query_serializer=MessageViewSerializer)
     def get(self, request, format=None):
