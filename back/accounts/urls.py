@@ -14,6 +14,8 @@ urlpatterns = [
     path('ban/', views.UserBan.as_view()),
     path('social/kakao/', views.KakaoSignInView.as_view()),
     path('social/kakao/callback/', views.KakaoSignInCallbackView.as_view()),
+    path('social/google/', views.GoogleSignInView.as_view()),
+    path('social/google/callback/', views.GoogleSignInCallbackView.as_view()),
     path('token/verify/', verify_jwt_token),
     path('token/refresh/', refresh_jwt_token),
 ]

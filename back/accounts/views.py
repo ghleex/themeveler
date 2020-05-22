@@ -16,13 +16,17 @@ from rest_framework.parsers import FormParser
 from drf_yasg.utils import swagger_auto_schema
 from .serializers import UserCreationSerializer, UserNicknameSerializer, WaitingSerializer
 from .serializers import UsernameSerializer, ConfirmCodeSerializer, UserPasswordSerializer
-from .serializers import UserSignInSerializer, UserBanSerializer
+from .serializers import UserSignInSerializer, UserBanSerializer, SocialLoginSerializer
 from .models import Waiting
 from random import SystemRandom, choice
 from datetime import datetime, timedelta
 from decouple import config
+from google.oauth2 import id_token
+from google.auth.transport import requests as req
+import json
 import requests
 import re
+
 
 # Create your views here.
 User = get_user_model()
@@ -247,6 +251,8 @@ class Password(APIView):
     def put(self, request, format=None):
         jwt_data = decoder(request.headers['Authorization'].split(' ')[1])
         user = get_object_or_404(User, id=jwt_data['user_id'])
+        if not user.has_usable_password():
+            return Response({'message': ['소셜 로그인 유저는 비밀번호를 변경할 수 없습니다.']}, status=status.HTTP_400_BAD_REQUEST)
         password_data = decoder(request.data.get('data'))
         serializer = UserPasswordSerializer(user, data=password_data)
         if serializer.is_valid(raise_exception=True):
@@ -273,6 +279,8 @@ class SignIn(APIView):
         username = request.data.get('username')
         if User.objects.filter(username=username).exists():
             sign_in_user = User.objects.get(username=username)
+            if not sign_in_user.has_usable_password():
+                return Response({'message': ['해당 유저는 소셜로그인 유저입니다.']}, status=status.HTTP_400_BAD_REQUEST)
             if sign_in_user.banning_period:
                 if str(sign_in_user.banning_period) < datetime.today().strftime('%Y-%m-%d'):
                     sign_in_user.is_active = True
@@ -328,6 +336,11 @@ class UserBan(APIView):
 @permission_classes((AllowAny, ))
 class KakaoSignInView(APIView):
     def get(self, request):
+        """
+            카카오 로그인
+            ____
+
+        """
         client_id = config('KAKAO_REST_API_KEY')
         redirect_uri = 'http://127.0.0.1:8000/api/accounts/social/kakao/callback/'
         url = f'https://kauth.kakao.com/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&response_type=code'
@@ -337,6 +350,9 @@ class KakaoSignInView(APIView):
 @permission_classes((AllowAny, ))
 class KakaoSignInCallbackView(APIView):
     def get(self, request):
+        """
+            카카오 콜백
+        """
         try:
             code = request.GET.get('code')                                
             client_id = config('KAKAO_REST_API_KEY')
@@ -365,24 +381,83 @@ class KakaoSignInCallbackView(APIView):
         }
         social_user = User.objects.filter(username=email).first()
         if social_user and social_user.username == email:
-            # if not social_user.has_usable_password():
-            user=social_user
-                # return Response({'msg':'이프문걸림'})
-            # else:
-            #     return Response({'message': ['해당 유저는 소셜로그인 유저가 아닙니다.']})
+            if not social_user.has_usable_password():
+                user = social_user
+            else:
+                return Response({'message': ['해당 유저는 소셜로그인 유저가 아닙니다.']}, status=status.HTTP_400_BAD_REQUEST)
         else:
             serializer = UsernameSerializer(data=data)
             if serializer.is_valid(raise_exception=True):
                 user = serializer.save()
-                user.set_password('test12!@')
+                user.set_unusable_password()
                 user.nickname = 'KAKAO 유저 ' + str(user.id)
                 user.anonymous = choice(prefix) + choice(suffix) + str(user.id)
                 user.save()
-        jwt = encoder(
-            {
-                'user_id': user.id,
-                'username': user.username,
-            }
-        )
-        return Response({'msg':jwt})      
+        social_serilizer = SocialLoginSerializer(user)
+        jwt = encoder(social_serilizer.data)
+        return Response({'jwt': jwt})  
 
+
+@permission_classes((AllowAny, ))
+class GoogleSignInView(APIView):
+    def get(self, request):
+        # state = hashlib.sha256(os.urandom(1024)).hexdigest()
+        base = 'https://accounts.google.com/o/oauth2/v2/auth?'
+        client_id = config('GOOGLE_APP_ID')
+        urls = [
+            'redirect_uri=http://127.0.0.1:8000/api/accounts/social/google/callback/&',
+            'prompt=consent&response_type=code&',
+            f'client_id={client_id}&'
+            'scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&',
+            'access_type=offline',
+            # 'state=state_parameter_passthrough_value&',
+        ]
+        
+        for url in urls:
+            base += url
+        return redirect(base)
+
+
+@permission_classes((AllowAny, ))
+class GoogleSignInCallbackView(APIView):
+    def get(self, request, format=None):
+        """
+                    
+        구글 소셜 로그인 시 사용
+        ---
+        """
+        google_access_code = request.GET.get('code', None)
+        url = 'https://www.googleapis.com/oauth2/v4/token'
+        headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+        body = {
+            'code': f'{google_access_code}',
+            'client_id': config('GOOGLE_APP_ID'),
+            'client_secret': config('GOOGLE_SECRET_KEY'),
+            'redirect_uri': 'http://127.0.0.1:8000/api/accounts/social/google/callback/',
+            'grant_type': 'authorization_code',
+        }
+        google_response = requests.post(url, headers=headers, data=body)
+        google_response_dict = json.loads(google_response.text)
+        access_token = google_response_dict.get('access_token')
+        id_info = id_token.verify_oauth2_token(google_response_dict.get('id_token'), req.Request(), config('GOOGLE_APP_ID'))
+        email = id_info['email']
+        data = {
+            'username': email
+        }
+        social_user = User.objects.filter(username=email).first()
+        if social_user and social_user.username == email:
+            if not social_user.has_usable_password():
+                user = social_user
+            else:
+                return Response({'message': ['해당 유저는 소셜로그인 유저가 아닙니다.']}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            serializer = UsernameSerializer(data=data)
+            if serializer.is_valid(raise_exception=True):
+                user = serializer.save()
+                user.set_unusable_password()
+                user.nickname = 'GOOGLE 유저 ' + str(user.id)
+                user.anonymous = choice(prefix) + choice(suffix) + str(user.id)
+                user.save()
+        social_serilizer = SocialLoginSerializer(user)
+        jwt = encoder(social_serilizer.data)
+        return Response({'jwt': jwt})
