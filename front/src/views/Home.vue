@@ -78,62 +78,10 @@
     </div>
 
 
-
-
     <!-- 인기 여행지 -->
     <div class="main-section">
       <h2 class="home-h2-title mt-12"><i class="fas fa-bus-alt mr-2"></i>인기 여행지</h2>
       <br><br>
-
-
-
-
-
-
-
-
-      <br><br><br><br><br><br>
-      <div class="main-section">
-        <br><br><br><br><br><br>
-        <h2 class="article-header my-5"><i class="fas fa-walking"></i> ?? <i class="fas fa-walking"></i></h2>
-        <!-- <revi-list limits="4" :spotData="spotData" /> -->
-        <!-- <div class="hspot d-inline width:80% col-md-6 col-12">
-          <div>
-            <p :src="spotData[0]" width="300" height="300"></p>
-            <p :src="spotData[1]" width="300" height="300"></p>
-          </div>
-          <div>
-            <p :src="spotData[2]" width="300" height="300"></p>
-            <p :src="spotData[3]" width="300" height="300"></p>
-          </div>
-        </div>
-        <br> -->
-        <!-- 인기 여행지 Card -->
-        <v-container fluid class="mx-auto" max-width="95%">
-          <v-row dense>
-            <v-col v-for="card in spotcards" :key="card.title" :cols="12" :sm="3">
-              <v-hover v-slot:default="{ hover }">
-                <v-card class="mx-auto" max-width="90%" :elevation="hover ? 12 : 2">
-                  <v-img :src="card.src" class="white--text align-end"
-                    gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)" height="200px">
-                    <v-card-title v-text="card.title"></v-card-title>
-                  </v-img>
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn icon>
-                      <v-icon color="red">mdi-heart-outline</v-icon>
-                    </v-btn>
-                    <v-btn icon>
-                      <v-icon color="green">mdi-bookmark-outline</v-icon>
-                    </v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-hover>
-            </v-col>
-          </v-row>
-        </v-container>
-        <br><br>
-      </div>
 
     </div>
   </div>
@@ -149,6 +97,8 @@
     },
     data() {
       return {
+        toggle: false,
+        active: false,
         dialog: false,
         imgUrl: '',
         model: null,
@@ -199,6 +149,10 @@
             context: '도쿄는 생각보다 별롭니다. 플로리다 올랜도는 쩔어요. 가장 큰 디즈니 월드(world) 클라쓰~',
             imgs: [
               require('../assets/image/pop4sub1.jpg'),
+              require('../assets/image/pop4sub2.jpg'),
+              require('../assets/image/pop4sub3.jpg'),
+              require('../assets/image/pop4sub4.jpg'),
+              require('../assets/image/pop4sub5.jpg'),
             ]
           },
           {
@@ -206,7 +160,13 @@
             img: require('../assets/image/pop5.jpg'),
             title: '혼저옵서예',
             context: '유일한 제주 남부의 시장을 가면 싱싱한 회 팩이 마치 3만원!',
-            imgs: []
+            imgs: [
+              require('../assets/image/pop5sub1.jpg'),
+              require('../assets/image/pop5sub2.jpg'),
+              require('../assets/image/pop5sub3.jpg'),
+              require('../assets/image/pop5sub4.jpg'),
+              require('../assets/image/pop5sub5.jpg'),
+            ]
           },
         ],
         slides: [
@@ -307,9 +267,14 @@
   @media (max-width: 950px) {
     .pop-theme-card-text {
       background: #2c3e50;
-      font-size: 1.5vw;
-      padding: .5rem;
+      font-size: 15px;
       font-family: 'Cafe24Simplehae';
+      display: flex;
+      padding: .5rem 0 .3rem 0;
+    }
+
+    .pop-theme-card-text {
+      padding: .3rem 0 0 0;
     }
 
     .pop-theme-card-text>i {
