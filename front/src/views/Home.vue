@@ -12,9 +12,12 @@
       </v-carousel>
     </div><br><br>
 
-
     <v-btn color="primary" class="mb-12" outlined to="/profile">
       유저페이지>>>>임시버튼</v-btn>
+
+
+
+
 
     <!-- 인기 테마 -->
     <h2 class="home-h2-title"><i class="fas fa-bookmark mr-2"></i>인기 테마</h2>
@@ -47,29 +50,29 @@
               <v-sheet class="ml-0 mr-auto" max-width="90vw">
                 <v-slide-group class="pa-4 pop-theme-slide-group" center-active show-arrows>
                   <!-- <v-slide-item v-for="(img, index) in cardBypopTheme(model)" :key="img"> -->
-                  <v-slide-item v-for="(img) in cardBypopTheme(model)" :key="img">
+                  <v-slide-item v-for="img in cardBypopTheme(model)" :key="img">
                     <v-card class="ma-4 popTheme-sub-img" height="123" width="120">
+                      <v-img :src="img" height="123" @click="openCardModal(img)"></v-img>
 
                       <!-- modal -->
-                      <v-dialog v-model="dialog" width="500">
-                        <template v-slot:activator="{ on }">
-                          <v-img :src="img" v-on="on" height="123"></v-img>
-                        </template>
-                        <!-- <v-card v-if="img == img[index]"> -->
-                        <v-card>
-                          <v-img :src="img"></v-img>
-                          <v-card-actions style="justify-content: flex-end;">
-                            <v-btn color="#2c3e50" class="text-light" @click="dialog = false">
-                              확인
-                            </v-btn>
-                          </v-card-actions>
-                        </v-card>
-                      </v-dialog>
-
+                     
                       <v-row class="fill-height" align="center" justify="center">
                       </v-row>
                     </v-card>
                   </v-slide-item>
+
+                   <v-dialog v-model="dialog" width="500">
+                      <v-card>
+                        <v-img :src="imgUrl" height="80vh" width="100vw"></v-img>
+                        <!-- {{ img }} {{ index }} -->
+                        <v-card-actions style="justify-content: flex-end;">
+                          <v-btn color="#2c3e50" class="text-light" @click="dialog = false">
+                            확인
+                          </v-btn>
+                        </v-card-actions>
+                      </v-card>
+                    </v-dialog>
+
                 </v-slide-group>
               </v-sheet>
             </div>
@@ -85,55 +88,9 @@
 
 
 
-
-
-
-
-
-
-
-
     <!-- 인기 여행지 -->
     <div class="main-section">
       <h2 class="home-h2-title mt-12"><i class="fas fa-bus-alt mr-2"></i>인기 여행지</h2>
-
-      <!-- <revi-list limits="4" :spotData="spotData" /> -->
-      <!-- <div class="hspot d-inline width:80% col-md-6 col-12">
-          <div>
-            <p :src="spotData[0]" width="300" height="300"></p>
-            <p :src="spotData[1]" width="300" height="300"></p>
-          </div>
-          <div>
-            <p :src="spotData[2]" width="300" height="300"></p>
-            <p :src="spotData[3]" width="300" height="300"></p>
-          </div>
-        </div>
-        <br> -->
-      <!-- 인기 여행지 Card -->
-      <!-- <v-container fluid class="mx-auto" max-width="95%">
-          <v-row dense>
-            <v-col v-for="card in cards" :key="card.title" :cols="card.flex">
-              <v-card class="mx-auto" max-width="90%">
-                <v-img :src="card.src" class="white--text align-end"
-                  gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)" height="200px">
-                  <v-card-title v-text="card.title"></v-card-title>
-                </v-img>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn icon>
-                    <v-icon>mdi-heart</v-icon>
-                  </v-btn>
-                  <v-btn icon>
-                    <v-icon>mdi-bookmark</v-icon>
-                  </v-btn>
-                  <v-btn icon>
-                    <v-icon>mdi-share-variant</v-icon>
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-col>
-          </v-row>
-        </v-container> -->
       <br><br>
     </div>
   </div>
@@ -151,6 +108,7 @@
     data() {
       return {
         dialog: false,
+        imgUrl: '',
         model: null,
         eachContext: "",
         popTheme: [{
@@ -172,7 +130,11 @@
             title: '서울사람도 잘 몰라',
             context: '일단 아무말이나 적어보자.',
             imgs: [
-
+              require('../assets/image/pop2sub1.jpg'),
+              require('../assets/image/pop2sub2.jpg'),
+              require('../assets/image/pop2sub3.jpg'),
+              require('../assets/image/pop2sub4.jpg'),
+              require('../assets/image/pop2sub5.jpg'),
             ]
           },
           {
@@ -181,7 +143,11 @@
             title: '홍콩 어디까지 가봤니?',
             context: '홍콩 에그타르트 JMT.',
             imgs: [
-
+              require('../assets/image/pop3sub1.jpg'),
+              require('../assets/image/pop3sub2.jpg'),
+              require('../assets/image/pop3sub3.jpg'),
+              require('../assets/image/pop3sub4.jpg'),
+              require('../assets/image/pop3sub5.jpg'),
             ]
           },
           {
@@ -201,61 +167,10 @@
             imgs: []
           },
         ],
-        popImg: [
-          require('../assets/image/pop1.webp'),
-          require('../assets/image/pop2.jpg'),
-          require('../assets/image/pop3.jpg'),
-          require('../assets/image/pop4.jpg'),
-          require('../assets/image/pop5.jpg'),
-        ],
         slides: [
           require('../assets/image/bg.jpg'),
           require('../assets/image/bg-3.jpg'),
         ],
-        themeData: [
-
-        ],
-        // cards: [{
-        //     title: 'Pre-fab homes',
-        //     src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg',
-        //     flex: 3
-        //   },
-        //   {
-        //     title: 'Favorite road trips',
-        //     src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg',
-        //     flex: 3
-        //   },
-        //   {
-        //     title: 'Best airlines',
-        //     src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg',
-        //     flex: 3
-        //   },
-        //   {
-        //     title: 'Favorite road trips.',
-        //     src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg',
-        //     flex: 3
-        //   },
-        //   {
-        //     title: 'Pre-fab homes.',
-        //     src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg',
-        //     flex: 3
-        //   },
-        //   {
-        //     title: 'Best airlines.',
-        //     src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg',
-        //     flex: 3
-        //   },
-        //   {
-        //     title: 'Favorite road trips..',
-        //     src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg',
-        //     flex: 3
-        //   },
-        //   {
-        //     title: 'Best airlines..',
-        //     src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg',
-        //     flex: 3
-        //   }
-        // ]
       }
     },
     methods: {
@@ -275,6 +190,11 @@
         })
         // console.log(theme[0].context)
         this.eachContext = theme[0].context
+      },
+      openCardModal(imgUrl){
+        console.log(imgUrl)
+        this.imgUrl = imgUrl
+        this.dialog = true
       }
     },
     mounted() {
@@ -324,14 +244,11 @@
     font-size: 1.5vw;
     padding: .5rem;
     font-family: 'Cafe24Simplehae';
-    /* font-style: italic; */
   }
 
   .pop-theme-card-text>i {
     font-size: 15px;
     margin: 0 .3rem;
-    /* display: flex; */
-    /* align-items: flex-start; */
   }
 
   /* media query가 좀 이상하게 작동 함 */
@@ -350,7 +267,6 @@
 
   .banner>img {
     width: 100%;
-    /* max-height: initial; */
     margin-top: -15%;
   }
 
@@ -366,9 +282,5 @@
     .home-search-bar {
       width: 80%;
     }
-  }
-
-  .themecard {
-    text-align: left;
   }
 </style>
