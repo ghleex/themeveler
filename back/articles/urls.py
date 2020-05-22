@@ -9,6 +9,13 @@ urlpatterns = [
     path('cv_change/<int:user_pk>/<int:voice_pk>/', views.CustomersVoiceChange.as_view()),
     path('cv_reply/<int:manager_pk>/', views.ManagersReplying.as_view()),
     path('cv_reply_change/<int:manager_pk>/<int:todo_pk>/', views.ManagersReplyChange.as_view()),
+    path('theme_notice/<int:theme_pk>/', views.ThemeNoticesView.as_view()),
+    path('theme_notice_post/', views.ThemeNoticesPost.as_view()),
+    path('theme_notice_change/<int:notice_pk>/', views.ThemeNoticesChange.as_view()),
+    path('<int:dest_pk>/comment/', views.Comments.as_view()),
+    path('comment_change/<int:comment_pk>/', views.CommentChange.as_view()),
+    path('<int:comment_pk>/recomment/', views.ReComments.as_view()),
+    path('recomment_change/<int:recomment_pk>/', views.ReCommentChange.as_view()),
     path('report/comment/', views.ReportCommentMgmt.as_view()),
     path('report/recomment/', views.ReportReCommentMgmt.as_view()),
 ]

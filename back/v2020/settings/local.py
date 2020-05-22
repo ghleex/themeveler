@@ -31,7 +31,8 @@ DATABASES = {
 
 
 JWT_AUTH = {
-    'JWT_DECODE_HANDLER':'rest_framework_jwt.utils.jwt_decode_handler',
+    'JWT_ENCODE_HANDLER': 'rest_framework_jwt.utils.jwt_encode_handler',
+    'JWT_DECODE_HANDLER': 'rest_framework_jwt.utils.jwt_decode_handler',
     'JWT_SECRET_KEY': SECRET_KEY,
     'JWT_ALGORITHM': 'HS256',
     'JWT_ALLOW_REFRESH': True,
