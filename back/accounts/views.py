@@ -338,7 +338,9 @@ class KakaoSignInView(APIView):
     def get(self, request):
         """
             카카오 로그인
-            ____
+
+            # 내용
+                * 주소로 직접 접근해야 합니다.
 
         """
         client_id = config('KAKAO_REST_API_KEY')
@@ -352,6 +354,8 @@ class KakaoSignInCallbackView(APIView):
     def get(self, request):
         """
             카카오 콜백
+
+            ___
         """
         try:
             code = request.GET.get('code')                                
@@ -401,7 +405,12 @@ class KakaoSignInCallbackView(APIView):
 @permission_classes((AllowAny, ))
 class GoogleSignInView(APIView):
     def get(self, request):
-        # state = hashlib.sha256(os.urandom(1024)).hexdigest()
+        """
+            구글 소셜 로그인
+            
+            # 내용
+                * 주소로 직접 접근해야 합니다.
+        """
         base = 'https://accounts.google.com/o/oauth2/v2/auth?'
         client_id = config('GOOGLE_APP_ID')
         urls = [
@@ -410,9 +419,7 @@ class GoogleSignInView(APIView):
             f'client_id={client_id}&'
             'scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&',
             'access_type=offline',
-            # 'state=state_parameter_passthrough_value&',
         ]
-        
         for url in urls:
             base += url
         return redirect(base)
@@ -422,9 +429,9 @@ class GoogleSignInView(APIView):
 class GoogleSignInCallbackView(APIView):
     def get(self, request, format=None):
         """
-                    
-        구글 소셜 로그인 시 사용
-        ---
+            구글 콜백
+
+            ---
         """
         google_access_code = request.GET.get('code', None)
         url = 'https://www.googleapis.com/oauth2/v4/token'
@@ -478,7 +485,7 @@ class PasswordFind(APIView):
         if p.match(username) == None:
             return Response({'message': ['email 형식이 아닙니다.']}, status=status.HTTP_400_BAD_REQUEST)
         user = User.objects.filter(username=username).first()
-        if user and user.username == username:
+        if user and user.username == username and user.has_usable_password():
             password = User.objects.make_random_password(length=14)
             data = {
                 'username': username,
@@ -489,4 +496,4 @@ class PasswordFind(APIView):
             self.mail_send(data=data)
             return Response({'message': [username+'님에게 비밀번호를 전송했습니다.']})
         else:
-            return Response({'message': ['해당 유저는 회원 가입된 유저가 아닙니다.']}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'message': ['해당 유저는 회원 가입된 유저가 아니거나 소셜 로그인 유저입니다.']}, status=status.HTTP_400_BAD_REQUEST)
