@@ -18,7 +18,6 @@
       hide-details
       label="Where do you want to go?"
       solo-inverted
-      color="#651FFF"
     ></v-autocomplete>
     <!-- <v-btn icon> -->
     <v-btn color="#2c3e50" class="text-light">

@@ -11,7 +11,7 @@
       </div>
       <div class="body2">
         <p class="notice-writer"><i class="fas fa-user"></i> {{data.writer}}</p>
-        <p class="notice-createddate"><i class="far fa-clock"></i> {{data.createddate }}</p>
+        <p class="notice-createddate"><i class="far fa-clock"></i> {{data.createddate.slice(0, 16)}}</p>
       </div>
       <div class="body3">
         <div class="notice-content">{{data.content}}</div>
@@ -89,8 +89,10 @@ export default {
 }
 .notice-title {
   margin: 80px auto 0 auto;
-  text-align: center;
+  text-align: start;
   width: 80%;
+  font-family: 'Cafe24Simplehae';
+  font-size: 30px;
 }
 .notice-body {
   margin: 0 auto 60px auto;
@@ -111,8 +113,10 @@ export default {
 } */
 .notice-body-title {
   display: inline;
-  font-size: 20px;
   margin-left: 8px;
+  font-family: 'Cafe24Simplehae';
+  font-size: 20px;
+  font-weight: 700;
 }
 .body2 {
   text-align: right;
