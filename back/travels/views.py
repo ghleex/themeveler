@@ -48,39 +48,66 @@ class VisitedThemes(APIView):
     def get(self, request, format=None):
         user = get_user(request.headers['Authorization'].split(' '))
         try:
-            themes = user.favorite_themes
-            dests = user.favorite_destinations
+            themes = user.visited_themes.all()
+            dests = user.dests.all()
             theme, dest = [], []
+            fav_themes = user.favorite_themes.all()
+            fav_dests = user.favorite_destinations.all()
+            fav_theme, fav_dest = [], []
+
             for t in themes:
                 serializer_t = ThemeSerializer(t)
-                theme.append(t)
+                print('t', serializer_t.data)
+                theme.append(serializer_t.data)
             for d in dests:
                 serializer_d = DestinationSerializer(d)
-                dest.append(d)
-            
+                print('d', serializer_d.data)
+                dest.append(serializer_d.data)
+            for ft in fav_themes:
+                serializer_ft = ThemeSerializer(ft)
+                fav_theme.append(serializer_ft.data)
+            for fd in fav_dests:
+                serializer_fd = DestinationSerializer(fd)
+                fav_dest.append(serializer_fd.data)
+
             data = {
                 'message': 'ok',
-                'favourite_themes': theme,
-                'favourite_dests': dest,
+                'visited_themes': theme,
+                'visited_dests': dest,
+                'favorite_themes': fav_theme,
+                'favorite_dests': fav_dest,
             }
             return Response(data, status=status.HTTP_200_OK)
         except:
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
     
     def post(self, request, format=None):
-        try:
+            user = get_user(request.headers['Authorization'].split(' '))
+        # try:
+            req_themes = request.data.get('visited_themes')
+            req_dests = request.data.get('visited_dests')
+            theme, dest = [], []
+            for rt in req_themes:
+                thm = Theme.objects.get(pk=rt)
+                serializer_rt = ThemeSerializer(thm)
+                theme.append(serializer_rt.data)
+            for rd in req_dests:
+                dst = Destination.objects.get(pk=rd)
+                serializer_rd = DestinationSerializer(dst)
+                dest.append(serializer_rd.data)
+                
             message = {
                 'message': '',
             }
-            if Theme.visitors.filter(pk=user_pk).exists():
-                Theme.visitors.remove(user_pk)
-                message['message'] = f'{request.user} is removed from visited'
+            if user in theme:
+                User.visited_themes.remove(user)
+                message['message'] = f'{user} is removed from visited'
             else:
-                Theme.visitors.add(user_pk)
-                message['message'] = f'{request.user} is added to visited'
+                User.visited_themes.add(user)
+                message['message'] = f'{user} is added to visited'
             return Response(message, status=status.HTTP_200_OK)
-        except:
-            return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
+        # except:
+        #     return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
 
 @permission_classes((IsAuthenticated,))
@@ -139,8 +166,8 @@ class Like(APIView):
     
     def post(self, request, theme_pk, format=None):
         theme = self.get_theme(theme_pk)
+        user =  get_user(request.headers['Authorization'].split(' '))
         try:
-            user =  get_user(request.headers['Authorization'].split(' '))
             message = {
                 'message': '',
             }

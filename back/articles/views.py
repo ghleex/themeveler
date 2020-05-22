@@ -301,10 +301,8 @@ class ThemeNoticesView(APIView):
             notices = theme.theme_notices.all()
             notice = []
             for n in notices:
-                print(n)
                 serializer = NoticeSerializer(n)
                 notice.append(serializer.data)
-            print(f'notice: {notice}')
             data = {
                 'notices': notice,
             }
