@@ -411,7 +411,6 @@ class GoogleSignInView(APIView):
             # 내용
                 * 주소로 직접 접근해야 합니다.
         """
-        # state = hashlib.sha256(os.urandom(1024)).hexdigest()
         base = 'https://accounts.google.com/o/oauth2/v2/auth?'
         client_id = config('GOOGLE_APP_ID')
         urls = [
@@ -420,9 +419,7 @@ class GoogleSignInView(APIView):
             f'client_id={client_id}&'
             'scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&',
             'access_type=offline',
-            # 'state=state_parameter_passthrough_value&',
         ]
-        
         for url in urls:
             base += url
         return redirect(base)
