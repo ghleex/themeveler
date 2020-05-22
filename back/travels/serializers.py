@@ -11,7 +11,7 @@ class ThemeSerializer(serializers.ModelSerializer):
 class DestinationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Destination
-        fields = ('id', 'name', 'content', 'image', 'created_at', 'updated_at',)
+        fields = ('id', 'name', 'image', 'latitude', 'longitude', 'created_at', 'updated_at',)
 
 
 class MessageSerializer(serializers.ModelSerializer):
@@ -20,7 +20,7 @@ class MessageSerializer(serializers.ModelSerializer):
         fields = '__all__'
         extra_kwargs = {
             'nickname': {
-                'read_only': True,
+                'required': False,
             },
         }
 
