@@ -23,10 +23,10 @@ class WaitingSerializer(serializers.ModelSerializer):
         fields = '__all__'
         extra_kwargs = {
             'is_confirm': {
-                'read_only': True,
+                'required': False,
             },
             'confirm_code': {
-                'read_only': True,
+                'required': False,
             }
         }
 

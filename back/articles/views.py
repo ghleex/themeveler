@@ -560,7 +560,6 @@ class ReCommentChange(APIView):
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)        
 
 
-@parser_classes((FormParser, ))
 class ReportCommentMgmt(APIView):
     @swagger_auto_schema(request_body=ReportCommentSerializer)
     def post(self, request, format=None):
@@ -588,7 +587,6 @@ class ReportCommentMgmt(APIView):
             return Response({'message': ['이미 신고가 접수된 댓글입니다.']}, status=status.HTTP_400_BAD_REQUEST)
 
 
-@parser_classes((FormParser, ))
 class ReportReCommentMgmt(APIView):
     @swagger_auto_schema(request_body=ReportReCommentSerializer)
     def post(self, request, format=None):
