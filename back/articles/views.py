@@ -12,7 +12,7 @@ from .models import Notice, VoiceCategory, CustomersVoice, ManagersReply, Commen
 from .serializers import NoticeSerializer, VoiceCategorySerializer, CustomersVoiceSerializer
 from .serializers import ManagerReplySerializer, CommentSerializer, ReCommentSerializer
 from .serializers import ReportCommentSerializer, ReportReCommentSerializer
-from back.travels.models import Destination
+from travels.models import Destination
 
 User = get_user_model()
 decoder = api_settings.JWT_DECODE_HANDLER
