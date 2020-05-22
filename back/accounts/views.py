@@ -338,7 +338,9 @@ class KakaoSignInView(APIView):
     def get(self, request):
         """
             카카오 로그인
-            ____
+
+            # 내용
+                * 주소로 직접 접근해야 합니다.
 
         """
         client_id = config('KAKAO_REST_API_KEY')
@@ -352,6 +354,8 @@ class KakaoSignInCallbackView(APIView):
     def get(self, request):
         """
             카카오 콜백
+
+            ___
         """
         try:
             code = request.GET.get('code')                                
@@ -401,6 +405,12 @@ class KakaoSignInCallbackView(APIView):
 @permission_classes((AllowAny, ))
 class GoogleSignInView(APIView):
     def get(self, request):
+        """
+            구글 소셜 로그인
+            
+            # 내용
+                * 주소로 직접 접근해야 합니다.
+        """
         # state = hashlib.sha256(os.urandom(1024)).hexdigest()
         base = 'https://accounts.google.com/o/oauth2/v2/auth?'
         client_id = config('GOOGLE_APP_ID')
@@ -422,9 +432,9 @@ class GoogleSignInView(APIView):
 class GoogleSignInCallbackView(APIView):
     def get(self, request, format=None):
         """
-                    
-        구글 소셜 로그인 시 사용
-        ---
+            구글 콜백
+
+            ---
         """
         google_access_code = request.GET.get('code', None)
         url = 'https://www.googleapis.com/oauth2/v4/token'
