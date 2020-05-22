@@ -8,8 +8,8 @@
         :sort-by="['id']" :sort-desc="true" dense>
         <template v-slot:top>
           <v-toolbar flat color="white">
-            <h5 class="card-title">작성한 댓글 목록
-              <v-chip class="ma-2 px-2" small color="amber" text-color="white">{{ commentCount }}</v-chip>
+            <h5 class="card-title">내가 작성한 댓글
+              <v-chip class="ma-2 px-2" small color="orange" text-color="white">{{ commentCount }}</v-chip>
               <!-- <v-badge color="blue" content="5" inline="true"></v-badge> -->
             </h5>
             <v-spacer></v-spacer>
@@ -53,7 +53,7 @@ export default {
       ],
       page: 1,
       pageCount: 0,
-      itemsPerPage: 10,
+      itemsPerPage: 20,
       search: '',
       headers: [
         { text: '번호', align: 'start', value: 'id', sortable: false },

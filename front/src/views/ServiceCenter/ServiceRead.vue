@@ -1,13 +1,15 @@
 <template>
   <div id="service-read">
-    <!-- 공지사항 리스트 Data table -->
     <div class="service-center-title">
       <i class="fas fa-exclamation-circle"></i> 고객센터
     </div>
+    <!-- 공지사항 리스트 Data table -->
     <div class="service-body">
-      <v-data-table style="white-space: nowrap" :calculate-widths="true" :headers="headers" :items="data" :page.sync="page" :items-per-page="itemsPerPage"
-        hide-default-footer class="service-dataTable" @page-count="pageCount = $event" :search="search"
-        :sort-by="['id']" :sort-desc="[true]">
+      <v-data-table
+        :headers="headers" :items="data" :page.sync="page" :items-per-page="itemsPerPage" hide-default-footer
+        class="service-dataTable" @page-count="pageCount = $event" :search="search" :sort-by="['id']" :sort-desc="[true]"
+        style="white-space: nowrap" :calculate-widths="true"
+      >
         <template v-slot:top>
           <v-toolbar class="service-center-header" flat color="white">
             <v-toolbar-title></v-toolbar-title>
@@ -107,11 +109,7 @@
 
 <style scoped>
   #service-read {
-    margin-top: 64px;
-    /* margin-bottom: 60px; */
-    margin-left: auto;
-    margin-right: auto;
-    text-align: center;
+    margin: 64px auto 0 auto;
     width: 100%;
     background-color: rgb(238, 240, 247);
   }
@@ -143,7 +141,7 @@
   .service-list-body {
     width: 100%;
     height: 1.2rem;
-    white-space: normal;;
+    white-space: normal;
     overflow: hidden;
     text-overflow: ellipsis;
     cursor: pointer;
@@ -155,18 +153,13 @@
 
   @media (max-width: 600px) {
     .service-center-title {
-      width: 95% !important
+      width: 95% !important;
     }
     .service-body {
       width: 95% !important;
       margin: 0 auto !important;
     }
   }
-
-  /* td:nth-child(3) {
-  data-v-1d075a48 {
-    width: 60% !important;
-  } */
   
   #service-read .service-body {
     background-color: #fff;
