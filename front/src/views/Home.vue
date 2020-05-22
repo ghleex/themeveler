@@ -3,21 +3,13 @@
     <div class="home-search-bar">
       <SearchBar />
     </div>
-
-    <!-- Carousels Banner-->
-    <div class="carousel">
-      <v-carousel cycle height="480" hide-delimiter-background show-arrows-on-hover hide-delimiters>
+    <!-- Carousels Banner -->
+    <div class="carousel banner">
+      <v-carousel cycle height="480" hide-delimiter-background show-arrows-on-hover :show-arrows="false">
         <v-carousel-item v-for="(slide, i) in slides" :key="i" :src="slide">
         </v-carousel-item>
       </v-carousel>
     </div><br><br>
-
-    <v-btn color="primary" class="mb-12" outlined to="/profile">
-      유저페이지>>>>임시버튼</v-btn>
-
-
-
-
 
     <!-- 인기 테마 -->
     <h2 class="home-h2-title"><i class="fas fa-bookmark mr-2"></i>인기 테마</h2>
@@ -55,23 +47,23 @@
                       <v-img :src="img" height="123" @click="openCardModal(img)"></v-img>
 
                       <!-- modal -->
-                     
+
                       <v-row class="fill-height" align="center" justify="center">
                       </v-row>
                     </v-card>
                   </v-slide-item>
 
-                   <v-dialog v-model="dialog" width="500">
-                      <v-card>
-                        <v-img :src="imgUrl" height="80vh" width="100vw"></v-img>
-                        <!-- {{ img }} {{ index }} -->
-                        <v-card-actions style="justify-content: flex-end;">
-                          <v-btn color="#2c3e50" class="text-light" @click="dialog = false">
-                            확인
-                          </v-btn>
-                        </v-card-actions>
-                      </v-card>
-                    </v-dialog>
+                  <v-dialog v-model="dialog" width="500">
+                    <v-card>
+                      <v-img :src="imgUrl" height="80vh" width="100vw"></v-img>
+                      <!-- {{ img }} {{ index }} -->
+                      <v-card-actions style="justify-content: flex-end;">
+                        <v-btn color="#2c3e50" class="text-light" @click="dialog = false">
+                          확인
+                        </v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
 
                 </v-slide-group>
               </v-sheet>
@@ -87,14 +79,63 @@
 
 
 
-
     <!-- 인기 여행지 -->
     <div class="main-section">
       <h2 class="home-h2-title mt-12"><i class="fas fa-bus-alt mr-2"></i>인기 여행지</h2>
       <br><br>
+
+
+
+
+
+
+
+
+      <br><br><br><br><br><br>
+      <div class="main-section">
+        <br><br><br><br><br><br>
+        <h2 class="article-header my-5"><i class="fas fa-walking"></i> ?? <i class="fas fa-walking"></i></h2>
+        <!-- <revi-list limits="4" :spotData="spotData" /> -->
+        <!-- <div class="hspot d-inline width:80% col-md-6 col-12">
+          <div>
+            <p :src="spotData[0]" width="300" height="300"></p>
+            <p :src="spotData[1]" width="300" height="300"></p>
+          </div>
+          <div>
+            <p :src="spotData[2]" width="300" height="300"></p>
+            <p :src="spotData[3]" width="300" height="300"></p>
+          </div>
+        </div>
+        <br> -->
+        <!-- 인기 여행지 Card -->
+        <v-container fluid class="mx-auto" max-width="95%">
+          <v-row dense>
+            <v-col v-for="card in spotcards" :key="card.title" :cols="12" :sm="3">
+              <v-hover v-slot:default="{ hover }">
+                <v-card class="mx-auto" max-width="90%" :elevation="hover ? 12 : 2">
+                  <v-img :src="card.src" class="white--text align-end"
+                    gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)" height="200px">
+                    <v-card-title v-text="card.title"></v-card-title>
+                  </v-img>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn icon>
+                      <v-icon color="red">mdi-heart-outline</v-icon>
+                    </v-btn>
+                    <v-btn icon>
+                      <v-icon color="green">mdi-bookmark-outline</v-icon>
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-hover>
+            </v-col>
+          </v-row>
+        </v-container>
+        <br><br>
+      </div>
+
     </div>
   </div>
-
 </template>
 
 <script>
@@ -191,7 +232,7 @@
         // console.log(theme[0].context)
         this.eachContext = theme[0].context
       },
-      openCardModal(imgUrl){
+      openCardModal(imgUrl) {
         console.log(imgUrl)
         this.imgUrl = imgUrl
         this.dialog = true
@@ -200,6 +241,13 @@
     mounted() {
       this.a()
     },
+    cardBypopThemeContext(id) {
+      var theme = this.popTheme.filter(theme => {
+        return theme.id == id
+      })
+      // console.log(theme[0].context)
+      this.eachContext = theme[0].context
+    }
   }
 </script>
 
@@ -244,16 +292,28 @@
     font-size: 1.5vw;
     padding: .5rem;
     font-family: 'Cafe24Simplehae';
+    /* font-style: italic; */
   }
 
   .pop-theme-card-text>i {
     font-size: 15px;
     margin: 0 .3rem;
+    /* display: flex; */
+    /* align-items: flex-start; */
   }
 
   /* media query가 좀 이상하게 작동 함 */
   @media (max-width: 950px) {
     .pop-theme-card-text {
+      background: #2c3e50;
+      font-size: 1.5vw;
+      padding: .5rem;
+      font-family: 'Cafe24Simplehae';
+    }
+
+    .pop-theme-card-text>i {
+      font-size: 15px;
+      margin: 0 .3rem;
       height: 3.5vw;
       padding: 0 .5rem 2rem .5rem;
       font-size: .8rem;
@@ -276,6 +336,12 @@
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 10;
+  }
+
+  @media (max-width: 520px) {
+    .home-search-bar {
+      width: 80%;
+    }
   }
 
   @media (max-width: 520px) {
