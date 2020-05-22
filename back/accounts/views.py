@@ -362,7 +362,7 @@ class KakaoSignInCallbackView(APIView):
             token_json = token_request.json()                                 
             access_token = token_json.get('access_token')        
             error = token_json.get('error', None)
-            if error is not None :
+            if error is not None:
                 return Response({'message': 'code'}, status = 400)
         except KeyError:
             return Response({'message': 'INVALID_TOKEN'}, status = 400)
