@@ -238,17 +238,17 @@ class UserMgmt(APIView):
 
 
 class Password(APIView):
-    """
-        비밀번호 변경 - 유저의 비밀번호를 변경합니다.
-
-        # 내용
-            * headers에서 포함된 jwt 데이터의 user_id를 이용합니다.
-            * password: 8자 이상이어야 합니다.
-                        1자 이상 문자가 포함되어야합니다.
-                        보안이 취약한 비밀번호는 사용할 수 없습니다. (예: 12345678)
-    """
     @swagger_auto_schema(request_body=UserPasswordSerializer)
     def put(self, request, format=None):
+        """
+            비밀번호 변경 - 유저의 비밀번호를 변경합니다.
+
+            # 내용
+                * headers에서 포함된 jwt 데이터의 user_id를 이용합니다.
+                * password: 8자 이상이어야 합니다.
+                            1자 이상 문자가 포함되어야합니다.
+                            보안이 취약한 비밀번호는 사용할 수 없습니다. (예: 12345678)
+        """
         jwt_data = decoder(request.headers['Authorization'].split(' ')[1])
         user = get_object_or_404(User, id=jwt_data['user_id'])
         if not user.has_usable_password():
@@ -461,3 +461,32 @@ class GoogleSignInCallbackView(APIView):
         social_serilizer = SocialLoginSerializer(user)
         jwt = encoder(social_serilizer.data)
         return Response({'jwt': jwt})
+
+
+@permission_classes((AllowAny, ))
+class PasswordFind(APIView):
+    def mail_send(self, data):
+        subject = 'Themevler ' + data.get('username') + '님의 새로운 비밀번호입니다.'
+        html_message = render_to_string('passwordMail.html', {'password': data.get('password')})
+        plain_message = strip_tags(html_message)
+        from_email = '<from@example.com>'
+        to = data.get('username')
+        send_mail(subject, plain_message, from_email, [to], html_message=html_message)
+
+    def get(self, request, username):
+        p = re.compile('^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$')
+        if p.match(username) == None:
+            return Response({'message': ['email 형식이 아닙니다.']}, status=status.HTTP_400_BAD_REQUEST)
+        user = User.objects.filter(username=username).first()
+        if user and user.username == username:
+            password = User.objects.make_random_password(length=14)
+            data = {
+                'username': username,
+                'password': password
+            }
+            user.set_password(password)
+            user.save()
+            self.mail_send(data=data)
+            return Response({'message': [username+'님에게 비밀번호를 전송했습니다.']})
+        else:
+            return Response({'message': ['해당 유저는 회원 가입된 유저가 아닙니다.']}, status=status.HTTP_400_BAD_REQUEST)

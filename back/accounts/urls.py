@@ -10,6 +10,7 @@ urlpatterns = [
     path('mail/', views.Mail.as_view()),
     path('usermgmt/', views.UserMgmt.as_view()),
     path('password/', views.Password.as_view()),
+    path('password/<str:username>/', views.PasswordFind.as_view()),
     path('signin/', views.SignIn.as_view()),
     path('ban/', views.UserBan.as_view()),
     path('social/kakao/', views.KakaoSignInView.as_view()),
