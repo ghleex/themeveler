@@ -5,25 +5,58 @@ from django.contrib.auth.password_validation import validate_password
 
 User = get_user_model()
 
+class UserNicknameSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('nickname', )
+
+
+class UsernameSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('username', )
+
+
+class WaitingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Waiting
+        fields = '__all__'
+        extra_kwargs = {
+            'is_confirm': {
+                'required': False,
+            },
+            'confirm_code': {
+                'required': False,
+            }
+        }
+
+
+class ConfirmCodeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Waiting
+        fields = ('username', 'confirm_code', )
+        extra_kwargs = {
+            'confirm_code': {
+                'required': True,
+            }
+        }
+
+
 class UserCreationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'password', 'nickname')
+        fields = ('id', 'username', 'password', 'nickname', )
     
     def validate_password(self, value):
         validate_password(value)
         return value
 
 
-class UserNicknameSerializer(serializers.ModelSerializer):
+class UserSignInSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('nickname', )
+        fields = ('username', 'password', )
 
-class UsernameSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('username', )
 
 class UserPasswordSerializer(serializers.ModelSerializer):
     class Meta:
@@ -35,13 +68,25 @@ class UserPasswordSerializer(serializers.ModelSerializer):
         return value
 
 
-class WaitingSerializer(serializers.ModelSerializer):
+class UserBanSerializer(serializers.ModelSerializer):
+    banning_period = serializers.IntegerField()
+    
     class Meta:
-        model = Waiting
-        fields = '__all__'
+        model = User
+        fields = ('username', 'banning_period', )
+        extra_kwargs = {
+            'banning_period': {
+                'required': True,
+            }
+        }
 
-class ConfirmCodeSerializer(serializers.ModelSerializer):
+
+class SocialLoginSerializer(serializers.ModelSerializer):
+    user_id = serializers.SerializerMethodField('get_user_name')
+
     class Meta:
-        model = Waiting
-        fields = ('username', 'confirm_code')
+        model = User
+        fields = ('user_id', 'username', 'nickname', )
 
+    def get_user_name(self, obj):
+        return obj.id

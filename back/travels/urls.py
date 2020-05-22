@@ -1,7 +1,11 @@
 from django.urls import path
 from . import views
+
 app_name='travels'
 urlpatterns = [
     path('', views.map, name='map'),
-    path('mgmt/<int:pk>/', views.TravelMgmt.as_view()),
+    path('visited_themes/', views.VisitedThemes.as_view()),
+    path('visited_dests/', views.VisitedDest.as_view()),
+    path('like/<int:theme_pk>/', views.Like.as_view()),
+    path('chat/', views.Chatting.as_view()),
 ]
