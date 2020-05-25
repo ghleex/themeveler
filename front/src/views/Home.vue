@@ -12,7 +12,6 @@
       </v-carousel>
     </div><br><br>
 
-
     <!-- 인기 테마 -->
     <h2 class="home-h2-title"><i class="fas fa-bookmark mr-2"></i>인기 테마</h2>
     <v-sheet class="mx-auto" max-width="100vw">
@@ -44,29 +43,29 @@
               <v-sheet class="ml-0 mr-auto" max-width="90vw">
                 <v-slide-group class="pa-4 pop-theme-slide-group" center-active show-arrows>
                   <!-- <v-slide-item v-for="(img, index) in cardBypopTheme(model)" :key="img"> -->
-                  <v-slide-item v-for="(img) in cardBypopTheme(model)" :key="img">
+                  <v-slide-item v-for="img in cardBypopTheme(model)" :key="img">
                     <v-card class="ma-4 popTheme-sub-img" height="123" width="120">
+                      <v-img :src="img" height="123" @click="openCardModal(img)"></v-img>
 
                       <!-- modal -->
-                      <v-dialog v-model="dialog" width="500">
-                        <template v-slot:activator="{ on }">
-                          <v-img :src="img" v-on="on" height="123"></v-img>
-                        </template>
-                        <!-- <v-card v-if="img == img[index]"> -->
-                        <v-card>
-                          <v-img :src="img"></v-img>
-                          <v-card-actions style="justify-content: flex-end;">
-                            <v-btn color="#2c3e50" class="text-light" @click="dialog = false">
-                              확인
-                            </v-btn>
-                          </v-card-actions>
-                        </v-card>
-                      </v-dialog>
 
                       <v-row class="fill-height" align="center" justify="center">
                       </v-row>
                     </v-card>
                   </v-slide-item>
+
+                  <v-dialog v-model="dialog" width="500">
+                    <v-card>
+                      <v-img :src="imgUrl" height="80vh" width="100vw"></v-img>
+                      <!-- {{ img }} {{ index }} -->
+                      <v-card-actions style="justify-content: flex-end;">
+                        <v-btn color="#2c3e50" class="text-light" @click="dialog = false">
+                          확인
+                        </v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
+
                 </v-slide-group>
               </v-sheet>
             </div>
@@ -82,43 +81,6 @@
     <!-- 인기 여행지 -->
     <div class="main-section">
       <h2 class="home-h2-title mt-12"><i class="fas fa-bus-alt mr-2"></i>인기 여행지</h2>
-      <!-- <revi-list limits="4" :spotData="spotData" /> -->
-      <!-- <div class="hspot d-inline width:80% col-md-6 col-12">
-          <div>
-            <p :src="spotData[0]" width="300" height="300"></p>
-            <p :src="spotData[1]" width="300" height="300"></p>
-          </div>
-          <div>
-            <p :src="spotData[2]" width="300" height="300"></p>
-            <p :src="spotData[3]" width="300" height="300"></p>
-          </div>
-        </div>
-        <br> -->
-      <!-- 인기 여행지 Card -->
-      <!-- <v-container fluid class="mx-auto" max-width="95%">
-          <v-row dense>
-            <v-col v-for="card in cards" :key="card.title" :cols="card.flex">
-              <v-card class="mx-auto" max-width="90%">
-                <v-img :src="card.src" class="white--text align-end"
-                  gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)" height="200px">
-                  <v-card-title v-text="card.title"></v-card-title>
-                </v-img>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn icon>
-                    <v-icon>mdi-heart</v-icon>
-                  </v-btn>
-                  <v-btn icon>
-                    <v-icon>mdi-bookmark</v-icon>
-                  </v-btn>
-                  <v-btn icon>
-                    <v-icon>mdi-share-variant</v-icon>
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-col>
-          </v-row>
-        </v-container> -->
       <br><br>
 
     </div>
@@ -248,66 +210,50 @@
       this.eachContext = theme[0].context
     }
   }
-}
 </script>
 
 <style scoped>
-.home-h2-title {
-  font-family: 'Cafe24Simplehae';
-  text-align: start;
-  margin-left: 5rem;
-}
-
-.home-more-bt {
-  margin-top: 2rem;
-  margin-right: 3.2rem;
-  font-size: 1.3vw;
-}
-
-@media (max-width: 750px) {
-  .home-more-bt {
-    font-size: 14px;
+  .home-h2-title {
+    font-family: 'Cafe24Simplehae';
+    text-align: start;
+    margin-left: 5rem;
   }
-}
 
-.popTheme-sub-img:hover {
-  cursor: pointer;
-  box-shadow: 1px 1px 8px 3px gray;
-  transition: .3s;
-}
+  .home-more-bt {
+    margin-top: 2rem;
+    margin-right: 3.2rem;
+    font-size: 1.3vw;
+  }
 
-.pop-theme-slide-group {
-  background-color: #f5f5f5;
-}
+  @media (max-width: 750px) {
+    .home-more-bt {
+      font-size: 14px;
+    }
+  }
 
-.popTheme-context {
-  font-family: 'Cafe24Simplehae';
-  font-size: 25px;
-  font-style: italic;
-  padding: 1rem 2rem 0 2rem;
-}
+  .popTheme-sub-img:hover {
+    cursor: pointer;
+    box-shadow: 1px 1px 8px 3px gray;
+    transition: .3s;
+  }
 
-.pop-theme-card-text {
-  background: #2c3e50;
-  font-size: 1.5vw;
-  padding: .5rem;
-  font-family: 'Cafe24Simplehae';
-  /* font-style: italic; */
-}
+  .pop-theme-slide-group {
+    background-color: #f5f5f5;
+  }
 
-.pop-theme-card-text>i {
-  font-size: 15px;
-  margin: 0 .3rem;
-  /* display: flex; */
-  /* align-items: flex-start; */
-}
+  .popTheme-context {
+    font-family: 'Cafe24Simplehae';
+    font-size: 25px;
+    font-style: italic;
+    padding: 1rem 2rem 0 2rem;
+  }
 
-/* media query가 좀 이상하게 작동 함 */
-@media (max-width: 950px) {
   .pop-theme-card-text {
-    height: 3.5vw;
-    padding: 0 .5rem 2rem .5rem;
-    font-size: .8rem;
+    background: #2c3e50;
+    font-size: 1.5vw;
+    padding: .5rem;
+    font-family: 'Cafe24Simplehae';
+    /* font-style: italic; */
   }
 
   .pop-theme-card-text>i {
@@ -344,23 +290,29 @@
       font-weight: 700;
     }
   }
-}
 
-.home-search-bar {
-  position: absolute;
-  top: 20rem;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 10;
-}
-
-@media (max-width: 520px) {
-  .home-search-bar {
-    width: 80%;
+  .banner>img {
+    width: 100%;
+    margin-top: -15%;
   }
-}
 
-.themecard {
-  text-align: left;
-}
+  .home-search-bar {
+    position: absolute;
+    top: 20rem;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+  }
+
+  @media (max-width: 520px) {
+    .home-search-bar {
+      width: 80%;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .home-search-bar {
+      width: 80%;
+    }
+  }
 </style>

@@ -6,14 +6,14 @@
     </div>
     <div class="notice-body">
       <div class="body1">
-        <p class="notice-body-title"><strong>{{noticeData.title}}</strong></p>
+        <p class="notice-body-title"><strong>{{notice.title}}</strong></p>
       </div>
       <div class="body2">
-        <p class="notice-writer"><i class="fas fa-user"></i> {{noticeData.writer}}</p>
-        <p class="notice-createddate"><i class="far fa-clock"></i> {{noticeData.writed_at.slice(0, 16)}}</p>
+        <p class="notice-writer"><i class="fas fa-user"></i> {{notice.writer}}</p>
+        <p class="notice-createddate"><i class="far fa-clock"></i> {{notice.createddate.slice(0, 16)}}</p>
       </div>
       <div class="body3">
-        <div class="notice-content">{{noticeData.content}}</div>
+        <div class="notice-content">{{notice.content}}</div>
       </div>
       <div class="notice-detail-btn">
         <v-divider></v-divider>
@@ -47,13 +47,10 @@ import axios from 'axios'
 
 export default {
   name: 'notice-detail',
-  components: {
-
-  },
   data() {
     const index = this.$route.params.noticeId
     return {
-      noticeData: [],
+      notice: [],
       index: index,
       valid: false,
       commentRules: [
@@ -63,17 +60,16 @@ export default {
   },
   methods: {
     deleteData() {
-      axios.delete(`/notice_change/${this.noticeId}`)
-      this.$router.push({
-        path: '/notice'
-      })
+      axios.delete(`/notice/${this.index}`)
+        .then(
+          this.$router.push({
+            path: '/notice'
+          })
+        )
     },
     updateData() {
       this.$router.push({
-        name: 'notice-create',
-        params: {
-          noticeId: this.index
-        }
+        path: `/notice/create/${this.index}`
       })
     },
     back() {
@@ -83,10 +79,13 @@ export default {
     }
   },
   mounted() {
-    axios.get(`/articles/notice/${this.noticeId}`)
+    axios.get(`/notice/${this.index}`)
       .then(response => {
-        this.noticeData = response.data  
-    })
+        this.notice = response.data  
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
 }
 </script>
@@ -114,11 +113,6 @@ export default {
 .body1 {
   text-align: left;
 }
-/* .notice-number {
-  display: inline;
-  font-size: 14px;
-  color:gray;
-} */
 .notice-body-title {
   display: inline;
   margin-left: 8px;

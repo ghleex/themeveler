@@ -8,7 +8,7 @@ import VueSimpleAlert from "vue-simple-alert"
 import axios from 'axios'
 
 Vue.config.productionTip = false
-axios.defaults.baseURL = 'http://localhost:8000'
+axios.defaults.baseURL = 'http://localhost:8000/api'
 
 new Vue({
   router,

@@ -5,7 +5,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    base_url: '',
+    // base_url: '',
     user_id: '',
     user_jwt: '',
     user_name: '',
@@ -13,9 +13,9 @@ export default new Vuex.Store({
     search_word: ''
   },
   mutations: {
-    urlSave (state, url) {
-      state.base_url = url
-    },
+    // urlSave (state, url) {
+    //   state.base_url = url
+    // },
     idSave (state, id) {
       state.user_id = id
     },
