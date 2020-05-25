@@ -121,160 +121,124 @@
         </v-container> -->
       <br><br>
 
-
-
-
-
-
-
-
-      <br><br><br><br><br><br>
-      <div class="main-section">
-        <br><br><br><br><br><br>
-        <h2 class="article-header my-5"><i class="fas fa-walking"></i> ?? <i class="fas fa-walking"></i></h2>
-        <!-- <revi-list limits="4" :spotData="spotData" /> -->
-        <!-- <div class="hspot d-inline width:80% col-md-6 col-12">
-          <div>
-            <p :src="spotData[0]" width="300" height="300"></p>
-            <p :src="spotData[1]" width="300" height="300"></p>
-          </div>
-          <div>
-            <p :src="spotData[2]" width="300" height="300"></p>
-            <p :src="spotData[3]" width="300" height="300"></p>
-          </div>
-        </div>
-        <br> -->
-        <!-- 인기 여행지 Card -->
-        <v-container fluid class="mx-auto" max-width="95%">
-          <v-row dense>
-            <v-col v-for="card in spotcards" :key="card.title" :cols="12" :sm="3">
-              <v-hover v-slot:default="{ hover }">
-                <v-card class="mx-auto" max-width="90%" :elevation="hover ? 12 : 2">
-                  <v-img :src="card.src" class="white--text align-end"
-                    gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)" height="200px">
-                    <v-card-title v-text="card.title"></v-card-title>
-                  </v-img>
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn icon><v-icon color="red">mdi-heart-outline</v-icon></v-btn>
-                    <v-btn icon><v-icon color="green">mdi-bookmark-outline</v-icon></v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-hover>
-            </v-col>
-          </v-row>
-        </v-container>
-        <br><br>
-      </div>
-
     </div>
   </div>
 </template>
 
 <script>
-import SearchBar from '../components/SearchBar.vue'
+  import SearchBar from '../components/SearchBar.vue'
 
-export default {
-  name: 'Home',
-  components: {
-    SearchBar,
-  },
-  data() {
-    return {
-      dialog: false,
-      model: null,
-      eachContext: '',
-      popTheme: [{
-          img: require('../assets/image/pop1.webp'),
-          title: '타지 사람들 집합',
-          context: '지역 사람들만 아는 숨겨진 맛집과 명소를 소개합니다.',
-          imgs: [
-            require('../assets/image/pop1sub1.jpg'),
-            require('../assets/image/pop1sub2.jpg'),
-            require('../assets/image/pop1sub3.jpg'),
-            require('../assets/image/pop1sub4.jpg'),
-            require('../assets/image/pop1sub5.jpg'),
-          ]
-        },
-        {
-          id: 1,
-          img: require('../assets/image/pop2.jpg'),
-          title: '서울사람도 잘 몰라',
-          context: '일단 아무말이나 적어보자.',
-          imgs: [
-            require('../assets/image/pop2sub1.jpg'),
-            require('../assets/image/pop2sub2.jpg'),
-            require('../assets/image/pop2sub3.jpg'),
-            require('../assets/image/pop2sub4.jpg'),
-            require('../assets/image/pop2sub5.jpg'),
-          ]
-        },
-        {
-          id: 2,
-          img: require('../assets/image/pop3.jpg'),
-          title: '홍콩 어디까지 가봤니?',
-          context: '홍콩 에그타르트 JMT.',
-          imgs: [
-            require('../assets/image/pop3sub1.jpg'),
-            require('../assets/image/pop3sub2.jpg'),
-            require('../assets/image/pop3sub3.jpg'),
-            require('../assets/image/pop3sub4.jpg'),
-            require('../assets/image/pop3sub5.jpg'),
-          ]
-        },
-        {
-          id: 3,
-          img: require('../assets/image/pop4.jpg'),
-          title: '최고의 디즈니 랜드',
-          context: '도쿄는 생각보다 별롭니다. 플로리다 올랜도는 쩔어요. 가장 큰 디즈니 월드(world) 클라쓰~',
-          imgs: [
-            require('../assets/image/pop4sub1.jpg'),
-          ]
-        },
-        {
-          id: 4,
-          img: require('../assets/image/pop5.jpg'),
-          title: '혼저옵서예',
-          context: '유일한 제주 남부의 시장을 가면 싱싱한 회 팩이 마치 3만원!',
-          imgs: []
-        },
-      ],
-      popImg: [
-        require('../assets/image/pop1.webp'),
-        require('../assets/image/pop2.jpg'),
-        require('../assets/image/pop3.jpg'),
-        require('../assets/image/pop4.jpg'),
-        require('../assets/image/pop5.jpg'),
-      ],
-      slides: [
-        require('../assets/image/bg.jpg'),
-        require('../assets/image/bg-3.jpg'),
-        require('../assets/image/pop2.jpg')
-      ],
-      themeData: [
-
-      ],
-      spotData: [
-        require('../assets/image/bg.jpg'),
-        require('../assets/image/image01.jpg'),
-        require('../assets/image/bg.jpg'),
-        require('../assets/image/image01.jpg')
-      ],
-      spotcards: [
-        { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg', flex: 3 },
-        { title: 'Favorite road trips', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg', flex: 3 },
-        { title: 'Best airlines.', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 3 },
-        { title: 'Favorite road trips.', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg', flex: 3 }
-      ]
-    }
-  },
-  methods: {
-    cardBypopTheme(id) {
-      var theme = this.popTheme.filter(theme => {
-        return theme.id == id
-      })
-      // console.log(theme[0].imgs)
-      return theme[0].imgs
+  export default {
+    name: 'Home',
+    components: {
+      SearchBar,
+    },
+    data() {
+      return {
+        toggle: false,
+        active: false,
+        dialog: false,
+        imgUrl: '',
+        model: null,
+        eachContext: "",
+        popTheme: [{
+            id: 0,
+            img: require('../assets/image/pop1.webp'),
+            title: '타지 사람들 집합',
+            context: '지역 사람들만 아는 숨겨진 맛집과 명소를 소개합니다.',
+            imgs: [
+              require('../assets/image/pop1sub1.jpg'),
+              require('../assets/image/pop1sub2.jpg'),
+              require('../assets/image/pop1sub3.jpg'),
+              require('../assets/image/pop1sub4.jpg'),
+              require('../assets/image/pop1sub5.jpg'),
+            ]
+          },
+          {
+            id: 1,
+            img: require('../assets/image/pop2.jpg'),
+            title: '서울사람도 잘 몰라',
+            context: '일단 아무말이나 적어보자.',
+            imgs: [
+              require('../assets/image/pop2sub1.jpg'),
+              require('../assets/image/pop2sub2.jpg'),
+              require('../assets/image/pop2sub3.jpg'),
+              require('../assets/image/pop2sub4.jpg'),
+              require('../assets/image/pop2sub5.jpg'),
+            ]
+          },
+          {
+            id: 2,
+            img: require('../assets/image/pop3.jpg'),
+            title: '홍콩 어디까지 가봤니?',
+            context: '홍콩 에그타르트 JMT.',
+            imgs: [
+              require('../assets/image/pop3sub1.jpg'),
+              require('../assets/image/pop3sub2.jpg'),
+              require('../assets/image/pop3sub3.jpg'),
+              require('../assets/image/pop3sub4.jpg'),
+              require('../assets/image/pop3sub5.jpg'),
+            ]
+          },
+          {
+            id: 3,
+            img: require('../assets/image/pop4.jpg'),
+            title: '최고의 디즈니 랜드',
+            context: '도쿄는 생각보다 별롭니다. 플로리다 올랜도는 쩔어요. 가장 큰 디즈니 월드(world) 클라쓰~',
+            imgs: [
+              require('../assets/image/pop4sub1.jpg'),
+              require('../assets/image/pop4sub2.jpg'),
+              require('../assets/image/pop4sub3.jpg'),
+              require('../assets/image/pop4sub4.jpg'),
+              require('../assets/image/pop4sub5.jpg'),
+            ]
+          },
+          {
+            id: 4,
+            img: require('../assets/image/pop5.jpg'),
+            title: '혼저옵서예',
+            context: '유일한 제주 남부의 시장을 가면 싱싱한 회 팩이 마치 3만원!',
+            imgs: [
+              require('../assets/image/pop5sub1.jpg'),
+              require('../assets/image/pop5sub2.jpg'),
+              require('../assets/image/pop5sub3.jpg'),
+              require('../assets/image/pop5sub4.jpg'),
+              require('../assets/image/pop5sub5.jpg'),
+            ]
+          },
+        ],
+        slides: [
+          require('../assets/image/bg.jpg'),
+          require('../assets/image/bg-3.jpg'),
+        ],
+      }
+    },
+    methods: {
+      a() {
+        document.querySelector('#footer').style.display = 'block'
+      },
+      cardBypopTheme(id) {
+        var theme = this.popTheme.filter(theme => {
+          return theme.id == id
+        })
+        // console.log(theme[0].imgs)
+        return theme[0].imgs
+      },
+      cardBypopThemeContext(id) {
+        var theme = this.popTheme.filter(theme => {
+          return theme.id == id
+        })
+        // console.log(theme[0].context)
+        this.eachContext = theme[0].context
+      },
+      openCardModal(imgUrl) {
+        console.log(imgUrl)
+        this.imgUrl = imgUrl
+        this.dialog = true
+      }
+    },
+    mounted() {
+      this.a()
     },
     cardBypopThemeContext(id) {
       var theme = this.popTheme.filter(theme => {
@@ -346,9 +310,39 @@ export default {
     font-size: .8rem;
   }
 
-  .popTheme-context {
-    font-size: 1rem;
-    font-weight: 700;
+  .pop-theme-card-text>i {
+    font-size: 15px;
+    margin: 0 .3rem;
+    /* display: flex; */
+    /* align-items: flex-start; */
+  }
+
+  /* media query가 좀 이상하게 작동 함 */
+  @media (max-width: 950px) {
+    .pop-theme-card-text {
+      background: #2c3e50;
+      font-size: 15px;
+      font-family: 'Cafe24Simplehae';
+      display: flex;
+      padding: .5rem 0 .3rem 0;
+    }
+
+    .pop-theme-card-text {
+      padding: .3rem 0 0 0;
+    }
+
+    .pop-theme-card-text>i {
+      font-size: 15px;
+      margin: 0 .3rem;
+      height: 3.5vw;
+      padding: 0 .5rem 2rem .5rem;
+      font-size: .8rem;
+    }
+
+    .popTheme-context {
+      font-size: 1rem;
+      font-weight: 700;
+    }
   }
 }
 
