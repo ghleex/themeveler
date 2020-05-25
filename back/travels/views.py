@@ -11,6 +11,7 @@ from drf_yasg.utils import swagger_auto_schema
 from decouple import config
 from .serializers import MessageSerializer, MessageViewSerializer, ThemeSerializer, DestinationSerializer
 from .models import Message, Theme, Destination
+from accounts.serializers import UserNicknameSerializer
 
 User = get_user_model()
 decoder = api_settings.JWT_DECODE_HANDLER
@@ -49,65 +50,45 @@ class VisitedThemes(APIView):
         user = get_user(request.headers['Authorization'].split(' '))
         try:
             themes = user.visited_themes.all()
-            dests = user.dests.all()
-            theme, dest = [], []
+            theme = [] 
             fav_themes = user.favorite_themes.all()
-            fav_dests = user.favorite_destinations.all()
-            fav_theme, fav_dest = [], []
+            fav_theme = []
 
             for t in themes:
                 serializer_t = ThemeSerializer(t)
-                print('t', serializer_t.data)
                 theme.append(serializer_t.data)
-            for d in dests:
-                serializer_d = DestinationSerializer(d)
-                print('d', serializer_d.data)
-                dest.append(serializer_d.data)
             for ft in fav_themes:
                 serializer_ft = ThemeSerializer(ft)
                 fav_theme.append(serializer_ft.data)
-            for fd in fav_dests:
-                serializer_fd = DestinationSerializer(fd)
-                fav_dest.append(serializer_fd.data)
 
             data = {
                 'message': 'ok',
                 'visited_themes': theme,
-                'visited_dests': dest,
                 'favorite_themes': fav_theme,
-                'favorite_dests': fav_dest,
             }
             return Response(data, status=status.HTTP_200_OK)
         except:
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
     
     def post(self, request, format=None):
-            user = get_user(request.headers['Authorization'].split(' '))
-        # try:
-            req_themes = request.data.get('visited_themes')
-            req_dests = request.data.get('visited_dests')
-            theme, dest = [], []
-            for rt in req_themes:
-                thm = Theme.objects.get(pk=rt)
-                serializer_rt = ThemeSerializer(thm)
-                theme.append(serializer_rt.data)
-            for rd in req_dests:
-                dst = Destination.objects.get(pk=rd)
-                serializer_rd = DestinationSerializer(dst)
-                dest.append(serializer_rd.data)
-                
+        user = get_user(request.headers['Authorization'].split(' '))
+        try:            
+            themes = user.visited_themes.all()
+            req_themes = request.data.get('visited_themes').split(', ')
             message = {
                 'message': '',
             }
-            if user in theme:
-                User.visited_themes.remove(user)
-                message['message'] = f'{user} is removed from visited'
+            for rt in req_themes:
+                if themes.filter(pk=rt).exists():
+                    user.visited_themes.remove(rt)
+                    message['message'] = f'{user} is removed from visited'
+                else:
+                    user.visited_themes.add(rt)
+                    message['message'] = f'{user} is added to visited'
             else:
-                User.visited_themes.add(user)
-                message['message'] = f'{user} is added to visited'
-            return Response(message, status=status.HTTP_200_OK)
-        # except:
-        #     return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
+                return Response(message, status=status.HTTP_200_OK)
+        except:
+            return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
 
 @permission_classes((IsAuthenticated,))
@@ -120,8 +101,19 @@ class VisitedDest(APIView):
     def get(self, request, format=None):
         user = get_user(request.headers['Authorization'].split(' '))
         try:
-            data = {
-                'visitors': user.dests.all(),
+            dests = user.dests.all()
+            fav_dests = user.favorite_destinations.all()
+            dest = []
+            fav_dest = []
+            for d in dests:
+                serializer_d = DestinationSerializer(d)
+                dest.append(serializer_d.data)
+            for fd in fav_dests:
+                serializer_fd = DestinationSerializer(fd)
+                fav_dest.append(serializer_fd.data)
+            data = {                
+                'visited_dests': dest,
+                'favorite_dests': fav_dest,
             }
             return Response(data, status=status.HTTP_200_OK)
         except:
@@ -129,17 +121,20 @@ class VisitedDest(APIView):
     
     def post(self, request, format=None):
         user = get_user(request.headers['Authorization'].split(' '))
-        message = {
-            'message': '',
-        }
         try:
-            if Destination.visitors.filter(pk=user.pk).exists():
-                Destination.visitors.remove(user)
-                message['message'] = f'{user.username} is removed from visitors'
-            else:
-                Destination.visitors.add(user)
-                message['message'] = f'{user.username} is added to visitors'
-            return Response(message, status=status.HTTP_200_OK)
+            dests = user.dests.all()
+            req_dests = request.data.get('visited_dests').split(', ')
+            message = {
+                'message': '',
+            }
+            for rd in req_dests:
+                if dests.filter(pk=rd).exists():
+                    user.dests.remove(rd)
+                    message['message'] = f'{user.username} is removed from visitors'
+                else:
+                    user.dests.add(rd)
+                    message['message'] = f'{user.username} is added to visitors'
+                return Response(message, status=status.HTTP_200_OK)
         except:
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
@@ -157,8 +152,14 @@ class Like(APIView):
     def get(self, request, theme_pk, format=None):
         theme = self.get_theme(theme_pk)
         try:
+            likes = theme.theme_like_users.all()
+            users = []
+            for l in likes:
+                serializer = UserNicknameSerializer(l)
+                users.append(serializer.data)
             data = {
-                'like_users': theme.theme_like_users.count()
+                'like_users_count': theme.theme_like_users.count(),
+                'like_users': users,
             }
             return Response(data, status=status.HTTP_200_OK)
         except:
