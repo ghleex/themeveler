@@ -185,38 +185,35 @@ class Like(APIView):
 
 class Chatting(APIView):
     @swagger_auto_schema(query_serializer=MessageViewSerializer)
-    def get(self, request, format=None):
+    def get(self, request, theme_pk, format=None):
         """
             채팅 내역 확인(테마) - 테마별 채팅 내역을 확인합니다.
 
             # 내용
                 * headers에서 포함된 jwt 데이터의 user_id를 이용합니다.
-                * theme: theme의 theme_id를 작성합니다. Int 형식입니다.
+                * theme_pk: theme의 theme_id를 작성합니다. Int 형식입니다.
         """
         data = {}
         theme = request.GET.get('theme')
-        if not theme:
-            data[theme] = ['이 필드는 필수항목 입니다.']
-            return Response(data)
-        serializer = MessageSerializer(Message.objects.filter(theme=theme), many=True)
+        serializer = MessageSerializer(Message.objects.filter(theme=theme_pk), many=True)
         return Response(serializer.data)
 
     @swagger_auto_schema(query_serializer=MessageSerializer)
-    def post(self, request, format=None):
+    def post(self, request, theme_pk, format=None):
         """
             채팅 저장(테마) - 테마별 채팅을 저장합니다..
 
             # 내용
                 * headers에서 포함된 jwt 데이터의 user_id를 이용합니다.
-                * theme: theme의 theme_id를 작성합니다. Int 형식입니다.
+                * theme_pk: theme의 theme_id를 작성합니다. Int 형식입니다.
                 * message: 메시지를 작성합니다.
         """
         jwt_data = decoder(request.headers['Authorization'].split(' ')[1])
         user = User.objects.get(id=jwt_data.get('user_id'))
         data = {
-            'theme' : request.data.get('theme'),
-            'nickname' : user.anonymous,
-            'message' : request.data.get('message')
+            'theme': theme_pk,
+            'nickname': user.anonymous,
+            'message': request.data.get('message')
         }
         serializer = MessageSerializer(data=data)
         if serializer.is_valid(raise_exception=True):

@@ -560,20 +560,24 @@ class ReCommentChange(APIView):
 
 class ReportCommentMgmt(APIView):
     @swagger_auto_schema(request_body=ReportCommentSerializer)
-    def post(self, request, format=None):
+    def post(self, request, comment_pk, format=None):
         """
             댓글 신고 - 해당 댓글을 신고합니다.
 
             # 내용
                 report_text: 신고 내용을 작성합니다.
                 user: 해당 유저의 user_id 값을 작성합니다. Int 형식이어야 합니다.
-                comment: 해당 댓글의 comment_id 값을 작성합니다. Int 형식이어야 합니다.
+                comment_pk: 해당 댓글의 comment_id 값을 작성합니다. Int 형식이어야 합니다.
         """
         user = get_user(request.headers['Authorization'].split(' '))
-        if not ReportComment.objects.filter(user=user.id).exists():
+        try:
+            Comment.objects.get(pk=comment_pk)
+        except:
+            return Response({'message': ['해당 댓글은 존재하지 않습니다.']}, status=status.HTTP_404_NOT_FOUND)
+        if not ReportComment.objects.filter(comment=comment_pk, user=user.id).exists():
             data = {
                 'user': user.id,
-                'comment': request.data.get('comment'),
+                'comment': comment_pk,
                 'report_text': request.data.get('report_text')
             }
             serializer = ReportCommentSerializer(data=data)
@@ -587,20 +591,24 @@ class ReportCommentMgmt(APIView):
 
 class ReportReCommentMgmt(APIView):
     @swagger_auto_schema(request_body=ReportReCommentSerializer)
-    def post(self, request, format=None):
+    def post(self, request, recomment_pk, format=None):
         """
             대댓글 신고 - 해당 대댓글을 신고합니다.
 
             # 내용
                 report_text: 신고 내용을 작성합니다.
                 user: 해당 유저의 user_id 값을 작성합니다. Int 형식이어야 합니다.
-                re_comment: 해당 댓글의 comment_id 값을 작성합니다. Int 형식이어야 합니다.
+                recomment_pk: 해당 댓글의 recomment_id 값을 작성합니다. Int 형식이어야 합니다.
         """
         user = get_user(request.headers['Authorization'].split(' '))
+        try:
+            ReComment.objects.get(pk=recomment_pk)
+        except:
+            return Response({'message': ['해당 대댓글은 존재하지 않습니다.']}, status=status.HTTP_404_NOT_FOUND)
         if not ReportReComment.objects.filter(user=user.id).exists():
             data = {
                 'user': user.id,
-                're_comment': request.data.get('re_comment'),
+                're_comment': recomment_pk,
                 'report_text': request.data.get('report_text')
             }
             serializer = ReportReCommentSerializer(data=data)
