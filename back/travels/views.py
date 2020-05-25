@@ -26,7 +26,7 @@ error_message = {
 def map(request):
     KAKAO_API_KEY = config('KAKAO_API_KEY')
     context = {'KAKAO_API_KEY': KAKAO_API_KEY} 
-    return render(request, 'travels/map.html', context)
+    return render(request, 'travels/map2.html', context)
 
 
 def get_user(token, format=None):
