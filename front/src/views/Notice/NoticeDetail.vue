@@ -6,15 +6,14 @@
     </div>
     <div class="notice-body">
       <div class="body1">
-        <!-- <p class="notice-number">{{data.id}} 번글</p> -->
-        <p class="notice-body-title"><strong>{{data.title}}</strong></p>
+        <p class="notice-body-title"><strong>{{noticeData.title}}</strong></p>
       </div>
       <div class="body2">
-        <p class="notice-writer"><i class="fas fa-user"></i> {{data.writer}}</p>
-        <p class="notice-createddate"><i class="far fa-clock"></i> {{data.createddate.slice(0, 16)}}</p>
+        <p class="notice-writer"><i class="fas fa-user"></i> {{noticeData.writer}}</p>
+        <p class="notice-createddate"><i class="far fa-clock"></i> {{noticeData.writed_at.slice(0, 16)}}</p>
       </div>
       <div class="body3">
-        <div class="notice-content">{{data.content}}</div>
+        <div class="notice-content">{{noticeData.content}}</div>
       </div>
       <div class="notice-detail-btn">
         <v-divider></v-divider>
@@ -44,14 +43,17 @@
 </template>
 
 <script>
-import data from '@/views/Notice/data'
+import axios from 'axios'
 
 export default {
   name: 'notice-detail',
+  components: {
+
+  },
   data() {
     const index = this.$route.params.noticeId
     return {
-      data: data[index],
+      noticeData: [],
       index: index,
       valid: false,
       commentRules: [
@@ -61,7 +63,7 @@ export default {
   },
   methods: {
     deleteData() {
-      data.splice(this.index, 1)
+      axios.delete(`/notice_change/${this.noticeId}`)
       this.$router.push({
         path: '/notice'
       })
@@ -79,6 +81,12 @@ export default {
         path: '/notice'
       })
     }
+  },
+  mounted() {
+    axios.get(`/articles/notice/${this.noticeId}`)
+      .then(response => {
+        this.noticeData = response.data  
+    })
   }
 }
 </script>
