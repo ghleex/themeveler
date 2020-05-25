@@ -141,7 +141,7 @@
 
         if (this.$refs.form.validate()) {
           this.$router.push({
-            path: '/service'
+            path: `/service/detail/${this.index}`
           })
         }
       },
@@ -155,7 +155,7 @@
       },
       updatecancel() {
         this.$router.push({
-          path: '/service/detail/' + this.index
+          path: `/service/detail/${this.index}`
         })
       }
     }

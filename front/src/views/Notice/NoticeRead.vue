@@ -53,7 +53,7 @@ export default {
         { text: '분류', value: 'category' },
         { text: '제목', value: 'title', sortable: false },
         { text: '작성자', value: 'writer', sortable: false },
-        { text: '등록일', value: 'writed_at'.slice(0, 16) }
+        { text: '등록일', value: 'createddate'.slice(0, 16) }
       ],
       noticeData: []
     }
@@ -64,12 +64,9 @@ export default {
         path: '/notice/create'
       })
     },
-    detail(id) {
+    detail(noticeId) {
       this.$router.push({
-        name: 'notice-detail',
-        params: {
-          noticeId: id
-        }
+        path: `/notice/detail/${noticeId}`
       })
     },
     getColor(category) {
@@ -79,9 +76,12 @@ export default {
     }
   },
   mounted() {
-    axios.get(`/articles/notice`)
+    axios.get('/notice')
       .then(response => {
         this.noticeData = response.data  
+      })
+      .catch(err => {
+        console.log(err)
       })
   }
 }

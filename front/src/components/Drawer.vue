@@ -1,22 +1,14 @@
 <template>
   <div id="drawer">
     <v-navigation-drawer
-      v-model="drawer"
-      :color="color"
-      :expand-on-hover="expandOnHover"
-      :mini-variant.sync="miniVariant"
-      :right="false"
-      :permanent="true"
-      :src="bg"
-      absolute
-      dark
+      v-model="drawer" :color="color" :expand-on-hover="expandOnHover" :mini-variant.sync="miniVariant"
+      :right="false" :permanent="true" :src="bg" absolute dark
     >
       <v-list dense nav class="py-0">
         <v-list-item two-line :class="miniVariant && 'px-0'">
           <v-list-item-avatar>
             <h2><i class="fas fa-user-circle"></i></h2>
           </v-list-item-avatar>
-
           <v-list-item-content>
             <v-list-item-title>OOO님</v-list-item-title>
             <v-list-item-subtitle>user</v-list-item-subtitle>
@@ -25,7 +17,6 @@
             <v-icon>mdi-chevron-left</v-icon>
           </v-btn> -->
         </v-list-item>
-
         <v-divider></v-divider>
 
         <v-list-item v-for="item in items" :key="item.title" link :to="item.path" class="list-item">
