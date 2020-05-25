@@ -15,17 +15,15 @@
         <v-list-item two-line :class="miniVariant && 'px-0'">
           <v-list-item-avatar>
             <h2><i class="fas fa-user-circle"></i></h2>
-            <!-- <img src="https://randomuser.me/api/portraits/men/81.jpg"> -->
           </v-list-item-avatar>
 
           <v-list-item-content>
             <v-list-item-title>OOO님</v-list-item-title>
             <v-list-item-subtitle>user</v-list-item-subtitle>
           </v-list-item-content>
-
-          <v-btn icon @click.stop="miniVariant = !miniVariant">
+          <!-- <v-btn icon @click.stop="miniVariant = !miniVariant">
             <v-icon>mdi-chevron-left</v-icon>
-          </v-btn>
+          </v-btn> -->
         </v-list-item>
 
         <v-divider></v-divider>
