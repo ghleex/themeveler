@@ -16,6 +16,6 @@ urlpatterns = [
     path('comment_change/<int:comment_pk>/', views.CommentChange.as_view()),
     path('<int:comment_pk>/recomment/', views.ReComments.as_view()),
     path('recomment_change/<int:recomment_pk>/', views.ReCommentChange.as_view()),
-    path('report/comment/', views.ReportCommentMgmt.as_view()),
-    path('report/recomment/', views.ReportReCommentMgmt.as_view()),
+    path('<int:comment_pk>/comment/report/', views.ReportCommentMgmt.as_view()),
+    path('<int:recomment_pk>/recomment/report/', views.ReportReCommentMgmt.as_view()),
 ]
