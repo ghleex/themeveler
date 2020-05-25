@@ -1,45 +1,38 @@
 <template>
   <div id="notice-read">
-    <!-- 공지사항 리스트 Data table -->
-    <v-data-table
-      :headers="headers"
-      :items="data"
-      :page.sync="page"
-      :items-per-page="itemsPerPage"
-      hide-default-footer
-      class="elevation-1"
-      @page-count="pageCount = $event"
-      :search="search"
-    >
-      <template v-slot:top>
-        <v-toolbar flat color="white">
-          <v-toolbar-title><h4>공지사항</h4></v-toolbar-title>
-          <v-spacer></v-spacer>
-          <!-- <v-dialog v-model="dialog" max-width="500px">
-            <template v-slot:activator="{ on }">
-              <v-btn color="primary" dark class="mb-2" v-on="on">New Item</v-btn>
-            </template>
-          </v-dialog> -->
-          <v-btn color="primary" dark class="mb-2" @click="write">글쓰기</v-btn>
-        </v-toolbar>
-      </template>
-      <!-- 카테고리 색상 -->
-      <template v-slot:item.category="{ item }">
-        <v-chip :color="getColor(item.category)" dark>{{ item.category }}</v-chip>
-      </template>
-      <!-- 리스트 제목 -->
-      <template v-slot:item.title="{ item }">
-        <div @click="detail(item.id)">{{ item.title }}</div>
-      </template>
-    </v-data-table>
-    <!-- 페이지 번호 -->
-    <div class="text-center pt-2">
-      <v-pagination v-model="page" :length="pageCount"></v-pagination>
-    </div>
-    <!-- 검색바 -->
-    <div>
-      <v-text-field v-model="search" append-icon="mdi-magnify" label="검색"
-        single-line hide-details class="searchbar"></v-text-field>
+    <div class="notice-title">공지사항</div>
+    <div class="notice-body">
+      <!-- 공지사항 리스트 Data table -->
+      <v-data-table
+        :headers="headers" :items="data" :page.sync="page" :items-per-page="itemsPerPage" hide-default-footer
+        class="datatable" @page-count="pageCount = $event" :search="search" :sort-by="['id']" :sort-desc="true"
+        style="white-space: nowrap" :calculate-widths="true"
+      >
+        <template v-slot:top>
+          <v-toolbar class="notice-table-header" flat color="white">
+            <v-toolbar-title><h4></h4></v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" dark class="mb-2" @click="write">글쓰기</v-btn>
+          </v-toolbar>
+        </template>
+        <!-- 카테고리 색상 -->
+        <template v-slot:item.category="{ item }">
+          <v-chip :color="getColor(item.category)" dark>{{ item.category }}</v-chip>
+        </template>
+        <!-- 리스트 제목 -->
+        <template v-slot:item.title="{ item }">
+          <div class="notice-table-body" @click="detail(item.id)">{{ item.title }}</div>
+        </template>
+      </v-data-table>
+      <!-- 페이지 번호 -->
+      <div class="text-center pt-2">
+        <v-pagination v-model="page" :length="pageCount"></v-pagination>
+      </div>
+      <!-- 검색바 -->
+      <div>
+        <v-text-field v-model="search" append-icon="mdi-magnify" label="검색"
+          single-line hide-details class="searchbar"></v-text-field>
+      </div>
     </div>
   </div>
 </template>
@@ -56,11 +49,11 @@ export default {
       itemsPerPage: 10,
       search: '',
       headers: [
-        { text: '번호', align: 'start', sortable: false, value: 'id' },
+        { text: '번호', align: 'start', value: 'id', sortable: false },
         { text: '분류', value: 'category' },
-        { text: '제목', value: 'title' },
+        { text: '제목', value: 'title', sortable: false },
         { text: '작성자', value: 'writer', sortable: false },
-        { text: '등록일', value: 'createddate' }
+        { text: '등록일', value: 'createddate'.slice(0, 16) }
       ],
       data: data
     }
@@ -90,16 +83,61 @@ export default {
 
 <style scoped>
 #notice-read {
-  margin-top: 80px;
-  margin-bottom: 60px;
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center;
-  width: 95%;
+  margin: 64px auto 0 auto;
+  padding: 16px 0 60px 0;
+  width: 100%;
+  background-color: rgb(238, 240, 247);
 }
+
 .searchbar {
-  margin-left: auto;
-  margin-right: auto;
+  margin: 24px auto;
   width: 30%;
+}
+
+.notice-title {
+  font-family: 'Cafe24Simplehae';
+  font-size: 40px;
+  margin: 16px auto 0 auto;
+  width: 80%;
+  border-radius: 7px 7px 0 0;
+  box-shadow: 1px 1px 2px 1px rgb(100, 105, 109);
+  background-color: rgb(255, 255, 255);
+  padding: 2rem 0;
+}
+
+.notice-body {
+  background-color: #fff;
+  width: 80%;
+  padding: 1.2rem 2rem;
+  margin: 0 10% 0 10%;
+  border-radius: 0 0 7px 7px;
+  box-shadow: 1px 2px 2px 1px rgb(100, 105, 109);
+}
+
+@media (max-width: 600px) {
+  .notice-title {
+    width: 95% !important;
+  }
+  .notice-body {
+    width: 95% !important;
+    margin: 0 auto !important;
+  }
+}
+
+.notice-table-header {
+  padding-bottom: 5rem;
+}
+
+.notice-table-body {
+  width: 100%;
+  height: 1.2rem;
+  white-space: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  word-wrap: break-word; 
+  display: -webkit-box; 
+  -webkit-line-clamp: 1; 
+  -webkit-box-orient: vertical;
 }
 </style>
