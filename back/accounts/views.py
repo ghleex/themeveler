@@ -481,6 +481,12 @@ class PasswordFind(APIView):
         send_mail(subject, plain_message, from_email, [to], html_message=html_message)
 
     def get(self, request, username):
+        """
+            새로운 비밀번호를 계정으로 발송합니다.
+
+            # 내용
+                * username: Email 형식이어야 합니다.
+        """
         p = re.compile('^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$')
         if p.match(username) == None:
             return Response({'message': ['email 형식이 아닙니다.']}, status=status.HTTP_400_BAD_REQUEST)
@@ -494,6 +500,6 @@ class PasswordFind(APIView):
             user.set_password(password)
             user.save()
             self.mail_send(data=data)
-            return Response({'message': [username+'님에게 비밀번호를 전송했습니다.']})
+            return Response({'message': [username + '님에게 비밀번호를 전송했습니다.']})
         else:
             return Response({'message': ['해당 유저는 회원 가입된 유저가 아니거나 소셜 로그인 유저입니다.']}, status=status.HTTP_400_BAD_REQUEST)
