@@ -15,6 +15,7 @@ import EditProfile from './views/EditProfile.vue'
 import ProfileArticle from './views/ProfileArticle.vue'
 import ProfileComment from './views/ProfileComment.vue'
 import ProfileTest from './views/ProfileTest.vue'
+import Travel from './views/Travel.vue'
 import Error404 from './views/Error404.vue'
 
 Vue.use(VueRouter)
@@ -94,6 +95,12 @@ const routes = [
     path: '/profiletest',
     name: 'profiletest',
     component: ProfileTest
+  },
+
+  {
+    path: '/travel',
+    name: 'travel',
+    component: Travel
   },
 
           
