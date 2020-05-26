@@ -1,10 +1,22 @@
 from django.contrib import admin
 from .models import Theme, Destination, Message, DestContent
+from django.db import models
+from django.forms import Textarea
 
 # Register your models here.
+class MessageInline(admin.TabularInline):
+    model = Message
+    formfield_overrides = {
+        models.TextField: {'widget': Textarea(attrs={'rows':3, 'cols':100 })},
+    }
+
 @admin.register(Theme)
 class ThemeAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'content', 'region', 'created_at', 'updated_at',)
+    inlines = [
+        MessageInline,
+    ]
+    
 
 
 @admin.register(Destination)
