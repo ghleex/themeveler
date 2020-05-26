@@ -88,10 +88,7 @@
       },
       updateData() {
         this.$router.push({
-          name: 'service-create',
-          params: {
-            serviceId: this.index
-          }
+          path: `/service/create/${this.index}`
         })
       },
       back() {

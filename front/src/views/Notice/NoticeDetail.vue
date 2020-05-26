@@ -6,15 +6,14 @@
     </div>
     <div class="notice-body">
       <div class="body1">
-        <!-- <p class="notice-number">{{data.id}} 번글</p> -->
-        <p class="notice-body-title"><strong>{{data.title}}</strong></p>
+        <p class="notice-body-title"><strong>{{notice.title}}</strong></p>
       </div>
       <div class="body2">
-        <p class="notice-writer"><i class="fas fa-user"></i> {{data.writer}}</p>
-        <p class="notice-createddate"><i class="far fa-clock"></i> {{data.createddate.slice(0, 16)}}</p>
+        <p class="notice-writer"><i class="fas fa-user"></i> {{notice.writer}}</p>
+        <p class="notice-createddate"><i class="far fa-clock"></i> {{notice.createddate.slice(0, 16)}}</p>
       </div>
       <div class="body3">
-        <div class="notice-content">{{data.content}}</div>
+        <div class="notice-content">{{notice.content}}</div>
       </div>
       <div class="notice-detail-btn">
         <v-divider></v-divider>
@@ -44,14 +43,14 @@
 </template>
 
 <script>
-import data from '@/views/Notice/data'
+import axios from 'axios'
 
 export default {
   name: 'notice-detail',
   data() {
     const index = this.$route.params.noticeId
     return {
-      data: data[index],
+      notice: [],
       index: index,
       valid: false,
       commentRules: [
@@ -61,17 +60,16 @@ export default {
   },
   methods: {
     deleteData() {
-      data.splice(this.index, 1)
-      this.$router.push({
-        path: '/notice'
-      })
+      axios.delete(`/notice/${this.index}`)
+        .then(
+          this.$router.push({
+            path: '/notice'
+          })
+        )
     },
     updateData() {
       this.$router.push({
-        name: 'notice-create',
-        params: {
-          noticeId: this.index
-        }
+        path: `/notice/create/${this.index}`
       })
     },
     back() {
@@ -79,6 +77,15 @@ export default {
         path: '/notice'
       })
     }
+  },
+  mounted() {
+    axios.get(`/notice/${this.index}`)
+      .then(response => {
+        this.notice = response.data  
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
 }
 </script>
@@ -106,11 +113,6 @@ export default {
 .body1 {
   text-align: left;
 }
-/* .notice-number {
-  display: inline;
-  font-size: 14px;
-  color:gray;
-} */
 .notice-body-title {
   display: inline;
   margin-left: 8px;

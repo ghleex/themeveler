@@ -4,7 +4,7 @@
     <div class="notice-body">
       <!-- 공지사항 리스트 Data table -->
       <v-data-table
-        :headers="headers" :items="data" :page.sync="page" :items-per-page="itemsPerPage" hide-default-footer
+        :headers="headers" :items="noticeData" :page.sync="page" :items-per-page="itemsPerPage" hide-default-footer
         class="datatable" @page-count="pageCount = $event" :search="search" :sort-by="['id']" :sort-desc="true"
         style="white-space: nowrap" :calculate-widths="true"
       >
@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import data from '@/views/Notice/data'
+import axios from 'axios'
 
 export default {
   name: 'notice-read',
@@ -55,7 +55,7 @@ export default {
         { text: '작성자', value: 'writer', sortable: false },
         { text: '등록일', value: 'createddate'.slice(0, 16) }
       ],
-      data: data
+      noticeData: []
     }
   },
   methods: {
@@ -64,12 +64,9 @@ export default {
         path: '/notice/create'
       })
     },
-    detail(id) {
+    detail(noticeId) {
       this.$router.push({
-        name: 'notice-detail',
-        params: {
-          noticeId: id
-        }
+        path: `/notice/detail/${noticeId}`
       })
     },
     getColor(category) {
@@ -77,6 +74,15 @@ export default {
       else if (category == '일반') return 'dark'
       else return 'green'
     }
+  },
+  mounted() {
+    axios.get('/notice')
+      .then(response => {
+        this.noticeData = response.data  
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
 }
 </script>
