@@ -35,7 +35,7 @@ class CustomUserAdmin(UserAdmin):
     ban_users.short_description = '선택된 사용자(들) 을/를 3일간 정지합니다.'
 
     UserAdmin.fieldsets[1][1]['fields'] += ('nickname', 'anonymous', 'banning_period', 'favorite_themes', 'favorite_destinations',)
-    list_display = ('id', 'username', 'nickname', 'anonymous', 'banning_period', 'is_active', 'reports', )
+    list_display = ('id', 'username', 'nickname', 'anonymous', 'banning_period', 'is_active', 'reports',)
     inlines = [
         ReportCommentInline,
         ReportReCommentInline
