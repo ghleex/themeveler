@@ -20,11 +20,11 @@
 
       <div class="service-content">{{data.content}}</div><br>
 
-      <v-btn color="rgb(238, 240, 247)" class="btn-detail" @click="back"><i class="fas fa-bars mr-1"></i>목록</v-btn>
       <div class="service-detail-btn mt-12">
-        <v-btn color="#2c3e50" class="text-light mr-4 btn-detail mb-2" @click="updateData">수정<i
-            class="fas fa-edit ml-1"></i></v-btn>
-        <v-btn color="error" class="btn-detail" @click="deleteData">삭제<i class="fas fa-minus-square ml-1"></i></v-btn>
+        <v-btn color="#2c3e50" class="text-light mr-4 btn-detail mb-2" @click="updateData">수정
+          <i class="fas fa-edit ml-1"></i></v-btn>
+        <v-btn color="error" class="btn-detail mr-4" @click="deleteData">삭제<i class="fas fa-minus-square ml-1"></i></v-btn>
+        <v-btn color="rgb(238, 240, 247)" class="btn-detail" @click="back"><i class="fas fa-bars ml-1"></i>목록</v-btn>
       </div>
     </div>
 
@@ -180,7 +180,6 @@
     width: 110px;
     padding: .5rem 0 .2rem 0;
     font-family: 'Cafe24Simplehae';
-    margin: 0 auto;
     color: white;
     font-size: 20px;
     margin: 0 auto 0 12.5%;

@@ -9,13 +9,13 @@ import NoticeDetail from './views/Notice/NoticeDetail.vue'
 import ServiceRead from './views/ServiceCenter/ServiceRead.vue'
 import ServiceCreate from './views/ServiceCenter/ServiceCreate.vue'
 import ServiceDetail from './views/ServiceCenter/ServiceDetail.vue'
-// import Map from './views/Map/Map.vue'
 import Profile from './views/Profile.vue'
 import EditProfile from './views/EditProfile.vue'
 import ProfileArticle from './views/ProfileArticle.vue'
 import ProfileComment from './views/ProfileComment.vue'
 import ProfileTest from './views/ProfileTest.vue'
 import Travel from './views/Travel.vue'
+// import Map from './views/Map/Map.vue'
 import Error404 from './views/Error404.vue'
 
 Vue.use(VueRouter)
@@ -66,11 +66,6 @@ const routes = [
     name: 'service-detail',
     component: ServiceDetail
   },
-  // {
-  //   path: '/map',
-  //   name: 'map',
-  //   component: Map
-  // },
   {
     path: '/profile',
     name: 'profile',
@@ -96,14 +91,18 @@ const routes = [
     name: 'profiletest',
     component: ProfileTest
   },
-
   {
     path: '/travel',
     name: 'travel',
     component: Travel
   },
+  // {
+  //   path: '/map',
+  //   name: 'map',
+  //   component: Map
+  // },
 
-          
+
 
 
   {
