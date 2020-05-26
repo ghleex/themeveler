@@ -52,7 +52,8 @@ class SetVoiceCategory(APIView):
         for c in categories:
             serializer = VoiceCategorySerializer(c)
             category.append(serializer.data)
-        if request.user.is_staff:
+        user = get_user(request.headers['Authorization'].split(' '))
+        if user.is_staff:
             data = {
                 'data': category,
             }
@@ -126,7 +127,7 @@ class CustomersVoices(APIView):
             * return 값: voice 목록(요청자와 실제 사용자가 같은 경우) / 부적절한 엑세스 메시지(요청자와 실제 사용자가 다른 경우)
     """
     def get(self, request, user_pk, format=None):
-        request_user = request.user
+        request_user = get_user(request.headers['Authorization'].split(' '))        
         if user_pk == request_user.pk:
             voices = CustomersVoice.objects.filter(request_user=user_pk).order_by('-created_at')
             voice = []
@@ -141,8 +142,9 @@ class CustomersVoices(APIView):
             return Response(access_message, status=status.HTTP_403_FORBIDDEN)
             
     def post(self, request, user_pk, format=None):
-        if user_pk == request.user.pk:
-            user = request.user.pk
+        request_user = get_user(request.headers['Authorization'].split(' '))
+        if user_pk == request_user.pk:
+            user = request_user.pk
             requests = request.data
             data = {
                 'title': requests.get('title'),
@@ -283,6 +285,23 @@ class ManagersReplyChange(APIView):
         except:
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
+@permission_classes((AllowAny, ))
+class Notices(APIView):
+    """
+        전체 공지사항 - 목록과 게시
+
+        ---
+        # 내용
+          * isNoticeAll: True 인 것만 출력
+    """
+    def get(self, request, format=None):
+        notices = Notice.objects.filter(isNoticeAll=True).order_by('-writed_at')
+        notice = [NoticeSerializer(n).data for n in notices]
+        data = {
+            'notice': notice,
+        }
+        return Response(data, status=status.HTTP_200_OK)
+    
 
 @permission_classes((IsAuthenticated, ))
 class ThemeNoticesView(APIView):
@@ -298,7 +317,7 @@ class ThemeNoticesView(APIView):
     def get(self, request, theme_pk, format=None):
         theme = self.get_theme(theme_pk)
         try:
-            notices = theme.theme_notices.all()
+            notices = theme.theme_notices.all().order_by('-writed_at')
             notice = []
             for n in notices:
                 serializer = NoticeSerializer(n)
@@ -386,7 +405,7 @@ class ThemeNoticesChange(APIView):
 @permission_classes((IsAuthenticated,))
 class Comments(APIView):
     """
-        댓글
+        댓글 - 목록과 작성
 
         ---
     """
@@ -396,7 +415,7 @@ class Comments(APIView):
     def get(self, request, dest_pk, format=None):
         dest = self.get_dest(dest_pk)
         try:
-            comments = dest.destination_comments.all()
+            comments = dest.destination_comments.all().order_by('-writed_at')
             comment = []
             for c in comments:
                 serializer = CommentSerializer(c)
@@ -431,7 +450,7 @@ class Comments(APIView):
 @permission_classes((IsAuthenticated,))
 class CommentChange(APIView):
     """
-        댓글 수정/삭제
+        댓글 - 수정과 삭제
 
         ---
     """
@@ -475,7 +494,7 @@ class CommentChange(APIView):
 @permission_classes((IsAuthenticated,))
 class ReComments(APIView):
     """
-        대댓글
+        대댓글 - 목록과 작성
 
         ---
     """
@@ -485,7 +504,7 @@ class ReComments(APIView):
     def get(self, request, comment_pk, format=None):
         comment = self.get_comment(comment_pk)
         try:
-            recomments = comment.recomments_original.all()
+            recomments = comment.recomments_original.all().order_by('-writed_at')
             recomment = []
             for rc in recomments:
                 serializer = ReCommentSerializer(rc)
@@ -517,7 +536,7 @@ class ReComments(APIView):
 @permission_classes((IsAuthenticated,))
 class ReCommentChange(APIView):
     """
-        대댓글 수정/삭제
+        대댓글 - 수정과 삭제
 
         ---
     """
