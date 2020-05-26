@@ -56,7 +56,7 @@ ROOT_URLCONF = 'v2020.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'v2020', 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
