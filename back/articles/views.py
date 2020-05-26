@@ -285,6 +285,7 @@ class ManagersReplyChange(APIView):
         except:
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
+
 @permission_classes((AllowAny, ))
 class Notices(APIView):
     """
