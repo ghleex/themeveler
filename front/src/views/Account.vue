@@ -190,7 +190,6 @@ import Swal from 'sweetalert2'
                 alert('회원가입이 완료되었습니다.')
                 // 회원가입 후 자동로그인
 
-
               }
               else {
                 alert('비밀번호가 너무 일상적인 단어입니다.')
