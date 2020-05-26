@@ -15,6 +15,7 @@
               <span>or use your email for registration</span>
 
               <input type="text" placeholder="Name" v-model="credentials.username" />
+              <v-icon @click="checkname" style="padding-left:12px; padding-right:12px;">mdi-check</v-icon>
               <input type="email" placeholder="Email" v-model="credentials.email" />
               <input type="password" name="pw" placeholder="Password" v-model="credentials.pw" />
               <input type="password" name="rpw" placeholder="Confirm Password" v-model="credentials.rpw" />
@@ -57,7 +58,8 @@
 </template>
 
 <script>
-  import Swal from 'sweetalert2'
+import axios from 'axios'
+import Swal from 'sweetalert2'
 
   export default {
     name: 'Account',
@@ -152,6 +154,32 @@
           })
         }
         // else {} // 검수를 다 거치고 난 후 회원가입
+        else {
+          const credentials = {
+            'email': this.credentials.email,
+            'password': this.credentials.pw,
+            'nickname': this.credentials.username
+          }
+          console.log(credentials)
+          axios.post('/accounts/signup', credentials)
+            .then(response => {
+              console.log(response.data.message)
+              // 회원가입 후 자동로그인
+
+            })
+        }
+      },
+      // 닉네임 중복체크
+      checkname() {
+        axios.get(`/accounts/nickname/${this.credentials.username}`)
+          .then(response => {
+            if (response.data.code == '200') {
+              alert('사용 가능한 닉네임입니다.')
+            }
+            else {
+              alert('이미 존재하는 닉네임입니다.')
+            }
+          })
       },
       a() {
         document.querySelector('#footer').style.display = 'none'
