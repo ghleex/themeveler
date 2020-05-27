@@ -1,4 +1,4 @@
-{% load i18n admin_urls static admin_modify %}
+{% load i18n admin_urls static admin_modify inline_tags %}
 
 <style>
   .dark {
@@ -106,38 +106,40 @@
   <div style="text-align: center;">
     {% with inline_admin_formset.formset.page as page_obj %}
     <p class="paginator">
-      {% if page_obj.previous_page_number > 0 %}
-        <a href="?page={{ page_obj.previous_page_number|add:'-1' }}">{% trans 'previous' %}</a>
-      {% endif %}
-      
-      {% if page_obj.number|add:"-3" > 1 %}
-        <a href="?page=1">1</a>
-      {% endif %}
-
-      {% if page_obj.number|add:"-3" > 1 %}
-        <span>&hellip;</span>
-      {% endif %}
-      {% for page_num in page_obj.paginator.page_range %}
-        {% if page_obj.number == page_num %}
-          <span class="light">{{ page_num }}</span>
-        {% else %}
-          {% if page_num > page_obj.number|add:"-3" and page_num < page_obj.number|add:"3" %}
-            <a class="dark" href="?page={{ page_num }}">{{ page_num }}</a>
-          {% endif %}
+      {% with inline_admin_formset.opts.verbose_name|title|lower as page %}
+        {% if page_obj.previous_page_number > 0 %}
+          <a href="?{{ page }}={{ page_obj.previous_page_number|add:'0' }}">{% trans 'previous' %}</a>
         {% endif %}
-      {% endfor %}
+        
+        {% if page_obj.number|add:"-3" > 1 %}
+          <a href="?{{ page }}=1">1</a>
+        {% endif %}
 
-      {% if page_obj.number|add:"3" < page_obj.paginator.num_pages %}
-        <span>&hellip;</span>
-      {% endif %}
+        {% if page_obj.number|add:"-3" > 1 %}
+          <span>&hellip;</span>
+        {% endif %}
+        {% for page_num in page_obj.paginator.page_range %}
+          {% if page_obj.number == page_num %}
+            <span class="light">{{ page_num }}</span>
+          {% else %}
+            {% if page_num > page_obj.number|add:"-3" and page_num < page_obj.number|add:"3" %}
+              <a class="dark" href="{% move request page page_num %}">{{ page_num }}</a>
+            {% endif %}
+          {% endif %}
+        {% endfor %}
 
-      {% if page_obj.number|add:"3" < page_obj.paginator.num_pages %}
-        <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
-      {% endif %}
+        {% if page_obj.number|add:"3" < page_obj.paginator.num_pages %}
+          <span>&hellip;</span>
+        {% endif %}
 
-      {% if page_obj.next_page_number < page_obj.paginator.num_pages|add:'1' %}
-        <a href="?page={{ page_obj.next_page_number|add:'-1' }}">{% trans 'next' %}</a>
-      {% endif %}
+        {% if page_obj.number|add:"3" < page_obj.paginator.num_pages %}
+          <a href="?{{ page }}={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+        {% endif %}
+
+        {% if page_obj.next_page_number < page_obj.paginator.num_pages|add:'1' %}
+          <a href="?{{ page }}={{ page_obj.next_page_number|add:'0' }}">{% trans 'next' %}</a>
+        {% endif %}
+      {% endwith %}
     </p>
   {% endwith %}
   </div>
