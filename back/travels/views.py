@@ -204,3 +204,34 @@ class Chatting(APIView):
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data)
+
+
+# @permission_classes((IsAuthenticated,))
+class TravelTheme(APIView):
+    # @swagger_auto_schema(query_serializer=ThemeSerializer)
+    def get(self, request, theme_pk, format=None):
+        start = get_object_or_404(Theme, pk=theme_pk).start()
+        data = {
+            'start': start.name
+        }
+        return Response(data)
+    
+    def get_all_theme(self, request):
+        all_theme = ThemeSerializer(Theme.objects.all())
+        if not all_theme:
+            return Response('Theme is not existed', status=status.HTTP_400_BAD_REQUEST)
+        data = {
+            'all_theme': all_theme
+        }
+        return Response(data)
+
+    def filter_theme(self, request, region):
+        filtered_theme = ThemeSerializer(Theme.objects.filter(region=region))
+        if not filtered_theme:
+            return Response('Theme is not existed', status=status.HTTP_400_BAD_REQUEST)
+        data = {
+            'filtered_theme': filtered_theme
+        }
+        return Response(data)
+        
+    
