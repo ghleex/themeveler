@@ -15,11 +15,13 @@ admin.ModelAdmin.list_per_page = 20
 @admin.register(Notice)
 class NoticeAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'content', 'writed_at', 'writer', 'theme',)
+    list_display_links = ('title',)
 
 
 @admin.register(VoiceCategory)
 class VoiceCategoryAdmin(admin.ModelAdmin):
     list_display = ('id', 'category',)
+    list_display_links = ('category',)
 
 
 @admin.register(CustomersVoice)
