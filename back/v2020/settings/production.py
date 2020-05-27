@@ -19,7 +19,7 @@ DATABASES = {
         'NAME': config('DB_NAME'), # 데이터베이스 이름
         'USER': config('DB_USER'), # 데이터베이스 연결시 사용할 유저 이름
         'PASSWORD': config('DB_PW'), # 유저 패스워드
-        'HOST': '127.0.0.1',
+        'HOST': config('DB_HOST'),
         'PORT': '',
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
