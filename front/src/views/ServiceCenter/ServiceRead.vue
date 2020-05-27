@@ -90,12 +90,9 @@
           path: '/service/create'
         })
       },
-      detail(id) {
+      detail(serviceId) {
         this.$router.push({
-          name: 'service-detail',
-          params: {
-            serviceId: id
-          }
+          path: `/service/detail/${serviceId}`
         })
       },
       getColor(category) {
@@ -123,7 +120,6 @@
     font-family: 'Cafe24Simplehae';
     font-size: 40px;
     margin: 5rem auto 0 auto;
-    /* background-color: rgb(255, 187, 0); */
     width: 80%;
     border-radius: 7px 7px 0 0;
     box-shadow: 1px 1px 2px 1px rgb(100, 105, 109);

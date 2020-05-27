@@ -25,7 +25,7 @@
                   <v-text-field label="Password Confirm" class="purple-input" />
                 </v-col>
                 <v-col cols="12" md="6" class="content-col">
-                  <v-text-field label="User Name" class="purple-input" />
+                  <v-text-field label="Nickname" class="purple-input" />
                 </v-col>
                 <v-col cols="12" md="6" class="content-col">
                   <v-text-field label="Name" class="purple-input" />
@@ -63,7 +63,7 @@
         <v-col col="12" md="4">
           <v-card-text class="text-center">
             <h6 class="display-1 mb-1 grey--text">ad.</h6>
-            <h4 class="display-2 font-weight-light mb-3 black--text">Alec Thompson</h4>
+            <h4 class="display-2 font-weight-light mb-3 black--text"></h4>
             <p class="font-weight-light grey--text">
               개인정보 유출에 항상 주의하세요...
             </p>

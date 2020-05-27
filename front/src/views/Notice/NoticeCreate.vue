@@ -22,12 +22,13 @@
 </template>
 
 <script>
+// import axios from 'axios'
 import data from '@/views/Notice/data'
 
 export default {
   name: 'notice-create',
   data() {
-    const index = this.$route.params.noticeId;
+    const index = this.$route.params.noticeId
     return {
       data: data,
       index: index,
@@ -69,7 +70,7 @@ export default {
       data[this.index].title = this.title
       data[this.index].content = this.content
       this.$router.push({
-        path: '/notice/detail/'+this.index
+        path: `/notice/detail/${this.index}`
       })
     },
     reset () {
@@ -82,7 +83,7 @@ export default {
     },
     updatecancel () {
       this.$router.push({
-        path: '/notice/detail/'+this.index
+        path: `/notice/detail/${this.index}`
       })
     }
   }
