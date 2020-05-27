@@ -2,19 +2,14 @@ from django.db.models.aggregates import Count
 from django.contrib.auth.admin import UserAdmin
 from django.contrib import admin
 from .models import User, Waiting
+from articles.inlines import ReportCommentInline, ReportReCommentInline
 from articles.models import ReportComment, ReportReComment
 from datetime import datetime, timedelta
 
 
 # Register your models here.
 
-class ReportCommentInline(admin.TabularInline):
-    model = ReportComment
-
-
-class ReportReCommentInline(admin.TabularInline):
-    model = ReportReComment
-
+admin.ModelAdmin.list_per_page = 20
 
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
@@ -36,6 +31,8 @@ class CustomUserAdmin(UserAdmin):
 
     UserAdmin.fieldsets[1][1]['fields'] += ('nickname', 'anonymous', 'banning_period', 'favorite_themes', 'favorite_destinations',)
     list_display = ('id', 'username', 'nickname', 'anonymous', 'banning_period', 'is_active', 'reports',)
+    search_fields = ('username', 'nickname',)
+    list_display_links = ('username',)
     inlines = [
         ReportCommentInline,
         ReportReCommentInline
@@ -48,3 +45,5 @@ class CustomUserAdmin(UserAdmin):
 @admin.register(Waiting)
 class WaitingAdmin(admin.ModelAdmin):
     list_display = ('id', 'username', 'is_confirm', 'confirm_code', 'updated_at',)
+    search_fields = ('username',)
+    list_display_links = ('username',)
