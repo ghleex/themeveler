@@ -13,7 +13,7 @@ djangorestframework-jwt==1.11.0
 drf-yasg==1.17.1
 google==2.0.3
 google-api-core==1.17.0
-google-api-python-client==1.8.3
+google-api-python-client==1.8.4
 google-auth==1.15.0
 google-auth-httplib2==0.0.3
 googleapis-common-protos==1.51.0
@@ -24,7 +24,7 @@ itypes==1.2.0
 Jinja2==2.11.2
 MarkupSafe==1.1.1
 mysqlclient==1.4.6
-packaging==20.3
+packaging==20.4
 Pillow==7.1.2
 protobuf==3.12.1
 pyasn1==0.4.8
@@ -37,7 +37,7 @@ requests==2.23.0
 rsa==4.0
 ruamel.yaml==0.16.10
 ruamel.yaml.clib==0.2.0
-six==1.14.0
+six==1.15.0
 soupsieve==2.0.1
 sqlparse==0.3.1
 uritemplate==3.0.1

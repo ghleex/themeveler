@@ -48,10 +48,7 @@ class SetVoiceCategory(APIView):
     """
     def get(self, request, format=None):
         categories = VoiceCategory.objects.all()
-        category = []
-        for c in categories:
-            serializer = VoiceCategorySerializer(c)
-            category.append(serializer.data)
+        category = [VoiceCategorySerializer(c).data for c in categories]
         user = get_user(request.headers['Authorization'].split(' '))
         if user.is_staff:
             data = {
@@ -130,10 +127,7 @@ class CustomersVoices(APIView):
         request_user = get_user(request.headers['Authorization'].split(' '))        
         if user_pk == request_user.pk:
             voices = CustomersVoice.objects.filter(request_user=user_pk).order_by('-created_at')
-            voice = []
-            for v in voices:
-                serializer = CustomersVoiceSerializer(v)
-                voice.append(serializer.data)
+            voice = [CustomersVoiceSerializer(v).data for v in voices]
             data = {
                 'voice': voice,
             }
@@ -319,10 +313,7 @@ class ThemeNoticesView(APIView):
         theme = self.get_theme(theme_pk)
         try:
             notices = theme.theme_notices.all().order_by('-writed_at')
-            notice = []
-            for n in notices:
-                serializer = NoticeSerializer(n)
-                notice.append(serializer.data)
+            notice = [NoticeSerializer(n).data for n in notices]
             data = {
                 'notices': notice,
             }
@@ -417,10 +408,7 @@ class Comments(APIView):
         dest = self.get_dest(dest_pk)
         try:
             comments = dest.destination_comments.all().order_by('-writed_at')
-            comment = []
-            for c in comments:
-                serializer = CommentSerializer(c)
-                comment.append(serializer.data)
+            comment = [CommentSerializer(c).data for c in comments]
             data = {
                 'comments': comment,
             }
@@ -506,10 +494,7 @@ class ReComments(APIView):
         comment = self.get_comment(comment_pk)
         try:
             recomments = comment.recomments_original.all().order_by('-writed_at')
-            recomment = []
-            for rc in recomments:
-                serializer = ReCommentSerializer(rc)
-                recomment.append(serializer.data)
+            recomment = [ReCommentSerializer(rc).data for rc in recomments]
             data = {
                 'recomments': recomment,
             }
