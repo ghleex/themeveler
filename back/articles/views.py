@@ -218,10 +218,7 @@ class ManagersReplying(APIView):
         manager = self.get_manager(manager_pk)
         try:
             todos = CustomersVoice.objects.filter(manager=manager_pk).order_by('-created_at')
-            todo = []
-            for t in todos:
-                serializer = CustomersVoiceSerializer(t)
-                todo.append(serializer.data)
+            todo = [CustomersVoiceSerializer(t).data for t in todos]
             data = {
                 'todos': todo,
             }
