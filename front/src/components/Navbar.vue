@@ -82,6 +82,16 @@
             {{ item.title }}
           </div>
 
+          <!-- <div class="drop-no" v-if="item.title == 'Sign in'">
+            <div v-if="!this.$store.getters.isLoggedIn" @click="login()">
+              <v-icon class="mr-2">{{ item.icon }}</v-icon>
+              Login
+            </div>
+            <div v-else @click="logout()">
+              <v-icon class="mr-2">{{ item.icon }}</v-icon>
+              Logout
+            </div>
+          </div> -->
         </v-btn>
 
       </v-toolbar-items>
