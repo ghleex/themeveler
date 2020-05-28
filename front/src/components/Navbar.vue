@@ -15,30 +15,36 @@
       <v-divider></v-divider>
 
       <v-list>
-        <v-list-item class="side-no-padding" color="#263238" v-for="item in items" :key="item.title" link :to="item.path">
+        <v-list-item class="side-no-padding" color="#263238" v-for="item in items" :key="item.title" link
+          :to="item.path">
           <!-- <router-link :to="item.path"></router-link> -->
           <template v-if="item.title != 'Contact'">
-          <v-list-item-icon>
-            <v-icon class="pl-4">{{ item.icon }}</v-icon>
-          </v-list-item-icon>
+            <v-list-item-icon>
+              <v-icon class="pl-4">{{ item.icon }}</v-icon>
+            </v-list-item-icon>
             <v-list-item-title>{{ item.title }}</v-list-item-title>
           </template>
 
-          <v-list-group class="side-width-100" color="#263238" no-action value="true" v-else-if="item.title == 'Contact'">
+          <v-list-group class="side-width-100" color="#263238" no-action value="true"
+            v-else-if="item.title == 'Contact'">
             <template class="contact-custom" v-slot:activator>
-          <v-list-item-icon>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-icon>
+              <v-list-item-icon>
+                <v-icon>{{ item.icon }}</v-icon>
+              </v-list-item-icon>
               <!-- <v-list-item-content> -->
-                <v-list-item-title>{{ item.title }}</v-list-item-title>
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
               <!-- </v-list-item-content> -->
             </template>
-              <v-list-item link>
-                <v-list-item-title class="contact-list-group"><router-link to="/notice">공지사항</router-link></v-list-item-title>
-              </v-list-item>
-              <v-list-item link>
-                <v-list-item-title class="contact-list-group"><router-link to="/service">고객센터</router-link></v-list-item-title>
-              </v-list-item>
+            <v-list-item link>
+              <v-list-item-title class="contact-list-group">
+                <router-link to="/notice">공지사항</router-link>
+              </v-list-item-title>
+            </v-list-item>
+            <v-list-item link>
+              <v-list-item-title class="contact-list-group">
+                <router-link to="/service">고객센터</router-link>
+              </v-list-item-title>
+            </v-list-item>
           </v-list-group>
 
         </v-list-item>
@@ -76,6 +82,16 @@
             {{ item.title }}
           </div>
 
+          <!-- <div class="drop-no" v-if="item.title == 'Sign in'">
+            <div v-if="!this.$store.getters.isLoggedIn" @click="login()">
+              <v-icon class="mr-2">{{ item.icon }}</v-icon>
+              Login
+            </div>
+            <div v-else @click="logout()">
+              <v-icon class="mr-2">{{ item.icon }}</v-icon>
+              Logout
+            </div>
+          </div> -->
         </v-btn>
 
       </v-toolbar-items>
@@ -96,7 +112,8 @@
           },
           {
             title: 'Travel',
-            icon: 'mdi-image-album'
+            icon: 'mdi-image-album',
+            path: '/travel'
           },
           {
             title: 'Contact',
@@ -115,7 +132,8 @@
           },
           {
             title: 'Travel',
-            icon: ' mdi-image-album'
+            icon: ' mdi-image-album',
+            path: '/travel'
           },
           {
             title: 'Contact',
@@ -133,11 +151,11 @@
 </script>
 
 <style lang="scss" scoped>
-@media (max-width: 767px) {
-  .navbar_box {
-    // position: fixed;
+  @media (max-width: 767px) {
+    .navbar_box {
+      // position: fixed;
+    }
   }
-}
 
   .navbar_box>img {
     width: 100%;
@@ -195,10 +213,10 @@
   }
 
   .navbar_box .v-list-group__header {
-    padding : 0 !important;
+    padding: 0 !important;
   }
 
-  .contact-list-group > a {
+  .contact-list-group>a {
     color: rgb(40, 40, 44);
   }
 
@@ -210,6 +228,5 @@
     padding: 0;
   }
 
-// ["role":"button"]
-
+  // ["role":"button"]
 </style>

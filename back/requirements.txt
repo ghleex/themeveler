@@ -6,13 +6,14 @@ chardet==3.0.4
 coreapi==2.3.3
 coreschema==0.0.4
 Django==3.0.6
+django-cors-headers==3.3.0
 django-mysql==3.5.0
 djangorestframework==3.11.0
 djangorestframework-jwt==1.11.0
 drf-yasg==1.17.1
 google==2.0.3
 google-api-core==1.17.0
-google-api-python-client==1.8.3
+google-api-python-client==1.8.4
 google-auth==1.15.0
 google-auth-httplib2==0.0.3
 googleapis-common-protos==1.51.0

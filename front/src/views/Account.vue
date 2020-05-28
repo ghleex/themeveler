@@ -5,7 +5,7 @@
 
         <div class="container" id="container">
           <div class="form-container sign-up-container">
-            <form name="signup" action="" method="post" @submit.prevent="regiCheck()">
+            <form name="signup" action="" method="post" @submit.prevent="checkSignup()">
               <h1>Create Account</h1>
               <!-- <div class="social-container">
                 <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
@@ -14,15 +14,39 @@
               </div> -->
               <span>or use your email for registration</span>
 
-              <input type="text" placeholder="Name" v-model="credentials.username" />
               <input type="email" placeholder="Email" v-model="credentials.email" />
+              <v-row justify="center">
+                <v-dialog v-model="dialog" max-width="500px">
+                  <template v-slot:activator="{ on }">
+                    <v-btn color="red lighten-2" dark v-on="on">이메일인증</v-btn>
+                  </template>
+                  <v-card>
+                    <v-card-title>
+                      <span class="headline" primary-title>이메일인증</span>
+                    </v-card-title>
+                    <v-card-text>
+                      <v-container>
+                        <input type="text" placeholder="인증번호" v-model="emailcertcode" />
+                        <v-btn color="grey lighten-2" @click="checkEmail">인증번호 전송</v-btn>
+                      </v-container>
+                    </v-card-text>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn color="blue darken-1" text @click="checkEmailCert">확인</v-btn>
+                      <v-btn color="blue darken-1" text @click="dialog = false">취소</v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+              </v-row>
+              <input type="text" placeholder="Name" v-model="credentials.username" />
+              <v-icon @click="checkNickname" style="padding-left:12px; padding-right:12px;">mdi-check</v-icon>
               <input type="password" name="pw" placeholder="Password" v-model="credentials.pw" />
               <input type="password" name="rpw" placeholder="Confirm Password" v-model="credentials.rpw" />
-              <button>Sign Up</button>
+              <button class="signupbtn">Sign Up</button>
             </form>
           </div>
           <div class="form-container sign-in-container">
-            <form name="signin" action="" method="post" @submit.prevent="signinCheck()">
+            <form name="signin" action="" method="post" @submit.prevent="checkSignin()">
               <h1>Sign in</h1>
               <div class="social-container">
                 <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
@@ -32,7 +56,7 @@
               <input type="email" placeholder="Email" v-model="credentials.email" />
               <input type="password" placeholder="Password" v-model="credentials.pw" />
               <a href="#">Forgot your password?</a>
-              <button>Sign In</button>
+              <button class="loginbtn">Sign In</button>
             </form>
           </div>
           <div class="overlay-container">
@@ -57,7 +81,8 @@
 </template>
 
 <script>
-  import Swal from 'sweetalert2'
+import axios from 'axios'
+import Swal from 'sweetalert2'
 
   export default {
     name: 'Account',
@@ -67,56 +92,23 @@
         //   v => !!v || 'E-mail is required',
         //   v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
         // ],
+        dialog: false,
         credentials: {
           username: '',
           email: '',
           pw: '',
           rpw: '',
         },
+        emailcertcode: '',
         csrf: '',
       }
     },
     methods: {
-      // 로그인 폼 체크
-      signinCheck() {
-        if (!this.credentials.email) {
-          Swal.fire({
-            title: "Check Email",
-            text: "이메일을 입력하세요.",
-            type: "warning",
-            timer: 3000
-          })
-        } else if (!this.credentials.pw) {
-          Swal.fire({
-            title: "Check Password",
-            text: "비밀번호를 입력하세요.",
-            type: "warning",
-            timer: 3000
-          })
-        }
-        // else {} // 검수 후 로그인
-      },
-
       // 회원가입 폼 체크
-      regiCheck() {
+      checkSignup() {
         // 검증 form
         // 입력하지 않는 경우 (비어있는 경우)
-        if (this.credentials.username == "") {
-          Swal.fire({
-            title: "Check Name",
-            text: "이름을 입력하세요.",
-            type: "warning",
-            timer: 3000
-          })
-        } else if (this.credentials.username.length >= 7) {
-          Swal.fire({
-            title: "Check Name",
-            text: "이름은 6자 이하로 가능합니다..",
-            type: "warning",
-            timer: 3000
-          })
-        } 
-        else if (!this.credentials.email) {
+        if (!this.credentials.email) {
           Swal.fire({
             title: "Check Email",
             text: "이메일을 입력하세요.",
@@ -132,7 +124,21 @@
             type: "warning",
             timer: 3000
           })
-          }
+        } else if (this.credentials.username == "") {
+          Swal.fire({
+            title: "Check Name",
+            text: "이름을 입력하세요.",
+            type: "warning",
+            timer: 3000
+          })
+        } else if (this.credentials.username.length >= 7) {
+          Swal.fire({
+            title: "Check Name",
+            text: "이름은 6자 이하로 가능합니다..",
+            type: "warning",
+            timer: 3000
+          })
+        } 
         // 길이가 너무 짧은 경우 (8자 이하)
         else if (this.credentials.pw.length < 8) {
           Swal.fire({
@@ -151,7 +157,127 @@
             timer: 3000
           })
         }
-        // else {} // 검수를 다 거치고 난 후 회원가입
+        // 검수를 다 거치고 난 후 회원가입
+        else {
+          const credentials = {
+            'username': this.credentials.email,
+            'password': this.credentials.pw,
+            'nickname': this.credentials.username
+          }
+          // console.log(credentials)
+          axios.post('/accounts/signup/', credentials)
+            .then(response => {
+              if (response.statusText=="OK") {
+                alert('회원가입이 완료되었습니다.')
+                // 회원가입 후 자동로그인
+
+              }
+              else {
+                alert('비밀번호가 너무 일상적인 단어입니다.')
+              }
+            })
+            .catch(err => {
+              console.log(err)
+            })
+        }
+      },
+      // 닉네임 중복체크
+      checkNickname() {
+        axios.get(`/accounts/nickname/${this.credentials.username}/`)
+          .then(response => {
+            if (response.statusText=="OK") {
+              alert('사용 가능한 닉네임입니다.')
+            }
+            else {
+              alert('이미 존재하는 닉네임입니다.')
+            }
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      },
+      // 이메일 중복체크
+      checkEmail() {
+        if (!`${this.credentials.email}`) {
+          alert('이메일을 입력해주세요.')
+        }
+        else {
+          axios.get(`/accounts/username/${this.credentials.email}/`)
+            .then(response => {
+              if (response.statusText=="OK") {
+                // 인증번호 전송
+                axios.post('/accounts/email/send/', {'username': this.credentials.email})
+                  .then(
+                    alert('인증번호가 전송되었습니다.')
+                  )
+                  .catch(err => {
+                    console.log(err)
+                  })
+              }
+              else {
+                alert('이미 존재하는 이메일(ID)입니다.')
+              }
+            })
+            .catch(err => {
+              console.log(err)
+            })
+        }
+      },
+      // 이메일 인증
+      checkEmailCert() {
+        axios.get(`/accounts/email/auth/${this.credentials.email}/${this.emailcertcode}/`)
+          .then(response => {
+            if (response.statusText=="OK") {
+              this.dialog=false
+              alert('이메일 인증이 완료되었습니다.')
+            }
+            else {
+              alert('이메일 인증에 실패하였습니다.')
+            }
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      },
+      // 로그인 폼 체크
+      checkSignin() {
+        if (!this.credentials.email) {
+          Swal.fire({
+            title: "Check Email",
+            text: "이메일을 입력하세요.",
+            type: "warning",
+            timer: 3000
+          })
+        } else if (!this.credentials.pw) {
+          Swal.fire({
+            title: "Check Password",
+            text: "비밀번호를 입력하세요.",
+            type: "warning",
+            timer: 3000
+          })
+        }
+        // 검수 후 로그인
+        else {
+          var loginforms = new FormData()
+          loginforms.append('username', this.credentials.email)
+          loginforms.append('password', this.credentials.pw)
+          axios.post('/accounts/signin/', loginforms)
+            .then(response => {
+              console.log(response)
+              if (response.status === 200 && "token" in response.data) {
+                const token = response.data.token
+                this.$session.start()
+                this.$session.set("jwt", token)
+                this.$session.set("expire", Date.now() + 2592000)
+                this.$store.dispatch("login", token)
+                this.$store.commit("setToken", token)
+                this.$router.push('/')
+              }
+            })
+            .catch(err => {
+              console.log(err)
+            })
+        }
       },
       a() {
         document.querySelector('#footer').style.display = 'none'
@@ -204,10 +330,6 @@
 
   // account card
   @import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
-
-  // * {
-  //   box-sizing: border-box;
-  // }
 
   .account-div {
     // background: #f6f5f7;
@@ -346,7 +468,6 @@
   }
 
   @keyframes show {
-
     0%,
     49.99% {
       opacity: 0;

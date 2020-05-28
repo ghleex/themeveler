@@ -43,7 +43,8 @@ suffix = [
     '사자 ', '호랑이 ', '독수리 ', '개미핥기 ', '상어 ', '고양이 ', '기린 ',
     '치타 ', '표범 ', '코끼리 ', '고릴라 ', '원숭이 ', '강아지 ', '펭귄 ',
 ]
-p = re.compile('^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$')
+
+email_check = re.compile('^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$')
 
 def check_request(request, check_list):
     data = {}
@@ -52,10 +53,11 @@ def check_request(request, check_list):
         if not value:
             data[form] = ['이 필드는 필수항목 입니다.']
         elif form == 'username':
-            if p.match(value) == None:
-                data[form] = ['email 형식이 아닙니다.']
-        elif form == 'banning_period' and not value.isdigit():
-            data[form] = ['이 필드는 INT형식이여야 합니다.']
+            if email_check.match(value) == None:
+                data[form] = ['Email 형식이 아닙니다.']
+        elif form == 'banning_period':
+            if not value.isdigit():
+                data[form] = ['이 필드는 Int 형식이여야 합니다.']
     return data
 
 
@@ -63,6 +65,7 @@ def get_user(token, format=None):
     jwt_data = decoder(token[1])
     user = get_object_or_404(User, id=jwt_data['user_id'])
     return user
+
 
 @permission_classes((AllowAny, ))
 class EmailAuth(APIView):
@@ -74,7 +77,7 @@ class EmailAuth(APIView):
                 * username: Email 형식이어야 합니다.
                 * confirm_code: '-' 포함 12자리의 숫자입니다.
         """
-        if p.match(username) == None:
+        if email_check.match(username) == None:
             return Response({'message': ['username이 Email 형식이 아닙니다.']}, status=status.HTTP_400_BAD_REQUEST)
         if Waiting.objects.filter(username=username).exists():
             waiting_user = Waiting.objects.get(username=username)
@@ -85,10 +88,11 @@ class EmailAuth(APIView):
                     waiting_user.is_confirm = True
                     waiting_user.confirm_code = None
                     waiting_user.save()
-                    return Response({'message': ['메일 인증 성공.']})
+                    return Response({'message': ['메일 인증에 성공하였습니다..']})
                 else:
                     return Response({'message': ['유효시간이 지났습니다.']}, status=status.HTTP_400_BAD_REQUEST)
         return Response({'message': ['인증에 실패하였습니다.']}, status=status.HTTP_400_BAD_REQUEST)
+
 
 @permission_classes((AllowAny, ))
 class EmailSend(APIView):
@@ -150,7 +154,6 @@ class Nickname(APIView):
             * nickname: 최대 20자의 String을 받습니다.
     """
     def get(self, request, nickname, format=None):
-        print(nickname)
         data = {
             'nickname': nickname
         }
@@ -294,7 +297,8 @@ class SignIn(APIView):
                     sign_in_user.is_active = False
                     sign_in_user.save()
                     return Response({'message': ['해당 유저는 ' + str(sign_in_user.banning_period) + '까지 접근이 제한되었습니다.' ]}, status=status.HTTP_401_UNAUTHORIZED)
-        return obtain_jwt_token(request._request)
+        sign_result = obtain_jwt_token(request._request)
+        return Response({"nickname": sign_in_user.nickname, "token": obtain_jwt_token(request._request).data.get("token")})
 
 
 @permission_classes((IsAdminUser, ))
@@ -326,7 +330,7 @@ class UserBan(APIView):
         sign_in_user.banning_period = None
         sign_in_user.is_active = True
         sign_in_user.save()
-        return Response({'message': [sign_in_user.username + '의 정지처리가 취소되었습니다.']})
+        return Response({'message': [sign_in_user.username + '님의 정지처리가 취소되었습니다.']})
 
 
 @permission_classes((AllowAny, ))
@@ -483,8 +487,7 @@ class PasswordFind(APIView):
             # 내용
                 * username: Email 형식이어야 합니다.
         """
-        p = re.compile('^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$')
-        if p.match(username) == None:
+        if email_check.match(username) == None:
             return Response({'message': ['email 형식이 아닙니다.']}, status=status.HTTP_400_BAD_REQUEST)
         user = User.objects.filter(username=username).first()
         if user and user.username == username and user.has_usable_password():
