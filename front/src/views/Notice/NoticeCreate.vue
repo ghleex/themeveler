@@ -22,20 +22,20 @@
 </template>
 
 <script>
-// import axios from 'axios'
-import data from '@/views/Notice/data'
+import axios from 'axios'
+// import data from '@/views/Notice/data'
 
 export default {
   name: 'notice-create',
   data() {
     const index = this.$route.params.noticeId
     return {
-      data: data,
+      noticeData: [],
       index: index,
-      select: index !== undefined ? data[index].category : null,
-      title: index !== undefined ? data[index].title : "",
-      content: index !== undefined ? data[index].content : "",
-      writer: index !== undefined ? data[index].writer : "",
+      // select: index !== undefined ? noticeData[index].category : null,
+      // title: index !== undefined ? noticeData[index].title : "",
+      // content: index !== undefined ? noticeData[index].content : "",
+      // writer: index !== undefined ? noticeData[index].writer : "",
       valid: false,
       categoryRules: [[v => !!v || '분류를 선택해주세요']],
       titleRules: [
@@ -54,24 +54,38 @@ export default {
   },
   methods: {
     write() {
-      this.data.push({
-        category: this.select,
-        title: this.title,
-        content: this.content,
-        writer: this.writer,
-        createddate: this.createddate,
-      })
-      this.$router.push({
-        path: '/notice'
-      })
+      var noticeCreateForms = {
+        'category': this.select,
+        'title': this.title,
+        'content': this.content,
+        'writer': this.writer,
+        'writed_at': this.createddate,    
+      }
+      axios.post('/articles/theme_notice/', noticeCreateForms)
+        .then(
+          this.$router.push({
+            path: '/notice'
+          })
+        )
+        .catch(err => {
+          console.log(err)
+        })
     },
     update() {
-      data[this.index].category = this.select
-      data[this.index].title = this.title
-      data[this.index].content = this.content
-      this.$router.push({
-        path: `/notice/detail/${this.index}`
-      })
+      var noticeUpdateForms = {
+        'category': this.select,
+        'title': this.title,
+        'content': this.content
+      }
+      axios.put(`/articles/theme_notice/${this.index}`, noticeUpdateForms)
+        .then(
+          this.$router.push({
+            path: `/notice/detail/${this.index}`
+          })
+        )
+        .catch(err => {
+          console.log(err)
+        })
     },
     reset () {
       this.$refs.form.reset()
@@ -86,6 +100,12 @@ export default {
         path: `/notice/detail/${this.index}`
       })
     }
+  },
+  mounted() {
+    axios.get(`/articles/notice/${this.index}/`)
+      .then(response => {
+        this.noticeData = response.data['notice']
+      })
   }
 }
 </script>

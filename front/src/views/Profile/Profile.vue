@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import Drawer from '../components/Drawer.vue'
+import Drawer from '@/components/Drawer.vue'
 
 export default {
   name: 'Profile',

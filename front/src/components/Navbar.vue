@@ -65,35 +65,39 @@
       <v-spacer></v-spacer>
       <v-toolbar-items class="d-none d-md-block">
 
-        <v-btn text v-for="item in menuItems" :key="item.title" :to="item.path">
-
-          <div class="drop-yes" v-if="item.title == 'Contact'">
-            <v-icon class="mr-2">{{ item.icon }}</v-icon>
-            {{ item.title }}
+        <v-btn text to="/">
+          <div class="nav-link drop-no">
+            <v-icon class="mr-2">mdi-home</v-icon> Home
+          </div>
+        </v-btn>
+        <v-btn text to="/travel">
+          <div class="nav-link drop-no">
+            <v-icon class="mr-2">mdi-image-album</v-icon> Travel
+          </div>
+        </v-btn>
+        <v-btn text>
+          <div class="nav-link drop-yes">
+            <v-icon class="mr-2">mdi-account-supervisor-circle</v-icon> Contact
             <div class="dropdown-content">
               <a href="/notice" class="mt-2">공지사항</a>
               <hr class="my-2">
               <a href="/service" class="mb-2">고객센터</a>
             </div>
           </div>
-
-          <div class="drop-no" v-else>
-            <v-icon class="mr-2">{{ item.icon }}</v-icon>
-            {{ item.title }}
-          </div>
-
-          <!-- <div class="drop-no" v-if="item.title == 'Sign in'">
-            <div v-if="!this.$store.getters.isLoggedIn" @click="login()">
-              <v-icon class="mr-2">{{ item.icon }}</v-icon>
-              Login
-            </div>
-            <div v-else @click="logout()">
-              <v-icon class="mr-2">{{ item.icon }}</v-icon>
-              Logout
-            </div>
-          </div> -->
         </v-btn>
-
+        <v-btn text>
+          <div class="nav-link drop-no" v-if="!this.$store.getters.isLoggedIn" @click="login()">
+            <v-icon class="mr-2">mdi-login-variant</v-icon> Login
+          </div>
+          <div class="nav-link drop-no" v-else @click="logout()">
+            <v-icon class="mr-2">mdi-login-variant</v-icon> Logout
+          </div>
+        </v-btn>
+        <v-btn text v-if="this.$store.getters.isLoggedIn" @click="userpage">
+          <div class="nav-link drop-no">
+            <div class="nav-text">{{ username() }}님</div>
+          </div>
+        </v-btn>
       </v-toolbar-items>
     </v-toolbar>
   </div>
@@ -105,26 +109,6 @@
     data() {
       return {
         drawer: null,
-        menuItems: [{
-            title: 'Home',
-            icon: 'mdi-home',
-            path: '/'
-          },
-          {
-            title: 'Travel',
-            icon: 'mdi-image-album',
-            path: '/travel'
-          },
-          {
-            title: 'Contact',
-            icon: 'mdi-account-supervisor-circle'
-          },
-          {
-            title: 'Sign in',
-            icon: 'mdi-login-variant',
-            path: '/login'
-          },
-        ],
         items: [{
             title: 'Home',
             icon: 'mdi-home',
@@ -140,11 +124,32 @@
             icon: 'mdi-account-supervisor-circle'
           },
           {
-            title: 'Sign in',
+            title: 'Login',
             icon: 'mdi-login-variant',
             path: '/login'
           },
         ],
+      }
+    },
+    methods: {
+      login() {
+        this.$router.push({
+          path: '/login'
+        })
+      },
+      logout() {
+        if (this.$session.exists()) {
+          this.$session.destroy()
+        }
+        this.$store.dispatch('logout')
+      },
+      username() {
+        return this.$session.get('nickname')
+      },
+      userpage() {
+        this.$router.push({
+          path: '/profile'
+        })
       }
     }
   }
