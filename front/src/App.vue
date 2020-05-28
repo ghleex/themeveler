@@ -16,7 +16,19 @@ export default {
   components: {
     Navbar,
     Footer
-  }
+  },
+  data() {
+    return {
+
+    }
+  },
+  methods: {
+    logout() {
+      this.$session.destroy()
+      this.$store.dispatch("logout")
+      this.$router.push('/')
+    },
+  },
 }
 </script>
 
