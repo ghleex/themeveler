@@ -7,53 +7,40 @@ from django.db import models
 from django.forms import Textarea
 from django.utils.translation import ugettext_lazy
 from .models import Notice, VoiceCategory, CustomersVoice, ManagersReply, Comment, ReComment, ReportComment, ReportReComment
-# Register your models here.
-class ReportCommentInline(admin.TabularInline):
-    model = ReportComment
-    max_num = 5
-    extra = 2
-    formfield_overrides = {
-        models.TextField: {'widget': Textarea(attrs={'rows':3, 'cols':100 })},
-    }
-
-
-class ReportReCommentInline(admin.TabularInline):
-    model = ReportReComment
-    formfield_overrides = {
-        models.TextField: {'widget': Textarea(attrs={'rows':3, 'cols':100 })},
-    }
-
-
-class ReCommentInline(admin.TabularInline):
-    model = ReComment
-    extra = 5
-    formfield_overrides = {
-        models.TextField: {'widget': Textarea(attrs={'rows':3, 'cols':100 })},
-    }
+from .inlines import ReCommentInline, ReportCommentInline, ReportReCommentInline, ManagersReplyInline
+# Register your models here.    
         
+admin.ModelAdmin.list_per_page = 20
 
 @admin.register(Notice)
 class NoticeAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'content', 'writed_at', 'writer', 'theme',)
+    list_display_links = ('title',)
 
 
 @admin.register(VoiceCategory)
 class VoiceCategoryAdmin(admin.ModelAdmin):
     list_display = ('id', 'category',)
+    list_display_links = ('category',)
 
 
 @admin.register(CustomersVoice)
 class CustomersVoiceAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'content', 'category', 'request_user', 'manager', 'is_fixed',)
+    search_fields = ('manager__username', 'category', 'title',)
+    list_display_links = ('title',)
+    inlines = [
+        ManagersReplyInline,
+    ]
 
 
 @admin.register(ManagersReply)
 class ManagersReplyAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'content', 'voice', 'manager', 'is_fixed',)
+    list_display = ('id', 'title', 'content', 'voice', 'manager',)
 
 
 @admin.register(Comment)
-class ReportCommentAdmin(admin.ModelAdmin):
+class CommentAdmin(admin.ModelAdmin):
     def reports(self, obj):
         return ReportComment.objects.filter(comment_id=obj.id).count()
 
@@ -65,8 +52,10 @@ class ReportCommentAdmin(admin.ModelAdmin):
         return queryset
     reports.admin_order_field = '_reports'
 
-    list_display = ('id', 'content', 'writer', 'destination', 'writed_at', 'updated_at', 'reports')
-    list_per_page = 5
+    list_display = ('id', 'content', 'writer', 'destination', 'writed_at', 'updated_at', 'reports',)
+    search_fields = ('destination__name', 'writer__username',)
+    list_display_links = ('content',)
+    list_filter = ('writed_at', 'updated_at',)
     inlines = [
         ReCommentInline,
         ReportCommentInline
@@ -74,7 +63,7 @@ class ReportCommentAdmin(admin.ModelAdmin):
 
 
 @admin.register(ReComment)
-class ReportReCommentAdmin(admin.ModelAdmin):
+class ReCommentAdmin(admin.ModelAdmin):
     def reports(self, obj):
         return ReportReComment.objects.filter(re_comment_id=obj.id).count()
 
@@ -86,8 +75,10 @@ class ReportReCommentAdmin(admin.ModelAdmin):
         return queryset
     reports.admin_order_field = '_reports'
 
-    list_display = ('id', 'comment', 'writer', 'content', 'writed_at', 'updated_at', 'reports')
-    list_per_page = 5
+    list_display = ('id', 'comment', 'writer', 'content', 'writed_at', 'updated_at', 'reports',)
+    search_fields = ('comment__content', 'writer__username',)
+    list_display_links = ('comment',)
+    list_filter = ('writed_at', 'updated_at',)
     inlines = [
         ReportReCommentInline
     ]

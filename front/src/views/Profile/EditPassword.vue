@@ -43,6 +43,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import Drawer from '@/components/Drawer.vue'
 
 export default {
@@ -57,9 +58,18 @@ export default {
   },
   methods: {
     update() {
-      this.$router.push({
-        path: '/profile'
-      })
+      var passwordForms = {
+        'password': this.passwordselect
+      }
+      axios.put(`/accounts/password/`, passwordForms)
+        .then(
+          this.$router.push({
+            path: `/profile`
+          })
+        )
+        .catch(err => {
+          console.log(err)
+        })
     },
     updatecancel () {
       this.$router.push({
