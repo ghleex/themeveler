@@ -42,7 +42,7 @@
               <v-icon @click="checkNickname" style="padding-left:12px; padding-right:12px;">mdi-check</v-icon>
               <input type="password" name="pw" placeholder="Password" v-model="credentials.pw" />
               <input type="password" name="rpw" placeholder="Confirm Password" v-model="credentials.rpw" />
-              <button>Sign Up</button>
+              <button class="signupbtn">Sign Up</button>
             </form>
           </div>
           <div class="form-container sign-in-container">
@@ -56,7 +56,7 @@
               <input type="email" placeholder="Email" v-model="credentials.email" />
               <input type="password" placeholder="Password" v-model="credentials.pw" />
               <a href="#">Forgot your password?</a>
-              <button>Sign In</button>
+              <button class="loginbtn">Sign In</button>
             </form>
           </div>
           <div class="overlay-container">
@@ -104,25 +104,6 @@ import Swal from 'sweetalert2'
       }
     },
     methods: {
-      // 로그인 폼 체크
-      checkSignin() {
-        if (!this.credentials.email) {
-          Swal.fire({
-            title: "Check Email",
-            text: "이메일을 입력하세요.",
-            type: "warning",
-            timer: 3000
-          })
-        } else if (!this.credentials.pw) {
-          Swal.fire({
-            title: "Check Password",
-            text: "비밀번호를 입력하세요.",
-            type: "warning",
-            timer: 3000
-          })
-        }
-        // else {} // 검수 후 로그인
-      },
       // 회원가입 폼 체크
       checkSignup() {
         // 검증 form
@@ -257,6 +238,46 @@ import Swal from 'sweetalert2'
           .catch(err => {
             console.log(err)
           })
+      },
+      // 로그인 폼 체크
+      checkSignin() {
+        if (!this.credentials.email) {
+          Swal.fire({
+            title: "Check Email",
+            text: "이메일을 입력하세요.",
+            type: "warning",
+            timer: 3000
+          })
+        } else if (!this.credentials.pw) {
+          Swal.fire({
+            title: "Check Password",
+            text: "비밀번호를 입력하세요.",
+            type: "warning",
+            timer: 3000
+          })
+        }
+        // 검수 후 로그인
+        else {
+          var loginforms = new FormData()
+          loginforms.append('username', this.credentials.email)
+          loginforms.append('password', this.credentials.pw)
+          axios.post('/accounts/signin/', loginforms)
+            .then(response => {
+              console.log(response)
+              if (response.status === 200 && "token" in response.data) {
+                const token = response.data.token
+                this.$session.start()
+                this.$session.set("jwt", token)
+                this.$session.set("expire", Date.now() + 2592000)
+                this.$store.dispatch("login", token)
+                this.$store.commit("setToken", token)
+                this.$router.push('/')
+              }
+            })
+            .catch(err => {
+              console.log(err)
+            })
+        }
       },
       a() {
         document.querySelector('#footer').style.display = 'none'
