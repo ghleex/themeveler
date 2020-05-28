@@ -297,7 +297,8 @@ class SignIn(APIView):
                     sign_in_user.is_active = False
                     sign_in_user.save()
                     return Response({'message': ['해당 유저는 ' + str(sign_in_user.banning_period) + '까지 접근이 제한되었습니다.' ]}, status=status.HTTP_401_UNAUTHORIZED)
-        return obtain_jwt_token(request._request)
+        sign_result = obtain_jwt_token(request._request)
+        return Response({"nickname": sign_in_user.nickname, "token": obtain_jwt_token(request._request).data.get("token")})
 
 
 @permission_classes((IsAdminUser, ))

@@ -67,7 +67,7 @@ export default {
   },
   methods: {
     deleteData() {
-      axios.delete(`/notice/${this.index}`)
+      axios.delete(`/articles/notice/${this.index}`)
         .then(
           this.$router.push({
             path: '/notice'
@@ -76,7 +76,7 @@ export default {
     },
     updateData() {
       this.$router.push({
-        path: `/notice/create/${this.index}`
+        path: `/articles/notice/create/${this.index}`
       })
     },
     back() {

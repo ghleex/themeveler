@@ -50,16 +50,9 @@ class VisitedThemes(APIView):
         user = get_user(request.headers['Authorization'].split(' '))
         try:
             themes = user.visited_themes.all()
-            theme = [] 
+            theme = [ThemeSerializer(t).data for t in themes] 
             fav_themes = user.favorite_themes.all()
-            fav_theme = []
-
-            for t in themes:
-                serializer_t = ThemeSerializer(t)
-                theme.append(serializer_t.data)
-            for ft in fav_themes:
-                serializer_ft = ThemeSerializer(ft)
-                fav_theme.append(serializer_ft.data)
+            fav_theme = [ThemeSerializer(ft).data for ft in fav_themes]
 
             data = {
                 'message': 'ok',
@@ -102,15 +95,10 @@ class VisitedDest(APIView):
         user = get_user(request.headers['Authorization'].split(' '))
         try:
             dests = user.dests.all()
+            dest = [DestinationSerializer(d).data for d in dests]            
             fav_dests = user.favorite_destinations.all()
-            dest = []
-            fav_dest = []
-            for d in dests:
-                serializer_d = DestinationSerializer(d)
-                dest.append(serializer_d.data)
-            for fd in fav_dests:
-                serializer_fd = DestinationSerializer(fd)
-                fav_dest.append(serializer_fd.data)
+            fav_dest = [DestinationSerializer(fd).data for fd in fav_dests]
+
             data = {                
                 'visited_dests': dest,
                 'favorite_dests': fav_dest,
@@ -153,10 +141,7 @@ class Like(APIView):
         theme = self.get_theme(theme_pk)
         try:
             likes = theme.theme_like_users.all()
-            users = []
-            for l in likes:
-                serializer = UserNicknameSerializer(l)
-                users.append(serializer.data)
+            users = [UserNicknameSerializer(l).data for l in likes]
             data = {
                 'like_users_count': theme.theme_like_users.count(),
                 'like_users': users,
@@ -219,3 +204,34 @@ class Chatting(APIView):
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data)
+
+
+# @permission_classes((IsAuthenticated,))
+class TravelTheme(APIView):
+    # @swagger_auto_schema(query_serializer=ThemeSerializer)
+    def get(self, request, theme_pk, format=None):
+        start = get_object_or_404(Theme, pk=theme_pk).start()
+        data = {
+            'start': start.name
+        }
+        return Response(data)
+    
+    def get_all_theme(self, request):
+        all_theme = ThemeSerializer(Theme.objects.all())
+        if not all_theme:
+            return Response('Theme is not existed', status=status.HTTP_400_BAD_REQUEST)
+        data = {
+            'all_theme': all_theme
+        }
+        return Response(data)
+
+    def filter_theme(self, request, region):
+        filtered_theme = ThemeSerializer(Theme.objects.filter(region=region))
+        if not filtered_theme:
+            return Response('Theme is not existed', status=status.HTTP_400_BAD_REQUEST)
+        data = {
+            'filtered_theme': filtered_theme
+        }
+        return Response(data)
+        
+    
