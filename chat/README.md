@@ -1,4 +1,5 @@
 # chat
+npm install vue-moment 사용햇습니다.
 
 가져가실 때
 fornt에서
