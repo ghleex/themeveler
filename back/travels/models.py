@@ -49,9 +49,6 @@ class Message(models.Model):
     message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
-    class Meta:
-        ordering = ('-pk',)
-
 
 class DestContent(models.Model):
     theme = models.ForeignKey(Theme, on_delete=models.CASCADE) # Content.objects.get(theme=theme_id, destination=destination_id)
