@@ -1,6 +1,6 @@
 [TOC]
 
-![title](https://user-images.githubusercontent.com/52685206/83114412-e2302000-a103-11ea-839a-77912e14e147.png)
+![title](https://user-images.githubusercontent.com/52685206/83119054-31794f00-a10a-11ea-8db3-99f5ca4ced45.png)
 
 
 
@@ -66,7 +66,7 @@ $ npm install
 #### 1. npm 사용 시
 
 ```bash
-$ npm run serve
+$ npm run server
 ```
 
 #### 2. yarn 사용 시
