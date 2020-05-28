@@ -210,10 +210,17 @@ class Chatting(APIView):
 class TravelTheme(APIView):
     # @swagger_auto_schema(query_serializer=ThemeSerializer)
     def get(self, request, theme_pk, format=None):
-        start = get_object_or_404(Theme, pk=theme_pk).start()
+        theme = Theme.objects.filter(pk=theme_pk)[0]
+        destination_pk = theme.dests[0]
+        first_dest = Destination.objects.filter(pk=destination_pk)[0]
+        theme = ThemeSerializer(theme)
+        dest = DestinationSerializer(first_dest)
+        
         data = {
-            'start': start.name
+            'theme': theme.data,
+            'first_dest': dest.data
         }
+        
         return Response(data)
     
     def get_all_theme(self, request):
