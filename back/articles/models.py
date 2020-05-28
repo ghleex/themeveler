@@ -10,7 +10,7 @@ class Notice(models.Model):
     writed_at = models.DateTimeField(auto_now_add=True) # date will be set when it's created
     updated_at = models.DateTimeField(auto_now=True)
     writer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_notices') # User.user_notices.all() 
-    theme = models.ForeignKey(Theme, on_delete=models.CASCADE, related_name='theme_notices') # Theme.theme_notices.all()
+    theme = models.ForeignKey(Theme, null=True, on_delete=models.CASCADE, related_name='theme_notices') # Theme.theme_notices.all()
     isNoticeAll = models.BooleanField(default=False)
 
     def __str__(self):
