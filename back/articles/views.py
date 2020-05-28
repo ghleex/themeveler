@@ -293,6 +293,27 @@ class Notices(APIView):
             'notice': notice,
         }
         return Response(data, status=status.HTTP_200_OK)
+
+
+@permission_classes((AllowAny, ))
+class NoticeView(APIView):
+    """
+        개별 공지사항 보기
+
+        ---
+    """
+    def get_object(self, notice_pk, format=None):
+        return get_object_or_404(Notice, pk=notice_pk)
+
+    def get(self, request, notice_pk, format=None):
+        try:
+            notice = self.get_object(notice_pk)
+            data = {
+                'notice': NoticeSerializer(notice).data
+            }
+            return Response(data, status=status.HTTP_200_OK)
+        except:
+            return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
     
 
 @permission_classes((IsAuthenticated, ))
