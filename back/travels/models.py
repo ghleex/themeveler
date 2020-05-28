@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django_mysql.models import ListTextField
+from django.shortcuts import get_object_or_404
 
 # Create your models here.
 class Theme(models.Model):
@@ -18,6 +19,14 @@ class Theme(models.Model):
 
     def __str__(self):
         return self.name
+
+    def start(self):
+        for num in self.dests:
+            print(type(num))
+            print(num)
+            print()
+        start_pk = int(self.dests[0])
+        return get_object_or_404(Destination, pk=start_pk)
     
 
 class Destination(models.Model):
@@ -39,9 +48,6 @@ class Message(models.Model):
     nickname = models.CharField(blank=False, max_length=20)
     message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ('-pk',)
 
 
 class DestContent(models.Model):

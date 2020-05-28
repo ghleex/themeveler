@@ -10,12 +10,17 @@ class Notice(models.Model):
     writed_at = models.DateTimeField(auto_now_add=True) # date will be set when it's created
     updated_at = models.DateTimeField(auto_now=True)
     writer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_notices') # User.user_notices.all() 
-    theme = models.ForeignKey(Theme, on_delete=models.CASCADE, related_name='theme_notices') # Theme.theme_notices.all()
+    theme = models.ForeignKey(Theme, null=True, on_delete=models.CASCADE, related_name='theme_notices') # Theme.theme_notices.all()
     isNoticeAll = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.title
 
 class VoiceCategory(models.Model):
     category = models.CharField(max_length=50)
+    
+    def __str__(self):
+        return self.category
 
 
 class CustomersVoice(models.Model):
@@ -32,7 +37,7 @@ class CustomersVoice(models.Model):
         ordering = ('-pk',)
 
     def __str__(self):
-        return self.category
+        return self.title
 
 
 class ManagersReply(models.Model):
@@ -42,10 +47,12 @@ class ManagersReply(models.Model):
     manager = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='replys_manager') # User.replys_manager.all()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
-    is_fixed = models.ForeignKey(CustomersVoice, on_delete=models.CASCADE, related_name='fixes') # CustomersVoice.fixes.all()
     
     class Meta:
         ordering = ('-pk',)
+
+    def __str__(self):
+        return self.title
 
 
 class Comment(models.Model):
@@ -84,7 +91,10 @@ class ReportComment(models.Model):
     class Meta:
         ordering = ('-pk',)
 
+    def __str__(self):
+        return self.report_text
         
+
 class ReportReComment(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     re_comment = models.ForeignKey(ReComment, on_delete=models.CASCADE)
@@ -92,3 +102,6 @@ class ReportReComment(models.Model):
 
     class Meta:
         ordering = ('-pk',)    
+
+    def __str__(self):
+        return self.report_text

@@ -13,6 +13,7 @@ class User(AbstractUser):
     banning_period = models.DateField(blank=True, null=True)
     favorite_themes = models.ManyToManyField(Theme, blank=True, related_name='theme_like_users') # Theme.theme_like_users.all()
     favorite_destinations = models.ManyToManyField(Destination, blank=True, related_name='destination_like_users') # Destination.destination_like_users.all()
+    REQUIRED_FIELDS = ('nickname', 'anonymous',)
 
 
 class Waiting(models.Model):
