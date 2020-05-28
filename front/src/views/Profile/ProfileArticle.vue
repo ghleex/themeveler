@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import Drawer from '../components/Drawer.vue'
+import Drawer from '@/components/Drawer.vue'
 import data from '@/views/Notice/data'
 
 export default {

@@ -9,7 +9,7 @@
         <v-select v-model="select" :items="categorys" :rules="categoryRules" label="분류" required></v-select>
         <v-text-field v-model="title" :counter="30" :rules="titleRules" label="제목" required></v-text-field>
         <v-textarea v-model="content" :rules="contentRules" label="내용" class="mt-4" outlined></v-textarea>
-        <v-text-field v-model=" writer" label="작성자" disabled></v-text-field>
+        <v-text-field v-model="writer" label="작성자" disabled></v-text-field>
         <v-btn :disabled="!valid" color="success" class="mr-4 btn" 
           @click="index !== undefined ? update() : write()">{{index !== undefined ? '수정' : '작성'}}
           <i class="fas fa-check-circle ml-1"></i></v-btn>
@@ -22,20 +22,20 @@
 </template>
 
 <script>
-// import axios from 'axios'
-import data from '@/views/Notice/data'
+import axios from 'axios'
+// import data from '@/views/Notice/data'
 
 export default {
   name: 'notice-create',
   data() {
     const index = this.$route.params.noticeId
     return {
-      data: data,
+      noticeData: [],
       index: index,
-      select: index !== undefined ? data[index].category : null,
-      title: index !== undefined ? data[index].title : "",
-      content: index !== undefined ? data[index].content : "",
-      writer: index !== undefined ? data[index].writer : "",
+      // select: index !== undefined ? noticeData[index].category : null,
+      // title: index !== undefined ? noticeData[index].title : "",
+      // content: index !== undefined ? noticeData[index].content : "",
+      // writer: index !== undefined ? noticeData[index].writer : "",
       valid: false,
       categoryRules: [[v => !!v || '분류를 선택해주세요']],
       titleRules: [
@@ -54,24 +54,38 @@ export default {
   },
   methods: {
     write() {
-      this.data.push({
-        category: this.select,
-        title: this.title,
-        content: this.content,
-        writer: this.writer,
-        createddate: this.createddate,
-      })
-      this.$router.push({
-        path: '/notice'
-      })
+      var noticeCreateForms = {
+        'category': this.select,
+        'title': this.title,
+        'content': this.content,
+        'writer': this.writer,
+        'writed_at': this.writed_at,    
+      }
+      axios.post('/articles/theme_notice/', noticeCreateForms)
+        .then(
+          this.$router.push({
+            path: '/notice'
+          })
+        )
+        .catch(err => {
+          console.log(err)
+        })
     },
     update() {
-      data[this.index].category = this.select
-      data[this.index].title = this.title
-      data[this.index].content = this.content
-      this.$router.push({
-        path: `/notice/detail/${this.index}`
-      })
+      var noticeUpdateForms = {
+        'category': this.select,
+        'title': this.title,
+        'content': this.content
+      }
+      axios.put(`/articles/theme_notice/${this.index}`, noticeUpdateForms)
+        .then(
+          this.$router.push({
+            path: `/notice/detail/${this.index}`
+          })
+        )
+        .catch(err => {
+          console.log(err)
+        })
     },
     reset () {
       this.$refs.form.reset()
@@ -86,6 +100,12 @@ export default {
         path: `/notice/detail/${this.index}`
       })
     }
+  },
+  mounted() {
+    axios.get(`/articles/notices/${this.index}/`)
+      .then(response => {
+        this.noticeData = response.data['notice']
+      })
   }
 }
 </script>

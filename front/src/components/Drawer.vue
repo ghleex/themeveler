@@ -39,6 +39,7 @@ export default {
       drawer: true,
       items: [
         { title: '마이페이지', icon: 'mdi-view-dashboard', path: "/profile" },
+        { title: '비밀번호변경', icon: 'mdi-account-edit', path: "/editpassword" },
         { title: '회원정보수정', icon: 'mdi-account-edit', path: "/editprofile" },
         { title: '내가 작성한 글', icon: 'mdi-inbox-full', path: "/profile/article" },
         { title: '내가 작성한 댓글', icon: 'mdi-comment-text', path: "/profile/comment" },
