@@ -91,9 +91,9 @@ export default {
     }
   },
   mounted() {
-    axios.get(`/notice/${this.index}`)
+    axios.get(`/articles/notice/${this.index}/`)
       .then(response => {
-        this.notice = response.data  
+        this.notice = response.data
       })
       .catch(err => {
         console.log(err)
