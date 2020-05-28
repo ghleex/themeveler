@@ -76,9 +76,9 @@ export default {
     }
   },
   mounted() {
-    axios.get('/notice')
+    axios.get('/articles/notices/')
       .then(response => {
-        this.noticeData = response.data  
+        this.noticeData = response.data["notice"]
       })
       .catch(err => {
         console.log(err)

@@ -1,7 +1,12 @@
 <template>
   <div class="header">
-    <v-btn style="position:absolute; margin-top:70px; left:20%; z-index:2;" color="primary" outlined to="/profile">
-      유저페이지>>>>임시버튼</v-btn>
+    <v-btn style="position:absolute; margin-top:70px; right:15%; z-index:2;" color="primary" outlined to="/profile">
+      유저페이지</v-btn>
+    <v-btn style="position:absolute; margin-top:70px; right:5%; z-index:2;" color="primary" v-if="!this.$store.getters.isLoggedIn" @click="login">
+      로그인</v-btn>
+    <v-btn style="position:absolute; margin-top:70px; right:5%; z-index:2;" color="primary" v-else @click="logout">
+      로그아웃</v-btn>
+
     <div class="home-search-bar">
       <SearchBar />
     </div>
@@ -12,7 +17,6 @@
         </v-carousel-item>
       </v-carousel>
     </div><br><br>
-
 
 
 
@@ -284,6 +288,15 @@
         this.imgUrl = imgUrl
         this.dialog = true
       },
+      login() {
+        this.$router.push('/login')
+      },
+      logout() {
+        if (this.$session.exists()) {
+          this.$session.destroy()
+        }
+        this.$store.dispatch('logout')
+      }
     },
     mounted() {
       this.a()
