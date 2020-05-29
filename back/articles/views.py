@@ -421,6 +421,7 @@ class Notices(APIView):
             serializer_n = NoticeSerializer(n).data
             writer = serializer_n['writer']
             noti = {
+                'id': serializer_n['id'],
                 'title': serializer_n['title'],
                 'category': serializer_n['category'],
                 'writer_id': writer,
