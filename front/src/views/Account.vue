@@ -55,7 +55,7 @@
               <span>or use your account</span>
               <input type="email" placeholder="Email" v-model="credentials.email" />
               <input type="password" placeholder="Password" v-model="credentials.pw" />
-              <a href="#">Forgot your password?</a>
+              <a @click="forgotPassword">Forgot your password?</a>
               <button class="loginbtn">Sign In</button>
             </form>
           </div>
@@ -170,20 +170,10 @@ import Swal from 'sweetalert2'
               if (response.status==200) {
                 alert('회원가입이 완료되었습니다.')
                 // 회원가입 후 자동로그인
-                const loginforms = {
-                  'username': this.credentials.email,
-                  'password': this.credentials.pw
-                }
-                axios.post('/accounts/signin/', loginforms)
-                  .then(response => {
-                    const token = response.data.token
-                    this.$session.start()
-                    this.$session.set('jwt', token)
-                    this.$session.set("nickname", response.data.nickname)
-                    this.$store.dispatch('login', token)
-                    this.$store.commit('setToken', token)
-                    this.$router.push('/')
-                  })
+                var loginforms = new FormData()
+                loginforms.append('username', this.credentials.email)
+                loginforms.append('password', this.credentials.pw)
+                this.$emit('login', loginforms)
               }
               else {
                 alert('비밀번호가 너무 일상적인 단어입니다.')
@@ -284,6 +274,18 @@ import Swal from 'sweetalert2'
         var mailForm =
           /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;        return mailForm.test(email);
       },
+      forgotPassword() {
+        if (this.validEmail(this.credentials.email)) {
+          axios.get(`/accounts/password/${this.credentials.email}/`)
+          .then(response => {
+            console.log(response)
+            alert('해당 이메일로 새로운 비밀번호가 전송되었습니다.')
+          })
+        }
+        else {
+          alert('이메일 형식이 아닙니다.')
+        }
+      }
     },
     mounted() {
       // footer none
