@@ -207,6 +207,7 @@ class Chatting(APIView):
 
 
 # @permission_classes((IsAuthenticated,))
+@permission_classes((IsAuthenticated,))
 class TravelTheme(APIView):
     # @swagger_auto_schema(query_serializer=ThemeSerializer)
     def get(self, request, theme_pk, format=None):
