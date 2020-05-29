@@ -170,7 +170,19 @@ import Swal from 'sweetalert2'
               if (response.statusText=="OK") {
                 alert('회원가입이 완료되었습니다.')
                 // 회원가입 후 자동로그인
-
+                const loginforms = {
+                  'username': this.credentials.email,
+                  'password': this.credentials.pw
+                }
+                axios.post('/accounts/signin/', loginforms)
+                  .then(response => {
+                    const token = response.data.token
+                    this.$session.start()
+                    this.$session.set('jwt', token)
+                    this.$session.set("nickname", response.data.nickname)
+                    this.$store.dispatch('login', token)
+                    this.$store.commit('setToken', token)
+                  })
               }
               else {
                 alert('비밀번호가 너무 일상적인 단어입니다.')
@@ -227,7 +239,7 @@ import Swal from 'sweetalert2'
       checkEmailCert() {
         axios.get(`/accounts/email/auth/${this.credentials.email}/${this.emailcertcode}/`)
           .then(response => {
-            if (response.statusText=="OK") {
+            if (response.status=="200") {
               this.dialog=false
               alert('이메일 인증이 완료되었습니다.')
             }
@@ -261,22 +273,7 @@ import Swal from 'sweetalert2'
           var loginforms = new FormData()
           loginforms.append('username', this.credentials.email)
           loginforms.append('password', this.credentials.pw)
-          axios.post('/accounts/signin/', loginforms)
-            .then(response => {
-              console.log(response)
-              if (response.status === 200 && "token" in response.data) {
-                const token = response.data.token
-                this.$session.start()
-                this.$session.set("jwt", token)
-                this.$session.set("expire", Date.now() + 2592000)
-                this.$store.dispatch("login", token)
-                this.$store.commit("setToken", token)
-                this.$router.push('/')
-              }
-            })
-            .catch(err => {
-              console.log(err)
-            })
+          this.$emit('login', loginforms)
         }
       },
       a() {

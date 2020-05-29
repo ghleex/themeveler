@@ -6,14 +6,14 @@
     </div>
     <div class="notice-body">
       <div class="body1">
-        <p class="notice-body-title"><strong>{{notice.title}}</strong></p>
+        <p class="notice-body-title"><strong>{{noticeData.title}}</strong></p>
       </div>
       <div class="body2">
-        <p class="notice-writer"><i class="fas fa-user"></i> {{notice.writer}}</p>
-        <p class="notice-createddate"><i class="far fa-clock"></i> {{notice.createddate.slice(0, 16)}}</p>
+        <p class="notice-writer"><i class="fas fa-user"></i> {{noticeData.writer}}</p>
+        <p class="notice-createddate"><i class="far fa-clock"></i> {{noticeData.writed_at.slice(0, 16)}}</p>
       </div>
       <div class="body3">
-        <div class="notice-content">{{notice.content}}</div>
+        <div class="notice-content">{{noticeData.content}}</div>
       </div>
       <div class="notice-detail-btn">
         <v-divider></v-divider>
@@ -54,7 +54,7 @@ export default {
   data() {
     const index = this.$route.params.noticeId
     return {
-      notice: [],
+      noticeData: [],
       index: index,
       valid: false,
       commentRules: [
@@ -67,7 +67,7 @@ export default {
   },
   methods: {
     deleteData() {
-      axios.delete(`/articles/notice/${this.index}`)
+      axios.delete(`/articles/notice/${this.index}/`)
         .then(
           this.$router.push({
             path: '/notice'
@@ -91,9 +91,9 @@ export default {
     }
   },
   mounted() {
-    axios.get(`/notice/${this.index}`)
+    axios.get(`/articles/notices/${this.index}/`)
       .then(response => {
-        this.notice = response.data  
+        this.noticeData = response.data['notice']
       })
       .catch(err => {
         console.log(err)

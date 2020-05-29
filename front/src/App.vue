@@ -1,13 +1,13 @@
 <template>
   <v-app id="app">
-    <Navbar />
-    <router-view></router-view>
+    <Navbar v-on:login="login" />
+    <router-view v-on:login="login"></router-view>
     <Footer />
   </v-app>
 </template>
 
 <script>
-// import axios from 'axios'
+import axios from 'axios'
 import Navbar from './components/Navbar.vue'
 import Footer from './components/Footer.vue'
 
@@ -28,7 +28,40 @@ export default {
       this.$store.dispatch("logout")
       this.$router.push('/')
     },
+    login(loginforms) {
+      axios.post('/accounts/signin/', loginforms)
+        .then(response => {
+          console.log(response)
+          if (response.status === 200 && "token" in response.data) {
+            const token = response.data.token
+            this.$session.start()
+            this.$session.set("jwt", token)
+            this.$session.set("nickname", response.data.nickname)
+            this.$session.set("expire", Date.now() + 21600)
+            this.$store.dispatch("login", token)
+            this.$store.commit("setToken", token)
+            this.$router.push('/')
+          }
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
   },
+  mounted() {
+    if (localStorage.getItem("vue-session-key")) {
+      let stored = JSON.parse(localStorage.getItem("vue-session-key"));
+      this.$store.dispatch("login", stored.jwt);
+      this.$store.commit("setToken", stored.jwt);
+    }
+    // sessionTimeout() {
+    //   if (this.$session.exists()) {
+    //     if (this.$session.getItem("expire") < Date.now()) {
+    //       this.logout()
+    //     }
+    //   }
+    // }
+  }
 }
 </script>
 
