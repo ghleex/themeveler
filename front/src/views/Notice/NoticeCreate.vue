@@ -43,18 +43,26 @@ export default {
       categorys: [
         '일반',
         '중요',
-        '테마',
-        '장소',
+        '테마'
       ]
     }
   },
   methods: {
     write() {
+      if (this.select === "일반") {
+        this.select = 1
+      } else if (this.select === "중요") {
+        this.select = 2
+      } else if (this.select === "테마") {
+        this.select = 3
+      }
+
       var noticeCreateForms = {
-        'category': this.select,
+        'category_id': this.select,
         'title': this.title,
         'content': this.content,
-        'writer': this.$session.get("nickname"),
+        'writer_id': this.$store.getters.user_id,
+        'isNoticeAll': 1,
         // 'writed_at': Date.Now()
       }
       const requestHeader = this.$store.getters.requestHeader
