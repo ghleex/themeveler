@@ -292,7 +292,6 @@
         })
         // console.log(themeId[0].id)
         const requestHeader = this.$store.getters.requestHeader
-        console.log(requestHeader)
         axios.get(`/travels/start/${themeId[0].id}`, requestHeader)
           .then(response => {
             console.log(response)

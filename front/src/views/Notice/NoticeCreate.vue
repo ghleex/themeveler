@@ -11,9 +11,9 @@
         <v-textarea v-model="content" :rules="contentRules" label="내용" class="mt-4" outlined></v-textarea>
         <v-text-field v-model="writer" label="작성자" disabled></v-text-field>
         <v-btn :disabled="!valid" color="success" class="mr-4 btn" 
-          @click="index !== undefined ? update() : write()">{{index !== undefined ? '수정' : '작성'}}
+          @click="noticeId !== undefined ? update() : write()">{{noticeId !== undefined ? '수정' : '작성'}}
           <i class="fas fa-check-circle ml-1"></i></v-btn>
-        <v-btn color="error" class="btn" @click="index !== undefined ? updatecancel() : addcancel()">취소
+        <v-btn color="error" class="btn" @click="noticeId !== undefined ? updatecancel() : addcancel()">취소
           <i class="fas fa-times-circle ml-1"></i>
         </v-btn>
       </v-form>
@@ -23,20 +23,16 @@
 
 <script>
 import axios from 'axios'
-// import data from '@/views/Notice/data'
 
 export default {
   name: 'notice-create',
   data() {
-    const index = this.$route.params.noticeId
     return {
-      noticeData: [],
-      index: index,
-      select: index !== undefined ? this.noticeData[index].category : null,
-      title: index !== undefined ? this.noticeData[index].title : "",
-      content: index !== undefined ? this.noticeData[index].content : "",
-      writer: index !== undefined ? this.noticeData[index].writer : "",
-      writed_at: index !== undefined ? this.noticeData[index].writed_at : "",
+      noticeId: "",
+      select: null,
+      title: "",
+      content: "",
+      writer: this.$session.get("nickname"),
       valid: false,
       categoryRules: [[v => !!v || "분류를 선택해주세요"]],
       titleRules: [
@@ -58,11 +54,11 @@ export default {
         'category': this.select,
         'title': this.title,
         'content': this.content,
-        'writer': this.writer,
-        'writed_at': this.writed_at,
+        'writer': this.$session.get("nickname"),
+        // 'writed_at': Date.Now()
       }
       const requestHeader = this.$store.getters.requestHeader
-      axios.post('/articles/theme_notice/', requestHeader, noticeCreateForms)
+      axios.post('/articles/theme_notice/', noticeCreateForms, requestHeader)
         .then(
           this.$router.push({
             path: '/notice'
@@ -76,12 +72,14 @@ export default {
       var noticeUpdateForms = {
         'category': this.select,
         'title': this.title,
-        'content': this.content
+        'content': this.content,
+        // 'updated_at': Date.Now()
       }
-      axios.put(`/articles/theme_notice/${this.index}/`, noticeUpdateForms)
+      const requestHeader = this.$store.getters.requestHeader
+      axios.put(`/articles/theme_notice/${this.noticeId}/`, noticeUpdateForms, requestHeader)
         .then(
           this.$router.push({
-            path: `/notice/detail/${this.index}`
+            path: `/notice/detail/${this.noticeId}`
           })
         )
         .catch(err => {
@@ -98,18 +96,29 @@ export default {
     },
     updatecancel () {
       this.$router.push({
-        path: `/notice/detail/${this.index}`
+        path: `/notice/detail/${this.noticeId}`
       })
     }
   },
   mounted() {
-    axios.get(`/articles/notices/${this.index}/`)
-      .then(response => {
-        this.noticeData = response.data['notice']
-      })
-      .catch(err => {
-        console.log(err)
-      })
+    this.noticeId = this.$route.params.noticeId
+    if (this.noticeId !== undefined) {
+      axios.get(`/articles/notices/${this.noticeId}/`)
+        .then(response => {
+          if (response.data['notice'].writer_name !== this.$session.get("nickname")) {
+            alert("수정 권한이 없습니다.")
+            this.$router.push("/notice")
+          } else {
+            this.select = response.data['notice'].category
+            this.title = response.data['notice'].title
+            this.content = response.data['notice'].content
+            this.writer = response.data['notice'].writer_name
+          }
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
   }
 }
 </script>
