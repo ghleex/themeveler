@@ -15,9 +15,11 @@ import EditProfile from './views/Profile/EditProfile.vue'
 import ProfileArticle from './views/Profile/ProfileArticle.vue'
 import ProfileComment from './views/Profile/ProfileComment.vue'
 import ProfileTest from './views/Profile/ProfileTest.vue'
-import Travel from './views/Travel.vue'
+import Travel from './views/Travel/Travel.vue'
+import TravelDetail from './views/Travel/TravelDetail.vue'
 // import Map from './views/Map/Map.vue'
 import Error404 from './views/Error404.vue'
+import CheckToken from './views/Social/CheckToken.vue'
 
 Vue.use(VueRouter)
 
@@ -103,6 +105,11 @@ const routes = [
     name: 'travel',
     component: Travel
   },
+  {
+    path: '/travel/:travelId',
+    name: 'travel-detail',
+    component: TravelDetail
+  },
   // {
   //   path: '/map',
   //   name: 'map',
@@ -116,7 +123,12 @@ const routes = [
     path: '*',
     name: 'error404',
     component: Error404
-  }
+  },
+  {
+    path: '/checktoken/:nickname/:token',
+    name: 'checkToken',
+    component: CheckToken
+  },
 ]
 
 const router = new VueRouter({

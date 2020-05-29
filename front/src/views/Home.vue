@@ -1,8 +1,7 @@
 <template>
   <div class="header">
-    <!-- <v-btn style="position:absolute; margin-top:70px; right:15%; z-index:2;" color="primary" outlined to="/profile">
-      유저페이지</v-btn> -->
-
+    <v-btn style="position:absolute; margin-top:70px; left:20%; z-index:2;" color="primary" outlined to="/profile">
+      유저페이지>>>>임시버튼</v-btn>
     <div class="home-search-bar">
       <SearchBar />
     </div>
@@ -13,6 +12,7 @@
         </v-carousel-item>
       </v-carousel>
     </div><br><br>
+
 
 
 
@@ -125,7 +125,7 @@
 
 
     <!-- 인기 여행지 -->
-    <div class="pop-box">
+    <!-- <div class="pop-box">
       <div class="main-section">
         <h2 class="home-h2-title text-center ml-0"><i class="fas fa-bus-alt mr-2"></i>인기 여행지</h2>
         <v-sheet class="mx-auto" max-width="100vw">
@@ -135,7 +135,6 @@
               <v-card class="home-destination-card" min-height="290px" max-height="30vw" min-width="218px"
                 max-width="30vw" @click="toggle">
                 <div>
-                  <!-- <div class="home-card-destination-name pt-2 text-light">여행지</div> -->
                   <div class="home-card-destination-header">
                     <div class="home-card-title">
                       <i class="fas fa-bus-alt mr-1"></i>
@@ -152,10 +151,10 @@
           </v-slide-group>
         </v-sheet>
       </div>
-    </div>
+    </div> -->
 
     <HowToUse></HowToUse>
-
+    <TopScroll></TopScroll>
   </div>
 </template>
 
@@ -163,12 +162,14 @@
   import axios from 'axios'
   import SearchBar from '../components/SearchBar.vue'
   import HowToUse from '../components/HowToUse.vue'
+  import TopScroll from '../components/TopScroll.vue'
 
   export default {
     name: 'Home',
     components: {
       SearchBar,
       HowToUse,
+      TopScroll,
     },
     data() {
       return {
