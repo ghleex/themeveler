@@ -18,6 +18,7 @@ import ProfileTest from './views/Profile/ProfileTest.vue'
 import Travel from './views/Travel.vue'
 // import Map from './views/Map/Map.vue'
 import Error404 from './views/Error404.vue'
+import CheckToken from './views/Social/CheckToken.vue'
 
 Vue.use(VueRouter)
 
@@ -116,7 +117,12 @@ const routes = [
     path: '*',
     name: 'error404',
     component: Error404
-  }
+  },
+  {
+    path: '/checktoken/:nickname/:token',
+    name: 'checkToken',
+    component: CheckToken
+  },
 ]
 
 const router = new VueRouter({
