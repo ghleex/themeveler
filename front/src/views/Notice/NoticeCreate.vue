@@ -32,7 +32,7 @@ export default {
       select: null,
       title: "",
       content: "",
-      writer: this.$session.get("nickname"),
+      writer: "",
       valid: false,
       categoryRules: [[v => !!v || "분류를 선택해주세요"]],
       titleRules: [
@@ -58,26 +58,34 @@ export default {
       }
 
       var noticeCreateForms = {
-        'category_id': this.select,
+        'category': this.select,
         'title': this.title,
         'content': this.content,
-        'writer_id': this.$store.getters.user_id,
+        'writer': this.$store.getters.user_id,
         'isNoticeAll': 1,
         // 'writed_at': Date.Now()
       }
+      console.log(noticeCreateForms)
       const requestHeader = this.$store.getters.requestHeader
       axios.post('/articles/theme_notice/', noticeCreateForms, requestHeader)
-        .then(response => {
-          console.log(response.data)
+        .then(
           this.$router.push({
             path: '/notice'
           })
-        })
+        )
         .catch(err => {
           console.log(err)
         })
     },
     update() {
+      if (this.select === "일반") {
+        this.select = 1
+      } else if (this.select === "중요") {
+        this.select = 2
+      } else if (this.select === "테마") {
+        this.select = 3
+      }
+
       var noticeUpdateForms = {
         'category': this.select,
         'title': this.title,
@@ -114,14 +122,14 @@ export default {
     if (this.noticeId !== undefined) {
       axios.get(`/articles/notices/${this.noticeId}/`)
         .then(response => {
-          if (response.data['notice'].writer_name !== this.$session.get("nickname")) {
+          if (response.data['notice'].writer !== this.$store.getters.user_id) {
             alert("수정 권한이 없습니다.")
             this.$router.push("/notice")
           } else {
             this.select = response.data['notice'].category
             this.title = response.data['notice'].title
             this.content = response.data['notice'].content
-            this.writer = response.data['notice'].writer_name
+            this.writer = response.data['notice'].writer
           }
         })
         .catch(err => {
