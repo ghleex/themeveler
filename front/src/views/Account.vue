@@ -49,8 +49,8 @@
             <form name="signin" action="" method="post" @submit.prevent="checkSignin()">
               <h1>Sign in</h1>
               <div class="social-container">
-                <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
-                <a href="#" class="social"><i class="fab fa-kaggle"></i></a>
+                <a href="http://127.0.0.1:8000/api/accounts/social/google/" class="social"><i class="fab fa-google-plus-g"></i></a>
+                <a href="http://127.0.0.1:8000/api/accounts/social/kakao/" class="social"><i class="fab fa-kaggle"></i></a>
               </div>
               <span>or use your account</span>
               <input type="email" placeholder="Email" v-model="credentials.email" />
