@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django_mysql.models import ListTextField
 from django.shortcuts import get_object_or_404
+from django.http import HttpResponseBadRequest
 
 # Create your models here.
 class Theme(models.Model):
@@ -21,12 +22,9 @@ class Theme(models.Model):
         return self.name
 
     def start(self):
-        for num in self.dests:
-            print(type(num))
-            print(num)
-            print()
         start_pk = int(self.dests[0])
-        return get_object_or_404(Destination, pk=start_pk)
+        start_dest = Destination.objects.filter(pk=start_pk)[0]
+        return start_dest if start_dest else HttpResponseBadRequest
     
 
 class Destination(models.Model):
