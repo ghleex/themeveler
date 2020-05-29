@@ -39,18 +39,16 @@ export default {
   },
   methods: {
     goToSpotPage(spot_id) {
-      axios
-        .get(`${this.$store.state.constants.SERVER}/spot/${spot_id}`)
+      axios.get(`/spot/${spot_id}/`)
         .then(response => {
           console.log(response);
         })
         .catch(error => {
           console.log(error.response);
-        });
+        })
 		},
     searchNow(query) {
-      axios
-        .get(`${this.$store.state.constants.SERVER}/search/${query}`)
+      axios.get(`/search/${query}/`)
         .then(response => {
 					this.spotData = response.data.spots
 					this.themeData = response.data.themes

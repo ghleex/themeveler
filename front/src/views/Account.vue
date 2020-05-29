@@ -49,8 +49,8 @@
             <form name="signin" action="" method="post" @submit.prevent="checkSignin()">
               <h1>Sign in</h1>
               <div class="social-container">
-                <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
-                <a href="#" class="social"><i class="fab fa-kaggle"></i></a>
+                <a href="http://127.0.0.1:8000/api/accounts/social/google/" class="social"><i class="fab fa-google-plus-g"></i></a>
+                <a href="http://127.0.0.1:8000/api/accounts/social/kakao/" class="social"><i class="fab fa-kaggle"></i></a>
               </div>
               <span>or use your account</span>
               <input type="email" placeholder="Email" v-model="credentials.email" />
@@ -167,7 +167,7 @@ import Swal from 'sweetalert2'
           // console.log(credentials)
           axios.post('/accounts/signup/', credentials)
             .then(response => {
-              if (response.statusText=="OK") {
+              if (response.status==200) {
                 alert('회원가입이 완료되었습니다.')
                 // 회원가입 후 자동로그인
                 const loginforms = {
@@ -182,6 +182,7 @@ import Swal from 'sweetalert2'
                     this.$session.set("nickname", response.data.nickname)
                     this.$store.dispatch('login', token)
                     this.$store.commit('setToken', token)
+                    this.$router.push('/')
                   })
               }
               else {
@@ -197,7 +198,7 @@ import Swal from 'sweetalert2'
       checkNickname() {
         axios.get(`/accounts/nickname/${this.credentials.username}/`)
           .then(response => {
-            if (response.statusText=="OK") {
+            if (response.status==200) {
               alert('사용 가능한 닉네임입니다.')
             }
             else {
@@ -216,7 +217,7 @@ import Swal from 'sweetalert2'
         else {
           axios.get(`/accounts/username/${this.credentials.email}/`)
             .then(response => {
-              if (response.statusText=="OK") {
+              if (response.status==200) {
                 // 인증번호 전송
                 axios.post('/accounts/email/send/', {'username': this.credentials.email})
                   .then(
@@ -239,7 +240,7 @@ import Swal from 'sweetalert2'
       checkEmailCert() {
         axios.get(`/accounts/email/auth/${this.credentials.email}/${this.emailcertcode}/`)
           .then(response => {
-            if (response.status=="200") {
+            if (response.status==200) {
               this.dialog=false
               alert('이메일 인증이 완료되었습니다.')
             }

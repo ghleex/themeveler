@@ -10,7 +10,7 @@
       </div>
       <div class="body2">
         <p class="notice-writer"><i class="fas fa-user"></i> {{noticeData.writer}}</p>
-        <p class="notice-createddate"><i class="far fa-clock"></i> {{noticeData.writed_at.slice(0, 16)}}</p>
+        <p class="notice-createddate"><i class="far fa-clock"></i> {{noticeData.writed_at}}</p>
       </div>
       <div class="body3">
         <div class="notice-content">{{noticeData.content}}</div>
@@ -52,13 +52,12 @@ import axios from 'axios'
 export default {
   name: 'notice-detail',
   data() {
-    const index = this.$route.params.noticeId
     return {
       noticeData: [],
-      index: index,
+      noticeId: "",
       valid: false,
       commentRules: [
-        v => (v && v.length <= 500) || '댓글은 최대 500자 이내로 작성해주세요.'
+        v => (v && v.length <= 500) || "댓글은 최대 500자 이내로 작성해주세요."
       ],
       remain: 500,
       resultRemian: 500,
@@ -67,16 +66,19 @@ export default {
   },
   methods: {
     deleteData() {
-      axios.delete(`/articles/notice/${this.index}/`)
+      axios.delete(`/articles/theme_notice/${this.noticeId}/`)
         .then(
           this.$router.push({
             path: '/notice'
           })
         )
+        .catch(err => {
+          console.log(err)
+        })
     },
     updateData() {
       this.$router.push({
-        path: `/articles/notice/create/${this.index}`
+        path: `/notice/create/${this.noticeId}`
       })
     },
     back() {
@@ -91,7 +93,8 @@ export default {
     }
   },
   mounted() {
-    axios.get(`/articles/notices/${this.index}/`)
+    this.noticeId = this.$route.params.noticeId
+    axios.get(`/articles/notices/${this.noticeId}/`)
       .then(response => {
         this.noticeData = response.data['notice']
       })
