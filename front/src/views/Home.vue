@@ -1,7 +1,5 @@
 <template>
   <div class="header">
-    <v-btn style="position:absolute; margin-top:70px; left:20%; z-index:2;" color="primary" outlined to="/profile">
-      유저페이지>>>>임시버튼</v-btn>
     <div class="home-search-bar">
       <SearchBar />
     </div>
@@ -19,9 +17,6 @@
 
     <!-- card -->
     <div class="describe">
-      <!-- <div class="des-start">
-        <i class="fas fa-barcode fa-rotate-90"></i>
-      </div> -->
       <div class="describe-card-left"></div>
       <div class="describe-left">
         <img :src="ticket" alt="">
@@ -294,6 +289,7 @@
         // console.log(themeId[0].id)
         const requestHeader = this.$store.getters.requestHeader
         axios.get(`/travels/start/${themeId[0].id}`, requestHeader)
+        // this.$router.push('/travel' + this.travelId)
           .then(response => {
             console.log(response)
           })
