@@ -211,8 +211,7 @@ class TravelTheme(APIView):
     # @swagger_auto_schema(query_serializer=ThemeSerializer)
     def get(self, request, theme_pk, format=None):
         theme = Theme.objects.filter(pk=theme_pk)[0]
-        destination_pk = theme.dests[0]
-        first_dest = Destination.objects.filter(pk=destination_pk)[0]
+        first_dest = theme.start()
         theme = ThemeSerializer(theme)
         dest = DestinationSerializer(first_dest)
         
@@ -222,23 +221,22 @@ class TravelTheme(APIView):
         }
         
         return Response(data)
-    
-    def get_all_theme(self, request):
-        all_theme = ThemeSerializer(Theme.objects.all())
+
+class AllTheme(APIView):
+    def get(self, request):
+        all_theme = Theme.objects.all()
         if not all_theme:
             return Response('Theme is not existed', status=status.HTTP_400_BAD_REQUEST)
-        data = {
-            'all_theme': all_theme
-        }
-        return Response(data)
+        
+        return ThemeSerializer(all_theme).data
 
-    def filter_theme(self, request, region):
-        filtered_theme = ThemeSerializer(Theme.objects.filter(region=region))
+
+class SelectedTheme(APIView):
+    def get(self, request, region):
+        filtered_theme = ThemeSerializer(Theme.objects.filter(region=region)) if region else ThemeSerializer(Theme.objects.all())
         if not filtered_theme:
             return Response('Theme is not existed', status=status.HTTP_400_BAD_REQUEST)
-        data = {
-            'filtered_theme': filtered_theme
-        }
-        return Response(data)
         
+        return filtered_theme
+            
     
