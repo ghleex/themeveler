@@ -5,7 +5,7 @@
       <!-- 공지사항 리스트 Data table -->
       <v-data-table
         :headers="headers" :items="noticeData" :page.sync="page" :items-per-page="itemsPerPage" hide-default-footer
-        class="datatable" @page-count="pageCount = $event" :search="search" :sort-by="['id']" :sort-desc="true"
+        class="notice-datatable" @page-count="pageCount = $event" :search="search" :sort-by="['id']" :sort-desc="true"
         style="white-space: nowrap" :calculate-widths="true"
       >
         <template v-slot:top>
@@ -30,8 +30,8 @@
       </div>
       <!-- 검색바 -->
       <div>
-        <v-text-field v-model="search" append-icon="mdi-magnify" label="검색"
-          single-line hide-details class="searchbar"></v-text-field>
+        <v-text-field v-model="search" append-icon="mdi-magnify" label="검색" single-line hide-details
+          class="searchbar"></v-text-field>
       </div>
     </div>
   </div>
@@ -78,7 +78,7 @@ export default {
   mounted() {
     axios.get('/articles/notices/')
       .then(response => {
-        console.log(response.data)
+        // console.log(response.data)
         this.noticeData = response.data["notice"]
       })
       .catch(err => {

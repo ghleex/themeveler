@@ -32,7 +32,7 @@ export default {
       axios.post('/accounts/signin/', loginforms)
         .then(response => {
           console.log(response)
-          if (response.status === 200 && "token" in response.data) {
+          if (response.status === 200 && response.data["token"] !== null) {
             const token = response.data.token
             this.$session.start()
             this.$session.set("jwt", token)
@@ -41,6 +41,10 @@ export default {
             this.$store.dispatch("login", token)
             this.$store.commit("setToken", token)
             this.$router.push('/')
+          }
+          else {
+            alert("잘못된 정보입니다. 다시 입력해주세요.")
+            this.$router.push('/login')
           }
         })
         .catch(err => {

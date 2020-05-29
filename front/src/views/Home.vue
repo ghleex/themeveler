@@ -292,17 +292,14 @@
           return themeId.id == id + 1
         })
         // console.log(themeId[0].id)
-
-        const authorization = this.$store.getters.requestHeader.headers.Authorization
-        console.log(authorization)
-        axios.get(`/travels/start/${themeId[0].id}/`, authorization)
-        .then(res => {
-          console.log(res)
-        })
-        .catch(err => {
-          console.log(err)
-        })
-
+        const requestHeader = this.$store.getters.requestHeader
+        axios.get(`/travels/start/${themeId[0].id}`, requestHeader)
+          .then(response => {
+            console.log(response)
+          })
+          .catch(err => {
+            console.log(err)
+          })
       }
     },
     mounted() {
