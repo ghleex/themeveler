@@ -228,8 +228,9 @@ class AllTheme(APIView):
         all_theme = Theme.objects.all()
         if not all_theme:
             return Response('Theme is not existed', status=status.HTTP_400_BAD_REQUEST)
+        serialized_all_theme = [ThemeSerializer(theme).data for theme in all_theme]
         data = {
-            'all_theme' : [ThemeSerializer(theme) for theme in all_theme]
+            'all_theme' : serialized_all_theme
         }
         return Response(data)
 
