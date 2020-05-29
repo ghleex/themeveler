@@ -1,7 +1,5 @@
 <template>
   <div class="header">
-    <!-- <v-btn style="position:absolute; margin-top:70px; left:20%; z-index:2;" color="primary" outlined to="/profile">
-      유저페이지>>>>임시버튼</v-btn> -->
     
     <div class="home-search-bar">
       <SearchBar />
@@ -12,8 +10,7 @@
         <v-carousel-item v-for="(slide, i) in slides" :key="i" :src="slide">
         </v-carousel-item>
       </v-carousel>
-    </div><br><br>
-
+    </div><br>
 
 
 
@@ -46,7 +43,6 @@
       <i class="fas fa-map-marker-alt mr-1"></i>
       여행을 쫓다 꿈을 좇다 테마블러
     </div>
-
 
 
 
@@ -99,15 +95,12 @@
                         <v-img :src="imgUrl" height="80vh" width="100vw"></v-img>
                         <!-- {{ img }} {{ index }} -->
                         <v-card-actions style="justify-content: flex-end;">
-                          <v-btn color="#2c3e50" class="text-light" @click="dialog = false">
-                            확인
-                          </v-btn>
+                          <v-btn color="#2c3e50" class="text-light" @click="dialog = false">확인</v-btn>
                         </v-card-actions>
                       </v-card>
                     </v-dialog>
 
                   </v-slide-group>
-
                 </v-sheet>
               </div>
             </v-row>
@@ -170,7 +163,7 @@
     components: {
       SearchBar,
       HowToUse,
-      TopScroll,
+      TopScroll
     },
     data() {
       return {
@@ -246,7 +239,7 @@
               require('../assets/image/pop5sub4.jpg'),
               require('../assets/image/pop5sub5.jpg'),
             ]
-          },
+          }
         ],
         slides: [
           require('../assets/image/bg.jpg'),
@@ -466,7 +459,6 @@
 
   .describe-left>img {
     width: 80%;
-
   }
 
   .describe-middle {
@@ -539,7 +531,6 @@
 
     .home-howTo-boxBtn>button {
       width: 200px;
-
     }
 
     .home-howTo-boxBtn span {
@@ -603,6 +594,14 @@
     .home-howTo-img>img {
       width: 450px;
     }
+
+    .describe {
+      margin-top: 32px;
+    }
+
+    .slogan {
+      margin-bottom: 32px;
+    }
   }
 
   .popTheme-sub-img:hover {
@@ -628,14 +627,11 @@
     padding: .5rem;
     font-family: 'Cafe24Simplehae';
     white-space: nowrap;
-    /* font-style: italic; */
   }
 
   .pop-theme-card-text>i {
     font-size: 15px;
     margin: 0 .3rem;
-    /* display: flex; */
-    /* align-items: flex-start; */
   }
 
   /* media query가 좀 이상하게 작동 함 */

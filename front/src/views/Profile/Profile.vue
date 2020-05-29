@@ -82,6 +82,7 @@ export default {
 <style scoped>
 #profile {
   margin-top: 64px;
+  background-color: rgba(245, 245, 245, 0.5);
 }
 
 #profile-content {

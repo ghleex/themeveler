@@ -11,48 +11,59 @@
           <v-list-item-title><b>Themeveler</b></v-list-item-title>
         </v-list-item-content>
       </v-list-item>
-
       <v-divider></v-divider>
 
       <v-list>
-        <v-list-item class="side-no-padding" color="#263238" v-for="item in items" :key="item.title" link
-          :to="item.path">
-          <!-- <router-link :to="item.path"></router-link> -->
-          <template v-if="item.title != 'Contact'">
-            <v-list-item-icon>
-              <v-icon class="pl-4">{{ item.icon }}</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
-          </template>
-
-          <v-list-group class="side-width-100" color="#263238" no-action value="true"
-            v-else-if="item.title == 'Contact'">
+        <v-list-item class="side-no-padding" color="#263238" to="/">
+          <v-list-item-icon>
+            <v-icon class="pl-4">mdi-home</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>HOME</v-list-item-title>
+        </v-list-item>
+        <v-list-item class="side-no-padding" color="#263238" to="/travel">
+          <v-list-item-icon>
+            <v-icon class="pl-4">mdi-image-album</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>TRAVEL</v-list-item-title>
+        </v-list-item>
+        <v-list-item class="side-no-padding" color="#263238">
+          <v-list-group class="side-width-100" color="#263238" no-action value="true">
             <template class="contact-custom" v-slot:activator>
               <v-list-item-icon>
-                <v-icon>{{ item.icon }}</v-icon>
+                <v-icon>mdi-account-supervisor-circle</v-icon>
               </v-list-item-icon>
-              <!-- <v-list-item-content> -->
-              <v-list-item-title>{{ item.title }}</v-list-item-title>
-              <!-- </v-list-item-content> -->
+              <v-list-item-title>CONTACT</v-list-item-title>
             </template>
-            <v-list-item link>
-              <v-list-item-title class="contact-list-group">
-                <router-link to="/notice">공지사항</router-link>
-              </v-list-item-title>
+            <v-list-item to="/notice">
+              <v-list-item-title class="contact-list-group">공지사항</v-list-item-title>
             </v-list-item>
-            <v-list-item link>
-              <v-list-item-title class="contact-list-group">
-                <router-link to="/service">고객센터</router-link>
-              </v-list-item-title>
+            <v-list-item to="/service">
+              <v-list-item-title class="contact-list-group">고객센터</v-list-item-title>
             </v-list-item>
           </v-list-group>
-
+        </v-list-item>
+        <v-list-item class="side-no-padding" color="#263238" v-if="!this.$store.getters.isLoggedIn" @click="login()">
+          <v-list-item-icon>
+            <v-icon class="pl-4">mdi-login-variant</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>LOGIN</v-list-item-title>
+        </v-list-item>
+        <v-list-item class="side-no-padding" color="#263238" v-else @click="userpage">
+          <v-list-item-icon>
+            <v-icon class="pl-4">mdi-account-circle</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>MYPAGE</v-list-item-title>
+        </v-list-item>
+        <v-list-item class="side-no-padding" color="#263238" v-if="this.$store.getters.isLoggedIn" @click="logout()">
+          <v-list-item-icon>
+            <v-icon class="pl-4">mdi-login-variant</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>LOGOUT</v-list-item-title>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
 
     <!--  상단바 -->
-    <!-- <v-toolbar flat extended extension-height="-64" color="primary"> -->
     <v-toolbar flat absolute width="100%" color="rgba(255, 255, 255, 0.8)">
       <!-- 메뉴를 click하면 사이드에 메뉴가 뜸 -->
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" class="d-block d-md-none"></v-app-bar-nav-icon>
@@ -63,8 +74,8 @@
         <v-toolbar-title>Themeveler</v-toolbar-title>
       </router-link>
       <v-spacer></v-spacer>
-      <v-toolbar-items class="d-none d-md-block">
 
+      <v-toolbar-items class="d-none d-md-block">
         <v-btn text to="/">
           <div class="nav-link drop-no">
             <v-icon class="mr-2">mdi-home</v-icon> Home
@@ -209,10 +220,6 @@
     z-index: 15;
   }
 
-  .navbar_box header {
-    z-index: 15;
-  }
-
   .drop-yes:hover {
     text-decoration: none;
   }
@@ -233,5 +240,7 @@
     padding: 0;
   }
 
-  // ["role":"button"]
+  .nav-link {
+    padding: 8px;
+  }
 </style>

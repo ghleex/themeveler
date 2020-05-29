@@ -58,7 +58,7 @@ export default {
       headers: [
         { text: '번호', align: 'start', value: 'id', sortable: false },
         { text: '작성위치', value: 'category' },
-        { text: '댓글내용', value: 'title', sortable: false },
+        { text: '댓글 내용', value: 'title', sortable: false },
         { text: '등록일', value: 'createddate', sortable: false }
       ],
       commentData: data,
@@ -69,10 +69,7 @@ export default {
   methods: {
     detail(id) {
       this.$router.push({
-        name: 'notice-detail',
-        params: {
-          noticeId: id
-        }
+        path: `/notice/detail/${id}`
       })
     }
   }
@@ -82,6 +79,7 @@ export default {
 <style scoped>
 #profile-comment {
   margin-top: 64px;
+  background-color: rgba(245, 245, 245, 0.5);
 }
 
 #profile-content {

@@ -6,7 +6,7 @@
       <h2 class="content-title">회원정보수정</h2>
       <hr>
       <v-row justify="center">
-        <v-col col="12" md="8">
+        <v-col cols="12" md="8">
           <v-form>
             <v-container class="py-0">
               <v-row>
@@ -54,7 +54,7 @@
           </v-form>
         </v-col>
 
-        <v-col col="12" md="4">
+        <v-col cols="12" md="4">
           <v-card-text class="text-center">
             <h6 class="display-1 mb-1 grey--text">ad.</h6>
             <h4 class="display-2 font-weight-light mb-3 black--text"></h4>
@@ -70,8 +70,8 @@
 </template>
 
 <script>
-import Drawer from '@/components/Drawer.vue'
 import axios from "axios"
+import Drawer from '@/components/Drawer.vue'
 
 export default {
   name: 'editprofile',
@@ -83,9 +83,6 @@ export default {
       dialog: false,
       nickname: ""
     }
-  },
-  mounted() {
-    this.nickname = this.$session.get("nickname")
   },
   methods: {
     userdelete() {
@@ -104,15 +101,15 @@ export default {
     update() {
       let form = new FormData()
       form.append("nickname", this.nickname)
-      axios.put("/accounts/usermgmt/", form, this.$store.getters.requestHeader)
+      axios.put('/accounts/usermgmt/', form, this.$store.getters.requestHeader)
         .then(() => {
-          alert('회원 정보가 성공적으로 변경되었습니다.')
+          alert("회원 정보가 성공적으로 변경되었습니다.")
           this.$session.set("nickname", this.nickname)
           this.$router.push('/profile')
         })
         .catch(err =>{
           console.log(err)
-          alert('회원 정보 변경이 실패하였습니다. 잠시후 다시 시도해주십시오.')
+          alert("회원 정보 변경이 실패하였습니다. 잠시후 다시 시도해주십시오.")
         })
     },
     updatecancel () {
@@ -120,6 +117,9 @@ export default {
         path: '/profile'
       })
     }
+  },
+  mounted() {
+    this.nickname = this.$session.get("nickname")
   }
 }
 </script>
@@ -127,6 +127,7 @@ export default {
 <style scoped>
 #editprofile {
   margin-top: 64px;
+  background-color: rgba(245, 245, 245, 0.5);
 }
 
 #profile-content {
