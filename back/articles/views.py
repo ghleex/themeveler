@@ -202,11 +202,13 @@ class CustomersVoiceChange(APIView):
             requests = request.data
             voice.title = requests.get('title')
             voice.content = requests.get('content')
-            voice.category = VoiceCategory.objects.get(pk=requests.get('category'))
+            voice.category = VoiceCategory.objects.get(pk=requests.get('category'))            
             data = {
                 'title': voice.title,
                 'content': voice.content,
                 'category': voice.category,
+                'request_user_id': request_user.pk,
+                'request_user_nickname': str(User.objects.get(pk=request_user.pk).nickname),
             }
             serializer = CustomersVoiceSerializer(voice, data=data)
             if serializer.is_valid():
@@ -414,7 +416,21 @@ class Notices(APIView):
     """
     def get(self, request, format=None):
         notices = Notice.objects.filter(isNoticeAll=True).order_by('-writed_at')
-        notice = [NoticeSerializer(n).data for n in notices]
+        notice = []
+        for n in notices:
+            serializer_n = NoticeSerializer(n).data
+            writer = serializer_n['writer']
+            noti = {
+                'title': serializer_n['title'],
+                'category': serializer_n['category'],
+                'writer_id': writer,
+                'writer_nickname': str(User.objects.get(pk=writer).nickname),
+                'writed_at': serializer_n['writed_at'],
+                'updated_at': serializer_n['updated_at'],
+                'theme': serializer_n['theme'],
+            }
+            notice.append(noti)
+
         data = {
             'notice': notice,
         }
@@ -432,10 +448,20 @@ class NoticeView(APIView):
         return get_object_or_404(Notice, pk=notice_pk)
 
     def get(self, request, notice_pk, format=None):
+        notice = self.get_object(notice_pk)
         try:
-            notice = self.get_object(notice_pk)
+            serializer_n = NoticeSerializer(notice).data
+            writer = serializer_n['writer']
             data = {
-                'notice': NoticeSerializer(notice).data
+                'title': serializer_n['title'],
+                'content': serializer_n['content'],
+                'category': serializer_n['category'],
+                'writer_id': writer,
+                'writer_nickname': str(User.objects.get(pk=writer).nickname),
+                'writed_at': serializer_n['writed_at'],
+                'updated_at': serializer_n['updated_at'],
+                'theme': serializer_n['theme'],
+                'isNoticeAll': serializer_n['isNoticeAll'],
             }
             return Response(data, status=status.HTTP_200_OK)
         except:
@@ -474,7 +500,7 @@ class ThemeNoticesPost(APIView):
         ---
     """
     def post(self, request, format=None):
-        # try:
+        try:
             requests = request.data
             data = {
                 'title': requests.get('title'),
@@ -489,8 +515,8 @@ class ThemeNoticesPost(APIView):
                 serializer.save()
                 return Response(data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_202_ACCEPTED)
-        # except:
-        #     return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
+        except:
+            return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ThemeNoticesChange(APIView):
@@ -527,7 +553,8 @@ class ThemeNoticesChange(APIView):
             data = {
                 'title': notice.title,
                 'content': notice.content,
-                'writer': notice.writer_id,
+                'writer_id': notice.writer_id,
+                'writer_nickname': str(User.objects.get(pk=notice.writer_id).nickname),
                 'theme': requests.get('theme'),
             }
             serializer = NoticeSerializer(notice, data=data)
