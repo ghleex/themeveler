@@ -1,6 +1,12 @@
-from .models import Notice, VoiceCategory, CustomersVoice, ManagersReply, Comment, ReComment, ReportComment, ReportReComment
+from .models import NoticeCategory, Notice, VoiceCategory, CustomersVoice, ManagersReply, Comment, ReComment, ReportComment, ReportReComment
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
+
+
+class NoticeCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NoticeCategory
+        fields = ('id', 'category',)
 
 
 class NoticeSerializer(serializers.ModelSerializer):
