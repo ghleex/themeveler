@@ -16,7 +16,7 @@ from rest_framework.parsers import FormParser
 from drf_yasg.utils import swagger_auto_schema
 from .serializers import UserCreationSerializer, UserNicknameSerializer, WaitingSerializer
 from .serializers import UsernameSerializer, ConfirmCodeSerializer, UserPasswordSerializer
-from .serializers import UserSignInSerializer, UserBanSerializer, SocialLoginSerializer
+from .serializers import UserSignInSerializer, UserBanSerializer
 from .models import Waiting
 from random import SystemRandom, choice
 from datetime import datetime, timedelta
@@ -32,6 +32,7 @@ import re
 User = get_user_model()
 decoder = api_settings.JWT_DECODE_HANDLER
 encoder = api_settings.JWT_ENCODE_HANDLER
+payload = api_settings.JWT_PAYLOAD_HANDLER
 
 # prefix, suffix: SignUp - anonymous
 prefix = [
@@ -284,21 +285,23 @@ class SignIn(APIView):
                 * return: jwt가 반환됩니다.
         """
         username = request.data.get('username')
-        if User.objects.filter(username=username).exists():
-            sign_in_user = User.objects.get(username=username)
-            if not sign_in_user.has_usable_password():
-                return Response({'message': ['해당 유저는 소셜로그인 유저입니다.']}, status=status.HTTP_400_BAD_REQUEST)
-            if sign_in_user.banning_period:
-                if str(sign_in_user.banning_period) < datetime.today().strftime('%Y-%m-%d'):
-                    sign_in_user.is_active = True
-                    sign_in_user.banning_period = None
-                    sign_in_user.save()
-                else:
-                    sign_in_user.is_active = False
-                    sign_in_user.save()
-                    return Response({'message': ['해당 유저는 ' + str(sign_in_user.banning_period) + '까지 접근이 제한되었습니다.' ]}, status=status.HTTP_401_UNAUTHORIZED)
-        sign_result = obtain_jwt_token(request._request)
-        return Response({"nickname": sign_in_user.nickname, "token": obtain_jwt_token(request._request).data.get("token")})
+        sign_in_user = get_object_or_404(User, username=username)
+        if not sign_in_user.has_usable_password():
+            return Response({'message': ['해당 유저는 소셜로그인 유저입니다.']}, status=status.HTTP_400_BAD_REQUEST)
+        if sign_in_user.banning_period:
+            if str(sign_in_user.banning_period) < datetime.today().strftime('%Y-%m-%d'):
+                sign_in_user.is_active = True
+                sign_in_user.banning_period = None
+                sign_in_user.save()
+            else:
+                sign_in_user.is_active = False
+                sign_in_user.save()
+                return Response({'message': ['해당 유저는 ' + str(sign_in_user.banning_period) + '까지 접근이 제한되었습니다.' ]}, status=status.HTTP_401_UNAUTHORIZED)
+        login_response = obtain_jwt_token(request._request)
+        token = login_response.data.get('token')
+        if not token:
+            return login_response
+        return Response({'nickname': sign_in_user.nickname, 'is_staff': sign_in_user.is_staff, 'token': token})
 
 
 @permission_classes((IsAdminUser, ))
@@ -397,8 +400,7 @@ class KakaoSignInCallbackView(APIView):
                 user.nickname = 'KAKAO 유저 ' + str(user.id)
                 user.anonymous = choice(prefix) + choice(suffix) + str(user.id)
                 user.save()
-        social_serilizer = SocialLoginSerializer(user)
-        jwt = encoder(social_serilizer.data)
+        jwt = encoder(payload(user))
         return Response({'jwt': jwt})  
 
 
@@ -465,8 +467,7 @@ class GoogleSignInCallbackView(APIView):
                 user.nickname = 'GOOGLE 유저 ' + str(user.id)
                 user.anonymous = choice(prefix) + choice(suffix) + str(user.id)
                 user.save()
-        social_serilizer = SocialLoginSerializer(user)
-        jwt = encoder(social_serilizer.data)
+        jwt = encoder(payload(user))
         return Response({'jwt': jwt})
 
 

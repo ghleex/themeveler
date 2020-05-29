@@ -9,7 +9,7 @@
         <p class="notice-body-title"><strong>{{noticeData.title}}</strong></p>
       </div>
       <div class="body2">
-        <p class="notice-writer"><i class="fas fa-user"></i> {{noticeData.writer}}</p>
+        <p class="notice-writer"><i class="fas fa-user"></i> {{noticeData.writer_nickname}}</p>
         <p class="notice-createddate"><i class="far fa-clock"></i> {{noticeData.writed_at}}</p>
       </div>
       <div class="body3">
@@ -17,9 +17,9 @@
       </div>
       <div class="notice-detail-btn">
         <v-divider></v-divider>
-        <v-btn color="warning" class="mr-4" @click="updateData">수정</v-btn>
-        <v-btn color="error" class="mr-4" @click="deleteData">삭제</v-btn>
-        <v-btn color="primary" @click="back">목록</v-btn>
+        <v-btn color="warning" class="mr-4 btn-detail" @click="updateData">수정 <i class="fas fa-edit ml-1"></i></v-btn>
+        <v-btn color="error" class="mr-4 btn-detail" @click="deleteData">삭제 <i class="fas fa-minus-square ml-1"></i></v-btn>
+        <v-btn color="rgb(238, 240, 247)" class="btn-detail" @click="back">목록 <i class="fas fa-bars ml-1"></i></v-btn>
       </div>
     </div>
 
@@ -66,15 +66,21 @@ export default {
   },
   methods: {
     deleteData() {
-      axios.delete(`/articles/theme_notice/${this.noticeId}/`)
-        .then(
-          this.$router.push({
-            path: '/notice'
+      if (this.noticeData.writer_id === this.$store.getters.user_id) {
+        const requestHeader = this.$store.getters.requestHeader
+        axios.delete(`/articles/theme_notice/${this.noticeId}/`, requestHeader)
+          .then(
+            this.$router.push({
+              path: '/notice'
+            })
+          )
+          .catch(err => {
+            console.log(err)
           })
-        )
-        .catch(err => {
-          console.log(err)
-        })
+      } else {
+        alert("삭제 권한이 없습니다.")
+        this.$router.push(`/notice/detail/${this.noticeId}`)  
+      }
     },
     updateData() {
       this.$router.push({
@@ -96,7 +102,7 @@ export default {
     this.noticeId = this.$route.params.noticeId
     axios.get(`/articles/notices/${this.noticeId}/`)
       .then(response => {
-        this.noticeData = response.data['notice']
+        this.noticeData = response.data
       })
       .catch(err => {
         console.log(err)
@@ -160,7 +166,10 @@ export default {
 .notice-detail-btn {
   text-align: right;
 }
-
+.btn-detail {
+  font-size: 16px;
+  font-family: 'Cafe24Simplehae';
+}
 
 .comment-header {
   border-radius: 8px 8px 0 0;

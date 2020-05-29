@@ -9,6 +9,8 @@ urlpatterns = [
     path('cv/<int:user_pk>/<int:voice_pk>/', views.CustomersVoiceChange.as_view()),
     path('cv_reply/<int:manager_pk>/', views.ManagersReplying.as_view()),
     path('cv_reply/<int:manager_pk>/<int:todo_pk>/', views.ManagersReplyChange.as_view()),
+    path('n_category/', views.SetNoticeCategory.as_view()),
+    path('n_category/<int:category_pk>/', views.ChangeNoticeCategory.as_view()),
     path('notices/', views.Notices.as_view()),
     path('notices/<int:notice_pk>/', views.NoticeView.as_view()),
     path('theme_notices/<int:theme_pk>/', views.ThemeNoticesView.as_view()),
