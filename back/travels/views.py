@@ -228,9 +228,10 @@ class AllTheme(APIView):
         all_theme = Theme.objects.all()
         if not all_theme:
             return Response('Theme is not existed', status=status.HTTP_400_BAD_REQUEST)
-        
-        return ThemeSerializer(all_theme).data
-
+        data = {
+            'all_theme' : [ThemeSerializer(theme) for theme in all_theme]
+        }
+        return Response(data)
 
 class SelectedTheme(APIView):
     def get(self, request, region):
