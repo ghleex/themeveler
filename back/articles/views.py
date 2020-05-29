@@ -474,21 +474,23 @@ class ThemeNoticesPost(APIView):
         ---
     """
     def post(self, request, format=None):
-        try:
+        # try:
             requests = request.data
             data = {
                 'title': requests.get('title'),
                 'content': requests.get('content'),
+                'category': requests.get('category'),
                 'writer': request.user.pk,
                 'theme': requests.get('theme'),
+                'isNoticeAll': requests.get('isNoticeAll'),
             }
             serializer = NoticeSerializer(data=data)
             if serializer.is_valid():
                 serializer.save()
                 return Response(data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_202_ACCEPTED)
-        except:
-            return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
+        # except:
+        #     return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ThemeNoticesChange(APIView):

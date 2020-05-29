@@ -12,7 +12,7 @@ class NoticeCategorySerializer(serializers.ModelSerializer):
 class NoticeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notice
-        fields = ('id', 'title', 'content', 'writer', 'theme', 'writed_at', 'updated_at', 'isNoticeAll',)
+        fields = ('id', 'title', 'content', 'category', 'writer', 'theme', 'writed_at', 'updated_at', 'isNoticeAll',)
 
 
 class VoiceCategorySerializer(serializers.ModelSerializer):
