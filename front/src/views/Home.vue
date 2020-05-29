@@ -1,8 +1,7 @@
 <template>
   <div class="header">
-    <!-- <v-btn style="position:absolute; margin-top:70px; right:15%; z-index:2;" color="primary" outlined to="/profile">
-      유저페이지</v-btn> -->
-
+    <v-btn style="position:absolute; margin-top:70px; left:20%; z-index:2;" color="primary" outlined to="/profile">
+      유저페이지>>>>임시버튼</v-btn>
     <div class="home-search-bar">
       <SearchBar />
     </div>
@@ -13,6 +12,7 @@
         </v-carousel-item>
       </v-carousel>
     </div><br><br>
+
 
 
 
@@ -70,7 +70,7 @@
         </v-slide-group>
 
         <v-expand-transition>
-          <v-sheet v-if="model != null" color="grey lighten-4" height="250" width="95%" tile
+          <v-sheet v-if="model != null" color="grey lighten-4" height="350" width="95%" tile
             class="home-pop-theme-subBox mx-auto">
             <div class="pop-theme-disc">
               <v-text v-if="toggle == active ? cardBypopThemeContext(model):false"></v-text>
@@ -106,18 +106,19 @@
                     </v-dialog>
 
                   </v-slide-group>
+
                 </v-sheet>
               </div>
             </v-row>
+            <div style="text-align: end;">
+              <v-btn rounded large class="home-more-bt text-light" color="#2c3e50" @click="goTheme(model)">
+                <i class="fas fa-book mr-1"></i>
+                여행하기
+              </v-btn>
+            </div>
           </v-sheet>
         </v-expand-transition>
       </v-sheet>
-      <div style="text-align: end;">
-        <v-btn rounded large class="home-more-bt text-light" color="#2c3e50">
-          <i class="fas fa-book mr-1"></i>
-          여행하기
-        </v-btn>
-      </div>
     </div>
 
 
@@ -154,19 +155,22 @@
     </div>
 
     <HowToUse></HowToUse>
-
+    <TopScroll></TopScroll>
   </div>
 </template>
 
 <script>
+  import axios from 'axios'
   import SearchBar from '../components/SearchBar.vue'
   import HowToUse from '../components/HowToUse.vue'
+  import TopScroll from '../components/TopScroll.vue'
 
   export default {
     name: 'Home',
     components: {
       SearchBar,
       HowToUse,
+      TopScroll,
     },
     data() {
       return {
@@ -174,12 +178,12 @@
         toggle: false,
         active: false,
         dialog: false,
-        imgUrl: '',
+        imgUrl: "",
         model: null,
         model_: null,
         eachContext: "",
         popTheme: [{
-            id: 0,
+            id: 1,
             img: require('../assets/image/pop1.webp'),
             title: '타지 사람들 집합',
             context: '지역 사람들만 아는 숨겨진 맛집과 명소를 소개합니다.',
@@ -192,7 +196,7 @@
             ]
           },
           {
-            id: 1,
+            id: 2,
             img: require('../assets/image/pop2.jpg'),
             title: '서울사람도 잘 몰라',
             context: '일단 아무말이나 적어보자.',
@@ -205,7 +209,7 @@
             ]
           },
           {
-            id: 2,
+            id: 3,
             img: require('../assets/image/pop3.jpg'),
             title: '홍콩 어디까지 가봤니?',
             context: '홍콩 에그타르트 JMT.',
@@ -218,7 +222,7 @@
             ]
           },
           {
-            id: 3,
+            id: 4,
             img: require('../assets/image/pop4.jpg'),
             title: '최고의 디즈니 랜드',
             context: '도쿄는 생각보다 별롭니다. 플로리다 올랜도는 쩔어요. 가장 큰 디즈니 월드(world) 클라쓰~',
@@ -231,7 +235,7 @@
             ]
           },
           {
-            id: 4,
+            id: 5,
             img: require('../assets/image/pop5.jpg'),
             title: '혼저옵서예',
             context: '유일한 제주 남부의 시장을 가면 싱싱한 회 팩이 마치 3만원!',
@@ -267,14 +271,14 @@
       },
       cardBypopTheme(id) {
         var theme = this.popTheme.filter(theme => {
-          return theme.id == id
+          return theme.id == id + 1
         })
         // console.log(theme[0].imgs)
         return theme[0].imgs
       },
       cardBypopThemeContext(id) {
         var theme = this.popTheme.filter(theme => {
-          return theme.id == id
+          return theme.id == id + 1
         })
         // console.log(theme[0].context)
         this.eachContext = theme[0].context
@@ -283,6 +287,23 @@
         // console.log(imgUrl)
         this.imgUrl = imgUrl
         this.dialog = true
+      },
+      goTheme(id) {
+        var themeId = this.popTheme.filter(themeId => {
+          return themeId.id == id + 1
+        })
+        // console.log(themeId[0].id)
+
+        const authorization = this.$store.getters.requestHeader.headers.Authorization
+        console.log(authorization)
+        axios.get(`/travels/start/${themeId[0].id}/`, authorization)
+        .then(res => {
+          console.log(res)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+
       }
     },
     mounted() {
@@ -292,6 +313,11 @@
 </script>
 
 <style>
+  html,
+  body {
+    overflow: hidden;
+  }
+
   .stepper-ok-btn {
     /* border: 1px solid; */
   }
@@ -604,6 +630,7 @@
     font-size: 1.5vw;
     padding: .5rem;
     font-family: 'Cafe24Simplehae';
+    white-space: nowrap;
     /* font-style: italic; */
   }
 
