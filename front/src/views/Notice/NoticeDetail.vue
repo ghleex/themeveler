@@ -58,7 +58,7 @@ export default {
       index: index,
       valid: false,
       commentRules: [
-        v => (v && v.length <= 500) || '댓글은 최대 500자 이내로 작성해주세요.'
+        v => (v && v.length <= 500) || "댓글은 최대 500자 이내로 작성해주세요."
       ],
       remain: 500,
       resultRemian: 500,
@@ -67,7 +67,7 @@ export default {
   },
   methods: {
     deleteData() {
-      axios.delete(`/articles/notice/${this.index}/`)
+      axios.delete(`/articles/theme_notice/${this.index}/`)
         .then(
           this.$router.push({
             path: '/notice'
@@ -76,7 +76,7 @@ export default {
     },
     updateData() {
       this.$router.push({
-        path: `/articles/notice/create/${this.index}`
+        path: `/notice/create/${this.index}`
       })
     },
     back() {

@@ -32,18 +32,18 @@ export default {
     return {
       noticeData: [],
       index: index,
-      // select: index !== undefined ? noticeData[index].category : null,
-      // title: index !== undefined ? noticeData[index].title : "",
-      // content: index !== undefined ? noticeData[index].content : "",
-      // writer: index !== undefined ? noticeData[index].writer : "",
+      select: index !== undefined ? this.noticeData[index].category : null,
+      title: index !== undefined ? this.noticeData[index].title : "",
+      content: index !== undefined ? this.noticeData[index].content : "",
+      writer: index !== undefined ? this.noticeData[index].writer : "",
+      writed_at: index !== undefined ? this.noticeData[index].writed_at : "",
       valid: false,
-      categoryRules: [[v => !!v || '분류를 선택해주세요']],
+      categoryRules: [[v => !!v || "분류를 선택해주세요"]],
       titleRules: [
-        v => !!v || '제목을 작성해주세요',
-        v => (v && v.length <= 30) || '제목을 30자 이내로 작성해주세요',
+        v => !!v || "제목을 작성해주세요",
+        v => (v && v.length <= 30) || "제목을 30자 이내로 작성해주세요",
       ],
-      contentRules: [v => !!v || '내용을 작성해주세요'],
-      createddate: "",
+      contentRules: [v => !!v || "내용을 작성해주세요"],
       categorys: [
         '일반',
         '중요',
@@ -59,9 +59,10 @@ export default {
         'title': this.title,
         'content': this.content,
         'writer': this.writer,
-        'writed_at': this.writed_at,    
+        'writed_at': this.writed_at,
       }
-      axios.post('/articles/theme_notice/', noticeCreateForms)
+      const requestHeader = this.$store.getters.requestHeader
+      axios.post('/articles/theme_notice/', requestHeader, noticeCreateForms)
         .then(
           this.$router.push({
             path: '/notice'
@@ -77,7 +78,7 @@ export default {
         'title': this.title,
         'content': this.content
       }
-      axios.put(`/articles/theme_notice/${this.index}`, noticeUpdateForms)
+      axios.put(`/articles/theme_notice/${this.index}/`, noticeUpdateForms)
         .then(
           this.$router.push({
             path: `/notice/detail/${this.index}`
@@ -105,6 +106,9 @@ export default {
     axios.get(`/articles/notices/${this.index}/`)
       .then(response => {
         this.noticeData = response.data['notice']
+      })
+      .catch(err => {
+        console.log(err)
       })
   }
 }
