@@ -26,20 +26,20 @@
           <div class="service-list-body" @click="detail(item.id)">{{ item.title }}</div>
         </template>
         <!-- data가 없을 시 -->
-        <template slot="no-data">
+        <!-- <template slot="no-data">
           <v-alert :value="true" color="error" icon="warning">
             Sorry, nothing to display here :(
           </v-alert>
-        </template>
+        </template> -->
       </v-data-table>
       <!-- 페이지 번호 -->
       <div class="text-center pt-2">
-        <v-pagination color="#607D8B" v-model="page" :length="pageCount"></v-pagination>
+        <v-pagination v-model="page" :length="pageCount" color="#607D8B"></v-pagination>
       </div>
       <!-- 검색바 -->
       <div>
-        <v-text-field color="#607D8B" v-model="search" append-icon="mdi-magnify" label="검색" single-line hide-details
-          class="searchbar">
+        <v-text-field v-model="search" append-icon="mdi-magnify" label="검색" single-line hide-details
+          class="searchbar" color="#607D8B">
         </v-text-field>
       </div>
     </div>
@@ -61,8 +61,8 @@ export default {
         { text: '번호', value: 'id', sortable: false },
         { text: '분류', value: 'category' },
         { text: '제목', value: 'title', sortable: false },
-        { text: '작성자', value: 'writer', sortable: false },
-        { text: '등록일', value: 'createddate' }
+        { text: '작성자', value: 'request_user_nickname', sortable: false },
+        { text: '등록일', value: 'created_at' }
       ],
       serviceData: [],
       userId: ""
@@ -88,9 +88,12 @@ export default {
   mounted() {
     this.userId = this.$store.getters.user_id
     const requestHeader = this.$store.getters.requestHeader
+    console.log(this.userId)
+    console.log(requestHeader)
     axios.get(`/articles/cv/${this.userId}/`, requestHeader)
       .then(response => {
-        this.serviceData = response.data["service"]
+        console.log(response.data)
+        this.serviceData = response.data["voice"]
       })
       .catch(err => {
         console.log(err)

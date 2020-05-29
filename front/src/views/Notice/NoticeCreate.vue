@@ -9,9 +9,8 @@
         <v-select v-model="select" :items="categorys" :rules="categoryRules" label="분류" required></v-select>
         <v-text-field v-model="title" :counter="30" :rules="titleRules" label="제목" required></v-text-field>
         <v-textarea v-model="content" :rules="contentRules" label="내용" class="mt-4" outlined></v-textarea>
-        <!-- <v-text-field v-model="writer" label="작성자" disabled></v-text-field> -->
         <v-btn :disabled="!valid" color="success" class="mr-4 btn" 
-          @click="noticeId !== undefined ? update() : write()">{{noticeId !== undefined ? '수정' : '작성'}}
+          @click="noticeId !== undefined ? update() : write()">{{noticeId !== undefined ? "수정" : "작성"}}
           <i class="fas fa-check-circle ml-1"></i></v-btn>
         <v-btn color="error" class="btn" @click="noticeId !== undefined ? updatecancel() : addcancel()">취소
           <i class="fas fa-times-circle ml-1"></i>
@@ -32,18 +31,19 @@ export default {
       select: null,
       title: "",
       content: "",
-      writer: "",
+      writer_id: "",
+      isNoticeAll: "",
       valid: false,
-      categoryRules: [[v => !!v || "분류를 선택해주세요"]],
+      categoryRules: [v => !!v || "분류를 선택해주세요"],
       titleRules: [
         v => !!v || "제목을 작성해주세요",
         v => (v && v.length <= 30) || "제목을 30자 이내로 작성해주세요",
       ],
       contentRules: [v => !!v || "내용을 작성해주세요"],
       categorys: [
-        '일반',
-        '중요',
-        '테마'
+        "일반",
+        "중요",
+        "테마"
       ]
     }
   },
@@ -57,25 +57,27 @@ export default {
         this.select = 3
       }
 
-      var noticeCreateForms = {
-        'category': this.select,
-        'title': this.title,
-        'content': this.content,
-        'writer': this.$store.getters.user_id,
-        'isNoticeAll': 1,
-        // 'writed_at': Date.Now()
-      }
-      console.log(noticeCreateForms)
-      const requestHeader = this.$store.getters.requestHeader
-      axios.post('/articles/theme_notice/', noticeCreateForms, requestHeader)
-        .then(
-          this.$router.push({
-            path: '/notice'
+      if (this.$refs.form.validate()) {
+        var noticeCreateForms = {
+          'category': this.select,
+          'title': this.title,
+          'content': this.content,
+          'writer': this.$store.getters.user_id,
+          'isNoticeAll': 1,
+          // 'writed_at': Date.Now()
+        }
+        console.log(noticeCreateForms)
+        const requestHeader = this.$store.getters.requestHeader
+        axios.post('/articles/theme_notice/', noticeCreateForms, requestHeader)
+          .then(
+            this.$router.push({
+              path: '/notice'
+            })
+          )
+          .catch(err => {
+            console.log(err)
           })
-        )
-        .catch(err => {
-          console.log(err)
-        })
+      }
     },
     update() {
       if (this.select === "일반") {
@@ -86,22 +88,29 @@ export default {
         this.select = 3
       }
 
-      var noticeUpdateForms = {
-        'category': this.select,
-        'title': this.title,
-        'content': this.content,
-        // 'updated_at': Date.Now()
-      }
-      const requestHeader = this.$store.getters.requestHeader
-      axios.put(`/articles/theme_notice/${this.noticeId}/`, noticeUpdateForms, requestHeader)
-        .then(
-          this.$router.push({
-            path: `/notice/detail/${this.noticeId}`
+      if (this.$refs.form.validate()) {
+        var noticeUpdateForms = {
+          'category': this.select,
+          'title': this.title,
+          'content': this.content,
+          'writer': this.$store.getters.user_id,
+          'isNoticeAll': this.isNoticeAll,
+          // 'updated_at': Date.Now()
+        }
+        const requestHeader = this.$store.getters.requestHeader
+        console.log(this.$store.getters.user_id)
+        console.log(this.select)
+        axios.put(`/articles/theme_notice/${this.noticeId}/`, noticeUpdateForms, requestHeader)
+          .then(response => {
+            console.log(response.data)
+            this.$router.push({
+              path: `/notice/detail/${this.noticeId}`
+            })
           })
-        )
-        .catch(err => {
-          console.log(err)
-        })
+          .catch(err => {
+            console.log(err)
+          })
+      }
     },
     reset () {
       this.$refs.form.reset()
@@ -122,14 +131,23 @@ export default {
     if (this.noticeId !== undefined) {
       axios.get(`/articles/notices/${this.noticeId}/`)
         .then(response => {
-          if (response.data['notice'].writer !== this.$store.getters.user_id) {
+          console.log(response.data)
+          if (response.data.writer_id === this.$store.getters.user_id) {
+            // this.select = response.data.category
+            if (response.data.category === 1) {
+              this.select = "일반"
+            } else if (response.data.category === 2) {
+              this.select = "중요"
+            } else if (response.data.category === 3) {
+              this.select = "테마"
+            }
+            this.title = response.data.title
+            this.content = response.data.content
+            this.isNoticeAll = response.data.isNoticeAll
+            this.writer_id = response.data.writer_id
+          } else {
             alert("수정 권한이 없습니다.")
             this.$router.push("/notice")
-          } else {
-            this.select = response.data['notice'].category
-            this.title = response.data['notice'].title
-            this.content = response.data['notice'].content
-            this.writer = response.data['notice'].writer
           }
         })
         .catch(err => {
