@@ -36,11 +36,11 @@
 
 
 
-  <!-- 여행지? -->
+  <!-- 여행지 -->
         <div class="pop-box mt-8">
       <div class="main-section">
         <h2 class="home-h2-title text-center ml-0"><i class="fas fa-book mr-4"></i>어디로 떠날까요?</h2>
-        <v-sheet class="mx-auto" max-width="100vw">
+        <v-sheet class="mr-auto" max-width="90vw">
           <v-slide-group v-model="model_" class="pa-4" center-active show-arrows>
             <v-slide-item v-for="n in 8" :key="n" v-slot:default="{ active, toggle }">
 
@@ -56,14 +56,14 @@
                     <i class="fas fa-window-close"></i>
                   </div>
                 </div>
-                <v-img :src="destination[n-1]" width="100%" height="100%" />
+                <v-img @click="showDetail(travelId)" :src="destination[n-1]" width="100%" height="100%" />
                 <v-row class="fill-height" align="center" justify="center">
                 </v-row>
               </v-card>
             </v-slide-item>
           </v-slide-group>
         </v-sheet>
-        <v-sheet class="mx-auto" max-width="100vw">
+        <v-sheet class="ml-auto" max-width="90vw">
           <v-slide-group v-model="model_" class="pa-4" center-active show-arrows>
             <v-slide-item v-for="n in 8" :key="n" v-slot:default="{ active, toggle }">
 
@@ -92,30 +92,35 @@
 </template>
 
 <script>
+// import axios from 'axios'
   export default {
     name: 'Travel',
     data() {
       return {
         slides: [
-          require('../assets/bg1.jpg'),
-          // require('../assets/bg2.jpg'),
-          // require('../assets/bg3.jpg'),
-          // require('../assets/bg4.jpg'),
-          require('../assets/bg5.jpg'),
-          // require('../assets/bg6.jpg'),
+          require('../../assets/bg1.jpg'),
+          require('../../assets/bg5.jpg'),
         ],
         destination: [
-          require('../assets/image/destination1.jpg'),
-          require('../assets/image/destination2.jpg'),
-          require('../assets/image/destination3.jpg'),
-          require('../assets/image/destination4.jpg'),
-          require('../assets/image/destination1.jpg'),
-          require('../assets/image/destination2.jpg'),
-          require('../assets/image/destination3.jpg'),
-          require('../assets/image/destination4.jpg'),
+          require('../../assets/image/destination1.jpg'),
+          require('../../assets/image/destination2.jpg'),
+          require('../../assets/image/destination3.jpg'),
+          require('../../assets/image/destination4.jpg'),
+          require('../../assets/image/destination1.jpg'),
+          require('../../assets/image/destination2.jpg'),
+          require('../../assets/image/destination3.jpg'),
+          require('../../assets/image/destination4.jpg'),
         ],
         }
     },
+    methods: {
+      showDetail(travelId) {
+        this.$router.push('/travel' + travelId)
+      }
+    },
+    mounted() {
+     
+    }
   }
 </script>
 

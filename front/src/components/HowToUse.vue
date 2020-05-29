@@ -17,7 +17,7 @@
 
 
     <v-row justify="center" class="home-how-to">
-      <v-dialog v-model="dialog" persistent min-width="80vw" max-width="800px">
+      <v-dialog v-model="dialog" persistent min-width="350px" width="80vw" max-width="800px">
         <v-card>
 
           <v-stepper v-model="e1">
@@ -93,6 +93,16 @@
   }
 </script>
 
-<style lang="scss" scoped>
+<style>
+ .v-dialog__content {
+   width: 100vw !important;
+ }
 
+ .v-overlay__scrim {
+   width: 100vw;
+ }
+
+ .v-overlay--active {
+   width: 100vw
+ }
 </style>
