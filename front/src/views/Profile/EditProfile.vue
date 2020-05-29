@@ -18,12 +18,12 @@
                 </v-col>
                 <v-col md="6" class="content-col">
                 </v-col>
-                <v-col cols="12" md="6" class="content-col">
+                <!-- <v-col cols="12" md="6" class="content-col">
                   <v-text-field label="Password" class="purple-input" />
                 </v-col>
                 <v-col cols="12" md="6" class="content-col">
                   <v-text-field label="Password Confirm" class="purple-input" />
-                </v-col>
+                </v-col> -->
                 <v-col cols="12" md="6" class="content-col">
                   <v-text-field label="Nickname" class="purple-input" />
                 </v-col>
@@ -35,12 +35,6 @@
                 </v-col>
                 <v-col cols="12" md="4" class="content-col">
                   <v-text-field label="Date of birth" />
-                  <!-- <v-menu ref="menu" :close-on-content-click="false" v-model="menu" :nudge-right="40" lazy
-                    transition="scale-transition" offset-y full-width max-width="290px" min-width="100px">
-                    <v-text-field slot="activator" v-model="date" label="Date of birth" readonly></v-text-field>
-                    <v-date-picker ref="picker" v-model="date" :max="new Date().toISOString().substr(0, 10)"
-                      min="1950-01-01" @change="datesave" ></v-date-picker>
-                  </v-menu> -->
                 </v-col>
                 <v-col cols="12" md="4" class="content-col">
                   <v-text-field label="Phone Number" />
@@ -76,7 +70,7 @@
 </template>
 
 <script>
-import Drawer from '../components/Drawer.vue'
+import Drawer from '@/components/Drawer.vue'
 
 export default {
   name: 'editprofile',

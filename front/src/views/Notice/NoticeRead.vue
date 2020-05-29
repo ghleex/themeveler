@@ -53,7 +53,7 @@ export default {
         { text: '분류', value: 'category' },
         { text: '제목', value: 'title', sortable: false },
         { text: '작성자', value: 'writer', sortable: false },
-        { text: '등록일', value: 'createddate'.slice(0, 16) }
+        { text: '등록일', value: 'writed_at'.slice(0, 16) }
       ],
       noticeData: []
     }
@@ -78,6 +78,7 @@ export default {
   mounted() {
     axios.get('/articles/notices/')
       .then(response => {
+        console.log(response.data)
         this.noticeData = response.data["notice"]
       })
       .catch(err => {

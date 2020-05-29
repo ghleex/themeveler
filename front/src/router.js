@@ -9,11 +9,12 @@ import NoticeDetail from './views/Notice/NoticeDetail.vue'
 import ServiceRead from './views/ServiceCenter/ServiceRead.vue'
 import ServiceCreate from './views/ServiceCenter/ServiceCreate.vue'
 import ServiceDetail from './views/ServiceCenter/ServiceDetail.vue'
-import Profile from './views/Profile.vue'
-import EditProfile from './views/EditProfile.vue'
-import ProfileArticle from './views/ProfileArticle.vue'
-import ProfileComment from './views/ProfileComment.vue'
-import ProfileTest from './views/ProfileTest.vue'
+import Profile from './views/Profile/Profile.vue'
+import EditPassword from './views/Profile/EditPassword.vue'
+import EditProfile from './views/Profile/EditProfile.vue'
+import ProfileArticle from './views/Profile/ProfileArticle.vue'
+import ProfileComment from './views/Profile/ProfileComment.vue'
+import ProfileTest from './views/Profile/ProfileTest.vue'
 import Travel from './views/Travel.vue'
 // import Map from './views/Map/Map.vue'
 import Error404 from './views/Error404.vue'
@@ -69,7 +70,13 @@ const routes = [
   {
     path: '/profile',
     name: 'profile',
-    component: Profile
+    component: Profile,
+    // meta: {loginRequired: true}
+  },
+  {
+    path: '/editpassword',
+    name: 'editpassword',
+    component: EditPassword
   },
   {
     path: '/editprofile',

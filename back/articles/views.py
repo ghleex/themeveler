@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
+from django.db.models import Q
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -8,11 +9,12 @@ from rest_framework.parsers import FormParser
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from rest_framework_jwt.settings import api_settings
 from drf_yasg.utils import swagger_auto_schema
-from .models import Notice, VoiceCategory, CustomersVoice, ManagersReply, Comment, ReComment, ReportComment, ReportReComment
-from .serializers import NoticeSerializer, VoiceCategorySerializer, CustomersVoiceSerializer
+from .models import NoticeCategory, Notice, VoiceCategory, CustomersVoice, ManagersReply, Comment, ReComment, ReportComment, ReportReComment
+from .serializers import NoticeCategorySerializer, NoticeSerializer, VoiceCategorySerializer, CustomersVoiceSerializer
 from .serializers import ManagerReplySerializer, CommentSerializer, ReCommentSerializer
 from .serializers import ReportCommentSerializer, ReportReCommentSerializer
 from travels.models import Theme, Destination
+from travels.serializers import ThemeSerializer, DestinationSerializer
 
 User = get_user_model()
 decoder = api_settings.JWT_DECODE_HANDLER
@@ -159,7 +161,7 @@ class CustomersVoices(APIView):
 @permission_classes((IsAuthenticated,))
 class CustomersVoiceChange(APIView):
     """
-        고객센터(사용자) - 요청 글 내용 수정
+        고객센터(사용자) - 요청 글 상세 내용 확인/수정/삭제
         
         ---
         # 내용
@@ -167,14 +169,37 @@ class CustomersVoiceChange(APIView):
         ## PUT
             * return 값: voice.id
     """
-    def get_user(self, user_pk, format=None):
-        return get_object_or_404(User, pk=user_pk)
+    def get_voice(self, voice_pk, format=None):
+        return get_object_or_404(CustomersVoice, pk=voice_pk)
+
+    def get(self, request, user_pk, voice_pk, format=None):
+        request_user = get_user(request.headers['Authorization'].split(' '))
+        voice = self.get_voice(voice_pk)
+        try:
+            if user_pk == request_user.pk:
+                serializer_v = CustomersVoiceSerializer(voice).data
+                req_user = serializer_v['request_user']
+                data = {
+                    'id': serializer_v['id'],
+                    'title': serializer_v['title'],
+                    'content': serializer_v['content'],
+                    'category': serializer_v['category'],
+                    'request_user_id': req_user,
+                    'request_user_nickname': str(User.objects.get(pk=req_user).nickname),
+                    'manager': serializer_v['manager'],
+                    'is_fixed': serializer_v['is_fixed'],
+                }
+                return Response(data, status=status.HTTP_200_OK)
+            else:
+                return Response(access_message, status=status.HTTP_401_UNAUTHORIZED)
+        except:
+            return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
     
     def put(self, request, user_pk, voice_pk, format=None):
-        user = self.get_user(user_pk)
-        if user.pk == request.user.pk:
+        request_user = get_user(request.headers['Authorization'].split(' '))
+        voice = self.get_voice(voice_pk)
+        if request_user.pk == voice.request_user:
             requests = request.data
-            voice = CustomersVoice.objects.get(pk=voice_pk)
             voice.title = requests.get('title')
             voice.content = requests.get('content')
             voice.category = VoiceCategory.objects.get(pk=requests.get('category'))
@@ -191,6 +216,27 @@ class CustomersVoiceChange(APIView):
                 return Response(serializer.errors, status=status.HTTP_202_ACCEPTED)
         else:
             return Response(access_message, status=status.HTTP_403_FORBIDDEN)
+
+    def delete(self, request, user_pk, voice_pk, format=None):
+        request_user = get_user(request.headers['Authorization'].split(' '))
+        voice = self.get_voice(voice_pk)
+        try:
+            if voice.is_fixed:
+                message = {
+                    'message': 'CANNOT DELETE THE VOICE DUE TO ADMIN\'S REPLY'
+                }
+                return Response(message, status=status.HTTP_202_ACCEPTED)
+            else:
+                if request_user.pk == voice.request_user:
+                    voice.delete()
+                    message = {
+                        'message': 'SUCCESSFULLY DELETED THE VOICE'
+                    }
+                    return Response(message, status=status.HTTP_204_NO_CONTENT)
+                else:
+                    return Response(access_message, status=status.HTTP_401_UNAUTHORIZED)
+        except:
+            return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
 
 @permission_classes((IsAdminUser,))
@@ -275,6 +321,86 @@ class ManagersReplyChange(APIView):
                 return Response(serializer.errors, status=status.HTTP_202_ACCEPTED)
         except:
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
+
+
+@permission_classes((IsAdminUser,))
+class SetNoticeCategory(APIView):
+    """
+        공지사항 유형 조회/생성
+
+        ---
+        # 내용
+        ## 공통
+            * categories: 전체 유형
+        ## GET
+            * category: 유형을 담을 리스트
+        ## POST
+            * category: 새롭게 만들 유형
+    """
+    def get(self, request, format=None):
+        categories = NoticeCategory.objects.all()
+        category = [NoticeCategorySerializer(c).data for c in categories]
+        user = get_user(request.headers['Authorization'].split(' '))
+        if user.is_staff:
+            data = {
+                'data': category,
+            }
+            return Response(data, status=status.HTTP_200_OK)
+        else:
+            return Response(access_message, status=status.HTTP_401_UNAUTHORIZED)
+
+    def post(self, request, format=None):
+        try:
+            category = request.data.get('category')
+            data = {
+                'category': category,
+            }
+            serializer = NoticeCategorySerializer(data=data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                Response(serializer.errors, status=status.HTTP_202_ACCEPTED)
+        except:
+            return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
+
+
+@permission_classes((IsAdminUser,))
+class ChangeNoticeCategory(APIView):
+    """
+        공지사항 유형 수정/삭제
+
+        ---
+        # 내용
+            * category: 요청 유형 QuerySet
+        
+    """
+    def get_category(self, category_pk, format=None):
+        return get_object_or_404(NoticeCategory, pk=category_pk)
+        
+    def put(self, request, category_pk, format=None):
+        category = self.get_category(category_pk)
+        try:
+            category.category = request.data.get('category')
+            data = {
+                'category': category.category,
+            }
+            serializer = NoticeCategorySerializer(category, data=data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(data, status=status.HTTP_200_OK)
+            else:
+                return Response(serializer.errors, status=status.HTTP_202_ACCEPTED)
+        except:
+            return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, category_pk, format=None):
+        category = self.get_category(category_pk)
+        category.delete()
+        message = {
+            'message': 'SUCCESSFULLY DELETED THE NOTICE CATEGORY'
+        }
+        return Response(message, status=status.HTTP_200_OK)
 
 
 @permission_classes((AllowAny, ))
@@ -365,16 +491,30 @@ class ThemeNoticesPost(APIView):
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
 
-@permission_classes((IsAdminUser,))
 class ThemeNoticesChange(APIView):
     """
-        코스 공지사항 - 관리자 수정/삭제
+        코스 공지사항 - 세부 내용(공통) | 관리자의 수정/삭제
         
         ---
     """
     def get_notices(self, notice_pk, format=None):
         return get_object_or_404(Notice, pk=notice_pk)
+
+    @permission_classes((IsAuthenticated,))
+    def get(self, request, notice_pk, format=None):
+        notice = self.get_notices(notice_pk)
+        serializer_n = NoticeSerializer(notice).data
+        writer = serializer_n['writer']
+        data = {
+            'id': serializer_n['id'],
+            'title': serializer_n['title'],
+            'content': serializer_n['content'],
+            'writer_id': writer,
+            'writer_nickname': str(User.objects.get(pk=writer).nickname),            
+        }
+        return Response(data, status=status.HTTP_200_OK)
     
+    @permission_classes((IsAdminUser,))
     def put(self, request, notice_pk, format=None):
         notice = self.get_notices(notice_pk)
         try:
@@ -397,6 +537,7 @@ class ThemeNoticesChange(APIView):
         except:
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
+    @permission_classes((IsAdminUser,))
     def delete(self, request, notice_pk, format=None):
         try:
             notice = self.get_notices(notice_pk)
@@ -408,6 +549,35 @@ class ThemeNoticesChange(APIView):
                 return Response(message, status=status.HTTP_200_OK)
             else:
                 return Response(access_message, status=status.HTTP_401_UNAUTHORIZED)
+        except:
+            return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
+
+
+@permission_classes((AllowAny, ))
+class Search(APIView):
+    """
+        검색 - 테마, 여행지
+
+        ---
+    """
+    def get(self, request, searching_word, format=None):
+        try:
+            query = searching_word
+            result = {
+                'theme': '검색할 내용이 존재하지 않습니다.',
+                'dest': '검색할 내용이 존재하지 않습니다.',
+            }        
+            
+            theme_results = Theme.objects.filter(
+                Q(name__contains=query) | Q(content__contains=query) | Q(region__contains=query) | Q(dests__icontains=query)
+            ).distinct()
+            dest_results = Destination.objects.filter(
+                Q(name__contains=query)
+            ).distinct()
+            result['theme'] = [ThemeSerializer(t_result).data for t_result in theme_results]
+            result['dest'] = [DestinationSerializer(d_result).data for d_result in dest_results]
+                
+            return Response(result, status=status.HTTP_200_OK)
         except:
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
