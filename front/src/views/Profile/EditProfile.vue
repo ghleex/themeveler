@@ -106,15 +106,13 @@ export default {
       form.append("nickname", this.nickname)
       axios.put("/accounts/usermgmt/", form, this.$store.getters.requestHeader)
         .then(() => {
-          alert('유저 정보가 성공적으로 변경되었습니다.')
+          alert('회원 정보가 성공적으로 변경되었습니다.')
           this.$session.set("nickname", this.nickname)
-          this.$router.push({
-            path: '/profile'
-          })
+          this.$router.push('/profile')
         })
         .catch(err =>{
           console.log(err)
-          alert('유저 정보 변경이 실패하였습니다. 잠시후 다시 시도해주십시오.')
+          alert('회원 정보 변경이 실패하였습니다. 잠시후 다시 시도해주십시오.')
         })
     },
     updatecancel () {
