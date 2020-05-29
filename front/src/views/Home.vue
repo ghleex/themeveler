@@ -1,7 +1,8 @@
 <template>
   <div class="header">
-    <v-btn style="position:absolute; margin-top:70px; left:20%; z-index:2;" color="primary" outlined to="/profile">
-      유저페이지>>>>임시버튼</v-btn>
+    <!-- <v-btn style="position:absolute; margin-top:70px; left:20%; z-index:2;" color="primary" outlined to="/profile">
+      유저페이지>>>>임시버튼</v-btn> -->
+    
     <div class="home-search-bar">
       <SearchBar />
     </div>

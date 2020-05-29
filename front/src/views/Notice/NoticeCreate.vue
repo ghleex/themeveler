@@ -9,7 +9,7 @@
         <v-select v-model="select" :items="categorys" :rules="categoryRules" label="분류" required></v-select>
         <v-text-field v-model="title" :counter="30" :rules="titleRules" label="제목" required></v-text-field>
         <v-textarea v-model="content" :rules="contentRules" label="내용" class="mt-4" outlined></v-textarea>
-        <v-text-field v-model="writer" label="작성자" disabled></v-text-field>
+        <!-- <v-text-field v-model="writer" label="작성자" disabled></v-text-field> -->
         <v-btn :disabled="!valid" color="success" class="mr-4 btn" 
           @click="noticeId !== undefined ? update() : write()">{{noticeId !== undefined ? '수정' : '작성'}}
           <i class="fas fa-check-circle ml-1"></i></v-btn>
@@ -59,11 +59,12 @@ export default {
       }
       const requestHeader = this.$store.getters.requestHeader
       axios.post('/articles/theme_notice/', noticeCreateForms, requestHeader)
-        .then(
+        .then(response => {
+          console.log(response.data)
           this.$router.push({
             path: '/notice'
           })
-        )
+        })
         .catch(err => {
           console.log(err)
         })
