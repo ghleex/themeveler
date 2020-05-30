@@ -12,5 +12,5 @@ urlpatterns = [
     path('chat/<int:theme_pk>/', views.Chatting.as_view()),
     path('all_theme/', views.AllTheme.as_view()),
     path('destinations/<int:theme_pk>', views.Destinations.as_view()),
-    path('selected_theme/<region>', views.SelectedTheme.as_view())
+    path('filtered_theme/<region>', views.FilteredTheme.as_view())
 ]
