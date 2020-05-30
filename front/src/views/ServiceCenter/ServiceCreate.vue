@@ -11,7 +11,6 @@
         <v-select color="#607D8B" v-model="select" :items="categorys" :rules="categoryRules" label="분류" required></v-select>
         <v-text-field color="#607D8B" v-model="title" :counter="30" :rules="titleRules" label="제목" required></v-text-field>
         <v-textarea color="#607D8B" v-model="content" :rules="contentRules" label="내용" class="mt-4" outlined></v-textarea>
-        <v-text-field color="#607D8B" v-model=" writer" label="작성자" class="mb-7" disabled></v-text-field>
         <v-btn color="#607D8B" :disabled="!valid" class="mr-4 text-light btn-create"
           @click="serviceId !== undefined ? update() : write()">{{serviceId !== undefined ? '수정' : '작성'}}
           <i class="fas fa-check-circle ml-1"></i></v-btn>
@@ -37,7 +36,7 @@ export default {
       content: "",
       writer: this.$session.get("nickname"),
       valid: false,
-      categoryRules: [[v => !!v || '분류를 선택해주세요']],
+      categoryRules: [v => !!v || '분류를 선택해주세요'],
       titleRules: [
         v => !!v || '제목을 작성해주세요',
         v => (v && v.length <= 30) || '제목을 30자 이내로 작성해주세요',
@@ -51,34 +50,10 @@ export default {
   },
   methods: {
     write() {
-      if (!this.select) {
-          Swal.fire({
-          title: "Check Categorys",
-          text: "분류를 선택해주세요.",
-          type: "warning",
-          timer: 3000
-        })
-      } else if (!this.title) {
-          Swal.fire({
-          title: "Check Title",
-          text: "제목을 입력하세요.",
-          type: "warning",
-          timer: 3000
-        })
-      } else if (this.title.length > 30) {
-          Swal.fire({
-          title: "Check Title",
-          text: "제목을 30자 이내로 작성해주세요",
-          type: "warning",
-          timer: 3000
-        })
-      } else if (!this.content) {
-          Swal.fire({
-          title: "Check Content",
-          text: "내용을 입력하세요.",
-          type: "warning",
-          timer: 3000
-        })
+      if (this.select === "건의") {
+        this.select = 1
+      } else if (this.select === "신고") {
+        this.select = 2
       }
 
       if (this.$refs.form.validate()) {
@@ -86,8 +61,8 @@ export default {
           'category': this.select,
           'title': this.title,
           'content': this.content,
-          'writer': this.$session.get("nickname"),
-          // 'writed_at': Date.Now()
+          'request_user': this.$store.getters.user_id,
+          'is_fixed': "",
         }
         // var today = new Date();
         // var year = today.getFullYear(); // 년도
@@ -97,9 +72,9 @@ export default {
         // // var hour = today.getHours() // 시간
         // // var min = today.getMinutes()
 
-        // // this.createddate = `${year}-${month}-${date} | ${hour}:${min}`
+        // // this.writed_at = `${year}-${month}-${date} | ${hour}:${min}`
         // this.writed_at = `${year}-${month}-${date}`
-        // // console.log(this.createddate)
+        // // console.log(this.writed_at)
 
         const requestHeader = this.$store.getters.requestHeader
         axios.post(`/articles/cv/${this.userId}/`, serviceCreateForms, requestHeader)
@@ -149,7 +124,8 @@ export default {
           'category': this.select,
           'title': this.title,
           'content': this.content,
-          // 'updated_at': Date.Now()
+          'request_user': this.$store.getters.user_id,
+          'is_fixed': this.is_fixed
         }
         const requestHeader = this.$store.getters.requestHeader
         axios.put(`/articles/cv/${this.userId}/${this.serviceId}/`, serviceUpdateForms, requestHeader)
@@ -183,14 +159,20 @@ export default {
     if (this.serviceId !== undefined) {
       axios.get(`/articles/cv/${this.userId}/${this.serviceId}/`)
         .then(response => {
-          if (response.data['service'].writer_name !== this.$session.get("nickname")) {
+          if (response.data['voice'].request_user === this.$store.getters.user_id) {
+            if (response.data.category === 1) {
+              this.select = "건의"
+            } else if (response.data.category === 2) {
+              this.select = "신고"
+            }
+            this.select = response.data['voice'].category
+            this.title = response.data['voice'].title
+            this.content = response.data['voice'].content
+            this.writer = response.data['voice'].writer_name
+            this.is_fixed = response.data['voice'].is_fixed
+          } else {
             alert("수정 권한이 없습니다.")
             this.$router.push("/service")
-          } else {
-            this.select = response.data['service'].category
-            this.title = response.data['service'].title
-            this.content = response.data['service'].content
-            this.writer = response.data['service'].writer_name
           }
         })
         .catch(err => {
