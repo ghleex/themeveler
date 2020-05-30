@@ -206,23 +206,6 @@ class Chatting(APIView):
             return Response(serializer.data)
 
 
-# @permission_classes((IsAuthenticated,))
-@permission_classes((IsAuthenticated,))
-class TravelTheme(APIView):
-    # @swagger_auto_schema(query_serializer=ThemeSerializer)
-    def get(self, request, theme_pk, format=None):
-        theme = Theme.objects.filter(pk=theme_pk)[0]
-        first_dest = theme.start()
-        theme = ThemeSerializer(theme)
-        dest = DestinationSerializer(first_dest)
-        
-        data = {
-            'theme': theme.data,
-            'first_dest': dest.data
-        }
-        
-        return Response(data)
-
 class AllTheme(APIView):
     def get(self, request):
         all_theme = Theme.objects.all()
@@ -234,12 +217,29 @@ class AllTheme(APIView):
         }
         return Response(data)
 
-class SelectedTheme(APIView):
+class Destinations(APIView):
+    def get(self, request, theme_pk):
+        destinations = []
+        theme = get_object_or_404(Theme, pk=theme_pk)
+        for dest_pk in theme.dests:
+            destination = Destination.objects.filter(pk=dest_pk)[0]
+            if destination:
+                destinations.append(DestinationSerializer(destination).data)
+            else:
+                return Response('Destination is not exist', status=status.HTTP_400_BAD_REQUEST)
+        data = {
+            'destinations' : destinations
+        }
+        return Response(data) if destinations else Response(error_message, status=status.HTTP_400_BAD_REQUEST)
+
+class FilteredTheme(APIView):
     def get(self, request, region):
         filtered_theme = ThemeSerializer(Theme.objects.filter(region=region)) if region else ThemeSerializer(Theme.objects.all())
         if not filtered_theme:
             return Response('Theme is not existed', status=status.HTTP_400_BAD_REQUEST)
         
         return filtered_theme
+
+
             
     

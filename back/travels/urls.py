@@ -10,7 +10,7 @@ urlpatterns = [
     path('visited_dests/', views.VisitedDest.as_view()),
     path('like/<int:theme_pk>/', views.Like.as_view()),
     path('chat/<int:theme_pk>/', views.Chatting.as_view()),
-    path('start/<int:theme_pk>/', views.TravelTheme.as_view()),
     path('all_theme/', views.AllTheme.as_view()),
-    path('selected_theme/<region>', views.SelectedTheme.as_view())
+    path('destinations/<int:theme_pk>', views.Destinations.as_view()),
+    path('filtered_theme/<region>', views.FilteredTheme.as_view())
 ]
