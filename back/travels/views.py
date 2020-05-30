@@ -207,23 +207,23 @@ class Chatting(APIView):
 
 
 # @permission_classes((IsAuthenticated,))
-@permission_classes((IsAuthenticated,))
-class TravelTheme(APIView):
-    # @swagger_auto_schema(query_serializer=ThemeSerializer)
-    def get(self, request, theme_pk, format=None):
-        theme = Theme.objects.filter(pk=theme_pk)[0]
-        first_dest = theme.start()
-        theme = ThemeSerializer(theme)
-        dest = DestinationSerializer(first_dest)
+# @permission_classes((IsAuthenticated,))
+# class TravelTheme(APIView):
+#     # @swagger_auto_schema(query_serializer=ThemeSerializer)
+#     def get(self, request, theme_pk, format=None):
+#         theme = Theme.objects.filter(pk=theme_pk)[0]
+#         first_dest = theme.start()
+#         theme = ThemeSerializer(theme)
+#         dest = DestinationSerializer(first_dest)
         
-        data = {
-            'theme': theme.data,
-            'first_dest': dest.data
-        }
+#         data = {
+#             'theme': theme.data,
+#             'first_dest': dest.data
+#         }
         
-        return Response(data)
+#         return Response(data)
 
-class AllTheme(APIView):
+class TravelTheme(APIView):
     def get(self, request):
         all_theme = Theme.objects.all()
         if not all_theme:
@@ -241,5 +241,7 @@ class SelectedTheme(APIView):
             return Response('Theme is not existed', status=status.HTTP_400_BAD_REQUEST)
         
         return filtered_theme
+
+
             
     
