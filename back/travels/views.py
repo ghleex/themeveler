@@ -127,7 +127,7 @@ class VisitedDest(APIView):
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
 
-@permission_classes((IsAuthenticated,))
+# @permission_classes((IsAuthenticated,))
 class Like(APIView):
     """
         사용자의 테마 좋아요/취소
@@ -156,6 +156,7 @@ class Like(APIView):
         try:
             message = {
                 'message': '',
+                'add_or_remove': 0
             }
             if theme.theme_like_users.filter(pk=user.pk).exists():
                 theme.theme_like_users.remove(user)
@@ -163,6 +164,7 @@ class Like(APIView):
             else:
                 theme.theme_like_users.add(user)
                 message['message'] = f'{user.username} added to like_users'
+                message['add_or_remove'] = 1
             return Response(message, status=status.HTTP_200_OK)
         except:
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
@@ -227,7 +229,7 @@ class Destinations(APIView):
                 destinations.append(DestinationSerializer(destination).data)
             else:
                 return Response('Destination is not exist', status=status.HTTP_400_BAD_REQUEST)
-                
+
         user = get_user(request.headers['Authorization'].split(' '))
         is_like = False
         if theme.theme_like_users.filter(pk=user.pk).exists():
