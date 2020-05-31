@@ -227,9 +227,10 @@ class Destinations(APIView):
                 destinations.append(DestinationSerializer(destination).data)
             else:
                 return Response('Destination is not exist', status=status.HTTP_400_BAD_REQUEST)
-        user = request.user
+                
+        user = get_user(request.headers['Authorization'].split(' '))
         is_like = False
-        if theme.theme_like_users.filter(pk=user).exists():
+        if theme.theme_like_users.filter(pk=user.pk).exists():
             is_like = True
         data = {
             'destinations' : destinations,
