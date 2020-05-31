@@ -156,7 +156,6 @@ class Like(APIView):
         try:
             message = {
                 'message': '',
-                'add_or_remove': 0
             }
             if theme.theme_like_users.filter(pk=user.pk).exists():
                 theme.theme_like_users.remove(user)
@@ -164,7 +163,6 @@ class Like(APIView):
             else:
                 theme.theme_like_users.add(user)
                 message['message'] = f'{user.username} added to like_users'
-                message['add_or_remove'] = 1
             return Response(message, status=status.HTTP_200_OK)
         except:
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
