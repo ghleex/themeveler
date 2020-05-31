@@ -8,65 +8,67 @@
       여행을 읽다<br>
       테마블러,
     </div>
-    <v-carousel
-    cycle
-    height="60vw"
-    hide-delimiter-background
-    show-arrows-on-hover
-  >
-    <v-carousel-item
-      v-for="slide in slides"
-      :key="slide"
-    >
-      <v-sheet
-        height="100%"
-      >
-        <v-row
-          class="fill-height"
-          align="center"
-          justify="center"
-        >
-          <img :src="slide" alt="" width="100%" />
-        </v-row>
-      </v-sheet>
-    </v-carousel-item>
-  </v-carousel>
+    <v-carousel cycle height="60vw" hide-delimiter-background show-arrows-on-hover>
+      <v-carousel-item v-for="slide in slides" :key="slide">
+        <v-sheet height="100%">
+          <v-row class="fill-height" align="center" justify="center">
+            <img :src="slide" alt="" width="100%" />
+          </v-row>
+        </v-sheet>
+      </v-carousel-item>
+    </v-carousel>
 
 
 
 
 
-  <!-- 여행지 -->
-        <div class="pop-box mt-8">
+    <!-- 여행지 -->
+    <div class="pop-box mt-8">
       <div class="main-section">
         <h2 class="home-h2-title text-center ml-0"><i class="fas fa-book mr-4"></i>어디로 떠날까요?</h2>
         <v-sheet class="mr-auto" max-width="90vw">
-          <v-slide-group v-model="model_" class="pa-4" center-active show-arrows>
-            <v-slide-item v-for="n in 8" :key="n" v-slot:default="{ active, toggle }">
-
+          <v-slide-group v-model="model" class="pa-4" center-active show-arrows>
+            <v-slide-item v-for="theme in themeArr" :key="theme" v-slot:default="{ active, toggle }">
               <v-card class="home-destination-card" min-height="290px" max-height="30vw" min-width="218px"
                 max-width="30vw" @click="toggle">
                 <div>
-                  <!-- <div class="home-card-destination-name pt-2 text-light">여행지</div> -->
                   <div class="home-card-destination-header">
                     <div class="home-card-title">
                       <i class="fas fa-book mr-1"></i>
-                      여행지_이름
+                      {{ theme.name }}.exe
                     </div>
                     <i class="fas fa-window-close"></i>
                   </div>
                 </div>
-                <v-img @click="showDetail(travelId)" :src="destination[n-1]" width="100%" height="100%" />
+                
+
+                <!-- <v-img @click="showDetail(theme.id)" :src="theme.image" width="100%" height="100%" /> -->
+                <!-- 임시 -->
+                <v-sheet class="d-flex justify-content-center align-items-center" @click="showDetail(theme.id)" color="#E91E63" width="100%" height="100%" style="border-radius: 0;">
+                  <div class="text-light pb-12" style="font-family: 'Cafe24Simplehae'; font-size: 25px;">#.{{ theme.id }} {{ theme.region }}</div>
+                </v-sheet>
+
+
                 <v-row class="fill-height" align="center" justify="center">
                 </v-row>
               </v-card>
             </v-slide-item>
           </v-slide-group>
+
+
+
+
+
+
+
+
+
+
+
         </v-sheet>
         <v-sheet class="ml-auto" max-width="90vw">
           <v-slide-group v-model="model_" class="pa-4" center-active show-arrows>
             <v-slide-item v-for="n in 8" :key="n" v-slot:default="{ active, toggle }">
-
               <v-card class="home-destination-card" min-height="290px" max-height="30vw" min-width="218px"
                 max-width="30vw" @click="toggle">
                 <div>
@@ -92,11 +94,14 @@
 </template>
 
 <script>
-// import axios from 'axios'
+  import axios from 'axios'
   export default {
     name: 'Travel',
     data() {
       return {
+        themeArr: [],
+        model: null,
+        model_: null,
         slides: [
           require('../../assets/bg1.jpg'),
           require('../../assets/bg5.jpg'),
@@ -111,30 +116,43 @@
           require('../../assets/image/destination3.jpg'),
           require('../../assets/image/destination4.jpg'),
         ],
-        }
+      }
     },
     methods: {
-      showDetail(travelId) {
-        this.$router.push('/travel' + travelId)
+      showDetail(themeId) {
+        this.$router.push('/travel/' + themeId)
       }
     },
     mounted() {
-     
+      const token = this.$session.get("jwt")
+      const requestHeader = {
+        headers: {
+          Authorization: "JWT " + token
+        }
+      }
+      axios.get("/travels/all_theme/", requestHeader)
+        .then(response => {
+          this.themeArr = response.data.all_theme
+          // console.log(this.themeArr)
+        })
+        // .catch(err => {
+        //   console.log(err)
+        // })
     }
   }
 </script>
 
 <style lang="scss" scoped>
-.travel-img-font {
-  position:absolute; 
-  top: 20%;
-  left: 53%; 
-  z-index:2;
-  font-size: 8vw;
-  font-weight: 700;
-  font-style: italic;
-  font-family: 'Cafe24Simplehae';
-  color: white;
-  text-shadow: black 1px 1px 1px;
-}
+  .travel-img-font {
+    position: absolute;
+    top: 8%;
+    left: 51%;
+    z-index: 2;
+    font-size: 8vw;
+    font-weight: 700;
+    font-style: italic;
+    font-family: 'Cafe24Simplehae';
+    color: white;
+    text-shadow: black 1px 1px 1px;
+  }
 </style>

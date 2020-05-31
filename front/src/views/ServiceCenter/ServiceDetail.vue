@@ -3,22 +3,20 @@
     <div class="service-center-title">
       <i class="fas fa-exclamation-circle"></i> 고객센터
     </div>
-
     <div class="service-body">
       <div class="service-body-header">
         <div class="service-detail-created-date">
-          {{serviceData.writed_at}}
+          {{serviceData.created_at}}
         </div>
         <div class="service-detail-title">
           {{serviceData.title}}</div>
       </div>
-      <div class="service-detail-user mt-3"><i class="fas fa-user"></i> {{serviceData.writer}}</div><br>
+      <div class="service-detail-user mt-3"><i class="fas fa-user"></i> {{serviceData.request_user}}</div><br>
       <div class="service-content">{{serviceData.content}}</div><br>
       <div class="service-detail-btn mt-12">
-        <v-btn color="#2c3e50" class="text-light mr-4 btn-detail mb-2" @click="updateData">수정
-          <i class="fas fa-edit ml-1"></i></v-btn>
-        <v-btn color="error" class="btn-detail mr-4" @click="deleteData">삭제<i class="fas fa-minus-square ml-1"></i></v-btn>
-        <v-btn color="rgb(238, 240, 247)" class="btn-detail" @click="back"><i class="fas fa-bars ml-1"></i>목록</v-btn>
+        <v-btn color="warning" class="text-light mr-4 btn-detail" @click="updateData">수정 <i class="fas fa-edit ml-1"></i></v-btn>
+        <v-btn color="error" class="mr-4 btn-detail" @click="deleteData">삭제 <i class="fas fa-minus-square ml-1"></i></v-btn>
+        <v-btn color="rgb(238, 240, 247)" class="btn-detail" @click="back">목록 <i class="fas fa-bars ml-1"></i></v-btn>
       </div>
     </div>
 
@@ -68,15 +66,21 @@ export default {
   },
   methods: {
     deleteData() {
-      axios.delete(`/articles/cv/${this.userId}/${this.serviceId}/`)
-        .then(
-          this.$router.push({
-            path: '/service'
+      if (this.serviceData["voice"].request_user === this.$store.getters.user_id) {
+        const requestHeader = this.$store.getters.requestHeader
+        axios.delete(`/articles/cv/${this.userId}/${this.serviceId}/`, requestHeader)
+          .then(
+            this.$router.push({
+              path: '/service'
+            })
+          )
+          .catch(err => {
+            console.log(err)
           })
-        )
-        .catch(err => {
-          console.log(err)
-        })
+      } else {
+        alert("삭제 권한이 없습니다.")
+        this.$router.push(`/service/detail/${this.serviceId}`)  
+      }
     },
     updateData() {
       this.$router.push({
@@ -97,10 +101,11 @@ export default {
   mounted() {
     this.serviceId = this.$route.params.serviceId
     this.userId = this.$store.getters.user_id
-    console.log(this.userId)
-    axios.get(`/articles/cv/${this.userId}/${this.serviceId}/`)
+    const requestHeader = this.$store.getters.requestHeader
+    axios.get(`/articles/cv/${this.userId}/${this.serviceId}/`, requestHeader)
       .then(response => {
-        this.noticeData = response.data['service']
+        console.log(response.data["voice"])
+        this.serviceData = response.data["voice"]
       })
       .catch(err => {
         console.log(err)
@@ -119,7 +124,6 @@ export default {
     font-family: 'Cafe24Simplehae';
     font-size: 30px;
     margin: 8rem auto 0 auto;
-    /* background-color: rgb(255, 187, 0); */
     width: 80%;
     border-radius: 7px 7px 0 0;
     box-shadow: 1px 1px 2px 1px rgb(100, 105, 109);
@@ -139,7 +143,6 @@ export default {
 
   .service-detail-title {
     font-family: 'Cafe24Simplehae';
-    /* text-align: start; */
     font-size: 20px;
     font-weight: 700;
   }
@@ -147,16 +150,6 @@ export default {
   .service-detail-created-date {
     color: rgb(170, 170, 170);
     font-size: 13px;
-    /* font-style: italic; */
-  }
-
-  .service-body-header {
-    /* display: flex;
-    justify-content: space-between; */
-  }
-
-  .service-detail-user {
-    /* text-align: start; */
   }
 
   .service-content {
@@ -178,11 +171,10 @@ export default {
   }
 
   .btn-detail {
-    font-size: 19px;
+    font-size: 16px;
     font-family: 'Cafe24Simplehae';
   }
 
-  /* comment */
   .comment-header {
     border-radius: 8px 8px 0 0;
     background-color: #2c3e50;

@@ -25,7 +25,7 @@
                   <v-text-field label="Password Confirm" class="purple-input" />
                 </v-col> -->
                 <v-col cols="12" md="6" class="content-col">
-                  <v-text-field label="Nickname" class="purple-input" />
+                  <v-text-field v-model="nickname" label="Nickname" class="purple-input" />
                 </v-col>
                 <v-col cols="12" md="6" class="content-col">
                   <v-text-field label="Name" class="purple-input" />
@@ -71,6 +71,7 @@
 
 <script>
 import Drawer from '@/components/Drawer.vue'
+import axios from "axios"
 
 export default {
   name: 'editprofile',
@@ -79,8 +80,12 @@ export default {
   },
   data() {
     return {
-      dialog: false
+      dialog: false,
+      nickname: ""
     }
+  },
+  mounted() {
+    this.nickname = this.$session.get("nickname")
   },
   methods: {
     userdelete() {
@@ -97,9 +102,18 @@ export default {
       }
     },
     update() {
-      this.$router.push({
-        path: '/profile'
-      })
+      let form = new FormData()
+      form.append("nickname", this.nickname)
+      axios.put("/accounts/usermgmt/", form, this.$store.getters.requestHeader)
+        .then(() => {
+          alert('회원 정보가 성공적으로 변경되었습니다.')
+          this.$session.set("nickname", this.nickname)
+          this.$router.push('/profile')
+        })
+        .catch(err =>{
+          console.log(err)
+          alert('회원 정보 변경이 실패하였습니다. 잠시후 다시 시도해주십시오.')
+        })
     },
     updatecancel () {
       this.$router.push({
