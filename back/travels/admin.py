@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Theme, Destination, Message, DestContent
+from .models import Theme, Destination, Message, DestContent, ContentPage
 from django.db import models
 from django.forms import Textarea
 from .inlines import MessageInline
@@ -39,3 +39,7 @@ class MessageAdmin(admin.ModelAdmin):
 class DestContentAdmin(admin.ModelAdmin):
     list_display = ('id', 'theme', 'destination', 'contents', 'created_at', 'updated_at')
 
+
+@admin.register(ContentPage)
+class ContentPage(admin.ModelAdmin):
+    list_display = ('id', 'dest_content', 'image', 'text', 'created_at', 'updated_at')
