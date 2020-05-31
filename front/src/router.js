@@ -73,27 +73,31 @@ const routes = [
     path: '/profile',
     name: 'profile',
     component: Profile,
-    // meta: {loginRequired: true}
+    // meta: {loginRequire: true}
   },
   {
     path: '/editpassword',
     name: 'editpassword',
-    component: EditPassword
+    component: EditPassword,
+    // meta: {loginRequire: true}
   },
   {
     path: '/editprofile',
     name: 'editprofile',
-    component: EditProfile
+    component: EditProfile,
+    // meta: {loginRequire: true}
   },
   {
     path: '/profile/article',
     name: 'profile-article',
-    component: ProfileArticle
+    component: ProfileArticle,
+    // meta: {loginRequire: true}
   },
   {
     path: '/profile/comment',
     name: 'profile-comment',
-    component: ProfileComment
+    component: ProfileComment,
+    // meta: {loginRequire: true}
   },
   {
     path: '/profiletest',
