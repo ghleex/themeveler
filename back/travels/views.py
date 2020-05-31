@@ -27,7 +27,7 @@ error_message = {
 def map(request):
     KAKAO_API_KEY = config('KAKAO_API_KEY')
     context = {'KAKAO_API_KEY': KAKAO_API_KEY} 
-    return render(request, 'travels/map2.html', context)
+    return render(request, 'travels/map.html', context)
 
 
 def get_user(token, format=None):
@@ -227,8 +227,14 @@ class Destinations(APIView):
                 destinations.append(DestinationSerializer(destination).data)
             else:
                 return Response('Destination is not exist', status=status.HTTP_400_BAD_REQUEST)
+        user = request.user
+        is_like = False
+        if theme.theme_like_users.filter(pk=user).exists():
+            is_like = True
         data = {
-            'destinations' : destinations
+            'destinations' : destinations,
+            'like_count': theme.theme_like_users.count(),
+            'is_like': is_like
         }
         return Response(data) if destinations else Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
