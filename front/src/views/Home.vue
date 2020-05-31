@@ -328,7 +328,7 @@
     /* border: 1px solid; */
     width: 75vw;
     height: 400px;
-    margin: 0 auto;
+    margin: 0 auto 10rem auto;
   }
 
   .header .home-howTo-img {

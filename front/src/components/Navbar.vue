@@ -2,7 +2,7 @@
   <div class="navbar_box">
 
     <!-- 사이드바 -->
-    <v-navigation-drawer class="text-start" v-model="drawer" absolute temporary>
+    <v-navigation-drawer class="text-start navbar-side" v-model="drawer" absolute temporary>
       <v-list-item class="mt-2">
         <v-list-item-avatar>
           <v-img class="nav-avartar" src='../assets/navlogo.png'></v-img>
@@ -35,6 +35,8 @@
               <v-list-item-title>{{ item.title }}</v-list-item-title>
               <!-- </v-list-item-content> -->
             </template>
+
+
             <v-list-item link>
               <v-list-item-title class="contact-list-group">
                 <router-link to="/notice">공지사항</router-link>
@@ -46,7 +48,34 @@
               </v-list-item-title>
             </v-list-item>
           </v-list-group>
+        </v-list-item>
 
+
+        <v-list-item link v-if="!this.$store.getters.isLoggedIn" @click="login()">
+          <template>
+            <v-list-item-icon>
+              <v-icon class="pl-4">mdi-login-variant</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Login</v-list-item-title>
+          </template>
+        </v-list-item>
+
+        <v-list-item v-else link @click="logout()">
+          <template>
+            <v-list-item-icon>
+              <v-icon class="ml-4">mdi-login-variant</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Logout</v-list-item-title>
+          </template>
+        </v-list-item>
+
+        <v-list-item link v-if="this.$store.getters.isLoggedIn" @click="userpage">
+          <template>
+            <v-list-item-icon>
+              <v-icon class="pl-4">mdi-account-circle</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>{{ username() }}님</v-list-item-title>
+          </template>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
@@ -63,7 +92,7 @@
         <v-toolbar-title>Themeveler</v-toolbar-title>
       </router-link>
       <v-spacer></v-spacer>
-      <v-toolbar-items class="d-none d-md-block">
+      <v-toolbar-items class="d-none d-md-block navbar-topbar">
 
         <v-btn text to="/">
           <div class="nav-link drop-no">
@@ -95,7 +124,9 @@
         </v-btn>
         <v-btn text v-if="this.$store.getters.isLoggedIn" @click="userpage">
           <div class="nav-link drop-no">
-            <div class="nav-text"><v-icon>mdi-account-circle</v-icon> {{ username() }}님</div>
+            <div class="nav-text">
+              <v-icon>mdi-account-circle</v-icon> {{ username() }}님
+            </div>
           </div>
         </v-btn>
       </v-toolbar-items>
@@ -122,11 +153,6 @@
           {
             title: 'Contact',
             icon: 'mdi-account-supervisor-circle'
-          },
-          {
-            title: 'Login',
-            icon: 'mdi-login-variant',
-            path: '/login'
           },
         ],
       }
@@ -156,10 +182,22 @@
 </script>
 
 <style lang="scss" scoped>
+  .navbar-topbar {
+    white-space: nowrap;
+  }
+
+  .navbar_box a {
+    text-decoration: none;
+  }
+
   @media (max-width: 767px) {
-    .navbar_box {
+    .navbar_box a {
       // position: fixed;
     }
+  }
+
+  .navbar-side {
+    z-index: 20;
   }
 
   .navbar_box>img {
@@ -170,11 +208,11 @@
     display: none;
     position: absolute;
     background-color: #f9f9f9;
-    min-width: 140px;
+    min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
-    left: -15px;
-    top: 25px;
+    left: -8px;
+    top: 40px;
   }
 
   .drop-yes:hover .dropdown-content {
