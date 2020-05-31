@@ -33,3 +33,9 @@ class DestinationAdmin(admin.ModelAdmin):
 @admin.register(Message)
 class MessageAdmin(admin.ModelAdmin):
     list_display = ('id', 'theme', 'nickname', 'message', 'created_at')
+
+
+@admin.register(DestContent)
+class DestContentAdmin(admin.ModelAdmin):
+    list_display = ('id', 'theme', 'destination', 'contents', 'created_at', 'updated_at')
+
