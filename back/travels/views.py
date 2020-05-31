@@ -218,6 +218,9 @@ class AllTheme(APIView):
         return Response(data)
 
 class Destinations(APIView):
+    """
+    Theme의 모든 destination 정보, Theme의 like 정보를 return합니다.
+    """
     def get(self, request, theme_pk):
         destinations = []
         theme = get_object_or_404(Theme, pk=theme_pk)
@@ -239,9 +242,16 @@ class Destinations(APIView):
         }
         return Response(data) if destinations else Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
+
+
 class DestinationContent(APIView):
-    def get(self, request, theme_pk, destination_pk):
-        dest_content = DestContent.objects.filter(theme=theme_pk, destination=destination_pk)[0]
+    """
+    destination의 content를 return합니다.
+    """
+    def get(self, request, theme_pk, dest_idx):
+        theme = get_object_or_404(Theme, pk=theme_pk)
+        destination = get_object_or_404(Destination, pk=theme.dests[dest_idx])
+        dest_content = DestContent.objects.filter(theme=theme_pk, destination=destination.pk)[0]
         if dest_content:
             contents = dest_content.contents
             return Response(contents)
