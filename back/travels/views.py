@@ -10,7 +10,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from drf_yasg.utils import swagger_auto_schema
 from decouple import config
 from .serializers import MessageSerializer, MessageViewSerializer, ThemeSerializer, DestinationSerializer
-from .models import Message, Theme, Destination
+from .models import Message, Theme, Destination, DestContent
 from accounts.serializers import UserNicknameSerializer
 
 User = get_user_model()
@@ -238,6 +238,15 @@ class Destinations(APIView):
             'is_like': is_like
         }
         return Response(data) if destinations else Response(error_message, status=status.HTTP_400_BAD_REQUEST)
+
+class DestinationContent(APIView):
+    def get(self, request, theme_pk, destination_pk):
+        dest_content = DestContent.objects.filter(theme=theme_pk, destination=destination_pk)[0]
+        if dest_content:
+            contents = dest_content.contents
+            return Response(contents)
+        else:
+            return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
 class FilteredTheme(APIView):
     def get(self, request, region):
