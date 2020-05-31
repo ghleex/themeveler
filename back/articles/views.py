@@ -129,7 +129,23 @@ class CustomersVoices(APIView):
         request_user = get_user(request.headers['Authorization'].split(' '))        
         if user_pk == request_user.pk:
             voices = CustomersVoice.objects.filter(request_user=user_pk).order_by('-created_at')
-            voice = [CustomersVoiceSerializer(v).data for v in voices]
+            voice = []
+            for v in voices:
+                serializer_v = CustomersVoiceSerializer(v)
+                writer = serializer_v['request_user']
+                vc = {
+                    'id': serializer_v['id'],
+                    'title': serializer_v['title'],
+                    'category': serializer_v['category'],
+                    'request_user_id': writer,
+                    'request_user_id': str(User.objects.get(pk=writer).nickname),
+                    'created_at': serializer_v['created_at'],
+                    'updated_at': serializer_v['updated_at'],
+                    'manager': serializer_v['manager'],
+                    'is_fixed': serializer_v['is_fixed'],
+                }
+                voice.append(vc)
+            
             data = {
                 'voice': voice,
             }
@@ -146,7 +162,8 @@ class CustomersVoices(APIView):
                 'title': requests.get('title'),
                 'content': requests.get('content'),
                 'category': requests.get('category'),
-                'request_user': user,
+                'request_user_id': user,
+                'request_user_nickname': request_user.nickname,
             }
             serializer = CustomersVoiceSerializer(data=data)
             if serializer.is_valid():
@@ -186,6 +203,8 @@ class CustomersVoiceChange(APIView):
                     'category': serializer_v['category'],
                     'request_user_id': req_user,
                     'request_user_nickname': str(User.objects.get(pk=req_user).nickname),
+                    'created_at': serializer_v['created_at'],
+                    'updated_at': serializer_v['updated_at'],
                     'manager': serializer_v['manager'],
                     'is_fixed': serializer_v['is_fixed'],
                 }
@@ -209,6 +228,8 @@ class CustomersVoiceChange(APIView):
                 'category': voice.category,
                 'request_user_id': request_user.pk,
                 'request_user_nickname': str(User.objects.get(pk=request_user.pk).nickname),
+                'created_at': voice.created_at,
+                'updated_at': voice.updated_at,
             }
             serializer = CustomersVoiceSerializer(voice, data=data)
             if serializer.is_valid():
