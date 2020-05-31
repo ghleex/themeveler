@@ -9,8 +9,8 @@ from rest_framework.parsers import FormParser
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from drf_yasg.utils import swagger_auto_schema
 from decouple import config
-from .serializers import MessageSerializer, MessageViewSerializer, ThemeSerializer, DestinationSerializer
-from .models import Message, Theme, Destination, DestContent
+from .serializers import MessageSerializer, MessageViewSerializer, ThemeSerializer, DestinationSerializer, ContentPageSerializer
+from .models import Message, Theme, Destination, DestContent, ContentPage
 from accounts.serializers import UserNicknameSerializer
 
 User = get_user_model()
@@ -254,7 +254,14 @@ class DestinationContent(APIView):
         dest_content = DestContent.objects.filter(theme=theme_pk, destination=destination.pk)[0]
         if dest_content:
             contents = dest_content.contents
-            return Response(contents)
+            pages = []
+            for page_pk in contents:
+                content_page = ContentPage.objects.filter(pk=page_pk)[0]
+                pages.append(ContentPageSerializer(content_page).data)
+            data = {
+                'pages' : pages
+            }
+            return Response(data, status=status.HTTP_200_OK)
         else:
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
