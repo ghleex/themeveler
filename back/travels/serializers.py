@@ -1,4 +1,4 @@
-from .models import Theme, Destination, Message
+from .models import Theme, Destination, Message, ContentPage
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 
@@ -29,3 +29,8 @@ class MessageViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
         fields = ('theme', )
+
+class ContentPageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ContentPage
+        fields = ('id', 'image', 'text', 'created_at', 'updated_at',)
