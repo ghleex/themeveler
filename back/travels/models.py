@@ -58,9 +58,16 @@ class DestContent(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return self.destination.name
+    
+
 class ContentPage(models.Model):
     dest_content = models.ForeignKey(DestContent, on_delete=models.CASCADE)
     image = models.ImageField(blank=True)
     text = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.text if self.text else '이미지 파일'
