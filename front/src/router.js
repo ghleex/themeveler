@@ -110,9 +110,12 @@ const routes = [
     component: Travel
   },
   {
-    path: '/travel/:travelId',
+    path: '/travel/:themeId',
     name: 'travel-detail',
-    component: TravelDetail
+    component: TravelDetail,
+    props: route => ({
+      themeId: Number(route.params.themeId)
+    })
   },
   // {
   //   path: '/map',

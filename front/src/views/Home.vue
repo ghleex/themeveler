@@ -17,9 +17,6 @@
 
     <!-- card -->
     <div class="describe">
-      <!-- <div class="des-start">
-        <i class="fas fa-barcode fa-rotate-90"></i>
-      </div> -->
       <div class="describe-card-left"></div>
       <div class="describe-left">
         <img :src="ticket" alt="">
@@ -287,7 +284,8 @@
         })
         // console.log(themeId[0].id)
         const requestHeader = this.$store.getters.requestHeader
-        axios.get(`/travels/start/${themeId[0].id}/`, requestHeader)
+        axios.get(`/travels/start/${themeId[0].id}`, requestHeader)
+        // this.$router.push('/travel' + this.travelId)
           .then(response => {
             console.log(response)
           })
