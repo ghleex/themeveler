@@ -1,6 +1,6 @@
 from django.db import models
 from django.conf import settings
-from django_mysql.models import ListTextField
+from django_mysql.models import ListTextField, JSONField
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseBadRequest
 
@@ -51,4 +51,6 @@ class Message(models.Model):
 class DestContent(models.Model):
     theme = models.ForeignKey(Theme, on_delete=models.CASCADE) # Content.objects.get(theme=theme_id, destination=destination_id)
     destination = models.ForeignKey(Destination, on_delete=models.CASCADE)
-    text = models.TextField()
+    contents = JSONField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

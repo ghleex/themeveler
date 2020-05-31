@@ -24,7 +24,11 @@ class VoiceCategorySerializer(serializers.ModelSerializer):
 class CustomersVoiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomersVoice
-        fields = ('id', 'title', 'content', 'category', 'request_user', 'manager', 'is_fixed',)
+        fields = (
+            'id', 'title', 'content', 'category',
+            'request_user', 'manager', 'is_fixed',
+            'created_at', 'updated_at',
+        )
 
 
 class ManagerReplySerializer(serializers.ModelSerializer):

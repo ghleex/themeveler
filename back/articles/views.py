@@ -126,10 +126,25 @@ class CustomersVoices(APIView):
             * return 값: voice 목록(요청자와 실제 사용자가 같은 경우) / 부적절한 엑세스 메시지(요청자와 실제 사용자가 다른 경우)
     """
     def get(self, request, user_pk, format=None):
-        request_user = get_user(request.headers['Authorization'].split(' '))        
+        request_user = get_user(request.headers['Authorization'].split(' '))
         if user_pk == request_user.pk:
             voices = CustomersVoice.objects.filter(request_user=user_pk).order_by('-created_at')
-            voice = [CustomersVoiceSerializer(v).data for v in voices]
+            voice = []
+            for v in voices:
+                serializer_v = CustomersVoiceSerializer(v).data
+                writer = serializer_v['request_user']
+                vc = {
+                    'id': serializer_v['id'],
+                    'title': serializer_v['title'],
+                    'category': serializer_v['category'],
+                    'request_user_id': writer,
+                    'request_user_nickname': request_user.nickname,
+                    'created_at': serializer_v['created_at'],
+                    'updated_at': serializer_v['updated_at'],
+                    'manager': serializer_v['manager'],
+                    'is_fixed': serializer_v['is_fixed'],
+                }
+                voice.append(vc)
             data = {
                 'voice': voice,
             }
@@ -146,7 +161,8 @@ class CustomersVoices(APIView):
                 'title': requests.get('title'),
                 'content': requests.get('content'),
                 'category': requests.get('category'),
-                'request_user': user,
+                'request_user_id': user,
+                'request_user_nickname': request_user.nickname,
             }
             serializer = CustomersVoiceSerializer(data=data)
             if serializer.is_valid():
@@ -185,7 +201,9 @@ class CustomersVoiceChange(APIView):
                     'content': serializer_v['content'],
                     'category': serializer_v['category'],
                     'request_user_id': req_user,
-                    'request_user_nickname': str(User.objects.get(pk=req_user).nickname),
+                    'request_user_nickname': request_user.nickname,
+                    'created_at': serializer_v['created_at'],
+                    'updated_at': serializer_v['updated_at'],
                     'manager': serializer_v['manager'],
                     'is_fixed': serializer_v['is_fixed'],
                 }
@@ -198,22 +216,23 @@ class CustomersVoiceChange(APIView):
     def put(self, request, user_pk, voice_pk, format=None):
         request_user = get_user(request.headers['Authorization'].split(' '))
         voice = self.get_voice(voice_pk)
-        if request_user.pk == voice.request_user:
+        if request_user.pk == voice.request_user.pk:
             requests = request.data
             voice.title = requests.get('title')
             voice.content = requests.get('content')
-            voice.category = VoiceCategory.objects.get(pk=requests.get('category'))            
+            # voice.category = VoiceCategory.objects.get(pk=requests.get('category')),
             data = {
                 'title': voice.title,
                 'content': voice.content,
-                'category': voice.category,
-                'request_user_id': request_user.pk,
-                'request_user_nickname': str(User.objects.get(pk=request_user.pk).nickname),
+                'category': requests.get('category'),
+                'request_user': request_user.pk,
+                'created_at': voice.created_at,
+                'updated_at': voice.updated_at,
             }
             serializer = CustomersVoiceSerializer(voice, data=data)
             if serializer.is_valid():
                 serializer.save()
-                return Response(voice.id, status=status.HTTP_200_OK)
+                return Response(serializer.data, status=status.HTTP_200_OK)
             else:
                 return Response(serializer.errors, status=status.HTTP_202_ACCEPTED)
         else:
@@ -472,7 +491,7 @@ class NoticeView(APIView):
 @permission_classes((IsAuthenticated, ))
 class ThemeNoticesView(APIView):
     """
-        코스 공지사항 - 사용자/관리자 공통
+        코스 공지사항 전체 목록 - 사용자/관리자 공통
 
         ---
 
@@ -484,7 +503,22 @@ class ThemeNoticesView(APIView):
         theme = self.get_theme(theme_pk)
         try:
             notices = theme.theme_notices.all().order_by('-writed_at')
-            notice = [NoticeSerializer(n).data for n in notices]
+            notice = []
+            for n in notices:
+                serializer_n = NoticeSerializer(n).data
+                writer = serializer_n['writer']
+                ntc = {
+                    'id': serializer_n['id'],
+                    'title': serializer_n['title'],
+                    'category': serializer_n['category'],
+                    'writed_at': serializer_n['writed_at'],
+                    'updated_at': serializer_n['updated_at'],
+                    'writer_id': writer,
+                    'writer_nickname': str(User.objects.get(pk=writer).nickname),
+                    'theme': serializer_n['theme'],
+                    'isNoticeAll': serializer_n['isNoticeAll'],
+                }
+                notice.append(ntc)
             data = {
                 'notices': notice,
             }
@@ -496,7 +530,7 @@ class ThemeNoticesView(APIView):
 @permission_classes((IsAdminUser,))
 class ThemeNoticesPost(APIView):
     """
-        코스 공지사항 - 관리자 화면
+        코스 공지사항 작성 - 관리자 화면
 
         ---
     """
@@ -539,7 +573,11 @@ class ThemeNoticesChange(APIView):
             'title': serializer_n['title'],
             'content': serializer_n['content'],
             'writer_id': writer,
-            'writer_nickname': str(User.objects.get(pk=writer).nickname),            
+            'writer_nickname': str(User.objects.get(pk=writer).nickname),
+            'writed_at': serializer_n['writed_at'],
+            'updated_at': serializer_n['updated_at'],
+            'theme': serializer_n['theme'],
+            'isNoticeAll': serializer_n['isNoticeAll'],
         }
         return Response(data, status=status.HTTP_200_OK)
     
@@ -547,23 +585,26 @@ class ThemeNoticesChange(APIView):
     def put(self, request, notice_pk, format=None):
         notice = self.get_notices(notice_pk)
         try:
-            requests = request.data
-            notice.title = requests.get('title')
-            notice.content = requests.get('content')
-            notice.writer_id = request.user.pk
-            data = {
-                'title': notice.title,
-                'content': notice.content,
-                'writer_id': notice.writer_id,
-                'writer_nickname': str(User.objects.get(pk=notice.writer_id).nickname),
-                'theme': requests.get('theme'),
-            }
-            serializer = NoticeSerializer(notice, data=data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_200_OK)
+            if request.user == notice.writer:
+                requests = request.data
+                notice.title = requests.get('title')
+                notice.content = requests.get('content')
+                notice.writer_id = request.user.pk
+                data = {
+                    'title': notice.title,
+                    'content': notice.content,
+                    'category': requests.get('category'),
+                    'writer': notice.writer_id,
+                    'theme': requests.get('theme'),
+                }
+                serializer = NoticeSerializer(notice, data=data)
+                if serializer.is_valid():
+                    serializer.save()
+                    return Response(serializer.data, status=status.HTTP_200_OK)
+                else:
+                    return Response(serializer.errors, status=status.HTTP_202_ACCEPTED)
             else:
-                return Response(serializer.errors, status=status.HTTP_202_ACCEPTED)
+                return Response(access_message, status=status.HTTP_401_UNAUTHORIZED)
         except:
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
