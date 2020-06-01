@@ -10,7 +10,7 @@
     >
       <v-card>
         <v-card-title class="headline">여행지</v-card-title>
-
+        <p v-if="chatLoading" class="chatLoading">Loading</p>
         <span v-if="memories">
           <v-card-text v-for="(memory, idx) in memories" :key="idx">
             {{ memory.nickname }} : {{ memory.message }}<br>
@@ -63,7 +63,10 @@
         token: "",
         memories: [],
         dialog: false,
-        connected: false
+        connected: false,
+        chatPage: 1,
+        scrollHeight: 0,
+        chatLoading: false,
       }
     },
     created() {
@@ -77,13 +80,13 @@
       })
     },
     mounted() {
-      axios.get(`http://127.0.0.1:8000/api/travels/chat/${this.themeId}/`, this.$store.getters.requestHeader)
-      .then(res => {
-        this.memories = res.data
-      })
-      .catch(err => {
-        console.log(err)
-      })
+      axios.get(`http://127.0.0.1:8000/api/travels/chat/${this.themeId}/${this.chatPage}/`, this.$store.getters.requestHeader)
+        .then(res => {
+          this.memories = res.data
+        })
+        .catch(err => {
+          console.log(err)
+        })
       this.messages = []
       if (this.$socket.connected) {
         this.$socket.emit("startMessage", {theme:this.themeId})
@@ -99,6 +102,28 @@
       this.dialog = false
     },
     methods: {
+      handleScroll(scrollTop) {
+        if (scrollTop.srcElement.scrollTop == 0) {
+          this.chatLoading = true
+          let loadingMessage =  setInterval(() => {
+            let loadingText = document.getElementsByClassName('chatLoading')[0]
+            loadingText.innerText += '.'
+            if (loadingText.innerText.length > 10) {
+              loadingText.innerText = 'Loading'
+            }
+          }, 100)
+          setTimeout(() => {
+            this.chatPage += 1
+            axios.get(`http://127.0.0.1:8000/api/travels/chat/${this.themeId}/${this.chatPage}/`, this.$store.getters.requestHeader)
+              .then(res => {
+                this.memories = res.data.concat(this.memories)
+                document.getElementsByClassName('v-dialog')[0].scrollTop = this.scrollHeight
+              })
+            this.chatLoading = false
+            clearInterval(loadingMessage)
+          }, 1000)
+        }          
+      },
       scroll() {
         var scroll = document.getElementsByClassName('v-dialog')[0]
         scroll.scrollTop = scroll.scrollHeight
@@ -106,6 +131,10 @@
       openModal() {
         this.dialog = true
         setTimeout(this.scroll, 10)
+        setTimeout(() => {
+          document.getElementsByClassName('v-dialog')[0].addEventListener('scroll', this.handleScroll)
+          this.scrollHeight = document.getElementsByClassName('v-dialog')[0].scrollHeight
+        }, 50);
       },
       checkConnected() {
         return this.$socket.connected
