@@ -66,14 +66,15 @@ export default {
           "isNoticeAll": 1,
           // 'writed_at': Date.Now()
         }
-        console.log(noticeCreateForms)
+        // console.log(noticeCreateForms)
         const requestHeader = this.$store.getters.requestHeader
         axios.post('/articles/theme_notice/', noticeCreateForms, requestHeader)
-          .then(
+          .then(response => {
+            console.log(response.data)
             this.$router.push({
               path: '/notice'
             })
-          )
+          })
           .catch(err => {
             console.log(err)
           })
@@ -98,8 +99,8 @@ export default {
           // 'updated_at': Date.Now()
         }
         const requestHeader = this.$store.getters.requestHeader
-        console.log(this.$store.getters.user_id)
-        console.log(this.select)
+        // console.log(this.$store.getters.user_id)
+        // console.log(this.select)
         axios.put(`/articles/theme_notice/${this.noticeId}/`, noticeUpdateForms, requestHeader)
           .then(response => {
             console.log(response.data)
@@ -112,15 +113,15 @@ export default {
           })
       }
     },
-    reset () {
+    reset() {
       this.$refs.form.reset()
     },
-    addcancel () {
+    addcancel() {
       this.$router.push({
         path: '/notice'
       })
     },
-    updatecancel () {
+    updatecancel() {
       this.$router.push({
         path: `/notice/detail/${this.noticeId}`
       })
@@ -143,8 +144,8 @@ export default {
             }
             this.title = response.data.title
             this.content = response.data.content
-            this.isNoticeAll = response.data.isNoticeAll
             this.writer_id = response.data.writer_id
+            this.isNoticeAll = response.data.isNoticeAll
           } else {
             alert("수정 권한이 없습니다.")
             this.$router.push("/notice")
@@ -161,7 +162,7 @@ export default {
 <style scoped>
 #notice-create {
   margin: 64px auto 0 auto;
-  padding: 16px 0 60px 0;
+  padding: 24px 0 60px 0;
   width: 100%;
   background-color: rgb(238, 240, 247);
 }

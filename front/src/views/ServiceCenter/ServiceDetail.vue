@@ -1,17 +1,12 @@
 <template>
   <div id="service-detail">
-    <div class="service-center-title">
-      <i class="fas fa-exclamation-circle"></i> 고객센터
-    </div>
+    <div class="service-center-title"><i class="fas fa-exclamation-circle"></i>고객센터</div>
     <div class="service-body">
       <div class="service-body-header">
-        <div class="service-detail-created-date">
-          {{serviceData.created_at}}
-        </div>
-        <div class="service-detail-title">
-          {{serviceData.title}}</div>
+        <div class="service-detail-title">{{serviceData.title}}</div>
       </div>
       <div class="service-detail-user mt-3"><i class="fas fa-user"></i> {{serviceData.request_user}}</div><br>
+      <div class="service-detail-created-date"> {{serviceData.created_at}}</div>
       <div class="service-content">{{serviceData.content}}</div><br>
       <div class="service-detail-btn mt-12">
         <v-btn color="warning" class="text-light mr-4 btn-detail" @click="updateData">수정 <i class="fas fa-edit ml-1"></i></v-btn>
@@ -20,10 +15,8 @@
       </div>
     </div>
 
-    <!-- Comment list -->
-    <div class="comment-header">
-      댓글
-    </div>
+    <!-- Comment -->
+    <div class="comment-header">댓글</div>
     <div class="comment-header-top"></div>
     <div class="service-comment">
       <v-form ref="form" class="service-comment-form" v-model="valid" lazy-validation>
@@ -57,7 +50,7 @@ export default {
       userId: "",
       valid: false,
       commentRules: [
-        v => (v && v.length <= 500) || '댓글은 최대 500자 이내로 작성해주세요.',
+        v => (v && v.length <= 500) || '댓글은 최대 500자 이내로 작성해주세요.'
       ],
       remain: 500,
       resultRemian: 500,

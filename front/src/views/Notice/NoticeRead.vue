@@ -1,6 +1,6 @@
 <template>
   <div id="notice-read">
-    <div class="notice-title">공지사항</div>
+    <div class="notice-title"><i class="fas fa-exclamation-circle mr-3"></i>공지사항</div>
     <div class="notice-body">
       <!-- 공지사항 리스트 Data table -->
       <v-data-table
@@ -10,7 +10,7 @@
       >
         <template v-slot:top>
           <v-toolbar class="notice-table-header" flat color="white">
-            <v-toolbar-title><h4></h4></v-toolbar-title>
+            <v-toolbar-title></v-toolbar-title>
             <v-spacer></v-spacer>
             <v-btn color="#607D8B" dark class="mb-2" @click="write">글쓰기</v-btn>
           </v-toolbar>
@@ -47,7 +47,7 @@ export default {
       page: 1,
       pageCount: 0,
       itemsPerPage: 10,
-      search: '',
+      search: "",
       headers: [
         { text: "번호", align: "start", value: "id", sortable: false },
         { text: "분류", value: "category" },
