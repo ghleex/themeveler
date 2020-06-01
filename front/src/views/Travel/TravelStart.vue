@@ -1,7 +1,7 @@
 <template>
   <div class="travel-detail-stepper">
     <div style="margin: 2rem 0 3rem 0;">
-      <h1>#.{{ themeId }} {{ themeArr[themeId].name }}</h1>
+      <h1>#.{{ themeId }} {{ themeArr[themeId-1].name }}</h1>
       <h2 class="my-10">{{ e1 }} / {{ dests.length }}</h2>
     </div>
 
@@ -24,7 +24,12 @@
 
       <v-stepper-items>
         <v-stepper-content v-for="n in steps" :key="`${n}-content`" :step="n">
-          <v-card class="mb-12" color="grey lighten-1" height="200px"></v-card>
+          <v-card class="mb-12" color="grey lighten-1" height="200px">
+            <div v-for="i in content" :key="i">
+            {{ i.text }}
+            </div>
+          </v-card>
+          
           <v-btn class="mr-3" v-if="e1 !== 1" @click="beforeStep(n)" rounded color="">
             이전
             <i class="fas fa-chevron-circle-left ml-1"></i>
@@ -34,7 +39,8 @@
             <i class="fas fa-chevron-circle-right ml-1"></i>
           </v-btn>
           <div class="text-end">
-          <v-btn roudned text color="red" @click="returnDetail(themeId)">닫기 <i class="fas fa-times-circle ml-1"></i></v-btn>
+            <v-btn roudned text color="red" @click="returnDetail(themeId)">닫기 <i class="fas fa-times-circle ml-1"></i>
+            </v-btn>
           </div>
         </v-stepper-content>
       </v-stepper-items>
@@ -58,6 +64,7 @@
         nowDest: "",
         steps: 1,
         themeArr: [],
+        content: [],
       }
     },
     methods: {
@@ -67,22 +74,43 @@
         } else {
           this.e1 = n + 1
         }
+        // 다음 detination script 가져오기
+        const requestHeader = this.$store.getters.requestHeader
+        axios.get(`/travels/dest_content/${this.themeId}/${this.e1-1}/`, requestHeader)
+        .then(res => {
+          // this.content = res.data
+          console.log(res.data)
+          this.content = res.data.pages
+        })
+        .catch(err => {
+          console.log(err.response)
+        })
+
         document.getElementById(this.dests[n].id).tabIndex = -1;
         document.getElementById(this.dests[n].id).focus();
       },
       beforeStep(n) {
         this.e1 = n - 1
-        document.getElementById(this.dests[n-1].id).tabIndex;
-        document.getElementById(this.dests[n-2].id).focus();
+
+        const requestHeader = this.$store.getters.requestHeader
+        axios.get(`/travels/dest_content/${this.themeId}/${this.e1-1}/`, requestHeader)
+        .then(res => {
+          // this.content = res.data
+          console.log(res.data)
+          this.content = res.data.pages
+        })
+        .catch(err => {
+          console.log(err.response)
+        })
+
+        document.getElementById(this.dests[n - 1].id).tabIndex;
+        document.getElementById(this.dests[n - 2].id).focus();
       },
       returnDetail(themeId) {
         this.$router.push(`/travel/${themeId}/`)
       }
     },
     mounted() {
-      document.querySelector("#Navbar").style.display = "none"
-      document.querySelector("#footer").style.display = "none"
-
       const token = this.$session.get('jwt')
       const requestHeader = {
         headers: {
@@ -99,16 +127,19 @@
         .then(res => {
           this.themeArr = res.data.all_theme
         })
-      // document.querySelector("#footer").style.display = 'none'
-      // document.querySelector(".navbar_box").style.display = 'none'
+      // document.querySelector("#Navbar").style.display = "none"
+      // document.querySelector("#footer").style.display = "none"
 
       axios.get(`/travels/dest_content/${this.themeId}/${this.e1-1}/`, requestHeader)
         .then(res => {
-          console.log(res)
+          // this.content = res.data
+          console.log(res.data)
+          this.content = res.data.pages
         })
         .catch(err => {
-          console.log(err)
+          console.log(err.data)
         })
+
     }
   }
 </script>
@@ -128,16 +159,17 @@
     .travel-detail-stepper .v-stepper:not(.v-stepper--vertical) .v-stepper__label {
       font-size: 13px;
     }
+
     .travel-detail-stepper {
-    padding: 0;
-  }
+      padding: 0;
+    }
   }
 
   .travel-detail-stepper .v-stepper__step {
     padding: 0 !important;
   }
 
-  .travel-detail-stepper .v-stepper__label > i {
+  .travel-detail-stepper .v-stepper__label>i {
     margin: 0 .7rem;
   }
 

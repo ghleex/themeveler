@@ -203,7 +203,7 @@
     background-color: #f1f1f1
   }
 
-  .navtitle {
+  .navbar_box a {
     color: black;
     text-decoration: none;
   }
