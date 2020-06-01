@@ -142,7 +142,9 @@ class Like(APIView):
         try:
             likes = theme.theme_like_users.all()
             users = [UserNicknameSerializer(l).data for l in likes]
+            request_user = get_user(request.headers['Authorization'].split(' '))
             data = {
+                'did_user_like': True if theme.theme_like_users.filter(pk=request_user) else False,
                 'like_users_count': theme.theme_like_users.count(),
                 'like_users': users,
             }
@@ -152,7 +154,7 @@ class Like(APIView):
     
     def post(self, request, theme_pk, format=None):
         theme = self.get_theme(theme_pk)
-        user =  get_user(request.headers['Authorization'].split(' '))
+        user = get_user(request.headers['Authorization'].split(' '))
         try:
             message = {
                 'message': '',
