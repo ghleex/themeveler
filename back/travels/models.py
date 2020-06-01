@@ -1,6 +1,6 @@
 from django.db import models
 from django.conf import settings
-from django_mysql.models import ListTextField
+from django_mysql.models import ListTextField, JSONField
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseBadRequest
 
@@ -51,4 +51,23 @@ class Message(models.Model):
 class DestContent(models.Model):
     theme = models.ForeignKey(Theme, on_delete=models.CASCADE) # Content.objects.get(theme=theme_id, destination=destination_id)
     destination = models.ForeignKey(Destination, on_delete=models.CASCADE)
-    text = models.TextField()
+    contents = ListTextField(
+        base_field=models.CharField(max_length=255),
+        size=100,
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.destination.name
+    
+
+class ContentPage(models.Model):
+    dest_content = models.ForeignKey(DestContent, on_delete=models.CASCADE)
+    image = models.ImageField(blank=True)
+    text = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.text if self.text else '이미지 파일'
