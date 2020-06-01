@@ -80,7 +80,7 @@
       }
     },
     mounted() {
-      document.querySelector("#Navbar").style.display = "none"
+      document.querySelector("#navbar").style.display = "none"
       document.querySelector("#footer").style.display = "none"
 
       const token = this.$session.get('jwt')
@@ -99,8 +99,6 @@
         .then(res => {
           this.themeArr = res.data.all_theme
         })
-      // document.querySelector("#footer").style.display = 'none'
-      // document.querySelector(".navbar_box").style.display = 'none'
 
       axios.get(`/travels/dest_content/${this.themeId}/${this.e1-1}/`, requestHeader)
         .then(res => {

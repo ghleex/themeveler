@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div class="chatbot">
     <div class="chatbot-box" @click="openModal">
       <i class="fas fa-comment-dots chatbot-icon"></i>
     </div>
@@ -48,7 +48,7 @@
 </template>
 
 <script>
-  const axios = require("axios").default;
+  const axios = require("axios").default
 
   export default {
     name: "ChatBot",
@@ -66,7 +66,7 @@
         connected: false,
         chatPage: 1,
         scrollHeight: 0,
-        chatLoading: false,
+        chatLoading: false
       }
     },
     created() {
@@ -134,7 +134,7 @@
         setTimeout(() => {
           document.getElementsByClassName('v-dialog')[0].addEventListener('scroll', this.handleScroll)
           this.scrollHeight = document.getElementsByClassName('v-dialog')[0].scrollHeight
-        }, 50);
+        }, 50)
       },
       checkConnected() {
         return this.$socket.connected
@@ -159,11 +159,8 @@
           this.messages = [{theme: "error", nickname: "관리자", message: "에러발생"}]
         }
         setTimeout(this.scroll, 40)
-      },  
+      }
     }
-    
-
-    
   }
 </script>
 

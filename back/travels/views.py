@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.core.paginator import Paginator, EmptyPage
 from django.shortcuts import render, get_object_or_404
 from rest_framework import status
 from rest_framework.views import APIView
@@ -142,7 +143,9 @@ class Like(APIView):
         try:
             likes = theme.theme_like_users.all()
             users = [UserNicknameSerializer(l).data for l in likes]
+            request_user = get_user(request.headers['Authorization'].split(' '))
             data = {
+                'did_user_like': True if theme.theme_like_users.filter(pk=request_user) else False,
                 'like_users_count': theme.theme_like_users.count(),
                 'like_users': users,
             }
@@ -152,49 +155,37 @@ class Like(APIView):
     
     def post(self, request, theme_pk, format=None):
         theme = self.get_theme(theme_pk)
-        user =  get_user(request.headers['Authorization'].split(' '))
+        user = get_user(request.headers['Authorization'].split(' '))
         try:
             message = {
                 'message': '',
+                'isLiked': '',
             }
             if theme.theme_like_users.filter(pk=user.pk).exists():
                 theme.theme_like_users.remove(user)
                 message['message'] = f'{user.username} is removed from like_users'
+                message['isLiked'] = False
             else:
                 theme.theme_like_users.add(user)
                 message['message'] = f'{user.username} added to like_users'
+                message['isLiked'] = True
             return Response(message, status=status.HTTP_200_OK)
         except:
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
 
-class Chatting(APIView):
-    @swagger_auto_schema(query_serializer=MessageViewSerializer)
-    def get(self, request, theme_pk, format=None):
-        """
-            채팅 내역 확인(테마) - 테마별 채팅 내역을 확인합니다.
-
-            # 내용
-                * headers에서 포함된 jwt 데이터의 user_id를 이용합니다.
-                * theme_pk: theme의 theme_id를 작성합니다. Int 형식입니다.
-        """
-        data = {}
-        theme = request.GET.get('theme')
-        serializer = MessageSerializer(Message.objects.filter(theme=theme_pk), many=True)
-        return Response(serializer.data)
-
+class Chat(APIView):
     @swagger_auto_schema(query_serializer=MessageSerializer)
     def post(self, request, theme_pk, format=None):
         """
-            채팅 저장(테마) - 테마별 채팅을 저장합니다..
+            채팅 저장(테마) - 테마별 채팅을 저장합니다.
 
             # 내용
                 * headers에서 포함된 jwt 데이터의 user_id를 이용합니다.
                 * theme_pk: theme의 theme_id를 작성합니다. Int 형식입니다.
                 * message: 메시지를 작성합니다.
         """
-        jwt_data = decoder(request.headers['Authorization'].split(' ')[1])
-        user = User.objects.get(id=jwt_data.get('user_id'))
+        user = get_user(request.headers['Authorization'].split(' '))
         data = {
             'theme': theme_pk,
             'nickname': user.anonymous,
@@ -203,7 +194,26 @@ class Chatting(APIView):
         serializer = MessageSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
-            return Response(serializer.data)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class ChatView(APIView):
+    @swagger_auto_schema(query_serializer=MessageViewSerializer)
+    def get(self, request, theme_pk, page_no, format=None):
+        """
+            채팅 내역 확인(테마) - 테마별 채팅 내역을 확인합니다.
+
+            # 내용
+                * headers에서 포함된 jwt 데이터의 user_id를 이용합니다.
+                * theme_pk: theme의 theme_id를 작성합니다. Int 형식입니다.
+                * page_no: 
+        """
+        try:
+            chat_page = Paginator(Message.objects.all(), 20).page(page_no)            
+            serializer = MessageSerializer(chat_page, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except EmptyPage:
+            return Response({'message': '더 이상 데이터가 없습니다.'}, status=status.HTTP_404_NOT_FOUND)
 
 
 class AllTheme(APIView):
@@ -216,6 +226,7 @@ class AllTheme(APIView):
             'all_theme' : serialized_all_theme
         }
         return Response(data)
+
 
 class Destinations(APIView):
     """
@@ -243,7 +254,6 @@ class Destinations(APIView):
         return Response(data) if destinations else Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
 
-
 class DestinationContent(APIView):
     """
     destination의 content를 return합니다.
@@ -265,14 +275,10 @@ class DestinationContent(APIView):
         else:
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
+
 class FilteredTheme(APIView):
     def get(self, request, region):
         filtered_theme = ThemeSerializer(Theme.objects.filter(region=region)) if region else ThemeSerializer(Theme.objects.all())
         if not filtered_theme:
             return Response('Theme is not existed', status=status.HTTP_400_BAD_REQUEST)
-        
         return filtered_theme
-
-
-            
-    

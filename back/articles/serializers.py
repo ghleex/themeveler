@@ -34,7 +34,7 @@ class CustomersVoiceSerializer(serializers.ModelSerializer):
 class ManagerReplySerializer(serializers.ModelSerializer):
     class Meta:
         model = ManagersReply
-        fields = ('id', 'title', 'content', 'is_fixed',)
+        fields = ('id', 'content', 'manager', 'is_fixed',)
 
 
 class CommentSerializer(serializers.ModelSerializer):
