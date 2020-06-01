@@ -222,7 +222,7 @@ class CustomersVoiceChange(APIView):
                 'title': voice.title,
                 'content': voice.content,
                 'category': requests.get('category'),
-                'request_user': request_user.pk
+                'request_user': request_user.pk,
             }
             serializer = CustomersVoiceSerializer(voice, data=data)
             if serializer.is_valid():
@@ -280,7 +280,18 @@ class ManagersReplying(APIView):
         manager = self.get_manager(manager_pk)
         try:
             todos = CustomersVoice.objects.filter(manager=manager_pk).order_by('-created_at')
-            todo = [CustomersVoiceSerializer(t).data for t in todos]
+            todo = []
+            for t in todos:
+                serializer_t = CustomersVoiceSerializer(t).data
+                td = {
+                    'id': serializer_t['id'],
+                    'title': serializer_t['title'],
+                    'category': serializer_t['category'],
+                    'request_user': serializer_t['request_user'],
+                    'created_at': serializer_t['created_at'],
+                    'updated_at': serializer_t['updated_at'],
+                }
+                todo.append(td)
             data = {
                 'todos': todo,
             }
@@ -292,9 +303,8 @@ class ManagersReplying(APIView):
         try:
             requests = request.data
             data = {
-                'title': requests.get('title'),
                 'content': requests.get('content'),
-                'manager': request.user,
+                'manager': request.user.pk,
                 'is_fixed': True,
             }
             serializer = ManagerReplySerializer(data=data)
@@ -326,8 +336,8 @@ class ManagersReplyChange(APIView):
             todo.content = requests.get['content']
             data = {
                 'id': todo.id,
-                'title': todo.title,
                 'content': todo.content,
+                'manager': request.user.pk,
             }
             serializer = CustomersVoiceSerializer(todo, data=data)
             if serializer.is_valid():
