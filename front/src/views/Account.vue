@@ -289,7 +289,7 @@ import Swal from 'sweetalert2'
     },
     mounted() {
       // footer none
-      // this.a()
+      this.a()
 
       // signin&up js
       const signUpButton = document.getElementById('signUp');

@@ -1,17 +1,12 @@
 <template>
   <div id="service-detail">
-    <div class="service-center-title">
-      <i class="fas fa-exclamation-circle"></i> 고객센터
-    </div>
+    <div class="service-center-title"><i class="fas fa-exclamation-circle"></i>고객센터</div>
     <div class="service-body">
       <div class="service-body-header">
-        <div class="service-detail-created-date">
-          {{serviceData.created_at}}
-        </div>
-        <div class="service-detail-title">
-          {{serviceData.title}}</div>
+        <div class="service-detail-title">{{serviceData.title}}</div>
       </div>
-      <div class="service-detail-user mt-3"><i class="fas fa-user"></i> {{serviceData.request_user}}</div><br>
+      <div class="service-detail-user mt-3"><i class="fas fa-user"></i> {{serviceData.request_user_nickname}}</div><br>
+      <div class="service-detail-created-date"> {{serviceData.created_at}}</div>
       <div class="service-content">{{serviceData.content}}</div><br>
       <div class="service-detail-btn mt-12">
         <v-btn color="warning" class="text-light mr-4 btn-detail" @click="updateData">수정 <i class="fas fa-edit ml-1"></i></v-btn>
@@ -20,10 +15,8 @@
       </div>
     </div>
 
-    <!-- Comment list -->
-    <div class="comment-header">
-      댓글
-    </div>
+    <!-- Comment -->
+    <div class="comment-header">댓글</div>
     <div class="comment-header-top"></div>
     <div class="service-comment">
       <v-form ref="form" class="service-comment-form" v-model="valid" lazy-validation>
@@ -49,7 +42,7 @@
 import axios from 'axios'
 
 export default {
-  name: 'service-detail',
+  name: "service-detail",
   data() {
     return {
       serviceData: [],
@@ -57,7 +50,7 @@ export default {
       userId: "",
       valid: false,
       commentRules: [
-        v => (v && v.length <= 500) || '댓글은 최대 500자 이내로 작성해주세요.',
+        v => (v && v.length <= 500) || '댓글은 최대 500자 이내로 작성해주세요.'
       ],
       remain: 500,
       resultRemian: 500,
@@ -66,7 +59,7 @@ export default {
   },
   methods: {
     deleteData() {
-      if (this.serviceData["voice"].request_user === this.$store.getters.user_id) {
+      if (this.serviceData.request_user_id === this.$store.getters.user_id) {
         const requestHeader = this.$store.getters.requestHeader
         axios.delete(`/articles/cv/${this.userId}/${this.serviceId}/`, requestHeader)
           .then(
@@ -104,8 +97,7 @@ export default {
     const requestHeader = this.$store.getters.requestHeader
     axios.get(`/articles/cv/${this.userId}/${this.serviceId}/`, requestHeader)
       .then(response => {
-        console.log(response.data["voice"])
-        this.serviceData = response.data["voice"]
+        this.serviceData = response.data
       })
       .catch(err => {
         console.log(err)
@@ -116,14 +108,14 @@ export default {
 
 <style scoped>
   #service-detail {
-    background-color: rgb(238, 240, 247);
     height: 100%;
+    background-color: rgb(238, 240, 247);
   }
 
   #service-detail .service-center-title {
     font-family: 'Cafe24Simplehae';
     font-size: 30px;
-    margin: 8rem auto 0 auto;
+    margin: 80px auto 0 auto;
     width: 80%;
     border-radius: 7px 7px 0 0;
     box-shadow: 1px 1px 2px 1px rgb(100, 105, 109);
@@ -135,8 +127,8 @@ export default {
   #service-detail .service-body {
     background-color: #fff;
     width: 80%;
-    padding: 1.2rem 2rem;
-    margin: 0 10% 5rem 10%;
+    padding: 1.2rem 1rem;
+    margin: 0 auto 60px auto;
     border-radius: 0 0 7px 7px;
     box-shadow: 1px 2px 2px 1px rgb(100, 105, 109);
   }
@@ -204,10 +196,6 @@ export default {
     padding: 2rem 0 1rem 2rem;
     box-shadow: 1px 2px 2px 1px rgb(100, 105, 109);
   }
-
-  /* .service-comment-form {
-    display: flex;
-  } */
 
   .survice-comment-input {
     display: flex;

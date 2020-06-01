@@ -1,18 +1,34 @@
 <template>
-  <div class="">
-    <div class="chatbot-box" @click.stop="dialog = true">
+  <div class="chatbot">
+    <div class="chatbot-box" @click="openModal">
       <i class="fas fa-comment-dots chatbot-icon"></i>
     </div>
     <v-dialog
       v-model="dialog"
       max-width="290"
+      transition="scale-transition"
     >
       <v-card>
         <v-card-title class="headline">여행지</v-card-title>
+        <p v-if="chatLoading" class="chatLoading">Loading</p>
+        <span v-if="memories">
+          <v-card-text v-for="(memory, idx) in memories" :key="idx">
+            {{ memory.nickname }} : {{ memory.message }}<br>
+            {{ memory.created_at | moment("YYYY-MM-DD hh:mm:ss") }}
+          </v-card-text>
+        </span>
+    
+        <span v-if="messages">
+          <v-card-text v-for="(message, idx) in messages" :key="idx">
+            {{ message.nickname }} : {{ message.message }}<br>
+            {{ message.created_at | moment("YYYY-MM-DD hh:mm:ss") }}
+          </v-card-text>
+        </span>
 
-        <v-card-text>
-          Hello....Juno Juno,,
-        </v-card-text>
+        <input v-if="connected" type="text" v-model="message" @keypress.enter="sendMessage" style="border: 1px black solid;">
+        <span v-else>
+          연결안됨
+        </span>
 
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -32,18 +48,118 @@
 </template>
 
 <script>
+  const axios = require("axios").default
+
   export default {
-    name: 'ChatBot',
+    name: "ChatBot",
     props: {
       themeId: Number,
     },
-    data() {
+    data:() => {
       return {
+        theme: "",
+        messages: [],
+        message: "",
+        token: "",
+        memories: [],
         dialog: false,
+        connected: false,
+        chatPage: 1,
+        scrollHeight: 0,
+        chatLoading: false
       }
     },
+    created() {
+      this.$socket.on("message", data => {
+        this.messages.push({
+          nickname: data.nickname, 
+          message: data.message, 
+          theme: this.themeId, 
+          created_at: this.$moment(new Date()).format("YYYY-MM-DD hh:mm:ss")
+        })
+      })
+    },
+    mounted() {
+      axios.get(`http://127.0.0.1:8000/api/travels/chat/${this.themeId}/${this.chatPage}/`, this.$store.getters.requestHeader)
+        .then(res => {
+          this.memories = res.data
+        })
+        .catch(err => {
+          console.log(err)
+        })
+      this.messages = []
+      if (this.$socket.connected) {
+        this.$socket.emit("startMessage", {theme:this.themeId})
+        this.$socket.on("joined", data => {
+          data["created_at"] = this.$moment(new Date()).format("YYYY-MM-DD hh:mm:ss")
+          this.messages = [data]
+          this.connected = true
+        })
+      } else {
+        this.messages = [{theme: "error", nickname: "관리자", message: "에러발생"}]
+        this.connected = false
+      }
+      this.dialog = false
+    },
     methods: {
-
+      handleScroll(scrollTop) {
+        if (scrollTop.srcElement.scrollTop == 0) {
+          this.chatLoading = true
+          let loadingMessage =  setInterval(() => {
+            let loadingText = document.getElementsByClassName('chatLoading')[0]
+            loadingText.innerText += '.'
+            if (loadingText.innerText.length > 10) {
+              loadingText.innerText = 'Loading'
+            }
+          }, 100)
+          setTimeout(() => {
+            this.chatPage += 1
+            axios.get(`http://127.0.0.1:8000/api/travels/chat/${this.themeId}/${this.chatPage}/`, this.$store.getters.requestHeader)
+              .then(res => {
+                this.memories = res.data.concat(this.memories)
+                document.getElementsByClassName('v-dialog')[0].scrollTop = this.scrollHeight
+              })
+            this.chatLoading = false
+            clearInterval(loadingMessage)
+          }, 1000)
+        }          
+      },
+      scroll() {
+        var scroll = document.getElementsByClassName('v-dialog')[0]
+        scroll.scrollTop = scroll.scrollHeight
+      },
+      openModal() {
+        this.dialog = true
+        setTimeout(this.scroll, 10)
+        setTimeout(() => {
+          document.getElementsByClassName('v-dialog')[0].addEventListener('scroll', this.handleScroll)
+          this.scrollHeight = document.getElementsByClassName('v-dialog')[0].scrollHeight
+        }, 50)
+      },
+      checkConnected() {
+        return this.$socket.connected
+      },
+      sendMessage() {
+        var message = this.message
+        this.message = ""
+        if (this.checkConnected) {
+          let data = {
+            "message":message
+          }
+          axios.post(`http://127.0.0.1:8000/api/travels/chat/${this.themeId}/`, data, this.$store.getters.requestHeader)
+          .then(res =>{
+            this.$socket.emit("sendMessage",{theme: this.themeId, nickname: res.data.nickname, message: message})
+            this.messages.push(res.data)
+          })
+          .catch(err =>{
+            console.log(err)
+            this.messages = [{theme: "error", nickname: "관리자", message: "에러발생"}]
+          })
+        } else {
+          this.messages = [{theme: "error", nickname: "관리자", message: "에러발생"}]
+        }
+        setTimeout(this.scroll, 40)
+      }
     }
   }
 </script>

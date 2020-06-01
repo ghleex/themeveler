@@ -24,7 +24,7 @@
 import axios from 'axios'
 
 export default {
-  name: 'notice-create',
+  name: "notice-create",
   data() {
     return {
       noticeId: "",
@@ -59,21 +59,20 @@ export default {
 
       if (this.$refs.form.validate()) {
         var noticeCreateForms = {
-          'category': this.select,
-          'title': this.title,
-          'content': this.content,
-          'writer': this.$store.getters.user_id,
-          'isNoticeAll': 1,
-          // 'writed_at': Date.Now()
+          "category": this.select,
+          "title": this.title,
+          "content": this.content,
+          "writer": this.$store.getters.user_id,
+          "isNoticeAll": 1
         }
-        console.log(noticeCreateForms)
         const requestHeader = this.$store.getters.requestHeader
         axios.post('/articles/theme_notice/', noticeCreateForms, requestHeader)
-          .then(
+          .then(response => {
+            console.log(response.data)
             this.$router.push({
               path: '/notice'
             })
-          )
+          })
           .catch(err => {
             console.log(err)
           })
@@ -90,16 +89,13 @@ export default {
 
       if (this.$refs.form.validate()) {
         var noticeUpdateForms = {
-          'category': this.select,
-          'title': this.title,
-          'content': this.content,
-          'writer': this.$store.getters.user_id,
-          'isNoticeAll': this.isNoticeAll,
-          // 'updated_at': Date.Now()
+          "category": this.select,
+          "title": this.title,
+          "content": this.content,
+          "writer": this.$store.getters.user_id,
+          "isNoticeAll": this.isNoticeAll
         }
         const requestHeader = this.$store.getters.requestHeader
-        console.log(this.$store.getters.user_id)
-        console.log(this.select)
         axios.put(`/articles/theme_notice/${this.noticeId}/`, noticeUpdateForms, requestHeader)
           .then(response => {
             console.log(response.data)
@@ -112,15 +108,15 @@ export default {
           })
       }
     },
-    reset () {
+    reset() {
       this.$refs.form.reset()
     },
-    addcancel () {
+    addcancel() {
       this.$router.push({
         path: '/notice'
       })
     },
-    updatecancel () {
+    updatecancel() {
       this.$router.push({
         path: `/notice/detail/${this.noticeId}`
       })
@@ -133,7 +129,6 @@ export default {
         .then(response => {
           console.log(response.data)
           if (response.data.writer_id === this.$store.getters.user_id) {
-            // this.select = response.data.category
             if (response.data.category === 1) {
               this.select = "일반"
             } else if (response.data.category === 2) {
@@ -141,10 +136,11 @@ export default {
             } else if (response.data.category === 3) {
               this.select = "테마"
             }
+            // this.select = response.data.category
             this.title = response.data.title
             this.content = response.data.content
-            this.isNoticeAll = response.data.isNoticeAll
             this.writer_id = response.data.writer_id
+            this.isNoticeAll = response.data.isNoticeAll
           } else {
             alert("수정 권한이 없습니다.")
             this.$router.push("/notice")
@@ -159,55 +155,58 @@ export default {
 </script>
 
 <style scoped>
-#notice-create {
-  margin: 64px auto 0 auto;
-  padding: 16px 0 60px 0;
-  width: 100%;
-  background-color: rgb(238, 240, 247);
-}
+  #notice-create {
+    margin: 64px auto 0 auto;
+    padding: 32px 0 48px 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(238, 240, 247);
+  }
 
-.notice-title {
-  font-family: 'Cafe24Simplehae';
-  font-size: 40px;
-  margin: 16px auto 0 auto;
-  width: 50%;
-  border-radius: 7px 7px 0 0;
-  box-shadow: 1px 1px 2px 1px rgb(100, 105, 109);
-  background-color: rgb(255, 255, 255);
-  padding: 2rem 0;
-}
-
-.notice-body {
-  background-color: #fff;
-  width: 50%;
-  padding: 1.2rem 2rem;
-  margin: 0 auto 0 auto;
-  border-radius: 0 0 7px 7px;
-  box-shadow: 1px 2px 2px 1px rgb(100, 105, 109);
-}
-
-.reset {
-  text-align: right;
-}
-
-.btn {
-  font-family: 'Cafe24Simplehae';
-  font-size: 18px;
-}
-
-.notice-create-form {
-  padding: 2rem;
-}
-
-@media (max-width: 600px) {
   .notice-title {
-    width: 95%;
+    font-family: 'Cafe24Simplehae';
+    font-size: 40px;
+    margin: 0 auto 0 auto;
+    width: 50%;
+    border-radius: 7px 7px 0 0;
+    box-shadow: 1px 1px 2px 1px rgb(100, 105, 109);
+    background-color: rgb(255, 255, 255);
+    padding: 2rem 0;
   }
+
   .notice-body {
-    width: 95%;
+    background-color: #fff;
+    width: 50%;
+    padding: 1.2rem 2rem;
+    margin: 0 auto 0 auto;
+    border-radius: 0 0 7px 7px;
+    box-shadow: 1px 2px 2px 1px rgb(100, 105, 109);
   }
+
+  .reset {
+    text-align: right;
+  }
+
+  .btn {
+    font-family: 'Cafe24Simplehae';
+    font-size: 18px;
+  }
+
   .notice-create-form {
-    padding: 8px;
+    padding: 2rem;
   }
-}
+
+  @media (max-width: 600px) {
+    .notice-title {
+      width: 95%;
+    }
+
+    .notice-body {
+      width: 95%;
+    }
+    
+    .notice-create-form {
+      padding: 8px;
+    }
+  }
 </style>

@@ -47,7 +47,7 @@ import axios from 'axios'
 import Drawer from '@/components/Drawer.vue'
 
 export default {
-  name: 'editprofile',
+  name: "editprofile",
   components: {
     Drawer
   },
@@ -63,7 +63,7 @@ export default {
       if (this.password === this.repassword) {
         if (this.password.length > 7) {
           var passwordForms = {
-            'password': this.repassword
+            "password": this.repassword
           }
           const requestHeader = this.$store.getters.requestHeader
           axios.put('/accounts/password/', passwordForms, requestHeader)
@@ -94,31 +94,31 @@ export default {
 </script>
 
 <style scoped>
-#editpassword {
-  margin-top: 64px;
-  background-color: rgba(245, 245, 245, 0.5);
-}
+  #editpassword {
+    margin-top: 64px;
+    background-color: rgba(245, 245, 245, 0.5);
+  }
 
-#profile-content {
-  margin-left: 256px;
-  width: 80%;
-}
-
-@media (max-width: 600px) {
   #profile-content {
-    margin-left: 56px;
+    margin-left: 256px;
     width: 80%;
   }
-}
 
-.content-title {
-  text-align: left;
-  margin-left: 20px;
-  margin-top: 8px;
-}
+  @media (max-width: 600px) {
+    #profile-content {
+      margin-left: 56px;
+      width: 80%;
+    }
+  }
 
-.content-col {
-  padding-top: 6px;
-  padding-bottom: 6px;
-}
+  .content-title {
+    text-align: left;
+    margin-left: 20px;
+    margin-top: 8px;
+  }
+
+  .content-col {
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }
 </style>

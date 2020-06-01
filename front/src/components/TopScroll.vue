@@ -35,7 +35,7 @@
     display: inline-block;
     text-align: center;
     position: fixed;
-    bottom: 30px;
+    bottom: 40px;
     right: 30px;
     transition: background-color .3s,
       opacity .5s, visibility .5s;
