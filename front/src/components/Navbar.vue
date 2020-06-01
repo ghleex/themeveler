@@ -2,7 +2,7 @@
   <div class="navbar_box">
 
     <!-- 사이드바 -->
-    <v-navigation-drawer class="text-start navbar-side" v-model="drawer" absolute temporary>
+    <v-navigation-drawer class="text-start" v-model="drawer" absolute temporary>
       <v-list-item class="mt-2">
         <v-list-item-avatar>
           <v-img class="nav-avartar" src='../assets/navlogo.png'></v-img>
@@ -106,9 +106,7 @@
         </v-btn>
         <v-btn text v-if="this.$store.getters.isLoggedIn" @click="userpage">
           <div class="nav-link drop-no">
-            <div class="nav-text">
-              <v-icon>mdi-account-circle</v-icon> {{ username() }}님
-            </div>
+            <div class="nav-text"><v-icon>mdi-account-circle</v-icon> {{ username() }}님</div>
           </div>
         </v-btn>
       </v-toolbar-items>
@@ -135,6 +133,11 @@
           {
             title: 'Contact',
             icon: 'mdi-account-supervisor-circle'
+          },
+          {
+            title: 'Login',
+            icon: 'mdi-login-variant',
+            path: '/login'
           },
         ],
       }
@@ -164,22 +167,10 @@
 </script>
 
 <style lang="scss" scoped>
-  .navbar-topbar {
-    white-space: nowrap;
-  }
-
-  .navbar_box a {
-    text-decoration: none;
-  }
-
   @media (max-width: 767px) {
-    .navbar_box a {
+    .navbar_box {
       // position: fixed;
     }
-  }
-
-  .navbar-side {
-    z-index: 20;
   }
 
   .navbar_box>img {
@@ -190,11 +181,11 @@
     display: none;
     position: absolute;
     background-color: #f9f9f9;
-    min-width: 160px;
+    min-width: 140px;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
-    left: -8px;
-    top: 40px;
+    left: -15px;
+    top: 25px;
   }
 
   .drop-yes:hover .dropdown-content {
