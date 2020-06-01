@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404
 from rest_framework import status
 from rest_framework.views import APIView
@@ -173,33 +174,18 @@ class Like(APIView):
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
 
-class Chatting(APIView):
-    @swagger_auto_schema(query_serializer=MessageViewSerializer)
-    def get(self, request, theme_pk, format=None):
-        """
-            채팅 내역 확인(테마) - 테마별 채팅 내역을 확인합니다.
-
-            # 내용
-                * headers에서 포함된 jwt 데이터의 user_id를 이용합니다.
-                * theme_pk: theme의 theme_id를 작성합니다. Int 형식입니다.
-        """
-        data = {}
-        theme = request.GET.get('theme')
-        serializer = MessageSerializer(Message.objects.filter(theme=theme_pk), many=True)
-        return Response(serializer.data)
-
+class Chat(APIView):
     @swagger_auto_schema(query_serializer=MessageSerializer)
     def post(self, request, theme_pk, format=None):
         """
-            채팅 저장(테마) - 테마별 채팅을 저장합니다..
+            채팅 저장(테마) - 테마별 채팅을 저장합니다.
 
             # 내용
                 * headers에서 포함된 jwt 데이터의 user_id를 이용합니다.
                 * theme_pk: theme의 theme_id를 작성합니다. Int 형식입니다.
                 * message: 메시지를 작성합니다.
         """
-        jwt_data = decoder(request.headers['Authorization'].split(' ')[1])
-        user = User.objects.get(id=jwt_data.get('user_id'))
+        user = get_user(request.headers['Authorization'].split(' '))
         data = {
             'theme': theme_pk,
             'nickname': user.anonymous,
@@ -208,7 +194,23 @@ class Chatting(APIView):
         serializer = MessageSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
-            return Response(serializer.data)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class ChatView(APIView):
+    @swagger_auto_schema(query_serializer=MessageViewSerializer)
+    def get(self, request, theme_pk, page_no, format=None):
+        """
+            채팅 내역 확인(테마) - 테마별 채팅 내역을 확인합니다.
+
+            # 내용
+                * headers에서 포함된 jwt 데이터의 user_id를 이용합니다.
+                * theme_pk: theme의 theme_id를 작성합니다. Int 형식입니다.
+                * page_no: 
+        """
+        chat_page = Paginator(Message.objects.all(), 20)
+        serializer = MessageSerializer(chat_page.page(page_no), many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class AllTheme(APIView):
