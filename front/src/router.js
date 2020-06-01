@@ -18,7 +18,7 @@ import ProfileTest from './views/Profile/ProfileTest.vue'
 import Travel from './views/Travel/Travel.vue'
 import TravelDetail from './views/Travel/TravelDetail.vue'
 import TravelStart from './views/Travel/TravelStart.vue'
-// import Map from './views/Map/Map.vue'
+
 import CheckToken from './views/Social/CheckToken.vue'
 import Error404 from './views/Error404.vue'
 
@@ -126,11 +126,6 @@ const routes = [
       themeId: Number(route.params.themeId)
     })
   },
-  // {
-  //   path: '/map',
-  //   name: 'map',
-  //   component: Map
-  // },
 
 
 
