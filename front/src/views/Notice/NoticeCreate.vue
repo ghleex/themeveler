@@ -59,11 +59,11 @@ export default {
 
       if (this.$refs.form.validate()) {
         var noticeCreateForms = {
-          'category': this.select,
-          'title': this.title,
-          'content': this.content,
-          'writer': this.$store.getters.user_id,
-          'isNoticeAll': 1,
+          "category": this.select,
+          "title": this.title,
+          "content": this.content,
+          "writer": this.$store.getters.user_id,
+          "isNoticeAll": 1,
           // 'writed_at': Date.Now()
         }
         console.log(noticeCreateForms)
@@ -90,11 +90,11 @@ export default {
 
       if (this.$refs.form.validate()) {
         var noticeUpdateForms = {
-          'category': this.select,
-          'title': this.title,
-          'content': this.content,
-          'writer': this.$store.getters.user_id,
-          'isNoticeAll': this.isNoticeAll,
+          "category": this.select,
+          "title": this.title,
+          "content": this.content,
+          "writer": this.$store.getters.user_id,
+          "isNoticeAll": this.isNoticeAll,
           // 'updated_at': Date.Now()
         }
         const requestHeader = this.$store.getters.requestHeader

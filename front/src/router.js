@@ -24,7 +24,8 @@ import Error404 from './views/Error404.vue'
 
 Vue.use(VueRouter)
 
-const routes = [{
+const routes = [
+  {
     path: '/',
     name: 'home',
     component: Home

@@ -57,11 +57,7 @@ export default {
 #footer {
   background: #555B6E;
   align-items: center;
-  /* position: relative; */
-  position: absolute;
-  left: 0;
-  bottom: 0;
-
+  position: relative;
   margin-top: auto !important;
   font-size: calc(6px + 0.6vw);
 }
