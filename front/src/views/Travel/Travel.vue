@@ -143,6 +143,10 @@
 </script>
 
 <style lang="scss" scoped>
+  #travel {
+    padding-bottom: 5rem;
+  }
+
   .travel-img-font {
     position: absolute;
     top: 8%;

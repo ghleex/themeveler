@@ -50,7 +50,7 @@
   }
 
   #button > i {
-    color: rgb(68, 69, 88);
+    color: #FF5252
   }
 
   .hvr-grow {
@@ -69,6 +69,6 @@
   }
 
   .hvr-grow i:hover {
-    text-shadow: 0 0 3px rgb(255, 255, 255);
+    text-shadow: 0 0 3px rgb(255, 117, 82);
   }
 </style>

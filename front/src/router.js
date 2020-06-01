@@ -17,14 +17,14 @@ import ProfileComment from './views/Profile/ProfileComment.vue'
 import ProfileTest from './views/Profile/ProfileTest.vue'
 import Travel from './views/Travel/Travel.vue'
 import TravelDetail from './views/Travel/TravelDetail.vue'
+import TravelStart from './views/Travel/TravelStart.vue'
 // import Map from './views/Map/Map.vue'
 import CheckToken from './views/Social/CheckToken.vue'
 import Error404 from './views/Error404.vue'
 
 Vue.use(VueRouter)
 
-const routes = [
-  {
+const routes = [{
     path: '/',
     name: 'home',
     component: Home
@@ -73,27 +73,31 @@ const routes = [
     path: '/profile',
     name: 'profile',
     component: Profile,
-    // meta: {loginRequired: true}
+    // meta: {loginRequire: true}
   },
   {
     path: '/editpassword',
     name: 'editpassword',
-    component: EditPassword
+    component: EditPassword,
+    // meta: {loginRequire: true}
   },
   {
     path: '/editprofile',
     name: 'editprofile',
-    component: EditProfile
+    component: EditProfile,
+    // meta: {loginRequire: true}
   },
   {
     path: '/profile/article',
     name: 'profile-article',
-    component: ProfileArticle
+    component: ProfileArticle,
+    // meta: {loginRequire: true}
   },
   {
     path: '/profile/comment',
     name: 'profile-comment',
-    component: ProfileComment
+    component: ProfileComment,
+    // meta: {loginRequire: true}
   },
   {
     path: '/profiletest',
@@ -113,6 +117,14 @@ const routes = [
       themeId: Number(route.params.themeId)
     })
   },
+  {
+    path: '/travel/:themeId/start',
+    name: 'travel-start',
+    component: TravelStart,
+    props: route => ({
+      themeId: Number(route.params.themeId)
+    })
+  },
   // {
   //   path: '/map',
   //   name: 'map',
@@ -121,7 +133,7 @@ const routes = [
 
 
 
-  
+
   {
     path: '/checktoken/:nickname/:token',
     name: 'checkToken',

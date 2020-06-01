@@ -58,7 +58,8 @@ export default {
       this.$store.dispatch("login", stored.jwt);
       this.$store.commit("setToken", stored.jwt);
     }
-    // sessionTimeout() {
+
+    // sessionTiemout() {
     //   if (this.$session.exists()) {
     //     if (this.$session.getItem("expire") < Date.now()) {
     //       this.logout()
