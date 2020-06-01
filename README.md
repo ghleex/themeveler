@@ -17,6 +17,8 @@
 
 ### 0. `back` 폴더에서 진행
 
+* PC 환경에서 실행 시 DB 관리를 위한 MySQL 은 기 설치되어 있음을 가정
+
 
 
 ### 1. 파이썬 가상환경 생성
@@ -82,7 +84,7 @@ $ npm install
 #### 1. npm 사용 시
 
 ```bash
-$ npm run server
+$ npm run serve
 ```
 
 #### 2. yarn 사용 시
@@ -125,43 +127,4 @@ $ node index.js
 
 
 
-
-
-## AWS EC2 에서는..
-
-### 0. `/home/ubuntu/` 에서 진행
-
-* 백엔드용 폴더 생성
-
-  ```bash
-  $ mkdir back
-  ```
-
-* 프론트엔드용 폴더 생성
-
-  ```bash
-  $ mkdir front
-  ```
-
-
-
-### 1. `back` 폴더
-
-#### 1. 파이썬 3.7 설치 (가상환경 포함)
-
-```bash
-$ sudo apt install python3.7 python3.7-venv
-```
-
-#### 2. 파이썬 가상환경 생성
-
-```bash
-$ python3.7 -m venv venv
-```
-
-#### 3. 파이썬 가상환경 실행
-
-```bash
-$ source venv/bin/activate
-```
 

@@ -155,14 +155,12 @@ class CustomersVoices(APIView):
     def post(self, request, user_pk, format=None):
         request_user = get_user(request.headers['Authorization'].split(' '))
         if user_pk == request_user.pk:
-            user = request_user.pk
             requests = request.data
             data = {
                 'title': requests.get('title'),
                 'content': requests.get('content'),
                 'category': requests.get('category'),
-                'request_user_id': user,
-                'request_user_nickname': request_user.nickname,
+                'request_user': request_user.pk,
             }
             serializer = CustomersVoiceSerializer(data=data)
             if serializer.is_valid():
