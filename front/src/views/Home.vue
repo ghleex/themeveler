@@ -1,6 +1,5 @@
 <template>
   <div class="header">
-
     <div class="home-search-bar">
       <SearchBar />
     </div>
@@ -11,8 +10,6 @@
         </v-carousel-item>
       </v-carousel>
     </div><br>
-
-
 
 
     <!-- card -->
@@ -40,8 +37,6 @@
       <i class="fas fa-map-marker-alt mr-1"></i>
       여행을 쫓다 꿈을 좇다 테마블러
     </div>
-
-
 
 
     <!-- 인기 테마 -->
@@ -113,8 +108,6 @@
     </div>
 
 
-
-
     <!-- 인기 여행지 -->
     <!-- <div class="pop-box">
       <div class="main-section">
@@ -156,7 +149,7 @@
   import TopScroll from '../components/TopScroll.vue'
 
   export default {
-    name: 'Home',
+    name: "Home",
     components: {
       SearchBar,
       HowToUse,
@@ -172,87 +165,87 @@
         model: null,
         model_: null,
         eachContext: "",
+        slides: [
+          require("../assets/image/bg.jpg"),
+          require("../assets/image/bg-3.jpg"),
+        ],
         popTheme: [{
             id: 1,
-            img: require('../assets/image/pop1.webp'),
-            title: '타지 사람들 집합',
-            context: '지역 사람들만 아는 숨겨진 맛집과 명소를 소개합니다.',
+            img: require("../assets/image/pop1.webp"),
+            title: "타지 사람들 집합",
+            context: "지역 사람들만 아는 숨겨진 맛집과 명소를 소개합니다.",
             imgs: [
-              require('../assets/image/pop1sub1.jpg'),
-              require('../assets/image/pop1sub2.jpg'),
-              require('../assets/image/pop1sub3.jpg'),
-              require('../assets/image/pop1sub4.jpg'),
-              require('../assets/image/pop1sub5.jpg'),
+              require("../assets/image/pop1sub1.jpg"),
+              require("../assets/image/pop1sub2.jpg"),
+              require("../assets/image/pop1sub3.jpg"),
+              require("../assets/image/pop1sub4.jpg"),
+              require("../assets/image/pop1sub5.jpg"),
             ]
           },
           {
             id: 2,
-            img: require('../assets/image/pop2.jpg'),
-            title: '서울사람도 잘 몰라',
-            context: '일단 아무말이나 적어보자.',
+            img: require("../assets/image/pop2.jpg"),
+            title: "서울사람도 잘 몰라",
+            context: "일단 아무말이나 적어보자.",
             imgs: [
-              require('../assets/image/pop2sub1.jpg'),
-              require('../assets/image/pop2sub2.jpg'),
-              require('../assets/image/pop2sub3.jpg'),
-              require('../assets/image/pop2sub4.jpg'),
-              require('../assets/image/pop2sub5.jpg'),
+              require("../assets/image/pop2sub1.jpg"),
+              require("../assets/image/pop2sub2.jpg"),
+              require("../assets/image/pop2sub3.jpg"),
+              require("../assets/image/pop2sub4.jpg"),
+              require("../assets/image/pop2sub5.jpg"),
             ]
           },
           {
             id: 3,
-            img: require('../assets/image/pop3.jpg'),
-            title: '홍콩 어디까지 가봤니?',
-            context: '홍콩 에그타르트 JMT.',
+            img: require("../assets/image/pop3.jpg"),
+            title: "홍콩 어디까지 가봤니?",
+            context: "홍콩 에그타르트 JMT.",
             imgs: [
-              require('../assets/image/pop3sub1.jpg'),
-              require('../assets/image/pop3sub2.jpg'),
-              require('../assets/image/pop3sub3.jpg'),
-              require('../assets/image/pop3sub4.jpg'),
-              require('../assets/image/pop3sub5.jpg'),
+              require("../assets/image/pop3sub1.jpg"),
+              require("../assets/image/pop3sub2.jpg"),
+              require("../assets/image/pop3sub3.jpg"),
+              require("../assets/image/pop3sub4.jpg"),
+              require("../assets/image/pop3sub5.jpg"),
             ]
           },
           {
             id: 4,
-            img: require('../assets/image/pop4.jpg'),
-            title: '최고의 디즈니 랜드',
-            context: '도쿄는 생각보다 별롭니다. 플로리다 올랜도는 쩔어요. 가장 큰 디즈니 월드(world) 클라쓰~',
+            img: require("../assets/image/pop4.jpg"),
+            title: "최고의 디즈니 랜드",
+            context: "도쿄는 생각보다 별롭니다. 플로리다 올랜도는 쩔어요. 가장 큰 디즈니 월드(world) 클라쓰~",
             imgs: [
-              require('../assets/image/pop4sub1.jpg'),
-              require('../assets/image/pop4sub2.jpg'),
-              require('../assets/image/pop4sub3.jpg'),
-              require('../assets/image/pop4sub4.jpg'),
-              require('../assets/image/pop4sub5.jpg'),
+              require("../assets/image/pop4sub1.jpg"),
+              require("../assets/image/pop4sub2.jpg"),
+              require("../assets/image/pop4sub3.jpg"),
+              require("../assets/image/pop4sub4.jpg"),
+              require("../assets/image/pop4sub5.jpg"),
             ]
           },
           {
             id: 5,
-            img: require('../assets/image/pop5.jpg'),
-            title: '혼저옵서예',
-            context: '유일한 제주 남부의 시장을 가면 싱싱한 회 팩이 마치 3만원!',
+            img: require("../assets/image/pop5.jpg"),
+            title: "혼저옵서예",
+            context: "유일한 제주 남부의 시장을 가면 싱싱한 회 팩이 마치 3만원!",
             imgs: [
-              require('../assets/image/pop5sub1.jpg'),
-              require('../assets/image/pop5sub2.jpg'),
-              require('../assets/image/pop5sub3.jpg'),
-              require('../assets/image/pop5sub4.jpg'),
-              require('../assets/image/pop5sub5.jpg'),
+              require("../assets/image/pop5sub1.jpg"),
+              require("../assets/image/pop5sub2.jpg"),
+              require("../assets/image/pop5sub3.jpg"),
+              require("../assets/image/pop5sub4.jpg"),
+              require("../assets/image/pop5sub5.jpg"),
             ]
           }
         ],
-        slides: [
-          require('../assets/image/bg.jpg'),
-          require('../assets/image/bg-3.jpg'),
-        ],
         destination: [
-          require('../assets/image/destination1.jpg'),
-          require('../assets/image/destination2.jpg'),
-          require('../assets/image/destination3.jpg'),
-          require('../assets/image/destination4.jpg'),
-          require('../assets/image/destination1.jpg'),
-          require('../assets/image/destination2.jpg'),
-          require('../assets/image/destination3.jpg'),
-          require('../assets/image/destination4.jpg'),
+          require("../assets/image/destination1.jpg"),
+          require("../assets/image/destination2.jpg"),
+          require("../assets/image/destination3.jpg"),
+          require("../assets/image/destination4.jpg"),
+          require("../assets/image/destination1.jpg"),
+          require("../assets/image/destination2.jpg"),
+          require("../assets/image/destination3.jpg"),
+          require("../assets/image/destination4.jpg"),
         ],
-        ticket: require('../assets/themeveler.png'),
+        ticket: require("../assets/themeveler.png"),
       }
     },
     methods: {
@@ -317,7 +310,6 @@
   .v-stepper__header {
     box-shadow: 0 0 0 0 rgba(0, 0, 0, 0) !important;
   }
-
 
   .home-how-to-box {
     display: flex;
@@ -387,13 +379,6 @@
     margin: 0 1rem;
   }
 
-  /* .home-card-destination-name {
-    height: 35px;
-    width: 100px;
-    background-color: #2c3e50;
-    border-radius: 5px 5px 0 0;
-  } */
-
   .home-card-destination-header {
     height: 36px;
     background-color: #2c3e50;
@@ -436,14 +421,10 @@
   }
 
   .describe-left {
-    /* background-image: url('../assets/themeveler.png'); */
     background-size: cover;
     background-color: #fff;
-    /* width:40%;
-    height: 100%; */
     width: 30%;
     height: 250px;
-    /* border-radius: 15px; */
     border-right: dotted 2px white;
     /* -webkit-clip-path: polygon(0 0, 76% 0, 24% 100%, 0% 100%);
     clip-path: polygon(0 0, 76% 0, 24% 100%, 0% 100%); */
@@ -471,10 +452,8 @@
   }
 
   .describe-middle>i {
-    /* border: dotted 1px tomato; */
     padding: .6rem;
     border-radius: 50px;
-    /* background-color: rgb(250, 239, 239); */
     background-color: tomato;
     color: white;
   }
@@ -560,7 +539,6 @@
   .main-section {
     margin-bottom: 5rem;
   }
-
 
   .home-h2-title {
     font-family: 'Cafe24Simplehae';

@@ -42,7 +42,7 @@
 import axios from 'axios'
 
 export default {
-  name: 'service-detail',
+  name: "service-detail",
   data() {
     return {
       serviceData: [],
@@ -59,7 +59,7 @@ export default {
   },
   methods: {
     deleteData() {
-      if (this.serviceData["voice"].request_user === this.$store.getters.user_id) {
+      if (this.serviceData.request_user_id === this.$store.getters.user_id) {
         const requestHeader = this.$store.getters.requestHeader
         axios.delete(`/articles/cv/${this.userId}/${this.serviceId}/`, requestHeader)
           .then(
@@ -97,7 +97,6 @@ export default {
     const requestHeader = this.$store.getters.requestHeader
     axios.get(`/articles/cv/${this.userId}/${this.serviceId}/`, requestHeader)
       .then(response => {
-        console.log(response.data)
         this.serviceData = response.data
       })
       .catch(err => {
@@ -109,14 +108,14 @@ export default {
 
 <style scoped>
   #service-detail {
-    background-color: rgb(238, 240, 247);
     height: 100%;
+    background-color: rgb(238, 240, 247);
   }
 
   #service-detail .service-center-title {
     font-family: 'Cafe24Simplehae';
     font-size: 30px;
-    margin: 8rem auto 0 auto;
+    margin: 80px auto 0 auto;
     width: 80%;
     border-radius: 7px 7px 0 0;
     box-shadow: 1px 1px 2px 1px rgb(100, 105, 109);
@@ -128,8 +127,8 @@ export default {
   #service-detail .service-body {
     background-color: #fff;
     width: 80%;
-    padding: 1.2rem 2rem;
-    margin: 0 10% 5rem 10%;
+    padding: 1.2rem 1rem;
+    margin: 0 auto 60px auto;
     border-radius: 0 0 7px 7px;
     box-shadow: 1px 2px 2px 1px rgb(100, 105, 109);
   }
@@ -197,10 +196,6 @@ export default {
     padding: 2rem 0 1rem 2rem;
     box-shadow: 1px 2px 2px 1px rgb(100, 105, 109);
   }
-
-  /* .service-comment-form {
-    display: flex;
-  } */
 
   .survice-comment-input {
     display: flex;

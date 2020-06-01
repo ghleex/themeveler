@@ -47,7 +47,7 @@
 import axios from 'axios'
 
 export default {
-  name: 'service-read',
+  name: "service-read",
   data() {
     return {
       page: 1,
@@ -85,8 +85,6 @@ export default {
   mounted() {
     this.userId = this.$store.getters.user_id
     const requestHeader = this.$store.getters.requestHeader
-    // console.log(this.userId)
-    // console.log(requestHeader)
     axios.get(`/articles/cv/${this.userId}/`, requestHeader)
       .then(response => {
         console.log(response.data)
@@ -98,9 +96,11 @@ export default {
   }
 }
 </script>
+
 <style scoped>
   #service-read {
     margin: 64px auto 0 auto;
+    padding: 32px 0 48px 0;
     width: 100%;
     height: 100%;
     background-color: rgb(238, 240, 247);
@@ -114,7 +114,7 @@ export default {
   #service-read .service-center-title {
     font-family: 'Cafe24Simplehae';
     font-size: 40px;
-    margin: 5rem auto 0 auto;
+    margin: 0 auto 0 auto;
     width: 80%;
     border-radius: 7px 7px 0 0;
     box-shadow: 1px 1px 2px 1px rgb(100, 105, 109);
@@ -143,6 +143,7 @@ export default {
     .service-center-title {
       width: 95% !important;
     }
+    
     .service-body {
       width: 95% !important;
       margin: 0 auto !important;

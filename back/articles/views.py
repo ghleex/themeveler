@@ -218,14 +218,11 @@ class CustomersVoiceChange(APIView):
             requests = request.data
             voice.title = requests.get('title')
             voice.content = requests.get('content')
-            # voice.category = VoiceCategory.objects.get(pk=requests.get('category')),
             data = {
                 'title': voice.title,
                 'content': voice.content,
                 'category': requests.get('category'),
-                'request_user': request_user.pk,
-                'created_at': voice.created_at,
-                'updated_at': voice.updated_at,
+                'request_user': request_user.pk
             }
             serializer = CustomersVoiceSerializer(voice, data=data)
             if serializer.is_valid():
@@ -246,7 +243,7 @@ class CustomersVoiceChange(APIView):
                 }
                 return Response(message, status=status.HTTP_202_ACCEPTED)
             else:
-                if request_user.pk == voice.request_user:
+                if request_user.pk == voice.request_user.pk:
                     voice.delete()
                     message = {
                         'message': 'SUCCESSFULLY DELETED THE VOICE'

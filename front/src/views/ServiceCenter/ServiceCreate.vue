@@ -21,10 +21,9 @@
 
 <script>
 import axios from 'axios'
-import Swal from 'sweetalert2'
 
 export default {
-  name: 'service-create',
+  name: "service-create",
   data() {
     return {
       serviceId: "",
@@ -70,12 +69,8 @@ export default {
         // // var day = today.getDay(); // 요일
         // // var hour = today.getHours() // 시간
         // // var min = today.getMinutes()
-
         // // this.writed_at = `${year}-${month}-${date} | ${hour}:${min}`
         // this.writed_at = `${year}-${month}-${date}`
-
-        console.log(this.userId)
-        console.log(serviceCreateForms)
         const requestHeader = this.$store.getters.requestHeader
         axios.post(`/articles/cv/${this.userId}/`, serviceCreateForms, requestHeader)
           .then(response => {
@@ -90,36 +85,6 @@ export default {
       }
     },
     update() {
-      if (!this.select) {
-          Swal.fire({
-          title: "Check Categorys",
-          text: "분류를 선택해주세요.",
-          type: "warning",
-          timer: 3000
-        })
-      } else if (!this.title) {
-          Swal.fire({
-          title: "Check Title",
-          text: "제목을 입력하세요.",
-          type: "warning",
-          timer: 3000
-        })
-      } else if (this.title.length > 30) {
-          Swal.fire({
-          title: "Check Title",
-          text: "제목을 30자 이내로 작성해주세요",
-          type: "warning",
-          timer: 3000
-        })
-      } else if (!this.content) {
-          Swal.fire({
-          title: "Check Content",
-          text: "내용을 입력하세요.",
-          type: "warning",
-          timer: 3000
-        })
-      }
-
       if (this.select === "건의") {
         this.select = 1
       } else if (this.select === "신고") {
@@ -169,17 +134,17 @@ export default {
       axios.get(`/articles/cv/${this.userId}/${this.serviceId}/`, requestHeader)
         .then(response => {
           console.log(response.data)
-          if (response.data['voice'].request_user === this.$store.getters.user_id) {
+          if (response.data.request_user_id === this.$store.getters.user_id) {
             if (response.data.category === 1) {
               this.select = "건의"
             } else if (response.data.category === 2) {
               this.select = "신고"
             }
             // this.select = response.data['voice'].category
-            this.title = response.data['voice'].title
-            this.content = response.data['voice'].content
-            this.request_user_id = response.data['voice'].request_user_id
-            this.is_fixed = response.data['voice'].is_fixed
+            this.title = response.data.title
+            this.content = response.data.content
+            this.request_user_id = response.data.request_user_id
+            this.is_fixed = response.data.is_fixed
           } else {
             alert("수정 권한이 없습니다.")
             this.$router.push("/service")
@@ -195,8 +160,11 @@ export default {
 
 <style scoped>
   #service-create {
-    background-color: rgb(238, 240, 247);
+    margin: 64px auto 0 auto;
+    padding: 32px 0 48px 0;
+    width: 100%;
     height: 100%;
+    background-color: rgb(238, 240, 247);
   }
 
   .reset {
@@ -206,7 +174,7 @@ export default {
   #service-create .service-center-title {
     font-family: 'Cafe24Simplehae';
     font-size: 40px;
-    margin: 8rem auto 0 auto;
+    margin: 0 auto 0 auto;
     width: 50%;
     border-radius: 7px 7px 0 0;
     box-shadow: 1px 1px 2px 1px rgb(100, 105, 109);
@@ -218,7 +186,7 @@ export default {
     background-color: #fff;
     width: 50%;
     padding: 1.2rem 2rem;
-    margin: 0 auto 5rem auto;
+    margin: 0 auto 0 auto;
     border-radius: 0 0 7px 7px;
     box-shadow: 1px 2px 2px 1px rgb(100, 105, 109);
   }
@@ -236,9 +204,11 @@ export default {
     #service-create .service-body {
       width: 95%;
     }
+
     #service-create .service-center-title {
       width: 95%;
     }
+    
     .service-create-form {
       padding: 8px;
     }
