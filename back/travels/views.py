@@ -217,6 +217,9 @@ class ChatView(APIView):
 
 
 class AllTheme(APIView):
+    """
+    모든 테마를 return합니다
+    """
     def get(self, request):
         all_theme = Theme.objects.all()
         if not all_theme:
@@ -235,21 +238,18 @@ class Destinations(APIView):
     def get(self, request, theme_pk):
         destinations = []
         theme = get_object_or_404(Theme, pk=theme_pk)
+        """
+        dest 순서에 맞게 serializer를 return하기 위해 list를 돌며 순서대로 append합니다.
+        """
         for dest_pk in theme.dests:
-            destination = Destination.objects.filter(pk=dest_pk)[0]
-            if destination:
+            try:
+                destination = Destination.objects.get(pk=dest_pk)
                 destinations.append(DestinationSerializer(destination).data)
-            else:
+            except:
                 return Response('Destination is not exist', status=status.HTTP_400_BAD_REQUEST)
 
-        user = get_user(request.headers['Authorization'].split(' '))
-        is_like = False
-        if theme.theme_like_users.filter(pk=user.pk).exists():
-            is_like = True
         data = {
             'destinations' : destinations,
-            'like_count': theme.theme_like_users.count(),
-            'is_like': is_like
         }
         return Response(data) if destinations else Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
@@ -261,22 +261,31 @@ class DestinationContent(APIView):
     def get(self, request, theme_pk, dest_idx):
         theme = get_object_or_404(Theme, pk=theme_pk)
         destination = get_object_or_404(Destination, pk=theme.dests[dest_idx])
-        dest_content = DestContent.objects.filter(theme=theme_pk, destination=destination.pk)[0]
-        if dest_content:
-            contents = dest_content.contents
-            pages = []
-            for page_pk in contents:
-                content_page = ContentPage.objects.filter(pk=page_pk)[0]
-                pages.append(ContentPageSerializer(content_page).data)
-            data = {
-                'pages' : pages
-            }
-            return Response(data, status=status.HTTP_200_OK)
-        else:
+        try:
+            dest_conent = DesContent.objects.get(theme=theme_pk, destination=destination.pk)
+            if dest_content:
+                contents = dest_content.contents
+                pages = []
+                """
+                순서를 지키기 위해 list를 돌며 serializer를 append합니다.
+                """
+                for page_pk in contents:
+                    content_page = ContentPage.objects.filter(pk=page_pk)[0]
+                    pages.append(ContentPageSerializer(content_page).data)
+                data = {
+                    'pages' : pages
+                }
+                return Response(data, status=status.HTTP_200_OK)
+            else:
+                return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
+        except:
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
 
 class FilteredTheme(APIView):
+    """
+    지역별로 분류된 테마를 return합니다. 만약 지역이 포함되어 있지 않다면 전체 테마를 return합니다.
+    """
     def get(self, request, region):
         filtered_theme = ThemeSerializer(Theme.objects.filter(region=region)) if region else ThemeSerializer(Theme.objects.all())
         if not filtered_theme:
