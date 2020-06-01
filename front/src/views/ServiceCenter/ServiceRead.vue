@@ -105,6 +105,7 @@ export default {
   #service-read {
     margin: 64px auto 0 auto;
     width: 100%;
+    height: 100%;
     background-color: rgb(238, 240, 247);
   }
 
