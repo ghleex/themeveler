@@ -262,7 +262,7 @@ class DestinationContent(APIView):
         theme = get_object_or_404(Theme, pk=theme_pk)
         destination = get_object_or_404(Destination, pk=theme.dests[dest_idx])
         try:
-            dest_content = DesContent.objects.get(theme=theme_pk, destination=destination.pk)
+            dest_content = DestContent.objects.get(theme=theme_pk, destination=destination.pk)
             if dest_content:
                 contents = dest_content.contents
                 pages = []
