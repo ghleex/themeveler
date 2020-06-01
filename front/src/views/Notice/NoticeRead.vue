@@ -1,6 +1,6 @@
 <template>
   <div id="notice-read">
-    <div class="notice-title">공지사항</div>
+    <div class="notice-title"><i class="fas fa-exclamation-circle mr-3"></i>공지사항</div>
     <div class="notice-body">
       <!-- 공지사항 리스트 Data table -->
       <v-data-table
@@ -93,6 +93,7 @@ export default {
   margin: 64px auto 0 auto;
   padding: 16px 0 60px 0;
   width: 100%;
+  height: 100%;
   background-color: rgb(238, 240, 247);
 }
 
