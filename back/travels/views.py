@@ -9,8 +9,8 @@ from rest_framework.parsers import FormParser
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from drf_yasg.utils import swagger_auto_schema
 from decouple import config
-from .serializers import MessageSerializer, MessageViewSerializer, ThemeSerializer, DestinationSerializer
-from .models import Message, Theme, Destination
+from .serializers import MessageSerializer, MessageViewSerializer, ThemeSerializer, DestinationSerializer, ContentPageSerializer
+from .models import Message, Theme, Destination, DestContent, ContentPage
 from accounts.serializers import UserNicknameSerializer
 
 User = get_user_model()
@@ -27,7 +27,7 @@ error_message = {
 def map(request):
     KAKAO_API_KEY = config('KAKAO_API_KEY')
     context = {'KAKAO_API_KEY': KAKAO_API_KEY} 
-    return render(request, 'travels/map2.html', context)
+    return render(request, 'travels/map.html', context)
 
 
 def get_user(token, format=None):
@@ -127,7 +127,7 @@ class VisitedDest(APIView):
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
 
-@permission_classes((IsAuthenticated,))
+# @permission_classes((IsAuthenticated,))
 class Like(APIView):
     """
         사용자의 테마 좋아요/취소
@@ -206,23 +206,6 @@ class Chatting(APIView):
             return Response(serializer.data)
 
 
-# @permission_classes((IsAuthenticated,))
-@permission_classes((IsAuthenticated,))
-class TravelTheme(APIView):
-    # @swagger_auto_schema(query_serializer=ThemeSerializer)
-    def get(self, request, theme_pk, format=None):
-        theme = Theme.objects.filter(pk=theme_pk)[0]
-        first_dest = theme.start()
-        theme = ThemeSerializer(theme)
-        dest = DestinationSerializer(first_dest)
-        
-        data = {
-            'theme': theme.data,
-            'first_dest': dest.data
-        }
-        
-        return Response(data)
-
 class AllTheme(APIView):
     def get(self, request):
         all_theme = Theme.objects.all()
@@ -234,12 +217,62 @@ class AllTheme(APIView):
         }
         return Response(data)
 
-class SelectedTheme(APIView):
+class Destinations(APIView):
+    """
+    Theme의 모든 destination 정보, Theme의 like 정보를 return합니다.
+    """
+    def get(self, request, theme_pk):
+        destinations = []
+        theme = get_object_or_404(Theme, pk=theme_pk)
+        for dest_pk in theme.dests:
+            destination = Destination.objects.filter(pk=dest_pk)[0]
+            if destination:
+                destinations.append(DestinationSerializer(destination).data)
+            else:
+                return Response('Destination is not exist', status=status.HTTP_400_BAD_REQUEST)
+
+        user = get_user(request.headers['Authorization'].split(' '))
+        is_like = False
+        if theme.theme_like_users.filter(pk=user.pk).exists():
+            is_like = True
+        data = {
+            'destinations' : destinations,
+            'like_count': theme.theme_like_users.count(),
+            'is_like': is_like
+        }
+        return Response(data) if destinations else Response(error_message, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+class DestinationContent(APIView):
+    """
+    destination의 content를 return합니다.
+    """
+    def get(self, request, theme_pk, dest_idx):
+        theme = get_object_or_404(Theme, pk=theme_pk)
+        destination = get_object_or_404(Destination, pk=theme.dests[dest_idx])
+        dest_content = DestContent.objects.filter(theme=theme_pk, destination=destination.pk)[0]
+        if dest_content:
+            contents = dest_content.contents
+            pages = []
+            for page_pk in contents:
+                content_page = ContentPage.objects.filter(pk=page_pk)[0]
+                pages.append(ContentPageSerializer(content_page).data)
+            data = {
+                'pages' : pages
+            }
+            return Response(data, status=status.HTTP_200_OK)
+        else:
+            return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
+
+class FilteredTheme(APIView):
     def get(self, request, region):
         filtered_theme = ThemeSerializer(Theme.objects.filter(region=region)) if region else ThemeSerializer(Theme.objects.all())
         if not filtered_theme:
             return Response('Theme is not existed', status=status.HTTP_400_BAD_REQUEST)
         
         return filtered_theme
+
+
             
     

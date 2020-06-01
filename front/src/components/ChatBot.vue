@@ -1,7 +1,7 @@
 <template>
   <div class="">
     <div class="chatbot-box" @click.stop="dialog = true">
-      <i class="fas fa-comment-dots text-light"></i>
+      <i class="fas fa-comment-dots chatbot-icon"></i>
     </div>
     <v-dialog
       v-model="dialog"
@@ -34,10 +34,16 @@
 <script>
   export default {
     name: 'ChatBot',
+    props: {
+      themeId: Number,
+    },
     data() {
       return {
         dialog: false,
       }
+    },
+    methods: {
+
     }
   }
 </script>
@@ -52,7 +58,8 @@
     border-radius: 100px;
     width: 70px;
     height: 70px;
-    background: rgb(95, 158, 177);
+    // background: #994177;
+    background: linear-gradient(#ff006a, #ff0c0c);
     justify-content: center;
     align-items: center;
     transition: .2s;
@@ -62,10 +69,14 @@
   .chatbot-box:hover {
     width: 80px;
     height: 80px;
-    box-shadow: 2px 2px 3px rgb(104, 112, 112);
+    box-shadow: 2px 2px 3px rgb(104, 110, 110);
   }
 
   .chatbot-box>i {
-    font-size: 30px;
+    font-size: 35px;
+    // color: #2c3e50;
+    // color: #ffbc2d;
+    color: white;
+    // text-shadow: 1px 1px 1px #ffbc2d;;
   }
 </style>
