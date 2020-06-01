@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage
 from django.shortcuts import render, get_object_or_404
 from rest_framework import status
 from rest_framework.views import APIView
@@ -208,9 +208,12 @@ class ChatView(APIView):
                 * theme_pk: theme의 theme_id를 작성합니다. Int 형식입니다.
                 * page_no: 
         """
-        chat_page = Paginator(Message.objects.all(), 20)
-        serializer = MessageSerializer(chat_page.page(page_no), many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        try:
+            chat_page = Paginator(Message.objects.all(), 20).page(page_no)            
+            serializer = MessageSerializer(chat_page, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except EmptyPage:
+            return Response({'message': '더 이상 데이터가 없습니다.'}, status=status.HTTP_404_NOT_FOUND)
 
 
 class AllTheme(APIView):
@@ -223,6 +226,7 @@ class AllTheme(APIView):
             'all_theme' : serialized_all_theme
         }
         return Response(data)
+
 
 class Destinations(APIView):
     """
@@ -250,7 +254,6 @@ class Destinations(APIView):
         return Response(data) if destinations else Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
 
-
 class DestinationContent(APIView):
     """
     destination의 content를 return합니다.
@@ -272,14 +275,10 @@ class DestinationContent(APIView):
         else:
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
+
 class FilteredTheme(APIView):
     def get(self, request, region):
         filtered_theme = ThemeSerializer(Theme.objects.filter(region=region)) if region else ThemeSerializer(Theme.objects.all())
         if not filtered_theme:
             return Response('Theme is not existed', status=status.HTTP_400_BAD_REQUEST)
-        
         return filtered_theme
-
-
-            
-    
