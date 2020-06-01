@@ -106,10 +106,10 @@
         if (scrollTop.srcElement.scrollTop == 0) {
           this.chatLoading = true
           let loadingMessage =  setInterval(() => {
-            let loadingText = document.getElementsByClassName('chatLoading')[0]
-            loadingText.innerText += '.'
+            let loadingText = document.getElementsByClassName("chatLoading")[0]
+            loadingText.innerText += "."
             if (loadingText.innerText.length > 10) {
-              loadingText.innerText = 'Loading'
+              loadingText.innerText = "Loading"
             }
           }, 100)
           setTimeout(() => {
@@ -117,7 +117,13 @@
             axios.get(`http://127.0.0.1:8000/api/travels/chat/${this.themeId}/${this.chatPage}/`, this.$store.getters.requestHeader)
               .then(res => {
                 this.memories = res.data.concat(this.memories)
-                document.getElementsByClassName('v-dialog')[0].scrollTop = this.scrollHeight
+                setTimeout(() =>{
+                  document.getElementsByClassName("v-dialog")[0].scrollTop = this.scrollHeight * res.data.length
+                }, 10)
+              })
+              .catch(err => {
+                console.log(err)
+                alert("마지막 메시지 입니다.")
               })
             this.chatLoading = false
             clearInterval(loadingMessage)
@@ -125,15 +131,15 @@
         }          
       },
       scroll() {
-        var scroll = document.getElementsByClassName('v-dialog')[0]
+        var scroll = document.getElementsByClassName("v-dialog")[0]
         scroll.scrollTop = scroll.scrollHeight
       },
       openModal() {
         this.dialog = true
         setTimeout(this.scroll, 10)
         setTimeout(() => {
-          document.getElementsByClassName('v-dialog')[0].addEventListener('scroll', this.handleScroll)
-          this.scrollHeight = document.getElementsByClassName('v-dialog')[0].scrollHeight
+          document.getElementsByClassName("v-dialog")[0].addEventListener("scroll", this.handleScroll)
+          this.scrollHeight = document.getElementsByClassName("v-card__text")[0].scrollHeight
         }, 50)
       },
       checkConnected() {
@@ -147,14 +153,14 @@
             "message":message
           }
           axios.post(`http://127.0.0.1:8000/api/travels/chat/${this.themeId}/`, data, this.$store.getters.requestHeader)
-          .then(res =>{
-            this.$socket.emit("sendMessage",{theme: this.themeId, nickname: res.data.nickname, message: message})
-            this.messages.push(res.data)
-          })
-          .catch(err =>{
-            console.log(err)
-            this.messages = [{theme: "error", nickname: "관리자", message: "에러발생"}]
-          })
+            .then(res =>{
+              this.$socket.emit("sendMessage",{theme: this.themeId, nickname: res.data.nickname, message: message})
+              this.messages.push(res.data)
+            })
+            .catch(err =>{
+              console.log(err)
+              this.messages = [{theme: "error", nickname: "관리자", message: "에러발생"}]
+            })
         } else {
           this.messages = [{theme: "error", nickname: "관리자", message: "에러발생"}]
         }
