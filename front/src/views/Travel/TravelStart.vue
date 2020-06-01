@@ -80,6 +80,9 @@
       }
     },
     mounted() {
+      document.querySelector("#Navbar").style.display = "none"
+      document.querySelector("#footer").style.display = "none"
+
       const token = this.$session.get('jwt')
       const requestHeader = {
         headers: {

@@ -181,11 +181,11 @@
     display: none;
     position: absolute;
     background-color: #f9f9f9;
-    min-width: 140px;
+    min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
     left: -15px;
-    top: 25px;
+    top: 40px;
   }
 
   .drop-yes:hover .dropdown-content {

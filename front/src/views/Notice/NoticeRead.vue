@@ -49,11 +49,11 @@ export default {
       itemsPerPage: 10,
       search: '',
       headers: [
-        { text: '번호', align: 'start', value: 'id', sortable: false },
-        { text: '분류', value: 'category' },
-        { text: '제목', value: 'title', sortable: false },
-        { text: '작성자', value: 'writer_nickname', sortable: false },
-        { text: '등록일', value: 'writed_at'.slice(0, 16) }
+        { text: "번호", align: "start", value: "id", sortable: false },
+        { text: "분류", value: "category" },
+        { text: "제목", value: "title", sortable: false },
+        { text: "작성자", value: "writer_nickname", sortable: false },
+        { text: "등록일", value: "writed_at".slice(0, 16) }
       ],
       noticeData: []
     }
@@ -70,9 +70,9 @@ export default {
       })
     },
     getColor(category) {
-      if (category == '중요') return 'blue'
-      else if (category == '일반') return 'dark'
-      else return 'green'
+      if (category == "중요") return "blue"
+      else if (category == "일반") return "dark"
+      else return "green"
     }
   },
   mounted() {
