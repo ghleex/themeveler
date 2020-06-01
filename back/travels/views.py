@@ -262,7 +262,7 @@ class DestinationContent(APIView):
         theme = get_object_or_404(Theme, pk=theme_pk)
         destination = get_object_or_404(Destination, pk=theme.dests[dest_idx])
         try:
-            dest_conent = DesContent.objects.get(theme=theme_pk, destination=destination.pk)
+            dest_content = DesContent.objects.get(theme=theme_pk, destination=destination.pk)
             if dest_content:
                 contents = dest_content.contents
                 pages = []
@@ -270,7 +270,7 @@ class DestinationContent(APIView):
                 순서를 지키기 위해 list를 돌며 serializer를 append합니다.
                 """
                 for page_pk in contents:
-                    content_page = ContentPage.objects.filter(pk=page_pk)[0]
+                    content_page = ContentPage.objects.get(pk=page_pk)
                     pages.append(ContentPageSerializer(content_page).data)
                 data = {
                     'pages' : pages
