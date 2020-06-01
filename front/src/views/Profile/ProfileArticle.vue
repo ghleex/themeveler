@@ -14,10 +14,10 @@
             </h5>
             <v-spacer></v-spacer>
             <!-- 검색바 -->
-            <div>
+            <!-- <div>
               <v-text-field v-model="search" append-icon="mdi-magnify" label="검색"
                 single-line hide-details class="searchbar"></v-text-field>
-            </div>
+            </div> -->
           </v-toolbar>
         </template>
         <!-- 리스트 제목 -->
@@ -35,10 +35,10 @@
 
 <script>
 import Drawer from '@/components/Drawer.vue'
-import data from '@/views/Notice/data'
+import data from '@/views/Profile/data'
 
 export default {
-  name: 'ProfileArticle',
+  name: "ProfileArticle",
   components: {
     Drawer
   },
@@ -54,12 +54,12 @@ export default {
       page: 1,
       pageCount: 0,
       itemsPerPage: 20,
-      search: '',
+      search: "",
       headers: [
-        { text: '번호', align: 'start', value: 'id', sortable: false },
-        { text: '작성위치', value: 'category' },
-        { text: '글 내용', value: 'title', sortable: false },
-        { text: '등록일', value: 'createddate', sortable: false }
+        { text: "번호", align: "start", value: "id", sortable: false },
+        { text: "작성위치", value: "category" },
+        { text: "글 내용", value: "title", sortable: false },
+        { text: "등록일", value: "createddate", sortable: false }
       ],
       commentData: data,
       commentCount: data.length
@@ -77,58 +77,60 @@ export default {
 </script>
 
 <style scoped>
-#profile-article {
-  margin-top: 64px;
-  background-color: rgba(245, 245, 245, 0.5);
-}
+  #profile-article {
+    margin-top: 64px;
+    background-color: rgba(245, 245, 245, 0.5);
+  }
 
-#profile-content {
-  margin-left: 256px;
-  width: 80%;
-}
-
-@media (max-width: 600px) {
   #profile-content {
-    margin-left: 56px;
+    margin-left: 256px;
     width: 80%;
   }
+
+  @media (max-width: 600px) {
+    #profile-content {
+      margin-left: 56px;
+      width: 80%;
+    }
+
+    .comment {
+      margin-left: 64px !important;
+      width: 75% !important;
+    }
+    
+    .searchbar {
+      width: 70% !important;
+    }
+  }
+
+  .content-title {
+    text-align: left;
+    margin-left: 20px;
+    margin-top: 8px;
+  }
+
+  .content-body {
+    margin-left: 2px;
+    margin-right: 2px;
+  }
+
+  .card-title {
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
+
   .comment {
-    margin-left: 64px !important;
-    width: 75% !important;
+    margin-top: 8px;
+    margin-bottom: 80px;
+    margin-left: 264px;
+    margin-right: auto;
+    text-align: center;
+    width: 80%;
   }
+
   .searchbar {
-    width: 70% !important;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
   }
-}
-
-.content-title {
-  text-align: left;
-  margin-left: 20px;
-  margin-top: 8px;
-}
-
-.content-body {
-  margin-left: 2px;
-  margin-right: 2px;
-}
-
-.card-title {
-  margin-top: 8px;
-  margin-bottom: 8px;
-}
-
-.comment {
-  margin-top: 8px;
-  margin-bottom: 80px;
-  margin-left: 264px;
-  margin-right: auto;
-  text-align: center;
-  width: 80%;
-}
-
-.searchbar {
-  margin-left: auto;
-  margin-right: auto;
-  width: 80%;
-}
 </style>

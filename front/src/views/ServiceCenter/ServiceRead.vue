@@ -1,17 +1,15 @@
 <template>
   <div id="service-read">
-    <div class="service-center-title">
-      <i class="fas fa-exclamation-circle"></i> 고객센터
-    </div>
-    <!-- 공지사항 리스트 Data table -->
+    <div class="service-center-title"><i class="fas fa-exclamation-circle"></i>고객센터</div>
     <div class="service-body">
+      <!-- 고객센터 리스트 Data table -->
       <v-data-table
         :headers="headers" :items="serviceData" :page.sync="page" :items-per-page="itemsPerPage" hide-default-footer
         class="service-dataTable" @page-count="pageCount = $event" :search="search" :sort-by="['id']" :sort-desc="true"
         style="white-space: nowrap" :calculate-widths="true"
       >
         <template v-slot:top>
-          <v-toolbar class="service-center-header" flat color="white">
+          <v-toolbar class="service-table-header" flat color="white">
             <v-toolbar-title></v-toolbar-title>
             <v-spacer></v-spacer>
             <v-btn color="#607D8B" dark class="mb-2" @click="write">글쓰기</v-btn>
@@ -39,8 +37,7 @@
       <!-- 검색바 -->
       <div>
         <v-text-field v-model="search" append-icon="mdi-magnify" label="검색" single-line hide-details
-          class="searchbar" color="#607D8B">
-        </v-text-field>
+          class="searchbar" color="#607D8B"></v-text-field>
       </div>
     </div>
   </div>
@@ -50,19 +47,19 @@
 import axios from 'axios'
 
 export default {
-  name: 'service-read',
+  name: "service-read",
   data() {
     return {
       page: 1,
       pageCount: 0,
       itemsPerPage: 5,
-      search: '',
+      search: "",
       headers: [
-        { text: '번호', value: 'id', sortable: false },
-        { text: '분류', value: 'category' },
-        { text: '제목', value: 'title', sortable: false },
-        { text: '작성자', value: 'request_user_nickname', sortable: false },
-        { text: '등록일', value: 'created_at' }
+        { text: "번호", value: "id", sortable: false },
+        { text: "분류", value: "category" },
+        { text: "제목", value: "title", sortable: false },
+        { text: "작성자", value: "request_user_nickname", sortable: false },
+        { text: "등록일", value: "created_at" }
       ],
       serviceData: [],
       userId: ""
@@ -80,16 +77,14 @@ export default {
       })
     },
     getColor(category) {
-      if (category == '신고') return '#FF5252'
-      else if (category == '건의') return 'dark'
-      else return '#BA68C8'
+      if (category == "신고") return "#FF5252"
+      else if (category == "건의") return "dark"
+      else return "#BA68C8"
     }
   },
   mounted() {
     this.userId = this.$store.getters.user_id
     const requestHeader = this.$store.getters.requestHeader
-    console.log(this.userId)
-    console.log(requestHeader)
     axios.get(`/articles/cv/${this.userId}/`, requestHeader)
       .then(response => {
         console.log(response.data)
@@ -101,9 +96,11 @@ export default {
   }
 }
 </script>
+
 <style scoped>
   #service-read {
     margin: 64px auto 0 auto;
+    padding: 32px 0 48px 0;
     width: 100%;
     height: 100%;
     background-color: rgb(238, 240, 247);
@@ -117,7 +114,7 @@ export default {
   #service-read .service-center-title {
     font-family: 'Cafe24Simplehae';
     font-size: 40px;
-    margin: 5rem auto 0 auto;
+    margin: 0 auto 0 auto;
     width: 80%;
     border-radius: 7px 7px 0 0;
     box-shadow: 1px 1px 2px 1px rgb(100, 105, 109);
@@ -125,7 +122,7 @@ export default {
     padding: 2rem 0;
   }
 
-  .service-center-header {
+  .service-table-header {
     padding-bottom: 5rem;
   }
 
@@ -146,6 +143,7 @@ export default {
     .service-center-title {
       width: 95% !important;
     }
+    
     .service-body {
       width: 95% !important;
       margin: 0 auto !important;

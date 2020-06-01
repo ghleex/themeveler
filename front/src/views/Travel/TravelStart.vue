@@ -26,10 +26,10 @@
         <v-stepper-content v-for="n in steps" :key="`${n}-content`" :step="n">
           <v-card class="mb-12" color="grey lighten-1" height="200px">
             <div v-for="i in content" :key="i">
-            {{ i.text }}
+              {{ i.text }}
             </div>
           </v-card>
-          
+
           <v-btn class="mr-3" v-if="e1 !== 1" @click="beforeStep(n)" rounded color="">
             이전
             <i class="fas fa-chevron-circle-left ml-1"></i>
@@ -77,14 +77,14 @@
         // 다음 detination script 가져오기
         const requestHeader = this.$store.getters.requestHeader
         axios.get(`/travels/dest_content/${this.themeId}/${this.e1-1}/`, requestHeader)
-        .then(res => {
-          // this.content = res.data
-          console.log(res.data)
-          this.content = res.data.pages
-        })
-        .catch(err => {
-          console.log(err.response)
-        })
+          .then(res => {
+            // this.content = res.data
+            console.log(res.data)
+            this.content = res.data.pages
+          })
+          .catch(err => {
+            console.log(err.response)
+          })
 
         document.getElementById(this.dests[n].id).tabIndex = -1;
         document.getElementById(this.dests[n].id).focus();
@@ -94,23 +94,28 @@
 
         const requestHeader = this.$store.getters.requestHeader
         axios.get(`/travels/dest_content/${this.themeId}/${this.e1-1}/`, requestHeader)
-        .then(res => {
-          // this.content = res.data
-          console.log(res.data)
-          this.content = res.data.pages
-        })
-        .catch(err => {
-          console.log(err.response)
-        })
+          .then(res => {
+            // this.content = res.data
+            console.log(res.data)
+            this.content = res.data.pages
+          })
+          .catch(err => {
+            console.log(err.response)
+          })
 
         document.getElementById(this.dests[n - 1].id).tabIndex;
         document.getElementById(this.dests[n - 2].id).focus();
       },
       returnDetail(themeId) {
         this.$router.push(`/travel/${themeId}/`)
+      },
+      a() {
+        document.querySelector("#Navbar").style.display = "none"
+        document.querySelector("#footer").style.display = "none"
       }
     },
     mounted() {
+      
       const token = this.$session.get('jwt')
       const requestHeader = {
         headers: {
@@ -127,8 +132,8 @@
         .then(res => {
           this.themeArr = res.data.all_theme
         })
-      // document.querySelector("#Navbar").style.display = "none"
-      // document.querySelector("#footer").style.display = "none"
+
+
 
       axios.get(`/travels/dest_content/${this.themeId}/${this.e1-1}/`, requestHeader)
         .then(res => {
@@ -140,6 +145,7 @@
           console.log(err.data)
         })
 
+      this.a()
     }
   }
 </script>

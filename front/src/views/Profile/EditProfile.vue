@@ -18,12 +18,6 @@
                 </v-col>
                 <v-col md="6" class="content-col">
                 </v-col>
-                <!-- <v-col cols="12" md="6" class="content-col">
-                  <v-text-field label="Password" class="purple-input" />
-                </v-col>
-                <v-col cols="12" md="6" class="content-col">
-                  <v-text-field label="Password Confirm" class="purple-input" />
-                </v-col> -->
                 <v-col cols="12" md="6" class="content-col">
                   <v-text-field v-model="nickname" label="Nickname" class="purple-input" />
                 </v-col>
@@ -70,11 +64,11 @@
 </template>
 
 <script>
-import axios from "axios"
+import axios from 'axios'
 import Drawer from '@/components/Drawer.vue'
 
 export default {
-  name: 'editprofile',
+  name: "editprofile",
   components: {
     Drawer
   },
@@ -125,31 +119,31 @@ export default {
 </script>
 
 <style scoped>
-#editprofile {
-  margin-top: 64px;
-  background-color: rgba(245, 245, 245, 0.5);
-}
+  #editprofile {
+    margin-top: 64px;
+    background-color: rgba(245, 245, 245, 0.5);
+  }
 
-#profile-content {
-  margin-left: 256px;
-  width: 80%;
-}
-
-@media (max-width: 600px) {
   #profile-content {
-    margin-left: 56px;
+    margin-left: 256px;
     width: 80%;
   }
-}
 
-.content-title {
-  text-align: left;
-  margin-left: 20px;
-  margin-top: 8px;
-}
+  @media (max-width: 600px) {
+    #profile-content {
+      margin-left: 56px;
+      width: 80%;
+    }
+  }
 
-.content-col {
-  padding-top: 6px;
-  padding-bottom: 6px;
-}
+  .content-title {
+    text-align: left;
+    margin-left: 20px;
+    margin-top: 8px;
+  }
+
+  .content-col {
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }
 </style>

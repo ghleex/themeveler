@@ -1,6 +1,6 @@
 <template>
   <a id="button" class="hvr-grow" style="display:scroll;">
-    <i class="fas fa-arrow-circle-up" style="font-size: 40px;"></i></a>
+    <i class="fas fa-arrow-circle-up" style="font-size: 50px;"></i></a>
 </template>
 
 <script>
