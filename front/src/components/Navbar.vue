@@ -1,5 +1,5 @@
 <template>
-  <div class="navbar_box">
+  <div id="navbar" class="navbar_box">
 
     <!-- 사이드바 -->
     <v-navigation-drawer class="text-start" v-model="drawer" absolute temporary>

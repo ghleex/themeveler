@@ -33,6 +33,7 @@ export default {
       title: "",
       content: "",
       request_user_id: "",
+      is_fixed: "",
       valid: false,
       categoryRules: [v => !!v || '분류를 선택해주세요'],
       titleRules: [

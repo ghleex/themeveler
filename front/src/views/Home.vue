@@ -1,5 +1,6 @@
 <template>
   <div class="header">
+
     <div class="home-search-bar">
       <SearchBar />
     </div>
@@ -295,7 +296,7 @@
     },
     mounted() {
       this.a()
-    },
+    }
   }
 </script>
 
@@ -376,7 +377,6 @@
     background-color: rgb(248, 248, 246);
   }
 
-
   @media (min-width: 750px) {
     .home-h2-title {
       font-size: 50px;
@@ -409,7 +409,6 @@
     border: 1px 1px 1px 1px solid #2c3e50;
     border-radius: 5px;
   }
-
 
   .describe {
     display: flex;

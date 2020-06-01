@@ -5,7 +5,7 @@
       <div class="service-body-header">
         <div class="service-detail-title">{{serviceData.title}}</div>
       </div>
-      <div class="service-detail-user mt-3"><i class="fas fa-user"></i> {{serviceData.request_user}}</div><br>
+      <div class="service-detail-user mt-3"><i class="fas fa-user"></i> {{serviceData.request_user_nickname}}</div><br>
       <div class="service-detail-created-date"> {{serviceData.created_at}}</div>
       <div class="service-content">{{serviceData.content}}</div><br>
       <div class="service-detail-btn mt-12">
@@ -97,8 +97,8 @@ export default {
     const requestHeader = this.$store.getters.requestHeader
     axios.get(`/articles/cv/${this.userId}/${this.serviceId}/`, requestHeader)
       .then(response => {
-        console.log(response.data["voice"])
-        this.serviceData = response.data["voice"]
+        console.log(response.data)
+        this.serviceData = response.data
       })
       .catch(err => {
         console.log(err)
