@@ -42,7 +42,7 @@ class CustomersVoiceAdmin(admin.ModelAdmin):
 
 @admin.register(ManagersReply)
 class ManagersReplyAdmin(admin.ModelAdmin):
-    list_display = ('id', 'content', 'voice', 'manager',)
+    list_display = ('id', 'content', 'voice', 'manager', 'created_at', 'updated_at',)
 
 
 @admin.register(Comment)
