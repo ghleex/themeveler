@@ -4,9 +4,17 @@ from django.contrib.auth import get_user_model
 from travels.models import Destination, Theme
 
 # Create your models here.
+class NoticeCategory(models.Model):
+    category = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.category
+
+
 class Notice(models.Model):
     title = models.CharField(max_length=255)
     content = models.TextField()
+    category = models.ForeignKey(NoticeCategory, on_delete=models.CASCADE, related_name='categories') # NoticeCategory.categories.all()
     writed_at = models.DateTimeField(auto_now_add=True) # date will be set when it's created
     updated_at = models.DateTimeField(auto_now=True)
     writer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_notices') # User.user_notices.all() 
@@ -15,6 +23,7 @@ class Notice(models.Model):
 
     def __str__(self):
         return self.title
+
 
 class VoiceCategory(models.Model):
     category = models.CharField(max_length=50)

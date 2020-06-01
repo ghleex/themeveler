@@ -6,15 +6,15 @@
       <h2 class="content-title">비밀번호변경</h2>
       <hr>
       <v-row justify="center">
-        <v-col col="12" md="8">
+        <v-col cols="12" md="8">
           <v-form>
             <v-container class="py-0">
               <v-row>
                 <v-col cols="12" md="6" class="content-col">
-                  <v-text-field label="Password" class="purple-input" />
+                  <v-text-field v-model="password" label="Password" class="purple-input" />
                 </v-col>
                 <v-col cols="12" md="6" class="content-col">
-                  <v-text-field label="Password Confirm" class="purple-input" />
+                  <v-text-field v-model="repassword" label="Password Confirm" class="purple-input" />
                 </v-col>
                 <v-col cols="4" md="6" class="text-left">
                 </v-col>
@@ -27,7 +27,7 @@
           </v-form>
         </v-col>
 
-        <v-col col="12" md="4">
+        <v-col cols="12" md="4">
           <v-card-text class="text-center">
             <h6 class="display-1 mb-1 grey--text">ad.</h6>
             <h4 class="display-2 font-weight-light mb-3 black--text"></h4>
@@ -53,23 +53,36 @@ export default {
   },
   data() {
     return {
-      dialog: false
+      dialog: false,
+      password: "",
+      repassword: ""
     }
   },
   methods: {
     update() {
-      var passwordForms = {
-        'password': this.passwordselect
+      if (this.password === this.repassword) {
+        if (this.password.length > 7) {
+          var passwordForms = {
+            'password': this.repassword
+          }
+          const requestHeader = this.$store.getters.requestHeader
+          axios.put('/accounts/password/', passwordForms, requestHeader)
+            .then(
+              this.$router.push({
+                path: '/profile'
+              })
+            )
+            .catch(err => {
+              console.log(err)
+            })
+        }
+        else {
+          alert("비밀번호는 8자리이상이여야 합니다.")
+        }
       }
-      axios.put(`/accounts/password/`, passwordForms)
-        .then(
-          this.$router.push({
-            path: `/profile`
-          })
-        )
-        .catch(err => {
-          console.log(err)
-        })
+      else {
+        alert("비밀번호가 일치하지 않습니다.")
+      }
     },
     updatecancel () {
       this.$router.push({
@@ -83,6 +96,7 @@ export default {
 <style scoped>
 #editpassword {
   margin-top: 64px;
+  background-color: rgba(245, 245, 245, 0.5);
 }
 
 #profile-content {

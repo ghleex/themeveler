@@ -10,12 +10,11 @@
       <v-form ref="form" class="service-create-form" v-model="valid" lazy-validation>
         <v-select color="#607D8B" v-model="select" :items="categorys" :rules="categoryRules" label="분류" required></v-select>
         <v-text-field color="#607D8B" v-model="title" :counter="30" :rules="titleRules" label="제목" required></v-text-field>
-        <v-textarea color="#607D8B" class="mt-4" outlined label="내용" v-model="content" :rules="contentRules"></v-textarea>
-        <v-text-field color="#607D8B" class="mb-7" v-model=" writer" label="작성자" required></v-text-field>
+        <v-textarea color="#607D8B" v-model="content" :rules="contentRules" label="내용" class="mt-4" outlined></v-textarea>
         <v-btn color="#607D8B" :disabled="!valid" class="mr-4 text-light btn-create"
-          @click="index !== undefined ? update() : write()">{{index !== undefined ? '수정' : '작성'}}
+          @click="serviceId !== undefined ? update() : write()">{{serviceId !== undefined ? '수정' : '작성'}}
           <i class="fas fa-check-circle ml-1"></i></v-btn>
-        <v-btn color="error" class="btn-create" @click="index !== undefined ? updatecancel() : addcancel()">취소
+        <v-btn color="error" class="btn-create" @click="serviceId !== undefined ? updatecancel() : addcancel()">취소
           <i class="fas fa-times-circle ml-1"></i></v-btn>
       </v-form>
     </div>
@@ -23,143 +22,165 @@
 </template>
 
 <script>
-  import data from '@/views/ServiceCenter/data'
-  import Swal from 'sweetalert2'
+import axios from 'axios'
+import Swal from 'sweetalert2'
 
-  export default {
-    name: 'service-create',
-    data() {
-      const index = this.$route.params.serviceId;
-      return {
-        data: data,
-        index: index,
-        select: index !== undefined ? data[index].category : null,
-        title: index !== undefined ? data[index].title : "",
-        content: index !== undefined ? data[index].content : "",
-        writer: index !== undefined ? data[index].writer : "",
-        valid: false,
-        categoryRules: [[v => !!v || '분류를 선택해주세요']],
-        titleRules: [
-          v => !!v || '제목을 작성해주세요',
-          v => (v && v.length <= 30) || '제목을 30자 이내로 작성해주세요',
-        ],
-        contentRules: [v => !!v || '내용을 작성해주세요'],
-        createddate: "",
-        categorys: [
-          '건의',
-          '신고',
-        ]
+export default {
+  name: 'service-create',
+  data() {
+    return {
+      serviceId: "",
+      userId: "",
+      select: null,
+      title: "",
+      content: "",
+      writer: this.$session.get("nickname"),
+      valid: false,
+      categoryRules: [v => !!v || '분류를 선택해주세요'],
+      titleRules: [
+        v => !!v || '제목을 작성해주세요',
+        v => (v && v.length <= 30) || '제목을 30자 이내로 작성해주세요',
+      ],
+      contentRules: [v => !!v || '내용을 작성해주세요'],
+      categorys: [
+        '건의',
+        '신고',
+      ]
+    }
+  },
+  methods: {
+    write() {
+      if (this.select === "건의") {
+        this.select = 1
+      } else if (this.select === "신고") {
+        this.select = 2
+      }
+
+      if (this.$refs.form.validate()) {
+        var serviceCreateForms = {
+          'category': this.select,
+          'title': this.title,
+          'content': this.content,
+          'request_user': this.$store.getters.user_id,
+          'is_fixed': "",
+        }
+        // var today = new Date();
+        // var year = today.getFullYear(); // 년도
+        // var month = today.getMonth() + 1; // 월
+        // var date = today.getDate(); // 날짜
+        // // var day = today.getDay(); // 요일
+        // // var hour = today.getHours() // 시간
+        // // var min = today.getMinutes()
+
+        // // this.writed_at = `${year}-${month}-${date} | ${hour}:${min}`
+        // this.writed_at = `${year}-${month}-${date}`
+        // // console.log(this.writed_at)
+
+        const requestHeader = this.$store.getters.requestHeader
+        axios.post(`/articles/cv/${this.userId}/`, serviceCreateForms, requestHeader)
+          .then(
+            this.$router.push({
+              path: '/service'
+            })
+          )
+          .catch(err => {
+            console.log(err)
+          })
       }
     },
-    methods: {   
-      write() {
-        var today = new Date();
-        var year = today.getFullYear(); // 년도
-        var month = today.getMonth() + 1; // 월
-        var date = today.getDate(); // 날짜
-        // var day = today.getDay(); // 요일
-        // var hour = today.getHours() // 시간
-        // var min = today.getMinutes()
-
-        // this.createddate = `${year}-${month}-${date} | ${hour}:${min}`
-        this.createddate = `${year}-${month}-${date}`
-        // console.log(this.createddate)
-
-        this.data.push({
-          category: this.select,
-          title: this.title,
-          content: this.content,
-          writer: this.writer,
-          createddate: this.createddate
+    update() {
+      if (!this.select) {
+          Swal.fire({
+          title: "Check Categorys",
+          text: "분류를 선택해주세요.",
+          type: "warning",
+          timer: 3000
         })
-
-        if (!this.select) {
-           Swal.fire({
-            title: "Check Categorys",
-            text: "분류를 선택해주세요.",
-            type: "warning",
-            timer: 3000
-          })
-        } else if (!this.title) {
-           Swal.fire({
-            title: "Check Title",
-            text: "제목을 입력하세요.",
-            type: "warning",
-            timer: 3000
-          })
-        } else if (this.title.length > 30) {
-           Swal.fire({
-            title: "Check Title",
-            text: "제목을 30자 이내로 작성해주세요",
-            type: "warning",
-            timer: 3000
-          })
-        } else if (!this.content) {
-           Swal.fire({
-            title: "Check Content",
-            text: "내용을 입력하세요.",
-            type: "warning",
-            timer: 3000
-          })
-        }
-
-        if (this.$refs.form.validate()) {
-          this.$router.push({
-            path: '/service'
-          })
-        }
-      },
-      update() {
-        this.$refs.form.validate()
-        data[this.index].category = this.select
-        data[this.index].title = this.title
-        data[this.index].content = this.content
-        data[this.index].writer = this.writer
-
-        if (!this.select) {
-           Swal.fire({
-            title: "Check Categorys",
-            text: "분류를 선택해주세요.",
-            type: "warning",
-            timer: 3000
-          })
-        } else if (!this.title) {
-           Swal.fire({
-            title: "Check Title",
-            text: "제목을 입력하세요.",
-            type: "warning",
-            timer: 3000
-          })
-        } else if (!this.content) {
-           Swal.fire({
-            title: "Check Content",
-            text: "내용을 입력하세요.",
-            type: "warning",
-            timer: 3000
-          })
-        }
-
-        if (this.$refs.form.validate()) {
-          this.$router.push({
-            path: `/service/detail/${this.index}`
-          })
-        }
-      },
-      reset() {
-        this.$refs.form.reset()
-      },
-      addcancel() {
-        this.$router.push({
-          path: '/service'
+      } else if (!this.title) {
+          Swal.fire({
+          title: "Check Title",
+          text: "제목을 입력하세요.",
+          type: "warning",
+          timer: 3000
         })
-      },
-      updatecancel() {
-        this.$router.push({
-          path: `/service/detail/${this.index}`
+      } else if (this.title.length > 30) {
+          Swal.fire({
+          title: "Check Title",
+          text: "제목을 30자 이내로 작성해주세요",
+          type: "warning",
+          timer: 3000
+        })
+      } else if (!this.content) {
+          Swal.fire({
+          title: "Check Content",
+          text: "내용을 입력하세요.",
+          type: "warning",
+          timer: 3000
         })
       }
+
+      if (this.$refs.form.validate()) {
+        var serviceUpdateForms = {
+          'category': this.select,
+          'title': this.title,
+          'content': this.content,
+          'request_user': this.$store.getters.user_id,
+          'is_fixed': this.is_fixed
+        }
+        const requestHeader = this.$store.getters.requestHeader
+        axios.put(`/articles/cv/${this.userId}/${this.serviceId}/`, serviceUpdateForms, requestHeader)
+          .then(
+            this.$router.push({
+              path: `/service/detail/${this.serviceId}`
+            })
+          )
+          .catch(err => {
+            console.log(err)
+          }) 
+      }
+    },
+    reset() {
+      this.$refs.form.reset()
+    },
+    addcancel() {
+      this.$router.push({
+        path: '/service'
+      })
+    },
+    updatecancel() {
+      this.$router.push({
+        path: `/service/detail/${this.serviceId}`
+      })
+    }
+  },
+  mounted() {
+    this.serviceId = this.$route.params.serviceId
+    this.userId = this.$store.getters.user_id
+    if (this.serviceId !== undefined) {
+      axios.get(`/articles/cv/${this.userId}/${this.serviceId}/`)
+        .then(response => {
+          if (response.data['voice'].request_user === this.$store.getters.user_id) {
+            if (response.data.category === 1) {
+              this.select = "건의"
+            } else if (response.data.category === 2) {
+              this.select = "신고"
+            }
+            this.select = response.data['voice'].category
+            this.title = response.data['voice'].title
+            this.content = response.data['voice'].content
+            this.writer = response.data['voice'].writer_name
+            this.is_fixed = response.data['voice'].is_fixed
+          } else {
+            alert("수정 권한이 없습니다.")
+            this.$router.push("/service")
+          }
+        })
+        .catch(err => {
+          console.log(err)
+        })
     }
   }
+}
 </script>
 
 <style scoped>

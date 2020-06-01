@@ -6,8 +6,8 @@
     <!-- 공지사항 리스트 Data table -->
     <div class="service-body">
       <v-data-table
-        :headers="headers" :items="data" :page.sync="page" :items-per-page="itemsPerPage" hide-default-footer
-        class="service-dataTable" @page-count="pageCount = $event" :search="search" :sort-by="['id']" :sort-desc="[true]"
+        :headers="headers" :items="serviceData" :page.sync="page" :items-per-page="itemsPerPage" hide-default-footer
+        class="service-dataTable" @page-count="pageCount = $event" :search="search" :sort-by="['id']" :sort-desc="true"
         style="white-space: nowrap" :calculate-widths="true"
       >
         <template v-slot:top>
@@ -26,19 +26,20 @@
           <div class="service-list-body" @click="detail(item.id)">{{ item.title }}</div>
         </template>
         <!-- data가 없을 시 -->
-        <template slot="no-data">
+        <!-- <template slot="no-data">
           <v-alert :value="true" color="error" icon="warning">
             Sorry, nothing to display here :(
           </v-alert>
-        </template>
+        </template> -->
       </v-data-table>
       <!-- 페이지 번호 -->
       <div class="text-center pt-2">
-        <v-pagination color="#607D8B" v-model="page" :length="pageCount"></v-pagination>
+        <v-pagination v-model="page" :length="pageCount" color="#607D8B"></v-pagination>
       </div>
       <!-- 검색바 -->
       <div>
-        <v-text-field color="#607D8B" v-model="search" append-icon="mdi-magnify" label="검색" single-line hide-details class="searchbar">
+        <v-text-field v-model="search" append-icon="mdi-magnify" label="검색" single-line hide-details
+          class="searchbar" color="#607D8B">
         </v-text-field>
       </div>
     </div>
@@ -46,64 +47,60 @@
 </template>
 
 <script>
-  import data from '@/views/ServiceCenter/data'
+import axios from 'axios'
 
-  export default {
-    name: 'service-read',
-    data() {
-      return {
-        page: 1,
-        pageCount: 0,
-        itemsPerPage: 5,
-        search: '',
-        headers: [{
-            text: '번호',
-            value: 'id',
-            sortable: false,
-          },
-          {
-            text: '분류',
-            value: 'category',
-          },
-          {
-            text: '제목',
-            value: 'title',
-            sortable: false,
-            // width: 100
-          },
-          {
-            text: '작성자',
-            value: 'writer',
-            sortable: false,
-          },
-          {
-            text: '등록일',
-            value: 'createddate',
-          }
-        ],
-        data: data
-      }
+export default {
+  name: 'service-read',
+  data() {
+    return {
+      page: 1,
+      pageCount: 0,
+      itemsPerPage: 5,
+      search: '',
+      headers: [
+        { text: '번호', value: 'id', sortable: false },
+        { text: '분류', value: 'category' },
+        { text: '제목', value: 'title', sortable: false },
+        { text: '작성자', value: 'request_user_nickname', sortable: false },
+        { text: '등록일', value: 'created_at' }
+      ],
+      serviceData: [],
+      userId: ""
+    }
+  },
+  methods: {
+    write() {
+      this.$router.push({
+        path: '/service/create'
+      })
     },
-    methods: {
-      write() {
-        this.$router.push({
-          path: '/service/create'
-        })
-      },
-      detail(serviceId) {
-        this.$router.push({
-          path: `/service/detail/${serviceId}`
-        })
-      },
-      getColor(category) {
-        if (category == '신고') return '#FF5252'
-        else if (category == '건의') return 'dark'
-        else return '#BA68C8'
-      },
+    detail(serviceId) {
+      this.$router.push({
+        path: `/service/detail/${serviceId}`
+      })
     },
+    getColor(category) {
+      if (category == '신고') return '#FF5252'
+      else if (category == '건의') return 'dark'
+      else return '#BA68C8'
+    }
+  },
+  mounted() {
+    this.userId = this.$store.getters.user_id
+    const requestHeader = this.$store.getters.requestHeader
+    console.log(this.userId)
+    console.log(requestHeader)
+    axios.get(`/articles/cv/${this.userId}/`, requestHeader)
+      .then(response => {
+        console.log(response.data)
+        this.serviceData = response.data["voice"]
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
+}
 </script>
-
 <style scoped>
   #service-read {
     margin: 64px auto 0 auto;
@@ -131,9 +128,6 @@
     padding-bottom: 5rem;
   }
 
-  .service-dataTable {
-    /* white-space: nowrap; */
-  }
   .service-list-body {
     width: 100%;
     height: 1.2rem;

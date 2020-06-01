@@ -57,9 +57,13 @@ export default {
 #footer {
   background: #555B6E;
   align-items: center;
-  position: relative;
+  /* position: relative; */
+  position: absolute;
+  left: 0;
+  bottom: 0;
+
   margin-top: auto !important;
-  font-size: calc(6px + 0.6vw)
+  font-size: calc(6px + 0.6vw);
 }
 .footer-brand {
   font-size: 2rem;

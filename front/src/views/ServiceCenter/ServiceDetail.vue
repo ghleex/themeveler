@@ -1,34 +1,26 @@
 <template>
   <div id="service-detail">
     <div class="service-center-title">
-      <i class="fas fa-exclamation-circle"></i>
-      고객센터
+      <i class="fas fa-exclamation-circle"></i> 고객센터
     </div>
-
     <div class="service-body">
       <div class="service-body-header">
         <div class="service-detail-created-date">
-          {{data.createddate}}
+          {{serviceData.created_at}}
         </div>
         <div class="service-detail-title">
-          <!-- <b>제목</b>:  -->
-          {{data.title}}</div>
+          {{serviceData.title}}</div>
       </div>
-
-      <!-- <a>{{data.id}}</a> -->
-      <div class="service-detail-user mt-3"><i class="fas fa-user"></i> {{data.writer}}</div><br>
-
-      <div class="service-content">{{data.content}}</div><br>
-
+      <div class="service-detail-user mt-3"><i class="fas fa-user"></i> {{serviceData.request_user}}</div><br>
+      <div class="service-content">{{serviceData.content}}</div><br>
       <div class="service-detail-btn mt-12">
-        <v-btn color="#2c3e50" class="text-light mr-4 btn-detail mb-2" @click="updateData">수정
-          <i class="fas fa-edit ml-1"></i></v-btn>
-        <v-btn color="error" class="btn-detail mr-4" @click="deleteData">삭제<i class="fas fa-minus-square ml-1"></i></v-btn>
-        <v-btn color="rgb(238, 240, 247)" class="btn-detail" @click="back"><i class="fas fa-bars ml-1"></i>목록</v-btn>
+        <v-btn color="warning" class="text-light mr-4 btn-detail" @click="updateData">수정 <i class="fas fa-edit ml-1"></i></v-btn>
+        <v-btn color="error" class="mr-4 btn-detail" @click="deleteData">삭제 <i class="fas fa-minus-square ml-1"></i></v-btn>
+        <v-btn color="rgb(238, 240, 247)" class="btn-detail" @click="back">목록 <i class="fas fa-bars ml-1"></i></v-btn>
       </div>
     </div>
 
-    <!-- comment list -->
+    <!-- Comment list -->
     <div class="comment-header">
       댓글
     </div>
@@ -50,54 +42,76 @@
       </v-form>
     </div>
     <div class="comment-header-bottom"></div>
-
   </div>
-
 </template>
 
 <script>
-  import data from '@/views/ServiceCenter/data'
+import axios from 'axios'
 
-  export default {
-    name: 'service-detail',
-    data() {
-      const index = this.$route.params.serviceId
-      return {
-        valid: false,
-        data: data[index],
-        index: index,
-        commentRules: [
-          v => (v && v.length <= 500) || '댓글은 최대 500자 이내로 작성해주세요.',
-        ],
-        remain: 500,
-        resultRemian: 500,
-        strLen: ""
+export default {
+  name: 'service-detail',
+  data() {
+    return {
+      serviceData: [],
+      serviceId: "",
+      userId: "",
+      valid: false,
+      commentRules: [
+        v => (v && v.length <= 500) || '댓글은 최대 500자 이내로 작성해주세요.',
+      ],
+      remain: 500,
+      resultRemian: 500,
+      strLen: ""
+    }
+  },
+  methods: {
+    deleteData() {
+      if (this.serviceData["voice"].request_user === this.$store.getters.user_id) {
+        const requestHeader = this.$store.getters.requestHeader
+        axios.delete(`/articles/cv/${this.userId}/${this.serviceId}/`, requestHeader)
+          .then(
+            this.$router.push({
+              path: '/service'
+            })
+          )
+          .catch(err => {
+            console.log(err)
+          })
+      } else {
+        alert("삭제 권한이 없습니다.")
+        this.$router.push(`/service/detail/${this.serviceId}`)  
       }
     },
-    methods: {
-      checkLen() {
-        var letterLength = this.strLen.length;
-        this.resultRemian = 0
-        this.resultRemian = this.remain - letterLength
-      },
-      deleteData() {
-        data.splice(this.index, 1)
-        this.$router.push({
-          path: '/service'
-        })
-      },
-      updateData() {
-        this.$router.push({
-          path: `/service/create/${this.index}`
-        })
-      },
-      back() {
-        this.$router.push({
-          path: '/service'
-        })
-      }
+    updateData() {
+      this.$router.push({
+        path: `/service/create/${this.serviceId}`
+      })
+    },
+    back() {
+      this.$router.push({
+        path: '/service'
+      })
+    },
+    checkLen() {
+      var letterLength = this.strLen.length;
+      this.resultRemian = 0
+      this.resultRemian = this.remain - letterLength
     }
+  },
+  mounted() {
+    this.serviceId = this.$route.params.serviceId
+    this.userId = this.$store.getters.user_id
+    const requestHeader = this.$store.getters.requestHeader
+    axios.get(`/articles/cv/${this.userId}/${this.serviceId}/`, requestHeader)
+      .then(response => {
+        console.log(response.data["voice"])
+        this.serviceData = response.data["voice"]
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
+}
 </script>
 
 <style scoped>
@@ -110,7 +124,6 @@
     font-family: 'Cafe24Simplehae';
     font-size: 30px;
     margin: 8rem auto 0 auto;
-    /* background-color: rgb(255, 187, 0); */
     width: 80%;
     border-radius: 7px 7px 0 0;
     box-shadow: 1px 1px 2px 1px rgb(100, 105, 109);
@@ -130,7 +143,6 @@
 
   .service-detail-title {
     font-family: 'Cafe24Simplehae';
-    /* text-align: start; */
     font-size: 20px;
     font-weight: 700;
   }
@@ -138,16 +150,6 @@
   .service-detail-created-date {
     color: rgb(170, 170, 170);
     font-size: 13px;
-    /* font-style: italic; */
-  }
-
-  .service-body-header {
-    /* display: flex;
-    justify-content: space-between; */
-  }
-
-  .service-detail-user {
-    /* text-align: start; */
   }
 
   .service-content {
@@ -169,11 +171,10 @@
   }
 
   .btn-detail {
-    font-size: 19px;
+    font-size: 16px;
     font-family: 'Cafe24Simplehae';
   }
 
-  /* comment */
   .comment-header {
     border-radius: 8px 8px 0 0;
     background-color: #2c3e50;

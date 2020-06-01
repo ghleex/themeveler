@@ -6,11 +6,17 @@ from django.db.models.aggregates import Count
 from django.db import models
 from django.forms import Textarea
 from django.utils.translation import ugettext_lazy
-from .models import Notice, VoiceCategory, CustomersVoice, ManagersReply, Comment, ReComment, ReportComment, ReportReComment
+from .models import NoticeCategory, Notice, VoiceCategory, CustomersVoice, ManagersReply, Comment, ReComment, ReportComment, ReportReComment
 from .inlines import ReCommentInline, ReportCommentInline, ReportReCommentInline, ManagersReplyInline
 # Register your models here.    
         
 admin.ModelAdmin.list_per_page = 20
+
+@admin.register(NoticeCategory)
+class NoticeCategoryAdmin(admin.ModelAdmin):
+    list_display = ('id', 'category',)
+    list_display_links = ('category',)
+
 
 @admin.register(Notice)
 class NoticeAdmin(admin.ModelAdmin):

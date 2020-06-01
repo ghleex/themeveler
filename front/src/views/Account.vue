@@ -49,13 +49,13 @@
             <form name="signin" action="" method="post" @submit.prevent="checkSignin()">
               <h1>Sign in</h1>
               <div class="social-container">
-                <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
-                <a href="#" class="social"><i class="fab fa-kaggle"></i></a>
+                <a href="http://127.0.0.1:8000/api/accounts/social/google/" class="social"><i class="fab fa-google-plus-g"></i></a>
+                <a href="http://127.0.0.1:8000/api/accounts/social/kakao/" class="social"><i class="fab fa-kaggle"></i></a>
               </div>
               <span>or use your account</span>
               <input type="email" placeholder="Email" v-model="credentials.email" />
               <input type="password" placeholder="Password" v-model="credentials.pw" />
-              <a href="#">Forgot your password?</a>
+              <a @click="forgotPassword">Forgot your password?</a>
               <button class="loginbtn">Sign In</button>
             </form>
           </div>
@@ -107,7 +107,7 @@ import Swal from 'sweetalert2'
       // 회원가입 폼 체크
       checkSignup() {
         // 검증 form
-        // 입력하지 않는 경우 (비어있는 경우)
+        // 이메일 입력하지 않은 경우
         if (!this.credentials.email) {
           Swal.fire({
             title: "Check Email",
@@ -115,7 +115,7 @@ import Swal from 'sweetalert2'
             type: "warning",
             timer: 3000
           })
-          // 이메일 valid From
+        // 이메일 valid From
         } 
         else if (!this.validEmail(this.credentials.email)) {
           Swal.fire({
@@ -139,7 +139,7 @@ import Swal from 'sweetalert2'
             timer: 3000
           })
         } 
-        // 길이가 너무 짧은 경우 (8자 이하)
+        // 길이가 너무 짧은 경우 (8자 미만)
         else if (this.credentials.pw.length < 8) {
           Swal.fire({
             title: "Check Password",
@@ -148,7 +148,7 @@ import Swal from 'sweetalert2'
             timer: 3000
           })
         }
-        // 비밀번호 확인이 맞는지 확인
+        // 비밀번호와 비밀번호확인이 일치하는지 확인
         else if (this.credentials.pw !== this.credentials.rpw) {
           Swal.fire({
             title: "Repeat Password",
@@ -167,22 +167,13 @@ import Swal from 'sweetalert2'
           // console.log(credentials)
           axios.post('/accounts/signup/', credentials)
             .then(response => {
-              if (response.statusText=="OK") {
+              if (response.status==200) {
                 alert('회원가입이 완료되었습니다.')
                 // 회원가입 후 자동로그인
-                const loginforms = {
-                  'username': this.credentials.email,
-                  'password': this.credentials.pw
-                }
-                axios.post('/accounts/signin/', loginforms)
-                  .then(response => {
-                    const token = response.data.token
-                    this.$session.start()
-                    this.$session.set('jwt', token)
-                    this.$session.set("nickname", response.data.nickname)
-                    this.$store.dispatch('login', token)
-                    this.$store.commit('setToken', token)
-                  })
+                var loginforms = new FormData()
+                loginforms.append('username', this.credentials.email)
+                loginforms.append('password', this.credentials.pw)
+                this.$emit('login', loginforms)
               }
               else {
                 alert('비밀번호가 너무 일상적인 단어입니다.')
@@ -197,7 +188,7 @@ import Swal from 'sweetalert2'
       checkNickname() {
         axios.get(`/accounts/nickname/${this.credentials.username}/`)
           .then(response => {
-            if (response.statusText=="OK") {
+            if (response.status==200) {
               alert('사용 가능한 닉네임입니다.')
             }
             else {
@@ -216,7 +207,7 @@ import Swal from 'sweetalert2'
         else {
           axios.get(`/accounts/username/${this.credentials.email}/`)
             .then(response => {
-              if (response.statusText=="OK") {
+              if (response.status==200) {
                 // 인증번호 전송
                 axios.post('/accounts/email/send/', {'username': this.credentials.email})
                   .then(
@@ -239,7 +230,7 @@ import Swal from 'sweetalert2'
       checkEmailCert() {
         axios.get(`/accounts/email/auth/${this.credentials.email}/${this.emailcertcode}/`)
           .then(response => {
-            if (response.status=="200") {
+            if (response.status==200) {
               this.dialog=false
               alert('이메일 인증이 완료되었습니다.')
             }
@@ -280,13 +271,25 @@ import Swal from 'sweetalert2'
         document.querySelector('#footer').style.display = 'none'
       },
       validEmail: function (email) {
-        var mailForm =
-          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;        return mailForm.test(email);
+        var mailForm = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        return mailForm.test(email)
       },
+      forgotPassword() {
+        if (this.validEmail(this.credentials.email)) {
+          axios.get(`/accounts/password/${this.credentials.email}/`)
+            .then(response => {
+              console.log(response)
+              alert('해당 이메일로 새로운 비밀번호가 전송되었습니다.')
+            })
+        }
+        else {
+          alert('이메일 형식이 아닙니다.')
+        }
+      }
     },
     mounted() {
       // footer none
-      this.a()
+      // this.a()
 
       // signin&up js
       const signUpButton = document.getElementById('signUp');
@@ -310,7 +313,6 @@ import Swal from 'sweetalert2'
 
 <style lang="scss" scoped>
   .account-box {
-    // margin-top: 64px;
     width: 100vw;
     height: 100vh;
     background-image: url('../assets/image/bg-2.jpg');
@@ -329,14 +331,12 @@ import Swal from 'sweetalert2'
   @import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
 
   .account-div {
-    // background: #f6f5f7;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     font-family: 'Montserrat', sans-serif;
     height: 100vh;
-    // margin: 0px 0 50px;
   }
 
   .account-div h1 {

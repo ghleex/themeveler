@@ -5,14 +5,14 @@
       <!-- 공지사항 리스트 Data table -->
       <v-data-table
         :headers="headers" :items="noticeData" :page.sync="page" :items-per-page="itemsPerPage" hide-default-footer
-        class="datatable" @page-count="pageCount = $event" :search="search" :sort-by="['id']" :sort-desc="true"
+        class="notice-datatable" @page-count="pageCount = $event" :search="search" :sort-by="['id']" :sort-desc="true"
         style="white-space: nowrap" :calculate-widths="true"
       >
         <template v-slot:top>
           <v-toolbar class="notice-table-header" flat color="white">
             <v-toolbar-title><h4></h4></v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-btn color="primary" dark class="mb-2" @click="write">글쓰기</v-btn>
+            <v-btn color="#607D8B" dark class="mb-2" @click="write">글쓰기</v-btn>
           </v-toolbar>
         </template>
         <!-- 카테고리 색상 -->
@@ -26,12 +26,12 @@
       </v-data-table>
       <!-- 페이지 번호 -->
       <div class="text-center pt-2">
-        <v-pagination v-model="page" :length="pageCount"></v-pagination>
+        <v-pagination v-model="page" :length="pageCount" color="#607D8B"></v-pagination>
       </div>
       <!-- 검색바 -->
       <div>
-        <v-text-field v-model="search" append-icon="mdi-magnify" label="검색"
-          single-line hide-details class="searchbar"></v-text-field>
+        <v-text-field v-model="search" append-icon="mdi-magnify" label="검색" single-line hide-details
+          class="searchbar"></v-text-field>
       </div>
     </div>
   </div>
@@ -52,7 +52,7 @@ export default {
         { text: '번호', align: 'start', value: 'id', sortable: false },
         { text: '분류', value: 'category' },
         { text: '제목', value: 'title', sortable: false },
-        { text: '작성자', value: 'writer', sortable: false },
+        { text: '작성자', value: 'writer_nickname', sortable: false },
         { text: '등록일', value: 'writed_at'.slice(0, 16) }
       ],
       noticeData: []
@@ -78,7 +78,7 @@ export default {
   mounted() {
     axios.get('/articles/notices/')
       .then(response => {
-        console.log(response.data)
+        // console.log(response.data)
         this.noticeData = response.data["notice"]
       })
       .catch(err => {
