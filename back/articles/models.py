@@ -50,7 +50,6 @@ class CustomersVoice(models.Model):
 
 
 class ManagersReply(models.Model):
-    title = models.CharField(max_length=255)
     content = models.TextField()
     voice = models.ForeignKey(CustomersVoice, on_delete=models.CASCADE, related_name='voices') # CustomersVoice.voices.all()
     manager = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='replys_manager') # User.replys_manager.all()
