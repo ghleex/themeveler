@@ -6,7 +6,7 @@
       <h2 class="content-title">비밀번호변경</h2>
       <hr>
       <v-row justify="center">
-        <v-col col="12" md="8">
+        <v-col cols="12" md="8">
           <v-form>
             <v-container class="py-0">
               <v-row>
@@ -27,7 +27,7 @@
           </v-form>
         </v-col>
 
-        <v-col col="12" md="4">
+        <v-col cols="12" md="4">
           <v-card-text class="text-center">
             <h6 class="display-1 mb-1 grey--text">ad.</h6>
             <h4 class="display-2 font-weight-light mb-3 black--text"></h4>
@@ -66,10 +66,10 @@ export default {
             'password': this.repassword
           }
           const requestHeader = this.$store.getters.requestHeader
-          axios.put(`/accounts/password/`, passwordForms, requestHeader)
+          axios.put('/accounts/password/', passwordForms, requestHeader)
             .then(
               this.$router.push({
-                path: `/profile`
+                path: '/profile'
               })
             )
             .catch(err => {
@@ -96,6 +96,7 @@ export default {
 <style scoped>
 #editpassword {
   margin-top: 64px;
+  background-color: rgba(245, 245, 245, 0.5);
 }
 
 #profile-content {
