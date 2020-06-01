@@ -35,7 +35,7 @@
 
 <script>
 import Drawer from '@/components/Drawer.vue'
-import data from '@/views/Notice/data'
+import data from '@/views/Profile/data'
 
 export default {
   name: "ProfileArticle",
