@@ -9,19 +9,20 @@
       transition="scale-transition"
     >
       <v-card>
+        <p v-if="newChat">New Message</p>
         <v-card-title class="headline">여행지</v-card-title>
         <p v-if="chatLoading" class="chatLoading">Loading</p>
         <span v-if="memories">
           <v-card-text v-for="(memory, idx) in memories" :key="idx">
             {{ memory.nickname }} : {{ memory.message }}<br>
-            {{ memory.created_at | moment("YYYY-MM-DD hh:mm:ss") }}
+            {{ memory.created_at | moment("YYYY-MM-DD LT") }}
           </v-card-text>
         </span>
     
         <span v-if="messages">
           <v-card-text v-for="(message, idx) in messages" :key="idx">
             {{ message.nickname }} : {{ message.message }}<br>
-            {{ message.created_at | moment("YYYY-MM-DD hh:mm:ss") }}
+            {{ message.created_at | moment("YYYY-MM-DD LT") }}
           </v-card-text>
         </span>
 
@@ -66,17 +67,28 @@
         connected: false,
         chatPage: 1,
         scrollHeight: 0,
-        chatLoading: false
+        chatLoading: false,
+        newChat: false,
       }
     },
     created() {
       this.$socket.on("message", data => {
+        let scroll = document.getElementsByClassName("v-dialog")[0]
+        let scrollMoveTrigger = Math.round(scroll.scrollTop) == scroll.scrollHeight - scroll.clientHeight
         this.messages.push({
           nickname: data.nickname, 
           message: data.message, 
           theme: this.themeId, 
-          created_at: this.$moment(new Date()).format("YYYY-MM-DD hh:mm:ss")
+          created_at: this.$moment(new Date()).format("YYYY-MM-DD LT")
         })
+        if (scrollMoveTrigger) {
+          this.newChat = false
+          setTimeout(() => {
+            scroll.scrollTop = scroll.scrollHeight
+          }, 40)
+        } else {
+          this.newChat = true
+        }
       })
     },
     mounted() {
@@ -91,7 +103,7 @@
       if (this.$socket.connected) {
         this.$socket.emit("startMessage", {theme:this.themeId})
         this.$socket.on("joined", data => {
-          data["created_at"] = this.$moment(new Date()).format("YYYY-MM-DD hh:mm:ss")
+          data["created_at"] = this.$moment(new Date()).format("YYYY-MM-DD LT")
           this.messages = [data]
           this.connected = true
         })
@@ -103,6 +115,7 @@
     },
     methods: {
       handleScroll(scrollTop) {
+        let scrollMoveTrigger = Math.round(scrollTop.srcElement.scrollTop) == scrollTop.srcElement.scrollHeight - scrollTop.srcElement.clientHeight
         if (scrollTop.srcElement.scrollTop == 0) {
           this.chatLoading = true
           let loadingMessage =  setInterval(() => {
@@ -128,7 +141,10 @@
             this.chatLoading = false
             clearInterval(loadingMessage)
           }, 1000)
-        }          
+        }
+        if (scrollMoveTrigger) {
+          this.newChat = false
+        }       
       },
       scroll() {
         var scroll = document.getElementsByClassName("v-dialog")[0]
