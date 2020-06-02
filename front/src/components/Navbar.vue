@@ -200,10 +200,10 @@
   }
 
   .dropdown-content a:hover {
-    background-color: #f1f1f1
+    background-color: #f1f1f1;
   }
 
-  .navbar_box a {
+  .navtitle {
     color: black;
     text-decoration: none;
   }

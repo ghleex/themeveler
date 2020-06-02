@@ -1,21 +1,8 @@
 import jwtDecode from 'jwt-decode'
+import getter from './getter.js'
 
 const state = {
-  token: null
-}
-
-const getters = {
-  isLoggedIn: state => state.token ? true : false,
-  requestHeader(state) {
-    return {
-      headers: {
-        Authorization: `JWT ${state.token}`
-      }
-    }
-  },
-  user_id(state) {
-    return jwtDecode(state.token).user_id
-  }
+  token: getter.getToken()
 }
 
 // token을 받아와서 state를 update
@@ -33,6 +20,20 @@ const actions =  {
   logout(context) {
       context.commit('setToken', null)
   }    
+}
+
+const getters = {
+  isLoggedIn: state => state.token ? true : false,
+  requestHeader(state) {
+    return {
+      headers: {
+        Authorization: `JWT ${state.token}`
+      }
+    }
+  },
+  user_id(state) {
+    return jwtDecode(state.token).user_id
+  }
 }
 
 export default {
