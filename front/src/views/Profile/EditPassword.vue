@@ -14,7 +14,7 @@
                   <v-text-field v-model="password" label="Password" class="purple-input" />
                 </v-col>
                 <v-col cols="12" md="6" class="content-col">
-                  <v-text-field v-model="repassword" label="Password Confirm" class="purple-input" />
+                  <v-text-field v-model="repassword" label="Confirm Password" class="purple-input" />
                 </v-col>
                 <v-col cols="4" md="6" class="text-left">
                 </v-col>

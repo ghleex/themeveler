@@ -10,7 +10,7 @@
       </div>
       <div class="body2">
         <p class="notice-writer"><i class="fas fa-user"></i> {{noticeData.writer_nickname}}</p>
-        <p class="notice-createddate"><i class="far fa-clock"></i> {{noticeData.writed_at}}</p>
+        <p class="notice-createddate"><i class="far fa-clock"></i> {{noticeData.writed_at | moment('YYYY-MM-DD HH:mm')}}</p>
       </div>
       <div class="body3">
         <div class="notice-content">{{noticeData.content}}</div>
