@@ -49,8 +49,8 @@
             <form name="signin" action="" method="post" @submit.prevent="checkSignin()">
               <h1>Sign in</h1>
               <div class="social-container">
-                <a href="http://127.0.0.1:8000/api/accounts/social/google/" class="social"><i class="fab fa-google"></i></a>
-                <a href="http://127.0.0.1:8000/api/accounts/social/kakao/" class="social"><i class="fab fa-kaggle"></i></a>
+                <a :href="baseURL+'/accounts/social/google/'" class="social"><i class="fab fa-google"></i></a>
+                <a :href="baseURL+'/accounts/social/kakao/'" class="social"><i class="fab fa-kaggle"></i></a>
               </div>
               <span>or use your account</span>
               <input type="email" placeholder="Email" v-model="credentials.email" />
@@ -101,6 +101,7 @@ import Swal from 'sweetalert2'
         },
         emailcertcode: "",
         csrf: "",
+        baseURL: ""
       }
     },
     methods: {
@@ -307,6 +308,8 @@ import Swal from 'sweetalert2'
       // csrf // :value="scrf"
       // this.$scrfToken;
       // this.csrf = this.$csrf.get();
+
+      this.baseURL = process.env.VUE_APP_IP
     }
   }
 </script>

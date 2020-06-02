@@ -9,6 +9,7 @@ import VueSimpleAlert from "vue-simple-alert"
 import axios from 'axios'
 // import io from 'socket.io-client' // socket chat
 
+require('dotenv').config()
 Vue.config.productionTip = false
 axios.defaults.baseURL = 'http://localhost:8000/api'
 var options = {
