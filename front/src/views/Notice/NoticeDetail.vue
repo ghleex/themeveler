@@ -50,7 +50,7 @@
 import axios from 'axios'
 
 export default {
-  name: 'notice-detail',
+  name: "notice-detail",
   data() {
     return {
       noticeData: [],
@@ -112,144 +112,167 @@ export default {
 </script>
 
 <style scoped>
-#notice-detail {
-  text-align: center;
-}
-.notice-title {
-  margin: 80px auto 0 auto;
-  text-align: start;
-  width: 80%;
-  font-family: 'Cafe24Simplehae';
-  font-size: 30px;
-}
-.notice-body {
-  margin: 0 auto 60px auto;
-  text-align: center;
-  width: 80%;
-}
-.notice-title>h4 {
-  text-align: left;
-  margin: 8px;
-}
-.body1 {
-  text-align: left;
-}
-.notice-body-title {
-  display: inline;
-  margin-left: 8px;
-  font-family: 'Cafe24Simplehae';
-  font-size: 20px;
-  font-weight: 700;
-}
-.body2 {
-  text-align: right;
-}
-.notice-writer {
-  display: inline;
-  font-size: 14px;
-  color:gray;
-}
-.notice-createddate {
-  display: inline;
-  font-size: 14px;
-  color:gray;
-  margin-left: 8px;
-}
-.body3 {
-  min-height: 250px;
-}
-.notice-content {
-  text-align: left;
-  margin: 8px;
-  max-height: 100
-}
-.notice-detail-btn {
-  text-align: right;
-}
-.btn-detail {
-  font-size: 16px;
-  font-family: 'Cafe24Simplehae';
-}
+  #notice-detail {
+    text-align: center;
+    height: 100%;
+  }
 
-.comment-header {
-  border-radius: 8px 8px 0 0;
-  background-color: #2c3e50;
-  width: 110px;
-  padding: .5rem 0 .2rem 0;
-  font-family: 'Cafe24Simplehae';
-  color: white;
-  font-size: 20px;
-  margin: 0 auto 0 12.5%;
-  box-shadow: 1px 2px 2px 1px rgb(100, 105, 109);
-}
-.comment-header-top {
-  height: 5px;
-  width: 75%;
-  background-color: #2c3e50;
-  font-size: 19px;
-  margin: 0 auto 0 auto;
-  border-radius: 0 3px 0 0;
-  box-shadow: 1px 2px 2px 1px rgb(100, 105, 109);
-}
-.service-comment {
-  background-color: #fff;
-  width: 75%;
-  margin: 0 auto 0 auto;
-  padding: 2rem 0 1rem 2rem;
-  box-shadow: 1px 2px 2px 1px rgb(100, 105, 109);
-}
-/* .service-comment-form {
-  display: flex;
-} */
-.survice-comment-input {
-  display: flex;
-  margin-right: 5em;
-}
-.service-comment-submitBtn-box {
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-end;
-  margin-bottom: 1rem;
-  margin-right: 1rem;
-}
-.service-comment-submitBtn {
-  color: white;
-  font-size: 19px;
-  font-family: 'Cafe24Simplehae';
-  margin: 0 1rem;
-}
-@media (max-width: 500px) {
-  .survice-comment-input {
-    margin-right: 0;
+  .notice-title {
+    margin: 80px auto 0 auto;
+    text-align: start;
+    width: 80%;
+    font-family: 'Cafe24Simplehae';
+    font-size: 30px;
   }
-  .service-content {
-    width: 100%;
+
+  .notice-body {
+    margin: 0 auto 60px auto;
+    text-align: center;
+    width: 80%;
   }
+
+  .notice-title>h4 {
+    text-align: left;
+    margin: 8px;
+  }
+
+  .body1 {
+    text-align: left;
+  }
+
+  .notice-body-title {
+    display: inline;
+    margin-left: 8px;
+    font-family: 'Cafe24Simplehae';
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  .body2 {
+    text-align: right;
+  }
+
+  .notice-writer {
+    display: inline;
+    font-size: 14px;
+    color:gray;
+  }
+
+  .notice-createddate {
+    display: inline;
+    font-size: 14px;
+    color:gray;
+    margin-left: 8px;
+  }
+
+  .body3 {
+    min-height: 250px;
+  }
+
+  .notice-content {
+    text-align: left;
+    margin: 8px;
+    max-height: 100
+  }
+
+  .notice-detail-btn {
+    text-align: right;
+  }
+
+  .btn-detail {
+    font-size: 16px;
+    font-family: 'Cafe24Simplehae';
+  }
+
+  .comment-header {
+    border-radius: 8px 8px 0 0;
+    background-color: #2c3e50;
+    width: 110px;
+    padding: .5rem 0 .2rem 0;
+    font-family: 'Cafe24Simplehae';
+    color: white;
+    font-size: 20px;
+    margin: 0 auto 0 12.5%;
+    box-shadow: 1px 2px 2px 1px rgb(100, 105, 109);
+  }
+
+  .comment-header-top {
+    height: 5px;
+    width: 75%;
+    background-color: #2c3e50;
+    font-size: 19px;
+    margin: 0 auto 0 auto;
+    border-radius: 0 3px 0 0;
+    box-shadow: 1px 2px 2px 1px rgb(100, 105, 109);
+  }
+
   .service-comment {
-    padding: 2rem 1.2rem .5rem 1.2rem;
+    background-color: #fff;
+    width: 75%;
+    margin: 0 auto 0 auto;
+    padding: 2rem 0 1rem 2rem;
+    box-shadow: 1px 2px 2px 1px rgb(100, 105, 109);
   }
+
+  .survice-comment-input {
+    display: flex;
+    margin-right: 5em;
+  }
+
+  .service-comment-submitBtn-box {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+    margin-bottom: 1rem;
+    margin-right: 1rem;
+  }
+
   .service-comment-submitBtn {
-    margin: 0;
+    color: white;
+    font-size: 19px;
+    font-family: 'Cafe24Simplehae';
+    margin: 0 1rem;
   }
+
+  @media (max-width: 500px) {
+    .survice-comment-input {
+      margin-right: 0;
+    }
+
+    .service-content {
+      width: 100%;
+    }
+
+    .service-comment {
+      padding: 2rem 1.2rem .5rem 1.2rem;
+    }
+
+    .service-comment-submitBtn {
+      margin: 0;
+    }
+
+    .strLen {
+      margin-right: 0 !important;
+    }
+  }
+
+  .service-comment-write {
+    width: 80%;
+  }
+
+  .comment-header-bottom {
+    height: 20px;
+    width: 75%;
+    background-color: #2c3e50;
+    font-size: 19px;
+    margin: 0 auto 5rem auto;
+    border-radius: 0 0 3px 3px;
+    box-shadow: 1px 2px 2px 1px rgb(100, 105, 109);
+  }
+
   .strLen {
-    margin-right: 0 !important;
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 5rem;
   }
-}
-.service-comment-write {
-  width: 80%;
-}
-.comment-header-bottom {
-  height: 20px;
-  width: 75%;
-  background-color: #2c3e50;
-  font-size: 19px;
-  margin: 0 auto 5rem auto;
-  border-radius: 0 0 3px 3px;
-  box-shadow: 1px 2px 2px 1px rgb(100, 105, 109);
-}
-.strLen {
-  display: flex;
-  justify-content: flex-end;
-  margin-right: 5rem;
-}
 </style>

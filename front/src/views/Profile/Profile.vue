@@ -61,7 +61,7 @@
 import Drawer from '@/components/Drawer.vue'
 
 export default {
-  name: 'Profile',
+  name: "Profile",
   components: {
     Drawer
   },
@@ -80,36 +80,36 @@ export default {
 </script>
 
 <style scoped>
-#profile {
-  margin-top: 64px;
-  background-color: rgba(245, 245, 245, 0.5);
-}
+  #profile {
+    margin-top: 64px;
+    background-color: rgba(245, 245, 245, 0.5);
+  }
 
-#profile-content {
-  margin-left: 256px;
-  width: 80%;
-}
-
-@media (max-width: 600px) {
   #profile-content {
-    margin-left: 56px;
+    margin-left: 256px;
     width: 80%;
   }
-}
 
-.content-title {
-  text-align: left;
-  margin-left: 20px;
-  margin-top: 8px;
-}
+  @media (max-width: 600px) {
+    #profile-content {
+      margin-left: 56px;
+      width: 80%;
+    }
+  }
 
-.content-body {
-  margin-left: 2px;
-  margin-right: 2px;
-}
+  .content-title {
+    text-align: left;
+    margin-left: 20px;
+    margin-top: 8px;
+  }
 
-.card-title {
-  margin-top: 8px;
-  margin-bottom: 8px;
-}
+  .content-body {
+    margin-left: 2px;
+    margin-right: 2px;
+  }
+
+  .card-title {
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
 </style>

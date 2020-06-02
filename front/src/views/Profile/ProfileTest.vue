@@ -50,13 +50,13 @@ export default {
 </script>
 
 <style>
-#profiletest {
-  margin-top: 64px;
-}
+  #profiletest {
+    margin-top: 64px;
+  }
 
-#lateral .v-btn--example {
-  bottom: 0;
-  position: absolute;
-  margin: 0 0 16px 16px;
-}
+  #lateral .v-btn--example {
+    bottom: 0;
+    position: absolute;
+    margin: 0 0 16px 16px;
+  }
 </style>
