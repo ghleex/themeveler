@@ -88,9 +88,20 @@ export default {
     userdelete() {
       var result = confirm("정말로 회원을 탈퇴하시겠습니까?")
       if (result) {
-        this.$router.push({
-          path: '/'
-        })
+        axios.delete('/accounts/usermgmt/', this.$store.getters.requestHeader)
+          .then(()=>{
+            if (this.$session.exists()) {
+              this.$session.destroy()
+            }
+            this.$store.dispatch('logout')
+            this.$router.push({
+              path: '/'
+            })
+          })
+          .catch(err => {
+            console.log(err)
+          })
+        
       }
       else {
         this.$router.push({
