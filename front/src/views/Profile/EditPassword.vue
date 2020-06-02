@@ -48,7 +48,7 @@
 <script>
 import axios from 'axios'
 import Drawer from '@/components/Drawer.vue'
-var jwt = require('jwt-simple');
+var jwt = require('jwt-simple')
 
 export default {
   name: "editprofile",
@@ -76,7 +76,7 @@ export default {
           form.append("data", token)
           const requestHeader = this.$store.getters.requestHeader
           axios.put('/accounts/password/', form, requestHeader)
-            .then(() =>{
+            .then(() => {
               this.$router.push({
                 path: '/profile'
               })
