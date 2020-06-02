@@ -35,6 +35,8 @@
       <ChatBot :themeId=themeId />
     </div>
 
+    <v-btn class="my-5" to="/travel/" rounded dark color="#2c3e50">📃뒤로가기</v-btn>
+
     <!-- destinations -->
     <div class="text-center mx-3" width="100%">
       <div class="d-flex mt-5 justify-content-center">
@@ -45,7 +47,8 @@
       </div>
     </div>
 
-    <v-sheet class="theme-detail-destination mx-auto d-flex justify-content-center" max-width="100vw" style="margin-bottom: 5rem;">
+    <v-sheet class="theme-detail-destination mx-auto d-flex justify-content-center" max-width="100vw"
+      style="margin-bottom: 5rem;">
       <v-slide-group v-model="model" class="pa-4" center-active show-arrows>
         <v-slide-item v-for="destination in destinations" :key="destination" v-slot:default="{ active, toggle }">
           <v-card class="ma-4" height="200" width="180" @click="toggle">
@@ -89,25 +92,21 @@
         like: false,
         destination: "",
         likeCount: 0,
+        likeUsers: [],
       }
     },
     methods: {
       likeTheme() {
-        this.like = !this.like
-        const token = this.$session.get("jwt")
-        const requestHeader = {
-          headers: {
-            Authorization: "JWT " + token
-          }
-        }
-        console.log(requestHeader)
-        axios.post(`/travels/like/${this.themeId}/`, requestHeader)
+        const requestHeader = this.$store.getters.requestHeader
+        axios.post(`/travels/like/${this.themeId}/`, this.themeId, requestHeader)
           .then(res => {
-            console.log(res)
+            this.like = res.data.isLiked
           })
-          .catch(err => {
-            console.log(err)
-          })
+        if (this.like == false) {
+          this.likeCount += 1
+        } else {
+          this.likeCount -= 1
+        }
       },
       toggleDestination(destination) {
         this.destination = destination.name
@@ -140,9 +139,20 @@
         .then(res => {
           this.destinations = res.data.destinations
           // console.log(res.data)
-          this.likeCount = res.data.like_count
-          this.like = res.data.is_like
         })
+
+      axios.get(`/travels/like/${this.themeId}`, requestHeader)
+        .then(res => {
+          this.likeCount = res.data.like_users_count
+          this.likeUsers = res.data.like_users
+        })
+
+      axios.get(`/travels/like/${this.themeId}`, this.themeId, requestHeader)
+        .then(res => {
+          console.log(res.data)
+        })
+        .catch(err =>
+        console.log(err.response))
     }
   }
 </script>
@@ -151,7 +161,7 @@
   .theme-detail-origin-box {}
 
   .theme-detail-destination {
-   margin-bottom: 15rem !important; 
+    margin-bottom: 15rem !important;
   }
 
   .btn-round-num {

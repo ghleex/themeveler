@@ -133,7 +133,6 @@ export default {
     if (this.serviceId !== undefined) {
       axios.get(`/articles/cv/${this.userId}/${this.serviceId}/`, requestHeader)
         .then(response => {
-          console.log(response.data)
           if (response.data.request_user_id === this.$store.getters.user_id) {
             if (response.data.category === 1) {
               this.select = "건의"
