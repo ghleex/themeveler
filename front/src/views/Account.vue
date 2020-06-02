@@ -38,8 +38,8 @@
                   </v-card>
                 </v-dialog>
               </v-row>
-              <input type="text" placeholder="Name" v-model="credentials.username" />
-              <v-icon @click="checkNickname" style="padding-left:12px; padding-right:12px;">mdi-check</v-icon>
+              <input type="text" placeholder="Name" v-model="credentials.nickname" />
+              <v-btn color="red lighten-2" dark @click="checkNickname">중복확인</v-btn>
               <input type="password" name="pw" placeholder="Password" v-model="credentials.pw" />
               <input type="password" name="rpw" placeholder="Confirm Password" v-model="credentials.rpw" />
               <button class="signupbtn">Sign Up</button>
@@ -47,7 +47,7 @@
           </div>
           <div class="form-container sign-in-container">
             <form name="signin" action="" method="post" @submit.prevent="checkSignin()">
-              <h1>Sign in</h1>
+              <h1>Login</h1>
               <div class="social-container">
                 <a :href="baseURL+'/accounts/social/google/'" class="social"><i class="fab fa-google"></i></a>
                 <a :href="baseURL+'/accounts/social/kakao/'" class="social"><i class="fab fa-kaggle"></i></a>
@@ -64,7 +64,7 @@
               <div class="overlay-panel overlay-left">
                 <h1>Welcome Back!</h1>
                 <p>개인 정보를 입력 하고 우리와 함께해요!</p>
-                <button class="ghost" id="signIn">Sign In</button>
+                <button class="ghost" id="signIn">Login</button>
               </div>
               <div class="overlay-panel overlay-right">
                 <h1>Hello, Friend!</h1>
@@ -94,8 +94,10 @@ import Swal from 'sweetalert2'
         // ],
         dialog: false,
         credentials: {
-          username: "",
           email: "",
+          checkEmailCert: false,
+          nickname: "",
+          checkNickname: false,
           pw: "",
           rpw: "",
         },
@@ -116,8 +118,8 @@ import Swal from 'sweetalert2'
             type: "warning",
             timer: 3000
           })
-        // 이메일 valid From
         } 
+        // 이메일 valid From
         else if (!this.validEmail(this.credentials.email)) {
           Swal.fire({
             title: "Check Email",
@@ -125,21 +127,35 @@ import Swal from 'sweetalert2'
             type: "warning",
             timer: 3000
           })
-        } else if (this.credentials.username == "") {
+        } else if (this.credentials.checkEmailCert == false) {
+          Swal.fire({
+            title: "Check Email",
+            text: "이메일 인증을 하세요.",
+            type: "warning",
+            timer: 3000
+          })
+        } else if (this.credentials.nickname == "") {
           Swal.fire({
             title: "Check Name",
             text: "이름을 입력하세요.",
             type: "warning",
             timer: 3000
           })
-        } else if (this.credentials.username.length >= 7) {
+        } else if (this.credentials.nickname.length >= 7) {
           Swal.fire({
             title: "Check Name",
-            text: "이름은 6자 이하로 가능합니다..",
+            text: "이름은 6자 이하로 가능합니다.",
             type: "warning",
             timer: 3000
           })
-        } 
+        } else if (this.credentials.checkNickname == false) {
+          Swal.fire({
+            title: "Check Name",
+            text: "이름 중복확인을 하세요.",
+            type: "warning",
+            timer: 3000
+          })
+        }
         // 길이가 너무 짧은 경우 (8자 미만)
         else if (this.credentials.pw.length < 8) {
           Swal.fire({
@@ -163,7 +179,7 @@ import Swal from 'sweetalert2'
           const credentials = {
             'username': this.credentials.email,
             'password': this.credentials.pw,
-            'nickname': this.credentials.username
+            'nickname': this.credentials.nickname
           }
           // console.log(credentials)
           axios.post('/accounts/signup/', credentials)
@@ -187,10 +203,11 @@ import Swal from 'sweetalert2'
       },
       // 닉네임 중복체크
       checkNickname() {
-        axios.get(`/accounts/nickname/${this.credentials.username}/`)
+        axios.get(`/accounts/nickname/${this.credentials.nickname}/`)
           .then(response => {
             if (response.status==200) {
               alert('사용 가능한 닉네임입니다.')
+              this.credentials.checkNickname = true
             }
             else {
               alert('이미 존재하는 닉네임입니다.')
@@ -234,6 +251,7 @@ import Swal from 'sweetalert2'
             if (response.status==200) {
               this.dialog=false
               alert('이메일 인증이 완료되었습니다.')
+              this.credentials.checkEmailCert = true
             }
             else {
               alert('이메일 인증에 실패하였습니다.')
@@ -284,7 +302,7 @@ import Swal from 'sweetalert2'
             })
         }
         else {
-          alert('이메일 형식이 아닙니다.')
+          alert('올바른 이메일 형식을 입력해주세요.')
         }
       }
     },
