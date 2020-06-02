@@ -49,6 +49,7 @@ export default {
         })
         .catch(err => {
           console.log(err)
+          alert("잘못된 정보입니다. 다시 입력해주세요.")
         })
     }
   },

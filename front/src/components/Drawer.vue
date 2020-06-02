@@ -10,7 +10,7 @@
             <h2><i class="fas fa-user-circle"></i></h2>
           </v-list-item-avatar>
           <v-list-item-content>
-            <v-list-item-title>OOO님</v-list-item-title>
+            <v-list-item-title>{{ username() }}님</v-list-item-title>
             <v-list-item-subtitle>user</v-list-item-subtitle>
           </v-list-item-content>
           <!-- <v-btn icon @click.stop="miniVariant = !miniVariant">
@@ -58,6 +58,9 @@ export default {
       if (window.innerWidth < 600) {
         this.miniVariant = true
       }
+    },
+    username() {
+      return this.$session.get('nickname')
     }
   },
   mounted() {
