@@ -23,6 +23,8 @@
         <template v-slot:item.title="{ item }">
           <div class="notice-table-body" @click="detail(item.id)">{{ item.title }}</div>
         </template>
+        <!-- 데이터가 없을 경우 -->
+        <template slot="no-data">작성된 글이 없습니다</template>
       </v-data-table>
       <!-- 페이지 번호 -->
       <div class="text-center pt-2">

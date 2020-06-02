@@ -159,7 +159,7 @@
       },
       userpage() {
         this.$router.push({
-          path: '/profile'
+          path: '/profiles'
         })
       }
     }

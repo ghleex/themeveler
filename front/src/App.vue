@@ -38,6 +38,7 @@ export default {
             this.$session.set("jwt", token)
             this.$session.set("nickname", response.data.nickname)
             this.$session.set("expire", Date.now() + 21600)
+            this.$session.set("staff", response.data.is_staff)
             this.$store.dispatch("login", token)
             this.$store.commit("setToken", token)
             this.$router.push('/')

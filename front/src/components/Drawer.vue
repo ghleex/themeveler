@@ -11,7 +11,7 @@
           </v-list-item-avatar>
           <v-list-item-content>
             <v-list-item-title>{{ username() }}님</v-list-item-title>
-            <v-list-item-subtitle>user</v-list-item-subtitle>
+            <v-list-item-subtitle>{{ userrole() }}</v-list-item-subtitle>
           </v-list-item-content>
           <!-- <v-btn icon @click.stop="miniVariant = !miniVariant">
             <v-icon>mdi-chevron-left</v-icon>
@@ -38,12 +38,11 @@ export default {
     return {
       drawer: true,
       items: [
-        { title: '마이페이지', icon: 'mdi-view-dashboard', path: "/profile" },
+        { title: '마이페이지', icon: 'mdi-view-dashboard', path: "/profiles" },
         { title: '비밀번호변경', icon: 'mdi-account-edit', path: "/editpassword" },
         { title: '회원정보수정', icon: 'mdi-account-edit', path: "/editprofile" },
         { title: '내가 작성한 글', icon: 'mdi-inbox-full', path: "/profile/article" },
         { title: '내가 작성한 댓글', icon: 'mdi-comment-text', path: "/profile/comment" },
-        // { title: '미정', icon: 'mdi-help-box', path: "/profiletest" },
         // { title: '미정..', icon: 'mdi-image', path: "/profiletest" },
       ],
       color: "primary",
@@ -58,9 +57,20 @@ export default {
       if (window.innerWidth < 600) {
         this.miniVariant = true
       }
+      else {
+        this.miniVariant = false
+      }
     },
     username() {
-      return this.$session.get('nickname')
+      return this.$session.get("nickname")
+    },
+    userrole() {
+      if (this.$session.get("staff") == 1) {
+        return "관리자"
+      }
+      else {
+        return "사용자"
+      }
     }
   },
   mounted() {
@@ -68,7 +78,7 @@ export default {
   },
   computed: {
     bg () {
-      return this.background ? 'https://cdn.vuetifyjs.com/images/backgrounds/bg-2.jpg' : undefined
+      return this.background ? "https://cdn.vuetifyjs.com/images/backgrounds/bg-2.jpg" : undefined
     },
   }
 }

@@ -1,13 +1,17 @@
 <template>
   <div id="service-detail">
-    <div class="service-center-title"><i class="fas fa-exclamation-circle mr-3"></i>고객센터</div>
+    <div class="service-center-title">
+      <i class="fas fa-exclamation-circle mr-3"></i>고객센터
+    </div>
     <div class="service-body">
       <div class="service-body-header">
         <div class="service-detail-title">{{serviceData.title}}</div>
       </div>
-      <div class="service-detail-user mt-3"><i class="fas fa-user"></i> {{serviceData.request_user_nickname}}</div><br>
-      <div class="service-detail-created-date"> {{serviceData.created_at | moment('YYYY-MM-DD HH:mm')}}</div>
-      <div class="service-content">{{serviceData.content}}</div><br>
+      <div class="body">
+        <p class="service-writer"><i class="fas fa-user"></i> {{serviceData.request_user_nickname}}</p>
+        <p class="service-created-date"><i class="far fa-clock"></i> {{serviceData.created_at | moment('YYYY-MM-DD HH:mm')}}</p>
+      </div>
+      <div class="service-content mt-3">{{serviceData.content}}</div><br>
       <div class="service-detail-btn mt-12">
         <v-btn color="warning" class="text-light mr-4 btn-detail" @click="updateData">수정 <i class="fas fa-edit ml-1"></i></v-btn>
         <v-btn color="error" class="mr-4 btn-detail" @click="deleteData">삭제 <i class="fas fa-minus-square ml-1"></i></v-btn>
@@ -35,6 +39,9 @@
       </v-form>
     </div>
     <div class="comment-header-bottom"></div>
+    <div>
+      <li v-for="comment in commentList" :key="comment.id">{{ comment.writer_id}}- {{ comment.content }}</li>
+    </div>
   </div>
 </template>
 
@@ -48,6 +55,7 @@ export default {
       serviceData: [],
       serviceId: "",
       userId: "",
+      commentList: [],
       valid: false,
       commentRules: [
         v => (v && v.length <= 500) || '댓글은 최대 500자 이내로 작성해주세요.'
@@ -102,6 +110,13 @@ export default {
       .catch(err => {
         console.log(err)
       })
+    // axios.get(`/articles/${this.serviceId}/comment/`, requestHeader)
+    //   .then(response => {
+    //     this.commentData = response.data
+    //   })
+    //   .catch(err => {
+    //     console.log(err)
+    //   })
   }
 }
 </script>
@@ -133,19 +148,37 @@ export default {
     box-shadow: 1px 2px 2px 1px rgb(100, 105, 109);
   }
 
+  .service-body-header {
+    text-align: left;
+    margin-left: 5%;
+  }
+
   .service-detail-title {
     font-family: 'Cafe24Simplehae';
     font-size: 20px;
     font-weight: 700;
   }
 
-  .service-detail-created-date {
-    color: rgb(170, 170, 170);
-    font-size: 13px;
+  .body {
+    text-align: right;
+    margin-right: 5%;
+  }
+
+  .service-writer {
+    display: inline;
+    font-size: 14px;
+    color:gray;
+  }
+
+  .service-created-date {
+    display: inline;
+    font-size: 14px;
+    color:gray;
+    margin-left: 8px;
   }
 
   .service-content {
-    width: 60%;
+    width: 90%;
     background-color: #d0d7df49;
     border-radius: 5px;
     border: 1px solid #2c3e5049;

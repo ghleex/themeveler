@@ -23,12 +23,8 @@
         <template v-slot:item.title="{ item }">
           <div class="service-list-body" @click="detail(item.id)">{{ item.title }}</div>
         </template>
-        <!-- data가 없을 시 -->
-        <!-- <template slot="no-data">
-          <v-alert :value="true" color="error" icon="warning">
-            Sorry, nothing to display here :(
-          </v-alert>
-        </template> -->
+        <!-- 데이터가 없을 경우 -->
+        <template slot="no-data">작성된 글이 없습니다</template>
       </v-data-table>
       <!-- 페이지 번호 -->
       <div class="text-center pt-2">

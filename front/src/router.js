@@ -71,7 +71,7 @@ const routes = [
     component: ServiceDetail
   },
   {
-    path: '/profile',
+    path: '/profiles',
     name: 'profile',
     component: Profile,
     // meta: {loginRequire: true}
