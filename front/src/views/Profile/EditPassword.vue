@@ -10,11 +10,14 @@
           <v-form>
             <v-container class="py-0">
               <v-row>
-                <v-col cols="12" md="6" class="content-col">
-                  <v-text-field v-model="password" label="Password" class="purple-input" />
+                <v-col cols="12" md="12" class="content-col">
+                  <v-text-field v-model="currentPassword" label="Current Password" class="purple-input" />
                 </v-col>
                 <v-col cols="12" md="6" class="content-col">
-                  <v-text-field v-model="repassword" label="Confirm Password" class="purple-input" />
+                  <v-text-field v-model="newPassword" label="New Password" class="purple-input" />
+                </v-col>
+                <v-col cols="12" md="6" class="content-col">
+                  <v-text-field v-model="confirmPassword" label="Confirm Password" class="purple-input" />
                 </v-col>
                 <v-col cols="4" md="6" class="text-left">
                 </v-col>
@@ -45,6 +48,7 @@
 <script>
 import axios from 'axios'
 import Drawer from '@/components/Drawer.vue'
+var jwt = require('jwt-simple');
 
 export default {
   name: "editprofile",
@@ -54,24 +58,29 @@ export default {
   data() {
     return {
       dialog: false,
-      password: "",
-      repassword: ""
+      currentPassword: "",
+      newPassword: "",
+      confirmPassword: ""
     }
   },
   methods: {
     update() {
-      if (this.password === this.repassword) {
-        if (this.password.length > 7) {
-          var passwordForms = {
-            "password": this.repassword
+      if (this.newPassword === this.confirmPassword) {
+        if (this.newPassword.length > 7) {
+          let data = {
+            "password": this.newPassword,
+            "original_password": this.currentPassword
           }
+          const token = jwt.encode(data, process.env.VUE_APP_JWT_SECRET_KEY, process.env.VUE_APP_JWT_ALGORITHM)
+          let form = new FormData()
+          form.append("data", token)
           const requestHeader = this.$store.getters.requestHeader
-          axios.put('/accounts/password/', passwordForms, requestHeader)
-            .then(
+          axios.put('/accounts/password/', form, requestHeader)
+            .then(() =>{
               this.$router.push({
                 path: '/profile'
               })
-            )
+            })
             .catch(err => {
               console.log(err)
             })
