@@ -3,27 +3,48 @@
     <Drawer class="drawer" />
 
     <div class="comment">
+      <div class="profile-comment-title">
+        <h5 class="card-title">내가 작성한 댓글
+          <v-chip class="ma-2 px-2" small color="orange" text-color="white">{{ commentCount }}</v-chip>
+          <!-- <v-badge color="blue" content="5" inline="true"></v-badge> -->
+        </h5>
+      </div>
+      <v-divider></v-divider>
       <v-data-table :headers="headers" :items="commentData" :page.sync="page" :items-per-page="itemsPerPage"
-        hide-default-footer class="elevation-1" @page-count="pageCount = $event" :search="search"
-        :sort-by="['id']" :sort-desc="true" dense>
+        hide-default-footer class="elevation-1" @page-count="pageCount = $event" :sort-by="['id']" :sort-desc="true" dense>
         <template v-slot:top>
-          <v-toolbar flat color="white">
-            <h5 class="card-title">내가 작성한 댓글
-              <v-chip class="ma-2 px-2" small color="orange" text-color="white">{{ commentCount }}</v-chip>
-              <!-- <v-badge color="blue" content="5" inline="true"></v-badge> -->
-            </h5>
-            <v-spacer></v-spacer>
-            <!-- 검색바 -->
-            <!-- <div>
-              <v-text-field v-model="search" append-icon="mdi-magnify" label="검색"
-                single-line hide-details class="searchbar"></v-text-field>
-            </div> -->
-          </v-toolbar>
         </template>
         <!-- 리스트 제목 -->
         <template v-slot:item.title="{ item }">
           <div @click="detail(item.id)">{{ item.title }}</div>
         </template>
+        <!-- 데이터가 없을 경우 -->
+        <template slot="no-data">작성한 댓글이 없습니다</template>
+      </v-data-table>
+      <!-- 페이지 번호 -->
+      <div class="text-center pt-2">
+        <v-pagination v-model="page" :length="pageCount"></v-pagination>
+      </div>
+    </div>
+
+    <div class="recomment">
+      <div class="profile-recomment-title">
+        <h5 class="re-card-title">내가 작성한 대댓글
+          <v-chip class="ma-2 px-2" small color="orange" text-color="white">{{ reCommentCount }}</v-chip>
+          <!-- <v-badge color="blue" content="5" inline="true"></v-badge> -->
+        </h5>
+      </div>
+      <v-divider></v-divider>
+      <v-data-table :headers="headers" :items="reCommentData" :page.sync="page" :items-per-page="itemsPerPage"
+        hide-default-footer class="elevation-1" @page-count="pageCount = $event" :sort-by="['id']" :sort-desc="true" dense>
+        <template v-slot:top>
+        </template>
+        <!-- 리스트 제목 -->
+        <template v-slot:item.title="{ item }">
+          <div @click="redetail(item.id)">{{ item.title }}</div>
+        </template>
+        <!-- 데이터가 없을 경우 -->
+        <template slot="no-data">작성한 대댓글이 없습니다</template>
       </v-data-table>
       <!-- 페이지 번호 -->
       <div class="text-center pt-2">
@@ -34,44 +55,63 @@
 </template>
 
 <script>
+import axios from 'axios'
 import Drawer from '@/components/Drawer.vue'
-import data from '@/views/Profile/data'
 
 export default {
-  name: 'ProfileComment',
+  name: "ProfileComment",
   components: {
     Drawer
   },
   data() {
     return {
-      items: [
-        { id: 1, icon: 'mdi-heart-outline', iconClass: 'orange lighten-1 white--text', title: '경복궁', subtitle: 'Jan 9, 2020' },
-        { id: 2, icon: 'mdi-heart-outline', iconClass: 'purple lighten-1 white--text', title: '창경궁', subtitle: 'Jan 17, 2020' },
-        { id: 3, icon: 'mdi-heart', iconClass: 'red lighten-1 white--text', title: '명동', subtitle: 'Jan 28, 2020' },
-        { id: 4, icon: 'mdi-heart', iconClass: 'blue white--text', title: '인사동', subtitle: 'Jan 28, 2020' },
-        { id: 5, icon: 'mdi-heart', iconClass: 'amber white--text', title: '청계천', subtitle: 'Jan 28, 2020' },
-      ],
       page: 1,
       pageCount: 0,
-      itemsPerPage: 20,
-      search: "",
+      itemsPerPage: 10,
       headers: [
-        { text: "번호", align: "start", value: "id", sortable: false },
-        { text: "작성위치", value: "category" },
-        { text: "댓글 내용", value: "title", sortable: false },
-        { text: "등록일", value: "createddate", sortable: false }
+        { text: "번호", value: "id", sortable: false },
+        { text: "작성위치", value: "category", sortable: false },
+        { text: "댓글 내용", value: "content", sortable: false },
+        { text: "등록일", value: "created_at", sortable: false }
       ],
-      commentData: data,
-      commentCount: data.length
-      // commentCount: data.filter(val => val.content).length
+      commentData: [],
+      commentCount: 0,
+      reCommentData: [],
+      reCommentCount: 0,
+      userId: ""
     }
   },
   methods: {
-    detail(id) {
+    detail(commentsId) {
       this.$router.push({
-        path: `/notice/detail/${id}`
+        path: `/articles/cv/${this.userId}/${commentsId}`
+      })
+    },
+    redetail(reCommentsId) {
+      this.$router.push({
+        path: `/articles/cv/${this.userId}/${reCommentsId}`
       })
     }
+  },
+  mounted() {
+    this.userId = this.$store.getters.user_id
+    const requestHeader = this.$store.getters.requestHeader
+    axios.get(`/articles/comment_self/${this.userId}/`, requestHeader)
+      .then(response => {
+        this.commentData = response.data["comments"]
+        this.commentCount = response.data["comments"].length
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    axios.get(`/articles/recomment/${this.userId}/`, requestHeader)
+      .then(response => {
+        this.reCommentData = response.data["recomments"]
+        this.reCommentCount = response.data["recomments"].length
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
 }
 </script>
@@ -82,36 +122,16 @@ export default {
     background-color: rgba(245, 245, 245, 0.5);
   }
 
-  #profile-content {
-    margin-left: 256px;
-    width: 80%;
+  .profile-comment-title {
+    text-align: left;
+    margin-left: 16px;
   }
 
   @media (max-width: 600px) {
-    #profile-content {
-      margin-left: 56px;
-      width: 80%;
-    }
-
     .comment {
       margin-left: 64px !important;
       width: 75% !important;
     }
-    
-    .searchbar {
-      width: 70% !important;
-    }
-  }
-
-  .content-title {
-    text-align: left;
-    margin-left: 20px;
-    margin-top: 8px;
-  }
-
-  .content-body {
-    margin-left: 2px;
-    margin-right: 2px;
   }
 
   .card-title {
@@ -128,9 +148,30 @@ export default {
     width: 80%;
   }
 
-  .searchbar {
-    margin-left: auto;
+
+  .profile-recomment-title {
+    text-align: left;
+    margin-left: 16px;
+  }
+
+  @media (max-width: 600px) {
+    .recomment {
+      margin-left: 64px !important;
+      width: 75% !important;
+    }
+  }
+
+  .re-card-title {
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
+
+  .recomment {
+    margin-top: 8px;
+    margin-bottom: 80px;
+    margin-left: 264px;
     margin-right: auto;
+    text-align: center;
     width: 80%;
   }
 </style>
