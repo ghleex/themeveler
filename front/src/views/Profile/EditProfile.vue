@@ -21,7 +21,13 @@
                 <v-col cols="12" md="6" class="content-col">
                   <v-text-field v-model="nickname" label="Nickname" class="purple-input" />
                 </v-col>
-                <v-col cols="12" md="6" class="content-col">
+                <v-col cols="12" md="3" class="content-col">
+                  <v-select :items="['남','여']" label="Gender"></v-select>
+                </v-col>
+                <v-col cols="12" md="3" class="content-col">
+                  <v-text-field label="Age" />
+                </v-col>
+                <!-- <v-col cols="12" md="6" class="content-col">
                   <v-text-field label="Name" class="purple-input" />
                 </v-col>
                 <v-col cols="12" md="4" class="content-col">
@@ -35,7 +41,7 @@
                 </v-col>
                 <v-col cols="12" class="content-col">
                   <v-text-field label="Address" class="purple-input" />
-                </v-col>
+                </v-col> -->
                 <v-col cols="4" md="6" class="text-left">
                   <v-btn color="red" class="mr-0" @click="userdelete">회원탈퇴</v-btn>
                 </v-col>

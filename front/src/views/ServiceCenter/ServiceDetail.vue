@@ -1,12 +1,12 @@
 <template>
   <div id="service-detail">
-    <div class="service-center-title"><i class="fas fa-exclamation-circle"></i>고객센터</div>
+    <div class="service-center-title"><i class="fas fa-exclamation-circle mr-3"></i>고객센터</div>
     <div class="service-body">
       <div class="service-body-header">
         <div class="service-detail-title">{{serviceData.title}}</div>
       </div>
       <div class="service-detail-user mt-3"><i class="fas fa-user"></i> {{serviceData.request_user_nickname}}</div><br>
-      <div class="service-detail-created-date"> {{serviceData.created_at}}</div>
+      <div class="service-detail-created-date"> {{serviceData.created_at | moment('YYYY-MM-DD HH:mm')}}</div>
       <div class="service-content">{{serviceData.content}}</div><br>
       <div class="service-detail-btn mt-12">
         <v-btn color="warning" class="text-light mr-4 btn-detail" @click="updateData">수정 <i class="fas fa-edit ml-1"></i></v-btn>

@@ -56,7 +56,7 @@
               <input type="email" placeholder="Email" v-model="credentials.email" />
               <input type="password" placeholder="Password" v-model="credentials.pw" />
               <a @click="forgotPassword">Forgot your password?</a>
-              <button class="loginbtn">Sign In</button>
+              <button class="loginbtn">Login</button>
             </form>
           </div>
           <div class="overlay-container">
@@ -94,13 +94,13 @@ import Swal from 'sweetalert2'
         // ],
         dialog: false,
         credentials: {
-          username: '',
-          email: '',
-          pw: '',
-          rpw: '',
+          username: "",
+          email: "",
+          pw: "",
+          rpw: "",
         },
-        emailcertcode: '',
-        csrf: '',
+        emailcertcode: "",
+        csrf: "",
       }
     },
     methods: {

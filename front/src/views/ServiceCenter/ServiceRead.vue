@@ -1,6 +1,6 @@
 <template>
   <div id="service-read">
-    <div class="service-center-title"><i class="fas fa-exclamation-circle"></i>고객센터</div>
+    <div class="service-center-title"><i class="fas fa-exclamation-circle mr-3"></i>고객센터</div>
     <div class="service-body">
       <!-- 고객센터 리스트 Data table -->
       <v-data-table
@@ -154,7 +154,7 @@ export default {
     background-color: #fff;
     width: 80%;
     padding: 1.2rem 2rem;
-    margin: 0 10% 5rem 10%;
+    margin: 0 10% 0 10%;
     border-radius: 0 0 7px 7px;
     box-shadow: 1px 2px 2px 1px rgb(100, 105, 109);
   }
