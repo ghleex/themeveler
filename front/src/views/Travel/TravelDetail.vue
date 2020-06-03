@@ -140,6 +140,9 @@
           this.destinations = res.data.destinations
           // console.log(res.data)
         })
+        .catch(err => {
+          console.log(err.response)
+        })
 
       axios.get(`/travels/like/${this.themeId}`, requestHeader)
         .then(res => {
@@ -147,7 +150,7 @@
           this.likeUsers = res.data.like_users
         })
 
-      axios.get(`/travels/like/${this.themeId}`, this.themeId, requestHeader)
+      axios.get(`/travels/like/${this.themeId}`, requestHeader)
         .then(res => {
           console.log(res.data)
         })

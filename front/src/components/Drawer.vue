@@ -65,7 +65,7 @@ export default {
       return this.$session.get("nickname")
     },
     userrole() {
-      if (this.$session.get("staff") == 1) {
+      if (this.$session.get("staff") === true) {
         return "관리자"
       }
       else {
