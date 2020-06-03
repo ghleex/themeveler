@@ -13,6 +13,7 @@ from .models import NoticeCategory, Notice, VoiceCategory, CustomersVoice, Manag
 from .serializers import NoticeCategorySerializer, NoticeSerializer, VoiceCategorySerializer, CustomersVoiceSerializer
 from .serializers import ManagerReplySerializer, CommentSerializer, ReCommentSerializer
 from .serializers import ReportCommentSerializer, ReportReCommentSerializer
+from articles.serializers import ManagerReplySerializer
 from travels.models import Theme, Destination
 from travels.serializers import ThemeSerializer, DestinationSerializer
 
@@ -186,13 +187,15 @@ class CustomersVoiceChange(APIView):
     def get_voice(self, voice_pk, format=None):
         return get_object_or_404(CustomersVoice, pk=voice_pk)
 
-    def get(self, request, user_pk, voice_pk, format=None):
+    def get(self, request, voice_pk, format=None):
         request_user = get_user(request.headers['Authorization'].split(' '))
         voice = self.get_voice(voice_pk)
         try:
-            if user_pk == request_user.pk:
+            if voice.request_user.pk == request_user.pk or request_user.is_staff:
                 serializer_v = CustomersVoiceSerializer(voice).data
                 req_user = serializer_v['request_user']
+                replys = CustomersVoice.voices.all()
+                reply = [ManagerReplySerializer(r).data for r in replys]
                 data = {
                     'id': serializer_v['id'],
                     'title': serializer_v['title'],
@@ -204,6 +207,7 @@ class CustomersVoiceChange(APIView):
                     'updated_at': serializer_v['updated_at'],
                     'manager': serializer_v['manager'],
                     'is_fixed': serializer_v['is_fixed'],
+                    'reply': reply,
                 }
                 return Response(data, status=status.HTTP_200_OK)
             else:
@@ -211,7 +215,7 @@ class CustomersVoiceChange(APIView):
         except:
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
     
-    def put(self, request, user_pk, voice_pk, format=None):
+    def put(self, request, voice_pk, format=None):
         request_user = get_user(request.headers['Authorization'].split(' '))
         voice = self.get_voice(voice_pk)
         if request_user.pk == voice.request_user.pk:
@@ -233,7 +237,7 @@ class CustomersVoiceChange(APIView):
         else:
             return Response(access_message, status=status.HTTP_403_FORBIDDEN)
 
-    def delete(self, request, user_pk, voice_pk, format=None):
+    def delete(self, request, voice_pk, format=None):
         request_user = get_user(request.headers['Authorization'].split(' '))
         voice = self.get_voice(voice_pk)
         try:
@@ -258,52 +262,18 @@ class CustomersVoiceChange(APIView):
 @permission_classes((IsAdminUser,))
 class ManagersReplying(APIView):
     """
-        고객센터(관리자) - 처리할 일 목록/등록
+        고객센터(관리자) - 처리 내용 등록
 
         ---
         # 내용
             * manager: 관리자
-        ## GET
-            * todos: 관리자가 처리할 글들
     """
-    def get_manager(self, manager_pk, format=None):
-        try:
-            manager = get_object_or_404(User, pk=manager_pk)
-            if manager.is_staff:
-                return manager
-            else:
-                raise Exception
-        except:
-            return Response(access_message, status=status.HTTP_401_UNAUTHORIZED)
-
-    def get(self, request, manager_pk, format=None):
-        manager = self.get_manager(manager_pk)
-        try:
-            todos = CustomersVoice.objects.filter(manager=manager_pk).order_by('-created_at')
-            todo = []
-            for t in todos:
-                serializer_t = CustomersVoiceSerializer(t).data
-                td = {
-                    'id': serializer_t['id'],
-                    'title': serializer_t['title'],
-                    'category': serializer_t['category'],
-                    'request_user': serializer_t['request_user'],
-                    'created_at': serializer_t['created_at'],
-                    'updated_at': serializer_t['updated_at'],
-                }
-                todo.append(td)
-            data = {
-                'todos': todo,
-            }
-            return Response(data, status=status.HTTP_200_OK)
-        except:
-            return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
-
-    def post(self, request, format=None):
+    def post(self, request, voice_pk, format=None):
         try:
             requests = request.data
             data = {
                 'content': requests.get('content'),
+                'voice': voice_pk,
                 'manager': request.user.pk,
                 'is_fixed': True,
             }
@@ -325,21 +295,19 @@ class ManagersReplyChange(APIView):
         ---
         # 내용
             * manager: 관리자
-            * todo: 답변했던 글
+            * reply: 답변
     """
-    def put(self, request, manager_pk, todo_pk, format=None):
-        manager = get_object_or_404(User, pk=manager_pk)
+    def put(self, request, reply_pk, format=None):
+        reply = get_object_or_404(ManagersReply, pk=reply_pk)
         try:
             requests = request.data
-            todo = get_object_or_404(CustomersVoice, pk=todo_pk)
-            todo.title = requests.get['title']
-            todo.content = requests.get['content']
+            reply.content = requests.get['content']
             data = {
-                'id': todo.id,
-                'content': todo.content,
+                'id': reply.id,
+                'content': reply.content,
                 'manager': request.user.pk,
             }
-            serializer = CustomersVoiceSerializer(todo, data=data)
+            serializer = ManagerReplySerializer(reply, data=data)
             if serializer.is_valid():
                 serializer.save()
                 return Response(data, status=status.HTTP_200_OK)
