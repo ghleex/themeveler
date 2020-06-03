@@ -128,7 +128,9 @@ class CustomersVoices(APIView):
     """
     def get(self, request, user_pk, format=None):
         request_user = get_user(request.headers['Authorization'].split(' '))
-        if user_pk == request_user.pk:
+        print('조회 요청')
+        if user_pk == request_user.pk and not request_user.is_staff:
+            print('같다')
             voices = CustomersVoice.objects.filter(request_user=user_pk).order_by('-created_at')
             voice = []
             for v in voices:
@@ -150,7 +152,30 @@ class CustomersVoices(APIView):
                 'voice': voice,
             }
             return Response(data, status=status.HTTP_200_OK)
+        elif request_user.is_staff:
+            voices = CustomersVoice.objects.all().order_by('-created_at')
+            voice = []
+            for v in voices:
+                serializer_v = CustomersVoiceSerializer(v).data
+                writer = serializer_v['request_user']
+                vc = {
+                    'id': serializer_v['id'],
+                    'title': serializer_v['title'],
+                    'category': serializer_v['category'],
+                    'request_user_id': writer,
+                    'request_user_nickname': str(User.objects.get(pk=writer).nickname),
+                    'created_at': serializer_v['created_at'],
+                    'updated_at': serializer_v['updated_at'],
+                    'manager': serializer_v['manager'],
+                    'is_fixed': serializer_v['is_fixed'],
+                }
+                voice.append(vc)
+            data = {
+                'voice': voice,
+            }
+            return Response(data, status=status.HTTP_200_OK)
         else:
+            print('아님')
             return Response(access_message, status=status.HTTP_403_FORBIDDEN)
             
     def post(self, request, user_pk, format=None):
@@ -275,7 +300,6 @@ class ManagersReplying(APIView):
                 'content': requests.get('content'),
                 'voice': voice_pk,
                 'manager': request.user.pk,
-                'is_fixed': True,
             }
             serializer = ManagerReplySerializer(data=data)
             if serializer.is_valid():
