@@ -128,9 +128,7 @@ class CustomersVoices(APIView):
     """
     def get(self, request, user_pk, format=None):
         request_user = get_user(request.headers['Authorization'].split(' '))
-        print('조회 요청')
         if user_pk == request_user.pk and not request_user.is_staff:
-            print('같다')
             voices = CustomersVoice.objects.filter(request_user=user_pk).order_by('-created_at')
             voice = []
             for v in voices:
@@ -175,7 +173,6 @@ class CustomersVoices(APIView):
             }
             return Response(data, status=status.HTTP_200_OK)
         else:
-            print('아님')
             return Response(access_message, status=status.HTTP_403_FORBIDDEN)
             
     def post(self, request, user_pk, format=None):
