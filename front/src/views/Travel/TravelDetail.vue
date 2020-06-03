@@ -92,7 +92,6 @@
         like: false,
         destination: "",
         likeCount: 0,
-        likeUsers: [],
       }
     },
     methods: {
@@ -116,12 +115,7 @@
       }
     },
     mounted() {
-      const token = this.$session.get("jwt")
-      const requestHeader = {
-        headers: {
-          Authorization: "JWT " + token
-        }
-      }
+      const requestHeader = this.$store.getters.requestHeader
       axios.get("/travels/all_theme/", requestHeader)
         .then(res => {
           this.themeArr = res.data.all_theme
@@ -140,22 +134,20 @@
           this.destinations = res.data.destinations
           // console.log(res.data)
         })
+        // .catch(err => {
+        //   console.log(err.response)
+        // })
+
+      axios.get(`/travels/like/${this.themeId}`, requestHeader)
+        .then(res => {
+          console.log(res)
+          this.likeCount = res.data.like_users_count
+          this.like = res.data.did_user_like
+        })
         .catch(err => {
           console.log(err.response)
-        })
 
-      axios.get(`/travels/like/${this.themeId}`, requestHeader)
-        .then(res => {
-          this.likeCount = res.data.like_users_count
-          this.likeUsers = res.data.like_users
         })
-
-      axios.get(`/travels/like/${this.themeId}`, requestHeader)
-        .then(res => {
-          console.log(res.data)
-        })
-        .catch(err =>
-        console.log(err.response))
     }
   }
 </script>
