@@ -659,6 +659,26 @@ class Search(APIView):
 
 
 @permission_classes((IsAuthenticated,))
+class CommentSelf(APIView):
+    """
+        자신이 작성한 댓글 목록
+
+        ---
+    """
+    def get(self, request, user_pk, format=None):
+        user = get_user(request.headers['Authorization'].split(' '))
+        try:
+            comments = Comment.objects.filter(writer=user.pk).order_by('-writed_at')
+            comment = [CommentSerializer(c).data for c in comments]
+            data = {
+                'comments': comment,
+            }
+            return Response(data, status=status.HTTP_200_OK)
+        except:
+            return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
+
+
+@permission_classes((IsAuthenticated,))
 class Comments(APIView):
     """
         댓글 - 목록과 작성
@@ -740,6 +760,26 @@ class CommentChange(APIView):
                 return Response(message, status=status.HTTP_200_OK)
             else:
                 return Response(access_message, status=status.HTTP_401_UNAUTHORIZED)
+        except:
+            return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
+
+
+@permission_classes((IsAuthenticated,))
+class ReCommentSelf(APIView):
+    """
+        자신이 작성한 대댓글(댓글의 댓글) 목록
+
+        ---
+    """
+    def get(self, request, user_pk, format=None):
+        user = get_user(request.headers['Authorization'].split(' '))
+        try:
+            recomments = ReComment.objects.filter(writer=user.pk).order_by('-writed_at')
+            recomment = [ReCommentSerializer(rc).data for rc in recomments]
+            data = {
+                'recomments': recomment,
+            }
+            return Response(data, status=status.HTTP_200_OK)
         except:
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
