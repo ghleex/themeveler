@@ -106,7 +106,7 @@
         </v-btn>
         <v-btn text v-if="this.$store.getters.isLoggedIn" @click="userpage">
           <div class="nav-link drop-no">
-            <div class="nav-text"><v-icon>mdi-account-circle</v-icon> {{ username() }}님</div>
+            <div class="nav-text"><v-icon>mdi-account-circle</v-icon> {{ nickname }}님</div>
           </div>
         </v-btn>
       </v-toolbar-items>
@@ -116,7 +116,12 @@
 
 <script>
 export default {
-  name: 'Navbar',
+  name: "Navbar",
+  props: {
+    nickname: {
+      type: String
+    }
+  },  
   data() {
     return {
       drawer: null,
@@ -156,9 +161,6 @@ export default {
       this.$router.push({
         path: '/'
       })
-    },
-    username() {
-      return this.$session.get('nickname')
     },
     userpage() {
       this.$router.push({

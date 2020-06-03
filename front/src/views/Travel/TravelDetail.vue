@@ -21,10 +21,10 @@
             <i style="color: gray;">{{ date }} <br> {{ time }}</i>
             <br><br>
           </div>
-          <div class="like-theme text-center" @click="likeTheme()">
+          <div class="like-theme text-center">
             {{ likeCount }} <br>
-            <i v-if="like == false" class="far fa-heart"></i>
-            <i v-else-if="like == true" class="fas fa-heart text-danger"></i>
+            <i @click="likeTheme()" v-if="like == false" class="far fa-heart"></i>
+            <i @click="likeTheme()" v-else-if="like == true" class="fas fa-heart text-danger"></i>
           </div>
         </div>
         <div class="theme-detail-go text-end">
@@ -140,14 +140,12 @@
 
       axios.get(`/travels/like/${this.themeId}`, requestHeader)
         .then(res => {
-          console.log(res)
           this.likeCount = res.data.like_users_count
           this.like = res.data.did_user_like
         })
-        .catch(err => {
-          console.log(err.response)
-
-        })
+        // .catch(err => {
+        //   console.log(err.response)
+        // })
     }
   }
 </script>

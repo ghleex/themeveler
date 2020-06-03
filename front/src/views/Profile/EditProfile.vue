@@ -115,6 +115,7 @@ export default {
         .then(() => {
           alert("회원 정보가 성공적으로 변경되었습니다.")
           this.$session.set("nickname", this.nickname)
+          this.$store.dispatch("changeNickname", this.nickname)
           this.$router.push('/profiles')
         })
         .catch(err =>{

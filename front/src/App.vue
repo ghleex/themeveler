@@ -1,6 +1,6 @@
 <template>
   <v-app id="app">
-    <Navbar v-on:login="login" />
+    <Navbar :nickname=nickname v-on:login="login" />
     <router-view v-on:login="login"></router-view>
     <Footer />
   </v-app>
@@ -41,6 +41,7 @@ export default {
             this.$session.set("staff", response.data.is_staff)
             this.$store.dispatch("login", token)
             this.$store.commit("setToken", token)
+            this.$store.dispatch("changeNickname", response.data.nickname)
             this.$router.push('/')
           }
           else {
@@ -65,6 +66,11 @@ export default {
     //     this.logout()
     //   }
     // }
+  },
+  computed: {
+    nickname() {
+      return this.$store.state.auth.nickname
+    },
   }
 }
 </script>
