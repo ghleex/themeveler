@@ -188,11 +188,11 @@ export default {
   }
 
   @media (max-width: 600px) {
-    .service-center-title {
+    #service-detail .service-center-title {
       width: 95%;
     }
 
-    .service-body {
+    #service-detail .service-body {
       width: 95%;
     }
   }
