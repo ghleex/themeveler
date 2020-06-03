@@ -43,7 +43,7 @@
                   <v-text-field label="Address" class="purple-input" />
                 </v-col> -->
                 <v-col cols="4" md="6" class="text-left">
-                  <v-btn color="red" class="mr-0" @click="userdelete">회원탈퇴</v-btn>
+                  <v-btn color="red" class="mr-0 text-white" @click="userdelete">회원탈퇴</v-btn>
                 </v-col>
                 <v-col cols="8" md="6" class="text-right">
                   <v-btn color="success" class="mr-4" @click="update">수정</v-btn>
@@ -59,9 +59,9 @@
             <h6 class="display-1 mb-1 grey--text">ad.</h6>
             <h4 class="display-2 font-weight-light mb-3 black--text"></h4>
             <p class="font-weight-light grey--text">
-              개인정보 유출에 항상 주의하세요...
+              개인정보 유출에 항상 주의하세요..
             </p>
-            <v-btn color="success" rounded class="mr-0">Read More</v-btn>
+            <!-- <v-btn color="success" rounded class="mr-0">Read More</v-btn> -->
           </v-card-text>
         </v-col>
       </v-row>
@@ -104,7 +104,7 @@ export default {
       }
       else {
         this.$router.push({
-          path: '/profile'
+          path: '/profiles'
         })
       }
     },
@@ -115,7 +115,7 @@ export default {
         .then(() => {
           alert("회원 정보가 성공적으로 변경되었습니다.")
           this.$session.set("nickname", this.nickname)
-          this.$router.push('/profile')
+          this.$router.push('/profiles')
         })
         .catch(err =>{
           console.log(err)
@@ -124,7 +124,7 @@ export default {
     },
     updatecancel () {
       this.$router.push({
-        path: '/profile'
+        path: '/profiles'
       })
     }
   },

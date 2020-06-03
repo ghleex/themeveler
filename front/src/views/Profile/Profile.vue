@@ -30,7 +30,7 @@
           <v-card>
             <h5 class="card-title">방문했던 장소
               <v-chip class="ma-2 px-2" small color="blue" text-color="white">{{ itemsDests.length }}</v-chip>
-              <v-btn @click="updateDest">수정</v-btn>
+              <v-btn class="ml-4" color="blue" outlined @click="updateDest">수정</v-btn>
             </h5>
             <v-divider></v-divider>
             <v-list>
@@ -155,7 +155,7 @@ export default {
   }
 
   .card-title {
-    margin-top: 8px;
-    margin-bottom: 8px;
+    padding-top: 16px;
+    margin-bottom: 0px;
   }
 </style>

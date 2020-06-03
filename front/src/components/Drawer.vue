@@ -42,7 +42,6 @@ export default {
         { title: '비밀번호변경', icon: 'mdi-account-edit', path: "/editpassword" },
         { title: '회원정보수정', icon: 'mdi-account-edit', path: "/editprofile" },
         { title: '댓글 활동', icon: 'mdi-comment-text', path: "/profile/comment" },
-        // { title: '내가 작성한 글', icon: 'mdi-inbox-full', path: "/profile/article" },
         // { title: '미정..', icon: 'mdi-image', path: "/profiletest" },
       ],
       color: "primary",

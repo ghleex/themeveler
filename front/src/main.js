@@ -12,6 +12,7 @@ import axios from 'axios'
 require('dotenv').config()
 Vue.config.productionTip = false
 axios.defaults.baseURL = 'http://localhost:8000/api'
+// axios.defaults.baseURL = 'https://k02b1031.p.ssafy.io:8000/api'
 var options = {
   persist: true
 }

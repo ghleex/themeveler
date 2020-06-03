@@ -12,11 +12,18 @@
           </v-textarea>
         </div>
         <div class="service-comment-submitBtn-box">
-          <v-btn color="#2c3e50" :disabled="!valid" class="service-comment-submitBtn">
+          <v-btn color="#2c3e50" :disabled="!valid" class="service-comment-submitBtn" @click="commentSubmit()">
             작성<i class="fas fa-comment ml-1"></i>
           </v-btn>
         </div>
       </v-form>
+      <v-divider></v-divider>
+      <div class="comment-list">
+        <li v-for="comment in commentList" :key="comment.id">
+          {{ comment.manager }} - {{ comment.content }}
+          <v-icon @click="commentUpdate(comment.id)">mdi-pen</v-icon>
+        </li>
+      </div>
     </div>
     <div class="comment-header-bottom"></div>
   </div>
@@ -27,6 +34,7 @@ export default {
   name: 'comment',
   data() {
     return {
+      commentList: [],
       valid: false,
       commentRules: [
         v => (v && v.length <= 500) || '댓글은 최대 500자 이내로 작성해주세요.'
@@ -41,6 +49,46 @@ export default {
       var letterLength = this.strLen.length;
       this.resultRemian = 0
       this.resultRemian = this.remain - letterLength
+    },
+    commentSubmit() {
+      if (this.$session.get("staff") === true) {
+        var commentForms = {
+          "content": this.strLen,
+          "manager": this.$store.getters.user_id,
+          "voice": this.serviceId
+        }
+        const requestHeader = this.$store.getters.requestHeader
+        axios.post(`/articles/manager_reply/${this.serviceId}/`, commentForms, requestHeader)
+          .then(response => {
+            console.log(response.data)
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      }
+      else {
+        alert("권한이 없습니다.")
+      }
+    },
+    commentUpdate(commentId) {      
+      if (this.$session.get("staff") === true) {
+        var commentForms = {
+          "content": this.strLen,
+          "manager": this.$store.getters.user_id,
+          "voice": this.serviceId
+        }
+        const requestHeader = this.$store.getters.requestHeader
+        axios.put(`/articles/manager_reply/${this.serviceId}/${commentId}/`, commentForms, requestHeader)
+          .then(response => {
+            console.log(response.data)
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      }
+      else {
+        alert("권한이 없습니다.")
+      }
     }
   }
 }
@@ -133,5 +181,9 @@ export default {
     display: flex;
     justify-content: flex-end;
     margin-right: 5rem;
+  }
+
+  .comment-list {
+    text-align: left;
   }
 </style>
