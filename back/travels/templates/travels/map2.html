@@ -5,13 +5,13 @@
 	<title>Kakao 지도 시작하기</title>
 </head>
 <body>
-    <a href= "javascript:void(0);" onclick="navigation()">[길 안내]</a>
+    <a href= "javascript:void(0);" onclick="navigation('유성온천')">[길 안내]</a>
 	<div id="map" style="width:500px;height:400px;"></div>
 	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey={{KAKAO_API_KEY}}&libraries=services"></script>
 	<script type="text/javascript">
     // 주소-좌표 변환 객체를 생성합니다
-    function navigation() {
-        var geocoder = new kakao.maps.services.Geocoder();
+    function navigation(dest) {
+        var geocoder = new kakao.maps.services.Geocoder(); // 카카오맵 GPS Service
 
         function searchAddrFromCoords(lon, lat, callback) {
             // 좌표로 행정동 주소 정보를 요청합니다
@@ -28,14 +28,16 @@
                 
                 var lat = position.coords.latitude, // 위도
                     lon = position.coords.longitude; // 경도
-                console.log(lat, lon)
+                // console.log(lat, lon)
                 searchDetailAddrFromCoords(lon, lat, function(res) {
-                var addr = res[0].address.address_name
-                console.log(addr)
-                var url = "https://map.kakao.com/?target=walk&sName="+addr+"&eName=유성온천역"
-                
-                window.open(url)
-                console.log(window.location.href)
+                var addr = res[0].address.address_name // 현재 위치의 상세 주소를 return
+                    //console.log(addr)
+                    var start = addr
+                    var wayToGo = "walk"
+                    var url = `https://map.kakao.com/?target=${wayToGo}&sName=${start}&eName=${dest}`
+                    
+                    window.open(url)
+                    console.log(window.location.href)
                 })
                 
                     
