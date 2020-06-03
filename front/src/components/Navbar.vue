@@ -91,7 +91,7 @@
             <v-icon class="mr-2">mdi-account-supervisor-circle</v-icon> Contact
             <div class="dropdown-content">
               <a href="/notice" class="mt-2">공지사항</a>
-              <hr class="my-2">
+              <hr class="my-1">
               <a href="/service" class="mb-2">고객센터</a>
             </div>
           </div>
@@ -159,7 +159,7 @@
       },
       userpage() {
         this.$router.push({
-          path: '/profile'
+          path: '/profiles'
         })
       }
     }
@@ -200,10 +200,10 @@
   }
 
   .dropdown-content a:hover {
-    background-color: #f1f1f1
+    background-color: #f1f1f1;
   }
 
-  .navbar_box a {
+  .navtitle {
     color: black;
     text-decoration: none;
   }

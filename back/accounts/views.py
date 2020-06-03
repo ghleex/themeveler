@@ -401,7 +401,7 @@ class KakaoSignInCallbackView(APIView):
                 user.anonymous = choice(prefix) + choice(suffix) + str(user.id)
                 user.save()
         jwt = encoder(payload(user))
-        return Response({'jwt': jwt})  
+        return redirect(f'http://localhost:8080/checktoken/{user.nickname}/{jwt}/') 
 
 
 @permission_classes((AllowAny, ))
@@ -468,7 +468,7 @@ class GoogleSignInCallbackView(APIView):
                 user.anonymous = choice(prefix) + choice(suffix) + str(user.id)
                 user.save()
         jwt = encoder(payload(user))
-        return Response({'jwt': jwt})
+        return redirect(f'http://localhost:8080/checktoken/{user.nickname}/{jwt}/')
 
 
 @permission_classes((AllowAny, ))

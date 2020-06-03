@@ -51,7 +51,7 @@ class CustomersVoice(models.Model):
 
 class ManagersReply(models.Model):
     content = models.TextField()
-    voice = models.ForeignKey(CustomersVoice, on_delete=models.CASCADE, related_name='voices') # CustomersVoice.voices.all()
+    voice = models.ForeignKey(CustomersVoice, on_delete=models.CASCADE, related_name='manager_reply') # CustomersVoice.manager_reply.all()
     manager = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='replys_manager') # User.replys_manager.all()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)

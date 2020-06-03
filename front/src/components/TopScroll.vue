@@ -36,7 +36,7 @@
     text-align: center;
     position: fixed;
     bottom: 40px;
-    right: 30px;
+    right: 25px;
     transition: background-color .3s,
       opacity .5s, visibility .5s;
     opacity: 0;

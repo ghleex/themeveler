@@ -127,7 +127,6 @@ export default {
     if (this.noticeId !== undefined) {
       axios.get(`/articles/notices/${this.noticeId}/`)
         .then(response => {
-          console.log(response.data)
           if (response.data.writer_id === this.$store.getters.user_id) {
             if (response.data.category === 1) {
               this.select = "일반"

@@ -38,6 +38,7 @@ export default {
             this.$session.set("jwt", token)
             this.$session.set("nickname", response.data.nickname)
             this.$session.set("expire", Date.now() + 21600)
+            this.$session.set("staff", response.data.is_staff)
             this.$store.dispatch("login", token)
             this.$store.commit("setToken", token)
             this.$router.push('/')
@@ -49,21 +50,19 @@ export default {
         })
         .catch(err => {
           console.log(err)
+          alert("잘못된 정보입니다. 다시 입력해주세요.")
         })
     }
   },
   mounted() {
     if (localStorage.getItem("vue-session-key")) {
-      let stored = JSON.parse(localStorage.getItem("vue-session-key"));
-      this.$store.dispatch("login", stored.jwt);
-      this.$store.commit("setToken", stored.jwt);
+      let stored = JSON.parse(localStorage.getItem("vue-session-key"))
+      this.$store.dispatch("login", stored.jwt)
+      this.$store.commit("setToken", stored.jwt)
     }
-
-    // sessionTiemout() {
-    //   if (this.$session.exists()) {
-    //     if (this.$session.getItem("expire") < Date.now()) {
-    //       this.logout()
-    //     }
+    // if (this.$session.exists()) {
+    //   if (this.$session.get("expire") < Date.now()) {
+    //     this.logout()
     //   }
     // }
   }
