@@ -110,11 +110,12 @@
         this.$router.push(`/travel/${themeId}/`)
       },
       a() {
-        document.querySelector("#Navbar").style.display = "none"
-        document.querySelector("#footer").style.display = "none"
+        document.querySelector("#Navbar").style.display = 'none'
+        document.querySelector("#footer").style.display = 'none'
       }
     },
     mounted() {
+      this.a()
       
       const token = this.$session.get('jwt')
       const requestHeader = {
@@ -144,8 +145,6 @@
         .catch(err => {
           console.log(err.data)
         })
-
-      this.a()
     }
   }
 </script>
