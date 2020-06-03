@@ -2,74 +2,87 @@
   <div id="search-result">
     <div class="container">
       <div class="sresultheader">
-        <h4 class="my-3">"{{ $route.query.q }}" 에 대한 검색결과 ({{ spotData.length }} 개)</h4>
         <SearchBar class="sresult-search-bar mx-auto my-3 pb-4" />
+        <h5 class="sresult-header my-3">"{{ $route.query.q }}" 에 대한 검색결과 ({{ themeData.length+placeData.length }} 개)</h5>
       </div>
     </div>
     <div class="container border">
-      <div class="spot-container">
-        <spot-list spotData="spotData" />
+      <div class="theme-container" v-if="themeData">
+        <!-- <theme-list :themeData="themeData" /> -->
+        <p>테마 검색결과</p>
+        <li v-for="theme in themeData" :key="theme.id" @click="goThemePage(theme.id)">{{ theme.name }}</li>
       </div>
-
-      <div class="theme-container">
-        <theme-list :themeData="themeData" />
+      <div class="place-container" v-else-if="placeData">
+        <!-- <place-list :placeData="placeData" /> -->
+        <v-divider></v-divider>
+        <p>장소 검색결과</p>
+        <li v-for="place in placeData" :key="place.id">{{ place.name }}</li>
       </div>
+      <div v-else>일치하는 검색결과가 없습니다.</div>
     </div>
   </div>
 </template>
 
 <script>
-import axios from "axios"
-import SearchBar from '../components/SearchBar.vue'
-// import ThemeList from "../components/ThemeList.vue"
-// import SpotList from "../components/SpotList.vue"
+import axios from 'axios'
+import SearchBar from '@/components/SearchBar.vue'
+// import ThemeList from "@/components/ThemeList.vue"
+// import PlaceList from "@/components/PlaceList.vue"
 
 export default {
   name: "SearchResult",
   components: {
-    SearchBar,
-    // SpotList,
-    // ThemeList
+    SearchBar
   },
   data() {
     return {
-			spotData: [],
-			themeData: []
-		};
+			themeData: [],
+			placeData: []
+		}
   },
   methods: {
-    goToSpotPage(spot_id) {
-      axios.get(`/spot/${spot_id}/`)
-        .then(response => {
-          console.log(response);
-        })
-        .catch(error => {
-          console.log(error.response);
-        })
+    goThemePage(themeId) {
+      this.$router.push(`/travel/${themeId}`)
 		},
     searchNow(query) {
-      axios.get(`/search/${query}/`)
+      axios.get(`/articles/search/${query}/`)
         .then(response => {
-					this.spotData = response.data.spots
-					this.themeData = response.data.themes
+          console.log(response.data)
+					this.themeData = response.data.theme
+					this.placeData = response.data.dest
         })
     }
 	},
 	mounted() {
-		let queries = this.$route.query.q.split(' ')
-		this.searchNow(queries.join('|'))
+    this.searchNow(this.$route.query.q)
 	}
 }
 </script>
 
 <style>
-.sresultheader {
-  margin-top: 60px;
-  background: #11A0DC;
-  border-radius: 10px 10px 0 0;
-  border: 1px solid lightgray;  
-}
-.sresult-search-bar {
-  width: 75%;
-}
+  #search-result {
+    margin-top: 64px;
+    padding-top: 16px;
+  }
+
+  .sresultheader {
+    background: #11A0DC;
+    border-radius: 10px 10px 10px 10px;
+    border: 1px solid lightgray;
+  }
+
+  .sresult-search-bar {
+    width: 95%;
+  }
+
+  .sresult-header {
+    font-family: 'Cafe24Simplehae';
+    text-align: left;
+    margin-left: 24px;
+  }
+
+  .theme-container,
+  .place-container {
+    text-align: left;
+  }
 </style>

@@ -23,6 +23,8 @@
         <template v-slot:item.title="{ item }">
           <div class="notice-table-body" @click="detail(item.id)">{{ item.title }}</div>
         </template>
+        <!-- 데이터가 없을 경우 -->
+        <template slot="no-data">작성된 글이 없습니다</template>
       </v-data-table>
       <!-- 페이지 번호 -->
       <div class="text-center pt-2">
@@ -53,7 +55,7 @@ export default {
         { text: "분류", value: "category" },
         { text: "제목", value: "title", sortable: false },
         { text: "작성자", value: "writer_nickname", sortable: false },
-        { text: "등록일", value: "writed_at".slice(0, 16) }
+        { text: "등록일", value: "writed_at" }
       ],
       noticeData: []
     }
