@@ -31,8 +31,9 @@
 
         <v-col cols="12" md="6">
           <v-card>
-            <h5 class="card-title">방문했던 장소
+            <h5 class="card-title">
               <span>
+                방문했던 장소
                 <v-chip class="ma-2 px-2" small color="blue" text-color="white">{{ itemsDests.length }}</v-chip>
                 <v-btn class="ma-2" outlined fab x-small color="indigo" @click="updateDest">
                   <v-icon>mdi-pencil</v-icon>
@@ -166,19 +167,22 @@ export default {
   }
 
   .card-title {
+    /* padding-top: 16px; */
+    /* margin-bottom: 0px; */
     margin-top: 8px;
     margin-bottom: 8px;
     height: 48px;
   }
 
-  .card-title > span {
+  .card-title>span {
     line-height: 60px;
   }
 
-  .card-title > span > .v-btn {
+  .card-title>span>.v-btn {
     margin-top: 15px !important;
     float: right;
   }
+
   .v-list {
     height: 30em;
     overflow-y: scroll;

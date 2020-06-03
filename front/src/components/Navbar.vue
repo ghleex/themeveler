@@ -115,60 +115,60 @@
 </template>
 
 <script>
-  export default {
-    name: 'Navbar',
-    computed: {
-
-    },
-    props: {
-      nickname: {
-        type: String
-      }
-    },
-    data() {
-      return {
-        drawer: null,
-        items: [{
-            title: 'Home',
-            icon: 'mdi-home',
-            path: '/'
-          },
-          {
-            title: 'Travel',
-            icon: ' mdi-image-album',
-            path: '/travel'
-          },
-          {
-            title: 'Contact',
-            icon: 'mdi-account-supervisor-circle'
-          },
-          {
-            title: 'Login',
-            icon: 'mdi-login-variant',
-            path: '/login'
-          },
-        ],
-      }
-    },
-    methods: {
-      login() {
-        this.$router.push({
+export default {
+  name: "Navbar",
+  props: {
+    nickname: {
+      type: String
+    }
+  },  
+  data() {
+    return {
+      drawer: null,
+      items: [{
+          title: 'Home',
+          icon: 'mdi-home',
+          path: '/'
+        },
+        {
+          title: 'Travel',
+          icon: ' mdi-image-album',
+          path: '/travel'
+        },
+        {
+          title: 'Contact',
+          icon: 'mdi-account-supervisor-circle'
+        },
+        {
+          title: 'Login',
+          icon: 'mdi-login-variant',
           path: '/login'
-        })
-      },
-      logout() {
-        if (this.$session.exists()) {
-          this.$session.destroy()
-        }
-        this.$store.dispatch('logout')
-      },
-      userpage() {
-        this.$router.push({
-          path: '/profiles'
-        })
+        },
+      ],
+    }
+  },
+  methods: {
+    login() {
+      this.$router.push({
+        path: '/login'
+      })
+    },
+    logout() {
+      if (this.$session.exists()) {
+        this.$session.destroy()
       }
+      this.$store.dispatch('logout')
+      this.$router.push({
+        path: '/'
+      })
+    },
+    userpage() {
+      this.$router.push({
+        path: '/profiles'
+      })
     }
   }
+}
 </script>
 
 <style lang="scss" scoped>

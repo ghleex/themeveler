@@ -10,8 +10,11 @@ import axios from 'axios'
 // import io from 'socket.io-client' // socket chat
 
 require('dotenv').config()
+
 Vue.config.productionTip = false
 axios.defaults.baseURL = process.env.VUE_APP_IP
+// axios.defaults.baseURL = 'http://localhost:8000/api'
+// axios.defaults.baseURL = 'https://k02b1031.p.ssafy.io:8000/api'
 var options = {
   persist: true
 }
