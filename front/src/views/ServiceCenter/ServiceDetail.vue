@@ -32,7 +32,7 @@
           </v-textarea>
         </div>
         <div class="service-comment-submitBtn-box">
-          <v-btn color="#2c3e50" :disabled="!valid" class="service-comment-submitBtn">
+          <v-btn color="#2c3e50" :disabled="!valid" class="service-comment-submitBtn" @click="commentSubmit()">
             작성<i class="fas fa-comment ml-1"></i>
           </v-btn>
         </div>
@@ -40,7 +40,7 @@
     </div>
     <div class="comment-header-bottom"></div>
     <div>
-      <li v-for="comment in commentList" :key="comment.id">{{ comment.writer_id}}- {{ comment.content }}</li>
+      <li v-for="comment in commentList" :key="comment.id">{{ comment.writer_id }}- {{ comment.content }}</li>
     </div>
   </div>
 </template>
@@ -94,9 +94,29 @@ export default {
       })
     },
     checkLen() {
-      var letterLength = this.strLen.length;
+      var letterLength = this.strLen.length
       this.resultRemian = 0
       this.resultRemian = this.remain - letterLength
+    },
+    commentSubmit() {
+      const requestHeader = this.$store.getters.requestHeader
+      axios.post(`/articles/manager_reply/${this.serviceId}/`, this.strLen, requestHeader)
+        .then(response => {
+          console.log(response.data)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
+    commentUpdate(commentId) {
+      const requestHeader = this.$store.getters.requestHeader
+      axios.put(`/articles/manager_reply/${this.serviceId}/${commentId}/`, this.strLen, requestHeader)
+        .then(response => {
+          console.log(response.data)
+        })
+        .catch(err => {
+          console.log(err)
+        })
     }
   },
   mounted() {
@@ -110,13 +130,14 @@ export default {
       .catch(err => {
         console.log(err)
       })
-    // axios.get(`/articles/${this.serviceId}/comment/`, requestHeader)
-    //   .then(response => {
-    //     this.commentData = response.data
-    //   })
-    //   .catch(err => {
-    //     console.log(err)
-    //   })
+    axios.get(`/articles/cv/${this.serviceId}/`, requestHeader)
+      .then(response => {
+        console.log(response.data)
+        this.commentList = response.data
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
 }
 </script>
