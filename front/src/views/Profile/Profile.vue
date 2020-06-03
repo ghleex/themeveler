@@ -30,7 +30,6 @@
           <v-card>
             <h5 class="card-title">방문했던 장소
               <v-chip class="ma-2 px-2" small color="blue" text-color="white">{{ itemsDests.length }}</v-chip>
-              <!-- <v-badge color="blue" content="5" inline="true"></v-badge> -->
               <v-btn @click="updateDest">수정</v-btn>
             </h5>
             <v-divider></v-divider>
@@ -58,8 +57,8 @@
 </template>
 
 <script>
-import Drawer from "@/components/Drawer.vue"
-import axios from "axios"
+import axios from 'axios'
+import Drawer from '@/components/Drawer.vue'
 
 export default {
   name: "Profile",
@@ -68,8 +67,8 @@ export default {
   },
   data() {
     return {
-      itemsDests: [],
       itemsThemes: [],
+      itemsDests: [],
       checked_list: []
     }
   },
@@ -96,27 +95,28 @@ export default {
       console.log(data)
       axios.put('/travels/visited_dests/', data, this.$store.getters.requestHeader)
         .then(() => {
-          alert('수정되었습니다.')
+          alert("수정되었습니다.")
         })
         .catch(err => {
           console.log(err)
-          alert('수정이 실패하였습니다. 잠시후 다시 시도해주세요.')
+          alert("수정이 실패하였습니다. 잠시후 다시 시도해주세요.")
         })
     }
   },
   mounted() {
-    axios.get('/travels/visited_dests/', this.$store.getters.requestHeader)
-      .then(res => {
-        this.itemsDests = res.data.visited_dests
+    const requestHeader = this.$store.getters.requestHeader
+    axios.get('/travels/visited_dests/', requestHeader)
+      .then(response => {
+        this.itemsDests = response.data.visited_dests
       })
       .catch(err => {
         console.log(err)
       })
     
-     axios.get('/travels/visited_themes/', this.$store.getters.requestHeader)
-      .then(res => {
-        console.log(res)
-        this.itemsThemes = res.data.favorite_themes
+    axios.get('/travels/visited_themes/', requestHeader)
+      .then(response => {
+        console.log(response)
+        this.itemsThemes = response.data.favorite_themes
       })
       .catch(err => {
         console.log(err)
