@@ -9,16 +9,13 @@
         <v-col cols="12" md="6">
           <v-card>
             <h5 class="card-title">좋아요 누른 장소
-              <v-chip class="ma-2 px-2" small color="blue" text-color="white">5</v-chip>
+              <v-chip class="ma-2 px-2" small color="blue" text-color="white">{{ itemsThemes.length }}</v-chip>
             </h5>
             <v-divider></v-divider>
             <v-list>
-              <v-list-item v-for="item in items" :key="item.title" link>
-                <v-list-item-avatar>
-                  <v-icon :class="[item.iconClass]">{{ item.icon }}</v-icon>
-                </v-list-item-avatar>
+              <v-list-item v-for="item in itemsThemes" :key="item.name">
                 <v-list-item-content>
-                  <v-list-item-title>{{ item.title }}</v-list-item-title>
+                  <v-list-item-title>{{ item.name }}</v-list-item-title>
                   <!-- <v-list-item-subtitle>{{ item.subtitle }}</v-list-item-subtitle> -->
                 </v-list-item-content>
                 <v-list-item-action>
@@ -32,18 +29,20 @@
         <v-col cols="12" md="6">
           <v-card>
             <h5 class="card-title">방문했던 장소
-              <v-chip class="ma-2 px-2" small color="blue" text-color="white">5</v-chip>
-              <!-- <v-badge color="blue" content="5" inline="true"></v-badge> -->
+              <v-chip class="ma-2 px-2" small color="blue" text-color="white">{{ itemsDests.length }}</v-chip>
+              <v-btn @click="updateDest">수정</v-btn>
             </h5>
             <v-divider></v-divider>
             <v-list>
-              <v-list-item v-for="item in items" :key="item.title" link>
+              <v-list-item v-for="item in itemsDests" :key="item.name" @click="updateCheck(item)" :aria-selected="false">
                 <v-list-item-avatar>
-                  <v-icon :class="[item.iconClass]">{{ item.icon }}</v-icon>
+                  <v-checkbox v-model="checked_list" :value="item.id"></v-checkbox>
                 </v-list-item-avatar>
                 <v-list-item-content>
-                  <v-list-item-title>{{ item.title }}</v-list-item-title>
-                  <v-list-item-subtitle>{{ item.subtitle }}</v-list-item-subtitle>
+                  <v-list-item-title>{{ item.name }}</v-list-item-title>
+                  <v-list-item-subtitle>
+                    <input type="date" v-model="item.visited_at" style="z-index: 0;">
+                  </v-list-item-subtitle>
                 </v-list-item-content>
                 <v-list-item-action>
                   <v-btn icon :to="'/spot/'+item.id"><v-icon color="grey lighten-1">mdi-information</v-icon></v-btn>
@@ -58,6 +57,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import Drawer from '@/components/Drawer.vue'
 
 export default {
@@ -67,14 +67,60 @@ export default {
   },
   data() {
     return {
-      items: [
-        { id: 1, icon: 'mdi-heart-outline', iconClass: 'orange lighten-1 white--text', title: '경복궁', subtitle: 'Jan 9, 2020' },
-        { id: 2, icon: 'mdi-heart-outline', iconClass: 'purple lighten-1 white--text', title: '창경궁', subtitle: 'Jan 17, 2020' },
-        { id: 3, icon: 'mdi-heart', iconClass: 'red lighten-1 white--text', title: '명동', subtitle: 'Jan 28, 2020' },
-        { id: 4, icon: 'mdi-heart', iconClass: 'blue white--text', title: '인사동', subtitle: 'Jan 28, 2020' },
-        { id: 5, icon: 'mdi-heart', iconClass: 'amber white--text', title: '청계천', subtitle: 'Jan 28, 2020' },
-      ]
+      itemsThemes: [],
+      itemsDests: [],
+      checked_list: []
     }
+  },
+  methods: {
+    updateCheck(item) {
+      if (this.checked_list.indexOf(item.id) > -1) {
+        this.checked_list.splice(this.checked_list.indexOf(item.id), 1)
+      } else {
+        this.checked_list.push(item.id)
+      }
+    },
+    updateDest() {
+      const visited_at = []
+      this.itemsDests.forEach(value => {
+        if (this.checked_list.indexOf(value.id) > -1) {
+          visited_at.push(value.visited_at)
+        }
+      })
+      this.checked_list.sort()
+      let data = {
+        updated_dests: this.checked_list.join(', '),
+        update_dates: visited_at.join(', ')
+      }
+      console.log(data)
+      axios.put('/travels/visited_dests/', data, this.$store.getters.requestHeader)
+        .then(() => {
+          alert("수정되었습니다.")
+        })
+        .catch(err => {
+          console.log(err)
+          alert("수정이 실패하였습니다. 잠시후 다시 시도해주세요.")
+        })
+    }
+  },
+  mounted() {
+    const requestHeader = this.$store.getters.requestHeader
+    axios.get('/travels/visited_dests/', requestHeader)
+      .then(response => {
+        this.itemsDests = response.data.visited_dests
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    
+    axios.get('/travels/visited_themes/', requestHeader)
+      .then(response => {
+        console.log(response)
+        this.itemsThemes = response.data.favorite_themes
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
 }
 </script>

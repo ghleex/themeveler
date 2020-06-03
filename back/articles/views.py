@@ -321,7 +321,7 @@ class ManagersReplyChange(APIView):
             * manager: 관리자
             * reply: 답변
     """
-    def put(self, request, reply_pk, format=None):
+    def put(self, request, voice_pk, reply_pk, format=None):
         reply = get_object_or_404(ManagersReply, pk=reply_pk)
         try:
             requests = request.data

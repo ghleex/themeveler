@@ -57,7 +57,8 @@ export default {
         { text: "작성자", value: "writer_nickname", sortable: false },
         { text: "등록일", value: "writed_at" }
       ],
-      noticeData: []
+      noticeData: [],
+      category: []
     }
   },
   methods: {
@@ -82,6 +83,15 @@ export default {
       .then(response => {
         console.log(response.data)
         this.noticeData = response.data["notice"]
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    const requestHeader = this.$store.getters.requestHeader
+    axios.get('/articles/n_category/', requestHeader)
+      .then(response => {
+        console.log(response.data)
+        this.category = response.data["data"]
       })
       .catch(err => {
         console.log(err)
