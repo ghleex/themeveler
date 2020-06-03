@@ -40,7 +40,9 @@
     </div>
     <div class="comment-header-bottom"></div>
     <div>
-      <li v-for="comment in commentList" :key="comment.id">{{ comment.writer_id }}- {{ comment.content }}</li>
+      <li v-for="comment in commentList" :key="comment.id">{{ comment.writer_id }}- {{ comment.content }}
+        <v-icon @click="commentUpdate(comment.id)">mdi-pen</v-icon>
+      </li>
     </div>
   </div>
 </template>
@@ -69,7 +71,7 @@ export default {
     deleteData() {
       if (this.serviceData.request_user_id === this.$store.getters.user_id) {
         const requestHeader = this.$store.getters.requestHeader
-        axios.delete(`/articles/cv/${this.userId}/${this.serviceId}/`, requestHeader)
+        axios.delete(`/articles/voice/${this.serviceId}/`, requestHeader)
           .then(
             this.$router.push({
               path: '/service'
@@ -99,45 +101,66 @@ export default {
       this.resultRemian = this.remain - letterLength
     },
     commentSubmit() {
-      const requestHeader = this.$store.getters.requestHeader
-      axios.post(`/articles/manager_reply/${this.serviceId}/`, this.strLen, requestHeader)
-        .then(response => {
-          console.log(response.data)
-        })
-        .catch(err => {
-          console.log(err)
-        })
+      console.log(this.$session.get("staff"))
+      if (this.$session.get("staff") === true) {
+        var commentForms = {
+          "content": this.strLen,
+          "manager": this.$store.getters.user_id,
+          "voice": this.serviceId
+        }
+        const requestHeader = this.$store.getters.requestHeader
+        axios.post(`/articles/manager_reply/${this.serviceId}/`, commentForms, requestHeader)
+          .then(response => {
+            console.log(response.data)
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      }
+      else {
+        alert("권한이 없습니다.")
+      }
     },
-    commentUpdate(commentId) {
-      const requestHeader = this.$store.getters.requestHeader
-      axios.put(`/articles/manager_reply/${this.serviceId}/${commentId}/`, this.strLen, requestHeader)
-        .then(response => {
-          console.log(response.data)
-        })
-        .catch(err => {
-          console.log(err)
-        })
+    commentUpdate(commentId) {      
+      if (this.$session.get("staff") === true) {
+        var commentForms = {
+          "content": this.strLen,
+          "manager": this.$store.getters.user_id,
+          "voice": this.serviceId
+        }
+        const requestHeader = this.$store.getters.requestHeader
+        axios.put(`/articles/manager_reply/${this.serviceId}/${commentId}/`, commentForms, requestHeader)
+          .then(response => {
+            console.log(response.data)
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      }
+      else {
+        alert("권한이 없습니다.")
+      }
     }
   },
   mounted() {
     this.serviceId = this.$route.params.serviceId
     this.userId = this.$store.getters.user_id
     const requestHeader = this.$store.getters.requestHeader
-    axios.get(`/articles/cv/${this.userId}/${this.serviceId}/`, requestHeader)
+    axios.get(`/articles/voice/${this.serviceId}/`, requestHeader)
       .then(response => {
         this.serviceData = response.data
       })
       .catch(err => {
         console.log(err)
       })
-    axios.get(`/articles/cv/${this.serviceId}/`, requestHeader)
-      .then(response => {
-        console.log(response.data)
-        this.commentList = response.data
-      })
-      .catch(err => {
-        console.log(err)
-      })
+    // axios.get(`/articles/cv/${this.serviceId}/`, requestHeader)
+    //   .then(response => {
+    //     console.log(response.data)
+    //     this.commentList = response.data
+    //   })
+    //   .catch(err => {
+    //     console.log(err)
+    //   })
   }
 }
 </script>
