@@ -116,12 +116,7 @@
       }
     },
     mounted() {
-      const token = this.$session.get("jwt")
-      const requestHeader = {
-        headers: {
-          Authorization: "JWT " + token
-        }
-      }
+      const requestHeader = this.$store.getters.requestHeader
       axios.get("/travels/all_theme/", requestHeader)
         .then(res => {
           this.themeArr = res.data.all_theme
@@ -143,16 +138,13 @@
 
       axios.get(`/travels/like/${this.themeId}`, requestHeader)
         .then(res => {
+          console.log(res.data)
           this.likeCount = res.data.like_users_count
           this.likeUsers = res.data.like_users
         })
-
-      axios.get(`/travels/like/${this.themeId}`, this.themeId, requestHeader)
-        .then(res => {
-          console.log(res.data)
+        .catch(err => {
+          console.log(err.response)
         })
-        .catch(err =>
-        console.log(err.response))
     }
   }
 </script>
