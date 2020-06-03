@@ -188,13 +188,13 @@ class CustomersVoiceChange(APIView):
         return get_object_or_404(CustomersVoice, pk=voice_pk)
 
     def get(self, request, voice_pk, format=None):
-            request_user = get_user(request.headers['Authorization'].split(' '))
-            voice = self.get_voice(voice_pk)
-        # try:
+        request_user = get_user(request.headers['Authorization'].split(' '))
+        voice = self.get_voice(voice_pk)
+        try:
             if voice.request_user.pk == request_user.pk or request_user.is_staff:
                 serializer_v = CustomersVoiceSerializer(voice).data
                 req_user = serializer_v['request_user']
-                replys = CustomersVoice.voices.all()
+                replys = voice.manager_reply.all()
                 reply = [ManagerReplySerializer(r).data for r in replys]
                 data = {
                     'id': serializer_v['id'],
@@ -212,8 +212,8 @@ class CustomersVoiceChange(APIView):
                 return Response(data, status=status.HTTP_200_OK)
             else:
                 return Response(access_message, status=status.HTTP_401_UNAUTHORIZED)
-        # except:
-        #     return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
+        except:
+            return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
     
     def put(self, request, voice_pk, format=None):
         request_user = get_user(request.headers['Authorization'].split(' '))
