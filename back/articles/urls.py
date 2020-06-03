@@ -7,7 +7,7 @@ urlpatterns = [
     path('v_category/<int:category_pk>/', views.ChangeVoiceCategory.as_view()),
     path('customer/<int:user_pk>/', views.CustomersVoices.as_view()),
     path('voice/<int:voice_pk>/', views.CustomersVoiceChange.as_view()),
-    path('manager_reply/<int:user_pk>/', views.ManagersReplying.as_view()),
+    path('manager_reply/<int:voice_pk>/', views.ManagersReplying.as_view()),
     path('manager_reply/<int:voice_pk>/<int:reply_pk>/', views.ManagersReplyChange.as_view()),
     path('n_category/', views.SetNoticeCategory.as_view()),
     path('n_category/<int:category_pk>/', views.ChangeNoticeCategory.as_view()),
