@@ -35,10 +35,19 @@ class Destination(models.Model):
     longitude = models.CharField(max_length=100) # 경도
     created_at = models.DateTimeField(auto_now_add=True) # date is updated just created
     updated_at = models.DateTimeField(auto_now=True) # date is updated when created and updated
-    visitors = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='dests', blank=True) # User.dests.all()
+    visitors = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='dests', blank=True, through='DestinationVisitors') # User.dests.all()
     
     def __str__(self):
         return self.name
+
+
+class DestinationVisitors(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    destination = models.ForeignKey(Destination, on_delete=models.CASCADE)
+    visited_at = models.DateField(blank=True, null=True)
+
+    class Meta:
+        db_table = 'travels_destination_visitors'
 
 
 class Message(models.Model):
