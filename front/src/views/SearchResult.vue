@@ -49,7 +49,7 @@ export default {
         .then(response => {
           console.log(response.data)
 					this.themeData = response.data.theme
-					this.placeData = response.data.dest
+          this.placeData = response.data.dest
         })
     }
 	},
