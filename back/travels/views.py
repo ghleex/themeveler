@@ -11,7 +11,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from drf_yasg.utils import swagger_auto_schema
 from decouple import config
 from .serializers import MessageSerializer, MessageViewSerializer, ThemeSerializer, DestinationSerializer, ContentPageSerializer
-from .models import Message, Theme, Destination, DestContent, ContentPage
+from .models import Message, Theme, Destination, DestContent, ContentPage, DestinationVisitors
 from accounts.serializers import UserNicknameSerializer
 
 User = get_user_model()
@@ -96,10 +96,13 @@ class VisitedDest(APIView):
         user = get_user(request.headers['Authorization'].split(' '))
         try:
             dests = user.dests.all()
-            dest = [DestinationSerializer(d).data for d in dests]            
+            dest = []
+            for d in dests:
+                dest_data = DestinationSerializer(d).data
+                dest_data.update({'visited_at': DestinationVisitors.objects.get(user_id=user.id, destination_id=dest_data.get('id')).visited_at})
+                dest.append(dest_data)
             fav_dests = user.favorite_destinations.all()
             fav_dest = [DestinationSerializer(fd).data for fd in fav_dests]
-
             data = {                
                 'visited_dests': dest,
                 'favorite_dests': fav_dest,
@@ -127,6 +130,18 @@ class VisitedDest(APIView):
         except:
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
+    def put(self, request, format=None):
+        user = get_user(request.headers['Authorization'].split(' '))
+        dests = user.dests.all()
+        req_dests = request.data.get('updated_dests').split(', ')
+        update_dates = request.data.get('update_dates').split(', ')
+        for idx in range(len(req_dests)):
+            rd = DestinationVisitors.objects.get(user_id=user.id, destination_id=req_dests[idx])
+            rd.visited_at = update_dates[idx]
+            rd.save()
+            return Response({'message':['사용자가 방문한 장소에 날짜를 업데이트하였습니다.']}, status=status.HTTP_200_OK)
+        return Response({'message':['사용자가 방문한 장소에 날짜를 업데이트하는대 실패하였습니다.']}, status=status.HTTP_400_BAD_REQUEST)
+
 
 # @permission_classes((IsAuthenticated,))
 class Like(APIView):
@@ -145,7 +160,7 @@ class Like(APIView):
             users = [UserNicknameSerializer(l).data for l in likes]
             request_user = get_user(request.headers['Authorization'].split(' '))
             data = {
-                'did_user_like': True if theme.theme_like_users.filter(pk=request_user) else False,
+                'did_user_like': True if theme.theme_like_users.filter(pk=request_user.pk) else False,
                 'like_users_count': theme.theme_like_users.count(),
                 'like_users': users,
             }

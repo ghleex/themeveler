@@ -38,7 +38,7 @@
     // 클릭한 위치의 위도는 37.56331391371145 이고, 경도는 126.97410887249983 입니다
         new kakao.maps.LatLng(37.56432352687426, 126.9764854455257), // 시청역 12번 출구
         new kakao.maps.LatLng(37.56553504400646, 126.97491740238583), // 덕수궁
-        new kakao.maps.LatLng(37.56769692086134, 126.97260756300273), // 고종의 길
+        //new kakao.maps.LatLng(37.56769692086134, 126.97260756300273), // 고종의 길
         new kakao.maps.LatLng(37.56814718063462, 126.97159998426685), // 구 러시아 공사관
 
         new kakao.maps.LatLng(37.56549816531884, 126.97123878657418), // 이화 여고
@@ -49,8 +49,8 @@
     var polyline = new kakao.maps.Polyline({
         path: linePath, // 선을 구성하는 좌표배열 입니다
         strokeWeight: 5, // 선의 두께 입니다
-        strokeColor: '#FFAE00', // 선의 색깔입니다
-        strokeOpacity: 0.7, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+        strokeColor: '#209CEE', // 선의 색깔입니다
+        strokeOpacity: 0.9, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
         strokeStyle: 'solid' // 선의 스타일입니다
     });
 
@@ -63,10 +63,10 @@
         title: '덕수궁', 
         latlng: new kakao.maps.LatLng(37.56553504400646, 126.97491740238583)
     },
-    {
-        title: '고종의 길', 
-        latlng: new kakao.maps.LatLng(37.56769692086134, 126.97260756300273)
-    },
+    //{
+      //  title: '고종의 길', 
+      //  latlng: new kakao.maps.LatLng(37.56769692086134, 126.97260756300273)
+    //},
     {
         title: '구 러시아 공사관',
         latlng: new kakao.maps.LatLng(37.56814718063462, 126.97159998426685)
@@ -89,7 +89,7 @@
             var imageSize = new kakao.maps.Size(24, 35); 
             
             // 마커 이미지를 생성합니다    
-            var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize); 
+            var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
             
             // 마커를 생성합니다
             var marker = new kakao.maps.Marker({

@@ -92,7 +92,6 @@
         like: false,
         destination: "",
         likeCount: 0,
-        likeUsers: [],
       }
     },
     methods: {
@@ -135,15 +134,19 @@
           this.destinations = res.data.destinations
           // console.log(res.data)
         })
+        // .catch(err => {
+        //   console.log(err.response)
+        // })
 
       axios.get(`/travels/like/${this.themeId}`, requestHeader)
         .then(res => {
-          console.log(res.data)
+          console.log(res)
           this.likeCount = res.data.like_users_count
-          this.likeUsers = res.data.like_users
+          this.like = res.data.did_user_like
         })
         .catch(err => {
           console.log(err.response)
+
         })
     }
   }

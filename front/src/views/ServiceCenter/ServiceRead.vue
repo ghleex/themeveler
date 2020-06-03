@@ -81,7 +81,7 @@ export default {
   mounted() {
     this.userId = this.$store.getters.user_id
     const requestHeader = this.$store.getters.requestHeader
-    axios.get(`/articles/cv/${this.userId}/`, requestHeader)
+    axios.get(`/articles/customer/${this.userId}/`, requestHeader)
       .then(response => {
         console.log(response.data)
         this.serviceData = response.data["voice"]
