@@ -176,6 +176,10 @@ export default {
     }
   }
 
+  #navbar a {
+    text-decoration: none;
+  }
+
   .navbar_box>img {
     width: 100%;
   }
