@@ -72,7 +72,7 @@ export default {
         // // this.writed_at = `${year}-${month}-${date} | ${hour}:${min}`
         // this.writed_at = `${year}-${month}-${date}`
         const requestHeader = this.$store.getters.requestHeader
-        axios.post(`/articles/cv/${this.userId}/`, serviceCreateForms, requestHeader)
+        axios.post(`/articles/customer/${this.userId}/`, serviceCreateForms, requestHeader)
           .then(response => {
             console.log(response.data)
             this.$router.push({
@@ -100,7 +100,7 @@ export default {
           "is_fixed": this.is_fixed
         }
         const requestHeader = this.$store.getters.requestHeader
-        axios.put(`/articles/cv/${this.userId}/${this.serviceId}/`, serviceUpdateForms, requestHeader)
+        axios.put(`/articles/voice/${this.serviceId}/`, serviceUpdateForms, requestHeader)
           .then(response => {
             console.log(response.data)
             this.$router.push({
@@ -131,7 +131,7 @@ export default {
     this.serviceId = this.$route.params.serviceId
     const requestHeader = this.$store.getters.requestHeader
     if (this.serviceId !== undefined) {
-      axios.get(`/articles/cv/${this.userId}/${this.serviceId}/`, requestHeader)
+      axios.get(`/articles/voice/${this.serviceId}/`, requestHeader)
         .then(response => {
           if (response.data.request_user_id === this.$store.getters.user_id) {
             if (response.data.category === 1) {
