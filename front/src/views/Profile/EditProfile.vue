@@ -104,7 +104,7 @@ export default {
       }
       else {
         this.$router.push({
-          path: '/profile'
+          path: '/profiles'
         })
       }
     },
@@ -115,7 +115,8 @@ export default {
         .then(() => {
           alert("회원 정보가 성공적으로 변경되었습니다.")
           this.$session.set("nickname", this.nickname)
-          this.$router.push('/profile')
+          this.$store.dispatch("changeNickname", this.nickname)
+          this.$router.push('/profiles')
         })
         .catch(err =>{
           console.log(err)
@@ -124,7 +125,7 @@ export default {
     },
     updatecancel () {
       this.$router.push({
-        path: '/profile'
+        path: '/profiless'
       })
     }
   },

@@ -28,6 +28,7 @@ import axios from "axios"
           this.$session.set("nickname", this.$route.params.nickname)
           this.$store.dispatch("login", token)
           this.$store.commit("setToken", token)
+          this.$store.dispatch("changeNickname", this.$route.params.nickname)
           this.$router.push({name:'home'})
         })
         .catch(error => {

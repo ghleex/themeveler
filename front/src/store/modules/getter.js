@@ -6,5 +6,13 @@ export default {
     catch {
       return null
     }
-  }
+  },
+  getNickname() {
+    try {
+      return JSON.parse(localStorage.getItem("vue-session-key")).nickname
+    }
+    catch {
+      return null
+    }
+  },
 }

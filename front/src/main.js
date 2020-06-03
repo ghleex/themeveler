@@ -11,12 +11,12 @@ import axios from 'axios'
 
 require('dotenv').config()
 Vue.config.productionTip = false
-axios.defaults.baseURL = 'http://localhost:8000/api'
+axios.defaults.baseURL = process.env.VUE_APP_IP
 var options = {
   persist: true
 }
 
-// const socket = io('http://localhost:3000/')
+// const socket = io(process.env.VUE_APP_SOCKET)
 // Vue.prototype.$socket = socket
 
 Vue.use(VueSession, options)
