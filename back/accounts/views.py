@@ -47,6 +47,9 @@ suffix = [
 
 email_check = re.compile('^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$')
 
+back_url = config('BACK_URL')
+front_url = config('FRONT_URL')
+
 def check_request(request, check_list):
     data = {}
     for form in check_list:
@@ -347,7 +350,7 @@ class KakaoSignInView(APIView):
 
         """
         client_id = config('KAKAO_REST_API_KEY')
-        redirect_uri = 'http://127.0.0.1:8000/api/accounts/social/kakao/callback/'
+        redirect_uri = f'{back_url}/api/accounts/social/kakao/callback/'
         url = f'https://kauth.kakao.com/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&response_type=code'
         return redirect(url)
 
@@ -363,7 +366,7 @@ class KakaoSignInCallbackView(APIView):
         try:
             code = request.GET.get('code')                                
             client_id = config('KAKAO_REST_API_KEY')
-            redirect_uri = 'http://127.0.0.1:8000/api/accounts/social/kakao/callback/'
+            redirect_uri = f'{back_url}/api/accounts/social/kakao/callback/'
             url = f'https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id={client_id}&redirect_uri={redirect_uri}&code={code}'
             token_request = requests.get(url)
             token_json = token_request.json()                                 
@@ -401,7 +404,7 @@ class KakaoSignInCallbackView(APIView):
                 user.anonymous = choice(prefix) + choice(suffix) + str(user.id)
                 user.save()
         jwt = encoder(payload(user))
-        return redirect(f'http://localhost:8080/checktoken/{user.nickname}/{jwt}/') 
+        return redirect(f'{front_url}/checktoken/{user.nickname}/{jwt}/') 
 
 
 @permission_classes((AllowAny, ))
@@ -416,7 +419,7 @@ class GoogleSignInView(APIView):
         base = 'https://accounts.google.com/o/oauth2/v2/auth?'
         client_id = config('GOOGLE_APP_ID')
         urls = [
-            'redirect_uri=http://127.0.0.1:8000/api/accounts/social/google/callback/&',
+            f'redirect_uri={back_url}/api/accounts/social/google/callback/&',
             'prompt=consent&response_type=code&',
             f'client_id={client_id}&'
             'scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&',
@@ -442,7 +445,7 @@ class GoogleSignInCallbackView(APIView):
             'code': f'{google_access_code}',
             'client_id': config('GOOGLE_APP_ID'),
             'client_secret': config('GOOGLE_SECRET_KEY'),
-            'redirect_uri': 'http://127.0.0.1:8000/api/accounts/social/google/callback/',
+            'redirect_uri': f'{back_url}/api/accounts/social/google/callback/',
             'grant_type': 'authorization_code',
         }
         google_response = requests.post(url, headers=headers, data=body)
@@ -468,7 +471,7 @@ class GoogleSignInCallbackView(APIView):
                 user.anonymous = choice(prefix) + choice(suffix) + str(user.id)
                 user.save()
         jwt = encoder(payload(user))
-        return redirect(f'http://localhost:8080/checktoken/{user.nickname}/{jwt}/')
+        return redirect(f'{front_url}/checktoken/{user.nickname}/{jwt}/')
 
 
 @permission_classes((AllowAny, ))
