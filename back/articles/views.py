@@ -35,7 +35,7 @@ def get_user(token, format=None):
     return user
 
 
-@permission_classes((IsAdminUser,))
+@permission_classes((IsAuthenticated,))
 class SetVoiceCategory(APIView):
     """
         고객센터(관리자) - "요청 유형" 항목 조회/생성
@@ -51,17 +51,14 @@ class SetVoiceCategory(APIView):
     """
     def get(self, request, format=None):
         categories = VoiceCategory.objects.all()
-        category = [VoiceCategorySerializer(c).data for c in categories]
-        user = get_user(request.headers['Authorization'].split(' '))
-        if user.is_staff:
-            data = {
-                'data': category,
-            }
-            return Response(data, status=status.HTTP_200_OK)
-        else:
-            return Response(access_message, status=status.HTTP_401_UNAUTHORIZED)
+        serializer_c = VoiceCategorySerializer(categories, many=True)
+        return Response(serializer_c.data, status=status.HTTP_200_OK)
+
 
     def post(self, request, format=None):
+        user = get_user(request.headers['Authorization'].split(' '))
+        if not user.is_staff:
+            return Response(access_message, status=status.HTTP_401_UNAUTHORIZED)
         try:
             category = request.data.get('category')
             data = {
@@ -130,48 +127,12 @@ class CustomersVoices(APIView):
         request_user = get_user(request.headers['Authorization'].split(' '))
         if user_pk == request_user.pk and not request_user.is_staff:
             voices = CustomersVoice.objects.filter(request_user=user_pk).order_by('-created_at')
-            voice = []
-            for v in voices:
-                serializer_v = CustomersVoiceSerializer(v).data
-                writer = serializer_v['request_user']
-                vc = {
-                    'id': serializer_v['id'],
-                    'title': serializer_v['title'],
-                    'category': serializer_v['category'],
-                    'request_user_id': writer,
-                    'request_user_nickname': request_user.nickname,
-                    'created_at': serializer_v['created_at'],
-                    'updated_at': serializer_v['updated_at'],
-                    'manager': serializer_v['manager'],
-                    'is_fixed': serializer_v['is_fixed'],
-                }
-                voice.append(vc)
-            data = {
-                'voice': voice,
-            }
-            return Response(data, status=status.HTTP_200_OK)
+            serializer_v = CustomersVoiceSerializer(voices, many=True)
+            return Response(serializer_v.data, status=status.HTTP_200_OK)
         elif request_user.is_staff:
             voices = CustomersVoice.objects.all().order_by('-created_at')
-            voice = []
-            for v in voices:
-                serializer_v = CustomersVoiceSerializer(v).data
-                writer = serializer_v['request_user']
-                vc = {
-                    'id': serializer_v['id'],
-                    'title': serializer_v['title'],
-                    'category': serializer_v['category'],
-                    'request_user_id': writer,
-                    'request_user_nickname': str(User.objects.get(pk=writer).nickname),
-                    'created_at': serializer_v['created_at'],
-                    'updated_at': serializer_v['updated_at'],
-                    'manager': serializer_v['manager'],
-                    'is_fixed': serializer_v['is_fixed'],
-                }
-                voice.append(vc)
-            data = {
-                'voice': voice,
-            }
-            return Response(data, status=status.HTTP_200_OK)
+            serializer_v = CustomersVoiceSerializer(voices, many=True)
+            return Response(serializer_v.data, status=status.HTTP_200_OK)
         else:
             return Response(access_message, status=status.HTTP_403_FORBIDDEN)
             
@@ -214,23 +175,12 @@ class CustomersVoiceChange(APIView):
         voice = self.get_voice(voice_pk)
         try:
             if voice.request_user.pk == request_user.pk or request_user.is_staff:
-                serializer_v = CustomersVoiceSerializer(voice).data
+                serializer_v = CustomersVoiceSerializer(voice)
                 req_user = serializer_v['request_user']
                 replys = voice.manager_reply.all()
-                reply = [ManagerReplySerializer(r).data for r in replys]
-                data = {
-                    'id': serializer_v['id'],
-                    'title': serializer_v['title'],
-                    'content': serializer_v['content'],
-                    'category': serializer_v['category'],
-                    'request_user_id': req_user,
-                    'request_user_nickname': request_user.nickname,
-                    'created_at': serializer_v['created_at'],
-                    'updated_at': serializer_v['updated_at'],
-                    'manager': serializer_v['manager'],
-                    'is_fixed': serializer_v['is_fixed'],
-                    'reply': reply,
-                }
+                serializer_r = ManagerReplySerializer(replys, many=True)
+                data = serializer_v.data
+                data['replys'] = serializer_r.data
                 return Response(data, status=status.HTTP_200_OK)
             else:
                 return Response(access_message, status=status.HTTP_401_UNAUTHORIZED)
@@ -354,13 +304,10 @@ class SetNoticeCategory(APIView):
     """
     def get(self, request, format=None):
         categories = NoticeCategory.objects.all()
-        category = [NoticeCategorySerializer(c).data for c in categories]
+        serializer_c = NoticeCategorySerializer(categories, many=True)
         user = get_user(request.headers['Authorization'].split(' '))
         if user.is_staff:
-            data = {
-                'data': category,
-            }
-            return Response(data, status=status.HTTP_200_OK)
+            return Response(serializer_c.data, status=status.HTTP_200_OK)
         else:
             return Response(access_message, status=status.HTTP_401_UNAUTHORIZED)
 
@@ -512,20 +459,8 @@ class ThemeNoticesChange(APIView):
     @permission_classes((IsAuthenticated,))
     def get(self, request, notice_pk, format=None):
         notice = self.get_notices(notice_pk)
-        serializer_n = NoticeSerializer(notice).data
-        writer = serializer_n['writer']
-        data = {
-            'id': serializer_n['id'],
-            'title': serializer_n['title'],
-            'content': serializer_n['content'],
-            'writer_id': writer,
-            'writer_nickname': str(User.objects.get(pk=writer).nickname),
-            'writed_at': serializer_n['writed_at'],
-            'updated_at': serializer_n['updated_at'],
-            'theme': serializer_n['theme'],
-            'isNoticeAll': serializer_n['isNoticeAll'],
-        }
-        return Response(data, status=status.HTTP_200_OK)
+        serializer_n = NoticeSerializer(notice)
+        return Response(serializer_n.data, status=status.HTTP_200_OK)
     
     @permission_classes((IsAdminUser,))
     def put(self, request, notice_pk, format=None):
@@ -591,9 +526,8 @@ class Search(APIView):
             dest_results = Destination.objects.filter(
                 Q(name__contains=query)
             ).distinct()
-            result['theme'] = [ThemeSerializer(t_result).data for t_result in theme_results]
-            result['dest'] = [DestinationSerializer(d_result).data for d_result in dest_results]
-                
+            result['theme'] = ThemeSerializer(theme_results, many=True).data
+            result['dest'] = DestinationSerializer(dest_results, many=True).data
             return Response(result, status=status.HTTP_200_OK)
         except:
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
@@ -610,11 +544,8 @@ class CommentSelf(APIView):
         user = get_user(request.headers['Authorization'].split(' '))
         try:
             comments = Comment.objects.filter(writer=user.pk).order_by('-writed_at')
-            comment = [CommentSerializer(c).data for c in comments]
-            data = {
-                'comments': comment,
-            }
-            return Response(data, status=status.HTTP_200_OK)
+            serializer_c = CommentSerializer(comments, many=True)
+            return Response(serializer_c.data, status=status.HTTP_200_OK)
         except:
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
@@ -633,11 +564,8 @@ class Comments(APIView):
         dest = self.get_dest(dest_pk)
         try:
             comments = dest.destination_comments.all().order_by('-writed_at')
-            comment = [CommentSerializer(c).data for c in comments]
-            data = {
-                'comments': comment,
-            }
-            return Response(data, status=status.HTTP_200_OK)
+            serializer_c = CommentSerializer(comments, many=True)
+            return Response(serializer_c.data, status=status.HTTP_200_OK)
         except:
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
@@ -716,11 +644,8 @@ class ReCommentSelf(APIView):
         user = get_user(request.headers['Authorization'].split(' '))
         try:
             recomments = ReComment.objects.filter(writer=user.pk).order_by('-writed_at')
-            recomment = [ReCommentSerializer(rc).data for rc in recomments]
-            data = {
-                'recomments': recomment,
-            }
-            return Response(data, status=status.HTTP_200_OK)
+            serializer_r = ReCommentSerializer(recomments, many=True)
+            return Response(serializer_r.data, status=status.HTTP_200_OK)
         except:
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
@@ -739,11 +664,8 @@ class ReComments(APIView):
         comment = self.get_comment(comment_pk)
         try:
             recomments = comment.recomments_original.all().order_by('-writed_at')
-            recomment = [ReCommentSerializer(rc).data for rc in recomments]
-            data = {
-                'recomments': recomment,
-            }
-            return Response(data, status=status.HTTP_200_OK)
+            serializer_r = ReCommentSerializer(recomments, many=True)
+            return Response(serializer_r.data, status=status.HTTP_200_OK)
         except:
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
     
