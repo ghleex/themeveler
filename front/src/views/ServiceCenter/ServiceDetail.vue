@@ -5,13 +5,13 @@
     </div>
     <div class="service-body">
       <div class="service-body-header">
-        <div class="service-detail-title">{{serviceData.title}}</div>
+        <div class="service-detail-title">{{ serviceData.title }}</div>
       </div>
       <div class="body">
-        <p class="service-writer"><i class="fas fa-user"></i> {{serviceData.request_user_nickname}}</p>
+        <p class="service-writer"><i class="fas fa-user"></i> {{ serviceData.request_user_nickname }}</p>
         <p class="service-created-date"><i class="far fa-clock"></i> {{ serviceData.created_at | moment("YYYY-MM-DD LT") }}</p>
       </div>
-      <div class="service-content mt-3">{{serviceData.content}}</div><br>
+      <div class="service-content mt-3">{{ serviceData.content }}</div><br>
       <div class="service-detail-btn mt-12">
         <v-btn color="warning" class="text-light mr-4 btn-detail" @click="updateData">수정 <i class="fas fa-edit ml-1"></i></v-btn>
         <v-btn color="error" class="mr-4 btn-detail" @click="deleteData">삭제 <i class="fas fa-minus-square ml-1"></i></v-btn>
@@ -82,11 +82,11 @@ export default {
       if (this.serviceData.request_user_id === this.$store.getters.user_id) {
         const requestHeader = this.$store.getters.requestHeader
         axios.delete(`/articles/voice/${this.serviceId}/`, requestHeader)
-          .then(
+          .then(() => {
             this.$router.push({
               path: '/service'
             })
-          )
+          })
           .catch(err => {
             console.log(err)
           })
