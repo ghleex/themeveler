@@ -21,7 +21,9 @@ class DestinationSerializer(serializers.ModelSerializer):
         }
     
     def get_theme(self, obj):
-        return obj.themes
+        themes = obj.themes.all()
+        theme = [t.id for t in themes]
+        return theme
 
 
 class MessageSerializer(serializers.ModelSerializer):
