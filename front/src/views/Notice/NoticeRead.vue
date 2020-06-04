@@ -62,7 +62,6 @@ export default {
         { text: "등록일", value: "writed_at" }
       ],
       noticeData: [],
-      categorys: [],
       isAuthenticated: this.$session.get("staff")
     }
   },

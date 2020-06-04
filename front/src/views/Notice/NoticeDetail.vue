@@ -17,8 +17,8 @@
       </div>
       <div class="notice-detail-btn">
         <v-divider></v-divider>
-        <v-btn color="warning" class="mr-4 btn-detail" @click="updateData">수정 <i class="fas fa-edit ml-1"></i></v-btn>
-        <v-btn color="error" class="mr-4 btn-detail" @click="deleteData">삭제 <i class="fas fa-minus-square ml-1"></i></v-btn>
+        <v-btn color="warning" class="mr-4 btn-detail" @click="updateData" v-if="isAuthenticated">수정 <i class="fas fa-edit ml-1"></i></v-btn>
+        <v-btn color="error" class="mr-4 btn-detail" @click="deleteData" v-if="isAuthenticated">삭제 <i class="fas fa-minus-square ml-1"></i></v-btn>
         <v-btn color="rgb(238, 240, 247)" class="btn-detail" @click="back">목록 <i class="fas fa-bars ml-1"></i></v-btn>
       </div>
     </div>
@@ -34,13 +34,7 @@ export default {
     return {
       noticeData: [],
       noticeId: "",
-      valid: false,
-      commentRules: [
-        v => (v && v.length <= 500) || "댓글은 최대 500자 이내로 작성해주세요."
-      ],
-      remain: 500,
-      resultRemian: 500,
-      strLen: ""
+      isAuthenticated: this.$session.get("staff")
     }
   },
   methods: {
@@ -48,17 +42,19 @@ export default {
       if (this.noticeData.writer === this.$store.getters.user_id) {
         const requestHeader = this.$store.getters.requestHeader
         axios.delete(`/articles/theme_notice/${this.noticeId}/`, requestHeader)
-          .then(
+          .then(() => {
             this.$router.push({
               path: '/notice'
             })
-          )
+          })
           .catch(err => {
             console.log(err)
           })
       } else {
         alert("삭제 권한이 없습니다.")
-        this.$router.push(`/notice/detail/${this.noticeId}`)  
+        this.$router.push({
+          path: `/notice/detail/${this.noticeId}`
+        })  
       }
     },
     updateData() {
@@ -70,11 +66,6 @@ export default {
       this.$router.push({
         path: '/notice'
       })
-    },
-    checkLen() {
-      var letterLength = this.strLen.length;
-      this.resultRemian = 0
-      this.resultRemian = this.remain - letterLength
     }
   },
   mounted() {

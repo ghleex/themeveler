@@ -6,7 +6,8 @@
         <v-btn color="error" outlined class="btn-create text-light" @click="reset"><i class="fas fa-redo-alt mr-1"></i>다시 작성</v-btn>
       </div>
       <v-form ref="form" class="service-create-form" v-model="valid" lazy-validation>
-        <v-select color="#607D8B" v-model="select" :items="categorys" item-value="id" item-text="category" :rules="categoryRules" label="분류" required></v-select>
+        <v-select color="#607D8B" v-model="select" :items="categorys" item-value="id" item-text="category"
+         :rules="categoryRules" label="분류" required></v-select>
         <v-text-field color="#607D8B" v-model="title" :counter="30" :rules="titleRules" label="제목" required></v-text-field>
         <v-textarea color="#607D8B" v-model="content" :rules="contentRules" label="내용" class="mt-4" outlined></v-textarea>
         <v-btn color="#607D8B" :disabled="!valid" class="mr-4 btn-create text-light"
@@ -20,7 +21,7 @@
 </template>
 
 <script>
-import axios from "axios"
+import axios from 'axios'
 
 export default {
   name: "service-create",
@@ -40,10 +41,11 @@ export default {
         v => (v && v.length <= 30) || "제목을 30자 이내로 작성해주세요",
       ],
       contentRules: [v => !!v || "내용을 작성해주세요"],
-      categorys: [
-        "건의",
-        "신고",
-      ]
+      categorys: [],
+      // categorys: [
+      //   "건의",
+      //   "신고",
+      // ]
     }
   },
   methods: {
@@ -69,7 +71,7 @@ export default {
         axios.post(`/articles/customer/${this.userId}/`, serviceCreateForms, requestHeader)
           .then(() => {
             this.$router.push({
-              path: "/service"
+              path: '/service'
             })
           })
           .catch(error => {
@@ -103,7 +105,7 @@ export default {
     },
     addcancel() {
       this.$router.push({
-        path: "/service"
+        path: '/service'
       })
     },
     updatecancel() {
@@ -134,7 +136,9 @@ export default {
             this.is_fixed = response.data.is_fixed
           } else {
             alert("수정 권한이 없습니다.")
-            this.$router.push("/service")
+            this.$router.push({
+              path: '/service'
+            })
           }
         })
         .catch(error => {
