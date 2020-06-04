@@ -21,10 +21,10 @@
             <i style="color: gray;">{{ date }} <br> {{ time }}</i>
             <br><br>
           </div>
-          <div class="like-theme text-center" @click="likeTheme()">
+          <div class="like-theme text-center">
             {{ likeCount }} <br>
-            <i v-if="like == false" class="far fa-heart"></i>
-            <i v-else-if="like == true" class="fas fa-heart text-danger"></i>
+            <i @click="likeTheme()" v-if="like == false" class="far fa-heart"></i>
+            <i @click="likeTheme()" v-else-if="like == true" class="fas fa-heart text-danger"></i>
           </div>
         </div>
         <div class="theme-detail-go text-end">
@@ -92,7 +92,6 @@
         like: false,
         destination: "",
         likeCount: 0,
-        likeUsers: [],
       }
     },
     methods: {
@@ -116,12 +115,7 @@
       }
     },
     mounted() {
-      const token = this.$session.get("jwt")
-      const requestHeader = {
-        headers: {
-          Authorization: "JWT " + token
-        }
-      }
+      const requestHeader = this.$store.getters.requestHeader
       axios.get("/travels/all_theme/", requestHeader)
         .then(res => {
           this.themeArr = res.data.all_theme
@@ -140,22 +134,18 @@
           this.destinations = res.data.destinations
           // console.log(res.data)
         })
-        .catch(err => {
-          console.log(err.response)
-        })
+        // .catch(err => {
+        //   console.log(err.response)
+        // })
 
       axios.get(`/travels/like/${this.themeId}`, requestHeader)
         .then(res => {
           this.likeCount = res.data.like_users_count
-          this.likeUsers = res.data.like_users
+          this.like = res.data.did_user_like
         })
-
-      axios.get(`/travels/like/${this.themeId}`, requestHeader)
-        .then(res => {
-          console.log(res.data)
-        })
-        .catch(err =>
-        console.log(err.response))
+        // .catch(err => {
+        //   console.log(err.response)
+        // })
     }
   }
 </script>
