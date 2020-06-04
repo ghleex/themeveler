@@ -2,7 +2,7 @@ from .base import *
 from decouple import config
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '*$u!6xj8eo15zd9%^3_8!r%r2&$&-7fd0m3n5w#s2^i5*d%+7x'
+SECRET_KEY = 'j9b7^!ini06k49@=22-cy+7jl+4meyonf#yt(y(ks6zzd(-1_t'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

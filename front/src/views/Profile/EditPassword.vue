@@ -35,9 +35,9 @@
             <h6 class="display-1 mb-1 grey--text">ad.</h6>
             <h4 class="display-2 font-weight-light mb-3 black--text"></h4>
             <p class="font-weight-light grey--text">
-              개인정보 유출에 항상 주의하세요...
+              개인정보 유출에 항상 주의하세요..
             </p>
-            <v-btn color="success" rounded class="mr-0">Read More</v-btn>
+            <!-- <v-btn color="success" rounded class="mr-0">Read More</v-btn> -->
           </v-card-text>
         </v-col>
       </v-row>
@@ -78,7 +78,7 @@ export default {
           axios.put('/accounts/password/', form, requestHeader)
             .then(() => {
               this.$router.push({
-                path: '/profile'
+                path: '/profiles'
               })
             })
             .catch(err => {
@@ -95,7 +95,7 @@ export default {
     },
     updatecancel () {
       this.$router.push({
-        path: '/profile'
+        path: '/profiles'
       })
     }
   }

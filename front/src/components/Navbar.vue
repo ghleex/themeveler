@@ -106,7 +106,7 @@
         </v-btn>
         <v-btn text v-if="this.$store.getters.isLoggedIn" @click="userpage">
           <div class="nav-link drop-no">
-            <div class="nav-text"><v-icon>mdi-account-circle</v-icon> {{ username() }}님</div>
+            <div class="nav-text"><v-icon>mdi-account-circle</v-icon> {{ nickname }}님</div>
           </div>
         </v-btn>
       </v-toolbar-items>
@@ -115,55 +115,60 @@
 </template>
 
 <script>
-  export default {
-    name: 'Navbar',
-    data() {
-      return {
-        drawer: null,
-        items: [{
-            title: 'Home',
-            icon: 'mdi-home',
-            path: '/'
-          },
-          {
-            title: 'Travel',
-            icon: ' mdi-image-album',
-            path: '/travel'
-          },
-          {
-            title: 'Contact',
-            icon: 'mdi-account-supervisor-circle'
-          },
-          {
-            title: 'Login',
-            icon: 'mdi-login-variant',
-            path: '/login'
-          },
-        ],
-      }
-    },
-    methods: {
-      login() {
-        this.$router.push({
+export default {
+  name: "Navbar",
+  props: {
+    nickname: {
+      type: String
+    }
+  },  
+  data() {
+    return {
+      drawer: null,
+      items: [{
+          title: 'Home',
+          icon: 'mdi-home',
+          path: '/'
+        },
+        {
+          title: 'Travel',
+          icon: ' mdi-image-album',
+          path: '/travel'
+        },
+        {
+          title: 'Contact',
+          icon: 'mdi-account-supervisor-circle'
+        },
+        {
+          title: 'Login',
+          icon: 'mdi-login-variant',
           path: '/login'
-        })
-      },
-      logout() {
-        if (this.$session.exists()) {
-          this.$session.destroy()
-        }
-        this.$store.dispatch('logout')
-      },
-      username() {
-        return this.$session.get('nickname')
-      },
-      userpage() {
-        this.$router.push({
-          path: '/profiles'
-        })
+        },
+      ],
+    }
+  },
+  methods: {
+    login() {
+      this.$router.push({
+        path: '/login'
+      })
+    },
+    logout() {
+      if (this.$session.exists()) {
+        this.$session.destroy()
       }
+      this.$store.dispatch('logout')
+      this.$router.push({
+        path: '/'
+      })
+    },
+    userpage() {
+      this.$router.push({
+        path: '/profiles'
+      })
     }
   }
+}
 </script>
 
 <style lang="scss" scoped>

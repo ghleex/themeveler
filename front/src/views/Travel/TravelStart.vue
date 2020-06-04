@@ -153,12 +153,12 @@
         axios.get(`/travels/dest_content/${this.themeId}/${this.e1-1}/`, requestHeader)
           .then(res => {
             // this.content = res.data
-            console.log(res.data)
+            // console.log(res.data)
             this.content = res.data.pages
           })
-          .catch(err => {
-            console.log(err.response)
-          })
+          // .catch(err => {
+          //   console.log(err.response)
+          // })
 
         document.getElementById(this.dests[n].id).tabIndex = -1;
         document.getElementById(this.dests[n].id).focus();
@@ -172,12 +172,12 @@
         axios.get(`/travels/dest_content/${this.themeId}/${this.e1-1}/`, requestHeader)
           .then(res => {
             // this.content = res.data
-            console.log(res.data)
+            // console.log(res.data)
             this.content = res.data.pages
           })
-          .catch(err => {
-            console.log(err.response)
-          })
+          // .catch(err => {
+          //   console.log(err.response)
+          // })
 
         document.getElementById(this.dests[n - 1].id).tabIndex = -1;
         document.getElementById(this.dests[n - 2].id).focus();
@@ -211,13 +211,13 @@
       axios.get(`/travels/dest_content/${this.themeId}/${this.e1-1}/`, requestHeader)
         .then(res => {
           // this.content = res.data
-          console.log(res.data)
+          // console.log(res.data)
           this.content = res.data.pages
           // this.te = this.content[0].id
         })
-        .catch(err => {
-          console.log(err.data)
-        })
+        // .catch(err => {
+        //   console.log(err.data)
+        // })
 
       this.a()
     }
