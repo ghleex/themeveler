@@ -10,7 +10,7 @@
         <v-text-field v-model="title" :counter="30" :rules="titleRules" label="제목" required></v-text-field>
         <v-textarea v-model="content" :rules="contentRules" label="내용" class="mt-4" outlined></v-textarea>
         <v-btn :disabled="!valid" color="success" class="mr-4 btn" 
-          @click="noticeId !== undefined ? update() : write()">{{noticeId !== undefined ? "수정" : "작성"}}
+          @click="noticeId !== undefined ? update() : write()">{{ noticeId !== undefined ? "수정" : "작성" }}
           <i class="fas fa-check-circle ml-1"></i></v-btn>
         <v-btn color="error" class="btn" @click="noticeId !== undefined ? updatecancel() : addcancel()">취소
           <i class="fas fa-times-circle ml-1"></i>
@@ -60,8 +60,7 @@ export default {
         }
         const requestHeader = this.$store.getters.requestHeader
         axios.post('/articles/theme_notice/', noticeCreateForms, requestHeader)
-          .then(response => {
-            console.log(response.data)
+          .then(() => {
             this.$router.push({
               path: '/notice'
             })
@@ -82,8 +81,7 @@ export default {
         }
         const requestHeader = this.$store.getters.requestHeader
         axios.put(`/articles/theme_notice/${this.noticeId}/`, noticeUpdateForms, requestHeader)
-          .then(response => {
-            console.log(response.data)
+          .then(() => {
             this.$router.push({
               path: `/notice/detail/${this.noticeId}`
             })
@@ -112,8 +110,7 @@ export default {
     const requestHeader = this.$store.getters.requestHeader
     axios.get('/articles/n_category/', requestHeader)
       .then(response => {
-        console.log(response.data["data"])
-        this.categorys = response.data["data"]
+        this.categorys = response.data
       })
       .catch(err => {
         console.log(err)
@@ -129,7 +126,9 @@ export default {
             this.isNoticeAll = response.data.isNoticeAll
           } else {
             alert("수정 권한이 없습니다.")
-            this.$router.push("/notice")
+            this.$router.push({
+              path: '/notice'
+            })
           }
         })
         .catch(err => {

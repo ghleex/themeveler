@@ -16,16 +16,16 @@
           </v-toolbar>
         </template>
         <!-- 카테고리 색상 -->
-        <template v-slot:item.category="{ item }">
-          <v-chip :color="getColor(item.category)" dark>{{ item.category }}</v-chip>
+        <template v-slot:item.category_name="{ item }">
+          <v-chip :color="getColor(item.category_name)" dark>{{ item.category_name }}</v-chip>
         </template>
         <!-- 리스트 제목 -->
         <template v-slot:item.title="{ item }">
           <div class="service-list-body" @click="detail(item.id)">{{ item.title }}</div>
         </template>
         <!-- 등록일 시간형식 -->
-        <template v-slot:item.crited_at="{ item }">
-          <div>{{ item.writed_at | moment("YYYY-MM-DD LT") }}</div>
+        <template v-slot:item.created_at="{ item }">
+          <div>{{ item.created_at | moment("YYYY-MM-DD LT") }}</div>
         </template>
         <!-- 데이터가 없을 경우 -->
         <template slot="no-data">작성된 글이 없습니다</template>
@@ -56,7 +56,7 @@ export default {
       search: "",
       headers: [
         { text: "번호", value: "id", sortable: false },
-        { text: "분류", value: "category" },
+        { text: "분류", value: "category_name" },
         { text: "제목", value: "title", sortable: false },
         { text: "작성자", value: "request_user_nickname", sortable: false },
         { text: "등록일", value: "created_at" }
@@ -88,7 +88,7 @@ export default {
     axios.get(`/articles/customer/${this.userId}/`, requestHeader)
       .then(response => {
         console.log(response.data)
-        this.serviceData = response.data["voice"]
+        this.serviceData = response.data
       })
       .catch(err => {
         console.log(err)
