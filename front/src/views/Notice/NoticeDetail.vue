@@ -10,7 +10,7 @@
       </div>
       <div class="body2">
         <p class="notice-writer"><i class="fas fa-user"></i> {{noticeData.writer_nickname}}</p>
-        <p class="notice-created-date"><i class="far fa-clock"></i> {{noticeData.writed_at | moment('YYYY-MM-DD HH:mm')}}</p>
+        <p class="notice-created-date"><i class="far fa-clock"></i> {{noticeData.writed_at | moment('YYYY-MM-DD LT')}}</p>
       </div>
       <div class="body3">
         <div class="notice-content">{{noticeData.content}}</div>
@@ -46,7 +46,7 @@ export default {
   },
   methods: {
     deleteData() {
-      if (this.noticeData.writer_id === this.$store.getters.user_id) {
+      if (this.noticeData.writer === this.$store.getters.user_id) {
         const requestHeader = this.$store.getters.requestHeader
         axios.delete(`/articles/theme_notice/${this.noticeId}/`, requestHeader)
           .then(
