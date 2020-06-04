@@ -17,11 +17,15 @@
         </template>
         <!-- 카테고리 색상 -->
         <template v-slot:item.category="{ item }">
-          <v-chip :color="getColor(item.category)" dark>{{ item.category }}</v-chip>
+          <v-chip :color="getColor(item.category_name)" dark>{{ item.category_name }}</v-chip>
         </template>
         <!-- 리스트 제목 -->
         <template v-slot:item.title="{ item }">
           <div class="notice-table-body" @click="detail(item.id)">{{ item.title }}</div>
+        </template>
+        <!-- 등록일 시간형식 -->
+        <template v-slot:item.writed_at="{ item }">
+          <div>{{ item.writed_at | moment("YYYY-MM-DD LT") }}</div>
         </template>
         <!-- 데이터가 없을 경우 -->
         <template slot="no-data">작성된 글이 없습니다</template>
@@ -58,7 +62,7 @@ export default {
         { text: "등록일", value: "writed_at" }
       ],
       noticeData: [],
-      category: [],
+      categorys: [],
       isAuthenticated: this.$session.get("staff")
     }
   },
@@ -83,16 +87,7 @@ export default {
     axios.get('/articles/notices/')
       .then(response => {
         console.log(response.data)
-        this.noticeData = response.data["notice"]
-      })
-      .catch(err => {
-        console.log(err)
-      })
-    const requestHeader = this.$store.getters.requestHeader
-    axios.get('/articles/n_category/', requestHeader)
-      .then(response => {
-        console.log(response.data)
-        this.category = response.data["data"]
+        this.noticeData = response.data
       })
       .catch(err => {
         console.log(err)

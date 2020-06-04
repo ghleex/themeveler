@@ -22,7 +22,6 @@
         <v-btn color="rgb(238, 240, 247)" class="btn-detail" @click="back">목록 <i class="fas fa-bars ml-1"></i></v-btn>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -46,7 +45,7 @@ export default {
   },
   methods: {
     deleteData() {
-      if (this.noticeData.writer_id === this.$store.getters.user_id) {
+      if (this.noticeData.writer === this.$store.getters.user_id) {
         const requestHeader = this.$store.getters.requestHeader
         axios.delete(`/articles/theme_notice/${this.noticeId}/`, requestHeader)
           .then(

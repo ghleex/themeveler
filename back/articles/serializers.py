@@ -10,9 +10,26 @@ class NoticeCategorySerializer(serializers.ModelSerializer):
 
 
 class NoticeSerializer(serializers.ModelSerializer):
+    writer_nickname = serializers.SerializerMethodField('get_user_name')
+    category_name = serializers.SerializerMethodField('get_category')
+
     class Meta:
         model = Notice
-        fields = ('id', 'title', 'content', 'category', 'writer', 'theme', 'writed_at', 'updated_at', 'isNoticeAll',)
+        fields = ('id', 'title', 'content', 'category', 'category_name', 'writer', 'writer_nickname', 'theme', 'writed_at', 'updated_at', 'isNoticeAll',)
+        extra_kwargs = {
+            'writer_nickname': {
+                'required': False,
+            },
+            'category_name': {
+                'required': False,
+            }
+        }
+
+    def get_user_name(self, obj):
+        return obj.writer.nickname
+
+    def get_category(self, obj):
+        return obj.category.category
 
 
 class VoiceCategorySerializer(serializers.ModelSerializer):

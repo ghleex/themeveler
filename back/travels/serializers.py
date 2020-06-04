@@ -9,9 +9,21 @@ class ThemeSerializer(serializers.ModelSerializer):
 
 
 class DestinationSerializer(serializers.ModelSerializer):
+    themes = serializers.SerializerMethodField('get_theme')
+
     class Meta:
         model = Destination
-        fields = ('id', 'name', 'image', 'latitude', 'longitude', 'created_at', 'updated_at',)
+        fields = ('id', 'name', 'themes', 'image', 'latitude', 'longitude', 'created_at', 'updated_at',)
+        extra_kwargs = {
+            'themes': {
+                'required': False,
+            },
+        }
+    
+    def get_theme(self, obj):
+        themes = obj.themes.all()
+        theme = [t.id for t in themes]
+        return theme
 
 
 class MessageSerializer(serializers.ModelSerializer):
