@@ -230,7 +230,7 @@ class ChatView(APIView):
         except EmptyPage:
             return Response({'message': '더 이상 데이터가 없습니다.'}, status=status.HTTP_404_NOT_FOUND)
 
-
+@permission_classes((AllowAny,))
 class AllTheme(APIView):
     """
     모든 테마를 return합니다
