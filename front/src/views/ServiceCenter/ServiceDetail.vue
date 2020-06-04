@@ -20,7 +20,7 @@
     </div>
 
     <!-- Comment -->
-    <div class="comment-header">댓글</div>
+    <div class="comment-header">관리자 댓글</div>
     <div class="comment-header-top"></div>
     <div class="service-comment">
       <v-form ref="form" class="service-comment-form" v-model="valid" lazy-validation>
@@ -32,18 +32,20 @@
           </v-textarea>
         </div>
         <div class="service-comment-submitBtn-box">
-          <v-btn color="#2c3e50" :disabled="!valid" class="service-comment-submitBtn" @click="commentSubmit()">
+          <v-btn color="#2c3e50" :disabled="!valid" class="service-comment-submitBtn" @click="commentSubmit">
             작성<i class="fas fa-comment ml-1"></i>
           </v-btn>
         </div>
       </v-form>
+      <v-divider></v-divider>
+      <div class="comment-list">
+        <li v-for="comment in commentList" :key="comment.id">
+          {{ comment.manager }} - {{ comment.content }}
+          <v-icon @click="commentUpdate(comment.id)">mdi-pen</v-icon>
+        </li>
+      </div>
     </div>
     <div class="comment-header-bottom"></div>
-    <div>
-      <li v-for="comment in commentList" :key="comment.id">{{ comment.writer_id }}- {{ comment.content }}
-        <v-icon @click="commentUpdate(comment.id)">mdi-pen</v-icon>
-      </li>
-    </div>
   </div>
 </template>
 
@@ -101,7 +103,6 @@ export default {
       this.resultRemian = this.remain - letterLength
     },
     commentSubmit() {
-      console.log(this.$session.get("staff"))
       if (this.$session.get("staff") === true) {
         var commentForms = {
           "content": this.strLen,
@@ -148,19 +149,13 @@ export default {
     const requestHeader = this.$store.getters.requestHeader
     axios.get(`/articles/voice/${this.serviceId}/`, requestHeader)
       .then(response => {
+        console.log(response.data)
         this.serviceData = response.data
+        this.commentList = response.data["reply"]
       })
       .catch(err => {
         console.log(err)
       })
-    // axios.get(`/articles/cv/${this.serviceId}/`, requestHeader)
-    //   .then(response => {
-    //     console.log(response.data)
-    //     this.commentList = response.data
-    //   })
-    //   .catch(err => {
-    //     console.log(err)
-    //   })
   }
 }
 </script>
@@ -174,11 +169,11 @@ export default {
   #service-detail .service-center-title {
     font-family: 'Cafe24Simplehae';
     font-size: 30px;
+    background-color: rgb(255, 255, 255);
     margin: 80px auto 0 auto;
     width: 80%;
     border-radius: 7px 7px 0 0;
     box-shadow: 1px 1px 2px 1px rgb(100, 105, 109);
-    background-color: rgb(255, 255, 255);
     padding: 2rem 2rem;
     text-align: start;
   }
@@ -190,6 +185,16 @@ export default {
     margin: 0 auto 60px auto;
     border-radius: 0 0 7px 7px;
     box-shadow: 1px 2px 2px 1px rgb(100, 105, 109);
+  }
+
+  @media (max-width: 600px) {
+    #service-detail .service-center-title {
+      width: 95%;
+    }
+
+    #service-detail .service-body {
+      width: 95%;
+    }
   }
 
   .service-body-header {
@@ -334,5 +339,9 @@ export default {
     display: flex;
     justify-content: flex-end;
     margin-right: 5rem;
+  }
+
+  .comment-list {
+    text-align: left;
   }
 </style>

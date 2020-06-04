@@ -127,4 +127,8 @@ $ node index.js
 
 
 
+-----
 
+## API 리스트 확인하기
+
+* https://k02b1031.p.ssafy.io/api/swagger

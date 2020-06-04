@@ -6,7 +6,6 @@
       <div class="profile-comment-title">
         <h5 class="card-title">내가 작성한 댓글
           <v-chip class="ma-2 px-2" small color="orange" text-color="white">{{ commentCount }}</v-chip>
-          <!-- <v-badge color="blue" content="5" inline="true"></v-badge> -->
         </h5>
       </div>
       <v-divider></v-divider>
@@ -31,7 +30,6 @@
       <div class="profile-recomment-title">
         <h5 class="re-card-title">내가 작성한 대댓글
           <v-chip class="ma-2 px-2" small color="orange" text-color="white">{{ reCommentCount }}</v-chip>
-          <!-- <v-badge color="blue" content="5" inline="true"></v-badge> -->
         </h5>
       </div>
       <v-divider></v-divider>
@@ -70,7 +68,6 @@ export default {
       itemsPerPage: 10,
       headers: [
         { text: "번호", value: "id", sortable: false },
-        { text: "작성위치", value: "category", sortable: false },
         { text: "댓글 내용", value: "content", sortable: false },
         { text: "등록일", value: "created_at", sortable: false }
       ],

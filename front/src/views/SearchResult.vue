@@ -7,18 +7,18 @@
       </div>
     </div>
     <div class="container border">
-      <div class="theme-container" v-if="themeData">
-        <!-- <theme-list :themeData="themeData" /> -->
+      <div class="theme-container" v-if="themeData.length !== 0">
+        <!-- <theme-list :themeList="themeList" /> -->
         <p>테마 검색결과</p>
         <li v-for="theme in themeData" :key="theme.id" @click="goThemePage(theme.id)">{{ theme.name }}</li>
       </div>
-      <div class="place-container" v-else-if="placeData">
-        <!-- <place-list :placeData="placeData" /> -->
+      <div class="place-container" v-if="placeData.length !== 0">
+        <!-- <place-list :placeList="placeList" /> -->
         <v-divider></v-divider>
         <p>장소 검색결과</p>
         <li v-for="place in placeData" :key="place.id">{{ place.name }}</li>
       </div>
-      <div v-else>일치하는 검색결과가 없습니다.</div>
+      <div v-if="themeData.length+placeData.length === 0">일치하는 검색결과가 없습니다.</div>
     </div>
   </div>
 </template>

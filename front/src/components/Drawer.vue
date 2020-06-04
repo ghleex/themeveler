@@ -13,9 +13,9 @@
             <v-list-item-title>{{ username() }}님</v-list-item-title>
             <v-list-item-subtitle>{{ userrole() }}</v-list-item-subtitle>
           </v-list-item-content>
-          <!-- <v-btn icon @click.stop="miniVariant = !miniVariant">
+          <v-btn icon @click.stop="miniVariant = !miniVariant" v-if="this.innerWidth < 600">
             <v-icon>mdi-chevron-left</v-icon>
-          </v-btn> -->
+          </v-btn>
         </v-list-item>
         <v-divider></v-divider>
 
@@ -42,7 +42,6 @@ export default {
         { title: '비밀번호변경', icon: 'mdi-account-edit', path: "/editpassword" },
         { title: '회원정보수정', icon: 'mdi-account-edit', path: "/editprofile" },
         { title: '댓글 활동', icon: 'mdi-comment-text', path: "/profile/comment" },
-        // { title: '내가 작성한 글', icon: 'mdi-inbox-full', path: "/profile/article" },
         // { title: '미정..', icon: 'mdi-image', path: "/profiletest" },
       ],
       color: "primary",
@@ -50,6 +49,7 @@ export default {
       // miniVariant: window.innerWidth >= 600 ? false : true,
       expandOnHover: false,
       background: true,
+      innerWidth: window.innerWidth
     }
   },
   methods: {

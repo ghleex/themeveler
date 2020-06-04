@@ -322,10 +322,10 @@ class ManagersReplyChange(APIView):
         reply = get_object_or_404(ManagersReply, pk=reply_pk)
         try:
             requests = request.data
-            reply.content = requests.get['content']
+            reply.content = requests.get('content')
             data = {
-                'id': reply.id,
                 'content': reply.content,
+                'voice': voice_pk,
                 'manager': request.user.pk,
             }
             serializer = ManagerReplySerializer(reply, data=data)
