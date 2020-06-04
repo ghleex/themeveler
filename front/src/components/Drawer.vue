@@ -13,9 +13,9 @@
             <v-list-item-title>{{ username() }}님</v-list-item-title>
             <v-list-item-subtitle>{{ userrole() }}</v-list-item-subtitle>
           </v-list-item-content>
-          <!-- <v-btn icon @click.stop="miniVariant = !miniVariant">
+          <v-btn icon @click.stop="miniVariant = !miniVariant" v-if="this.innerWidth < 600">
             <v-icon>mdi-chevron-left</v-icon>
-          </v-btn> -->
+          </v-btn>
         </v-list-item>
         <v-divider></v-divider>
 
@@ -49,6 +49,7 @@ export default {
       // miniVariant: window.innerWidth >= 600 ? false : true,
       expandOnHover: false,
       background: true,
+      innerWidth: window.innerWidth
     }
   },
   methods: {

@@ -12,9 +12,9 @@ import ServiceDetail from './views/ServiceCenter/ServiceDetail.vue'
 import Profile from './views/Profile/Profile.vue'
 import EditPassword from './views/Profile/EditPassword.vue'
 import EditProfile from './views/Profile/EditProfile.vue'
-import ProfileArticle from './views/Profile/ProfileArticle.vue'
 import ProfileComment from './views/Profile/ProfileComment.vue'
-import ProfileTest from './views/Profile/ProfileTest.vue'
+// import ProfileArticle from './views/Profile/ProfileArticle.vue'
+// import ProfileTest from './views/Profile/ProfileTest.vue'
 import Travel from './views/Travel/Travel.vue'
 import TravelDetail from './views/Travel/TravelDetail.vue'
 import TravelStart from './views/Travel/TravelStart.vue'
@@ -48,7 +48,8 @@ const routes = [
   {
     path: '/notice/create/:noticeId?',
     name: 'notice-create',
-    component: NoticeCreate
+    component: NoticeCreate,
+    meta: {requiresAuth: true}
   },
   {
     path: '/notice/detail/:noticeId',
@@ -63,47 +64,38 @@ const routes = [
   {
     path: '/service/create/:serviceId?',
     name: 'service-create',
-    component: ServiceCreate
+    component: ServiceCreate,
+    meta: {requiresAuth: true}
   },
   {
     path: '/service/detail/:serviceId',
     name: 'service-detail',
-    component: ServiceDetail
+    component: ServiceDetail,
+    meta: {requiresAuth: true}
   },
   {
     path: '/profiles',
     name: 'profile',
     component: Profile,
-    // meta: {loginRequire: true}
+    meta: {requiresAuth: true}
   },
   {
     path: '/editpassword',
     name: 'editpassword',
     component: EditPassword,
-    // meta: {loginRequire: true}
+    meta: {requiresAuth: true}
   },
   {
     path: '/editprofile',
     name: 'editprofile',
     component: EditProfile,
-    // meta: {loginRequire: true}
-  },
-  {
-    path: '/profile/article',
-    name: 'profile-article',
-    component: ProfileArticle,
-    // meta: {loginRequire: true}
+    meta: {requiresAuth: true}
   },
   {
     path: '/profile/comment',
     name: 'profile-comment',
     component: ProfileComment,
-    // meta: {loginRequire: true}
-  },
-  {
-    path: '/profiletest',
-    name: 'profiletest',
-    component: ProfileTest
+    meta: {requiresAuth: true}
   },
   {
     path: '/travel',
@@ -126,8 +118,6 @@ const routes = [
       themeId: Number(route.params.themeId)
     })
   },
-
-
 
 
   {

@@ -13,17 +13,31 @@ require('dotenv').config()
 
 Vue.config.productionTip = false
 axios.defaults.baseURL = process.env.VUE_APP_IP
-// axios.defaults.baseURL = 'http://localhost:8000/api'
-// axios.defaults.baseURL = 'https://k02b1031.p.ssafy.io:8000/api'
+// URL = 'http://localhost:8000/api'
+// URL = 'https://k02b1031.p.ssafy.io:8000/api'
 var options = {
   persist: true
 }
-
 // const socket = io(process.env.VUE_APP_SOCKET)
 // Vue.prototype.$socket = socket
 
 Vue.use(VueSession, options)
 Vue.use(require('vue-moment'))
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!store.getters.isLoggedIn) {
+      next({
+        path: '/login',
+        query: { redirect: to.fullPath }
+      })
+    } else {
+      next()
+    }
+  } else {
+    next()
+  }
+})
 
 new Vue({
   router,

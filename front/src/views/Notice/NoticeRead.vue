@@ -12,7 +12,7 @@
           <v-toolbar class="notice-table-header" flat color="white">
             <v-toolbar-title></v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-btn color="#607D8B" dark class="mb-2" @click="write">글쓰기</v-btn>
+            <v-btn color="#607D8B" dark class="mb-2" @click="write" v-if="isAuthenticated">글쓰기</v-btn>
           </v-toolbar>
         </template>
         <!-- 카테고리 색상 -->
@@ -58,7 +58,8 @@ export default {
         { text: "등록일", value: "writed_at" }
       ],
       noticeData: [],
-      category: []
+      category: [],
+      isAuthenticated: this.$session.get("staff")
     }
   },
   methods: {
@@ -142,10 +143,6 @@ export default {
       width: 95% !important;
       margin: 0 auto !important;
     }
-  }
-
-  .notice-table-header {
-    padding-bottom: 5rem;
   }
 
   .notice-table-body {
