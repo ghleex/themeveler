@@ -143,7 +143,7 @@ class VisitedDest(APIView):
         return Response({'message':['사용자가 방문한 장소에 날짜를 업데이트하는대 실패하였습니다.']}, status=status.HTTP_400_BAD_REQUEST)
 
 
-# @permission_classes((IsAuthenticated,))
+@permission_classes((IsAuthenticated,))
 class Like(APIView):
     """
         사용자의 테마 좋아요/취소
