@@ -6,14 +6,14 @@
     </div>
     <div class="notice-body">
       <div class="body1">
-        <p class="notice-body-title"><strong>{{noticeData.title}}</strong></p>
+        <p class="notice-body-title"><strong>{{ noticeData.title }}</strong></p>
       </div>
       <div class="body2">
-        <p class="notice-writer"><i class="fas fa-user"></i> {{noticeData.writer_nickname}}</p>
-        <p class="notice-created-date"><i class="far fa-clock"></i> {{noticeData.writed_at | moment('YYYY-MM-DD HH:mm')}}</p>
+        <p class="notice-writer"><i class="fas fa-user"></i> {{ noticeData.writer_nickname }}</p>
+        <p class="notice-created-date"><i class="far fa-clock"></i> {{ noticeData.writed_at | moment('YYYY-MM-DD HH:mm') }}</p>
       </div>
       <div class="body3">
-        <div class="notice-content">{{noticeData.content}}</div>
+        <div class="notice-content">{{ noticeData.content }}</div>
       </div>
       <div class="notice-detail-btn">
         <v-divider></v-divider>
