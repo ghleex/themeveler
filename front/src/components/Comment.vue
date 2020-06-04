@@ -19,10 +19,10 @@
       </v-form>
       <v-divider></v-divider>
       <div class="comment-list">
-        <li v-for="comment in commentList" :key="comment.id">
+        <div class="comment-content" v-for="comment in commentList" :key="comment.id">
           {{ comment.manager }} - {{ comment.content }}
           <v-icon @click="commentUpdate(comment.id)">mdi-pen</v-icon>
-        </li>
+        </div>
       </div>
     </div>
     <div class="comment-header-bottom"></div>
@@ -125,9 +125,15 @@ export default {
     box-shadow: 1px 2px 2px 1px rgb(100, 105, 109);
   }
 
+  .strLen {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 2rem;
+  }
+
   .survice-comment-input {
     display: flex;
-    margin-right: 5em;
+    margin-right: 2em;
   }
 
   .service-comment-submitBtn-box {
@@ -145,24 +151,6 @@ export default {
     margin: 0 1rem;
   }
 
-  @media (max-width: 500px) {
-    .survice-comment-input {
-      margin-right: 0;
-    }
-    .service-content {
-      width: 100%;
-    }
-    .service-comment {
-      padding: 2rem 1.2rem .5rem 1.2rem;
-    }
-    .service-comment-submitBtn {
-      margin: 0;
-    }
-    .strLen {
-      margin-right: 0 !important;
-    }
-  }
-
   .service-comment-write {
     width: 80%;
   }
@@ -177,13 +165,61 @@ export default {
     box-shadow: 1px 2px 2px 1px rgb(100, 105, 109);
   }
 
-  .strLen {
-    display: flex;
-    justify-content: flex-end;
-    margin-right: 5rem;
+  @media (max-width: 600px) {
+    .comment-header {
+      margin: 0 auto 0 5%;
+    }
+
+    .comment-header-top {
+      width: 90%;
+    }
+
+    .strLen {
+      margin-right: 0 !important;
+    }
+
+    .survice-comment-input {
+      margin-right: 0;
+    }
+
+    .service-content {
+      width: 100%;
+    }
+
+    .service-comment {
+      width: 90%;
+      padding: 2rem 1.2rem .5rem 1.2rem;
+    }
+
+    .service-comment-submitBtn-box {
+      margin-right: 0;
+    }
+
+    .service-comment-submitBtn {
+      margin: 0;
+    }
+
+    .comment-header-bottom {
+      width: 90%;
+    }
   }
 
   .comment-list {
     text-align: left;
+  }
+
+  .comment-content {
+    width: 95%;
+    background-color: #d0d7df49;
+    border-radius: 5px;
+    border: 1px solid #2c3e5049;
+    text-align: start;
+    padding: 1rem;
+  }
+
+  @media (max-width: 600px) {
+    .comment-content {
+      width: 100%;
+    }
   }
 </style>
