@@ -23,6 +23,10 @@
         <template v-slot:item.title="{ item }">
           <div class="service-list-body" @click="detail(item.id)">{{ item.title }}</div>
         </template>
+        <!-- 등록일 시간형식 -->
+        <template v-slot:item.crited_at="{ item }">
+          <div>{{ item.writed_at | moment("YYYY-MM-DD LT") }}</div>
+        </template>
         <!-- 데이터가 없을 경우 -->
         <template slot="no-data">작성된 글이 없습니다</template>
       </v-data-table>
