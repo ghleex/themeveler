@@ -120,7 +120,7 @@ export default {
         const requestHeader = this.$store.getters.requestHeader
         axios.post(`/articles/manager_reply/${this.serviceId}/`, commentForms, requestHeader)
           .then(response => {
-            this.commentList.unshift(response.data)            
+            this.commentList.unshift(response.data)
           })
           .catch(err => {
             console.log(err)
