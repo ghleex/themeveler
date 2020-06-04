@@ -37,8 +37,13 @@
 
     <v-btn class="my-5" to="/travel/" rounded dark color="#2c3e50">📃뒤로가기</v-btn>
 
+
+
     <!-- destinations -->
-    <div class="text-center mx-3" width="100%">
+    <div v-if="model == null" class="text-gray text-center mt-12" style="font-size: 12px;">
+      * 이미지를 클릭하면 장소를 알 수 있어요!
+    </div>
+    <div class="text-center mt-12" width="100%">
       <div class="d-flex mt-5 justify-content-center">
         <v-btn class="btn-round-num mr-2" v-model="destination" color="red" dark rounded v-if="model != null">
           {{ model + 1 }}
@@ -55,7 +60,7 @@
 
             <!-- 이미지가 없으므로 임시 card -->
             <v-sheet @click="toggleDestination(destination)" class="d-flex justify-content-center align-items-center"
-              color="#9575CD" width="100%" height="100%" style="border-radius: 0;">
+              color="#37474F" width="100%" height="100%" style="border-radius: 0;">
               <div class="text-light pb-8" style="font-family: 'Cafe24Simplehae'; font-size: 25px;">
                 #.{{ destination.id }} {{ destination.name }}</div>
             </v-sheet>
@@ -146,6 +151,7 @@
         // .catch(err => {
         //   console.log(err.response)
         // })
+        document.querySelector("#footer").style.display = 'block'
     }
   }
 </script>

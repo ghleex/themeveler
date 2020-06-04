@@ -7,6 +7,10 @@ import store from './store' // vuex
 import VueCsrf from 'vue-csrf'
 import VueSimpleAlert from "vue-simple-alert"
 import axios from 'axios'
+import AOS from 'aos'
+import 'aos/dist/aos.css'
+import 'bootstrap/dist/css/bootstrap.min.css'
+
 // import io from 'socket.io-client' // socket chat
 
 require('dotenv').config()
@@ -23,6 +27,7 @@ var options = {
 
 Vue.use(VueSession, options)
 Vue.use(require('vue-moment'))
+AOS.init()
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
