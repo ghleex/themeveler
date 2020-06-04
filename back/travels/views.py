@@ -143,7 +143,7 @@ class VisitedDest(APIView):
         return Response({'message':['사용자가 방문한 장소에 날짜를 업데이트하는대 실패하였습니다.']}, status=status.HTTP_400_BAD_REQUEST)
 
 
-# @permission_classes((IsAuthenticated,))
+@permission_classes((IsAuthenticated,))
 class Like(APIView):
     """
         사용자의 테마 좋아요/취소
@@ -230,7 +230,7 @@ class ChatView(APIView):
         except EmptyPage:
             return Response({'message': '더 이상 데이터가 없습니다.'}, status=status.HTTP_404_NOT_FOUND)
 
-
+@permission_classes((AllowAny,))
 class AllTheme(APIView):
     """
     모든 테마를 return합니다
