@@ -8,7 +8,7 @@
         <div class="survice-comment-input">
           <i class="far fa-comments mr-5 mt-2" style="font-size: 23px;"></i>
           <v-textarea color="#607D8B" class="service-comment-write" outlined label="댓글을 작성하세요."
-            :rules="commentRules" v-model="strLen" @keyup="checkLen">
+            :rules="commentRules" v-model="addComment" @keyup="checkLen">
           </v-textarea>
         </div>
         <div class="service-comment-submitBtn-box">
@@ -20,8 +20,14 @@
       <v-divider></v-divider>
       <div class="comment-list">
         <div class="comment-content" v-for="comment in commentList" :key="comment.id">
-          {{ comment.manager }} - {{ comment.content }}
-          <v-icon @click="commentUpdate(comment.id)">mdi-pen</v-icon>
+          <div v-if="modifyState === true">
+            <v-text-field v-model="comment.content"></v-text-field>
+            <v-icon @click="commentUpdate(comment)">mdi-pen</v-icon>
+          </div>
+          <div v-else>
+            {{ comment.manager }} - {{ comment.content }}
+            <v-icon @click="modify">mdi-pen</v-icon>
+          </div>
         </div>
       </div>
     </div>
@@ -41,19 +47,20 @@ export default {
       ],
       remain: 500,
       resultRemian: 500,
-      strLen: ""
+      addComment: "",
+      modifyState: false
     }
   },
   methods: {
     checkLen() {
-      var letterLength = this.strLen.length;
+      var letterLength = this.addComment.length;
       this.resultRemian = 0
       this.resultRemian = this.remain - letterLength
     },
     commentSubmit() {
       if (this.$session.get("staff") === true) {
         var commentForms = {
-          "content": this.strLen,
+          "content": this.addComment,
           "manager": this.$store.getters.user_id,
           "voice": this.serviceId
         }
@@ -70,15 +77,24 @@ export default {
         alert("권한이 없습니다.")
       }
     },
-    commentUpdate(commentId) {      
+    modify() {
+      if (this.$session.get("staff") === true) {
+        this.modifyState = true
+      }
+      else {
+        alert("권한이 없습니다.")
+      }
+    },
+    commentUpdate(comment) {      
       if (this.$session.get("staff") === true) {
         var commentForms = {
-          "content": this.strLen,
+          "id": comment.id,
+          "content": comment.content,
           "manager": this.$store.getters.user_id,
           "voice": this.serviceId
         }
         const requestHeader = this.$store.getters.requestHeader
-        axios.put(`/articles/manager_reply/${this.serviceId}/${commentId}/`, commentForms, requestHeader)
+        axios.put(`/articles/manager_reply/${this.serviceId}/${comment.id}/`, commentForms, requestHeader)
           .then(response => {
             console.log(response.data)
           })
@@ -121,7 +137,7 @@ export default {
     background-color: #fff;
     width: 75%;
     margin: 0 auto 0 auto;
-    padding: 2rem 0 1rem 2rem;
+    padding: 1rem 0 1rem 2rem;
     box-shadow: 1px 2px 2px 1px rgb(100, 105, 109);
   }
 
@@ -188,7 +204,7 @@ export default {
 
     .service-comment {
       width: 90%;
-      padding: 2rem 1.2rem .5rem 1.2rem;
+      padding: 1rem 1.2rem 1rem 1.2rem;
     }
 
     .service-comment-submitBtn-box {

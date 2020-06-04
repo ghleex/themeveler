@@ -10,7 +10,7 @@
       </div>
       <div class="body2">
         <p class="notice-writer"><i class="fas fa-user"></i> {{noticeData.writer_nickname}}</p>
-        <p class="notice-created-date"><i class="far fa-clock"></i> {{noticeData.writed_at | moment('YYYY-MM-DD LT')}}</p>
+        <p class="notice-created-date"><i class="far fa-clock"></i> {{noticeData.writed_at | moment('YYYY-MM-DD HH:mm')}}</p>
       </div>
       <div class="body3">
         <div class="notice-content">{{noticeData.content}}</div>
@@ -22,7 +22,6 @@
         <v-btn color="rgb(238, 240, 247)" class="btn-detail" @click="back">목록 <i class="fas fa-bars ml-1"></i></v-btn>
       </div>
     </div>
-
   </div>
 </template>
 

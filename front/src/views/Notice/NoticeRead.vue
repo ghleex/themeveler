@@ -23,6 +23,7 @@
         <template v-slot:item.title="{ item }">
           <div class="notice-table-body" @click="detail(item.id)">{{ item.title }}</div>
         </template>
+        <!-- 등록일 시간형식 -->
         <template v-slot:item.writed_at="{ item }">
           <div>{{ item.writed_at | moment("YYYY-MM-DD LT") }}</div>
         </template>
@@ -61,7 +62,7 @@ export default {
         { text: "등록일", value: "writed_at" }
       ],
       noticeData: [],
-      category: [],
+      categorys: [],
       isAuthenticated: this.$session.get("staff")
     }
   },
@@ -87,7 +88,6 @@ export default {
       .then(response => {
         console.log(response.data)
         this.noticeData = response.data
-        console.log(this.noticeData)
       })
       .catch(err => {
         console.log(err)

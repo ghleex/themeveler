@@ -6,7 +6,7 @@
         <v-btn color="error" outlined class="btn" @click="reset"><i class="fas fa-redo-alt mr-1"></i>다시 작성</v-btn>
       </div>
       <v-form ref="form" class="notice-create-form" v-model="valid" lazy-validation>
-        <v-select v-model="select" :items="categorys" item-value="id" item-text="category" label="분류" required></v-select>
+        <v-select v-model="select" :items="categorys" item-value="id" item-text="category" :rules="categoryRules" label="분류" required></v-select>
         <v-text-field v-model="title" :counter="30" :rules="titleRules" label="제목" required></v-text-field>
         <v-textarea v-model="content" :rules="contentRules" label="내용" class="mt-4" outlined></v-textarea>
         <v-btn :disabled="!valid" color="success" class="mr-4 btn" 
@@ -40,11 +40,12 @@ export default {
         v => (v && v.length <= 30) || "제목을 30자 이내로 작성해주세요",
       ],
       contentRules: [v => !!v || "내용을 작성해주세요"],
-      categorys: [
-        "일반",
-        "중요",
-        "테마"
-      ]
+      categorys: [],
+      // categorys: [
+      //   "일반",
+      //   "중요",
+      //   "테마"
+      // ]
     }
   },
   methods: {
@@ -66,7 +67,7 @@ export default {
             })
           })
           .catch(err => {
-            console.log(err.response)
+            console.log(err)
           })
       }
     },
@@ -108,9 +109,14 @@ export default {
   },
   mounted() {
     this.noticeId = this.$route.params.noticeId
-    axios.get(`/articles/n_category/`, this.$store.getters.requestHeader)
-      .then(res => {
-        this.categorys = res.data.data
+    const requestHeader = this.$store.getters.requestHeader
+    axios.get('/articles/n_category/', requestHeader)
+      .then(response => {
+        console.log(response.data["data"])
+        this.categorys = response.data["data"]
+      })
+      .catch(err => {
+        console.log(err)
       })
     if (this.noticeId !== undefined) {
       axios.get(`/articles/notices/${this.noticeId}/`)
