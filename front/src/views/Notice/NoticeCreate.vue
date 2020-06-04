@@ -6,7 +6,7 @@
         <v-btn color="error" outlined class="btn" @click="reset"><i class="fas fa-redo-alt mr-1"></i>다시 작성</v-btn>
       </div>
       <v-form ref="form" class="notice-create-form" v-model="valid" lazy-validation>
-        <v-select v-model="select" :items="categorys" :rules="categoryRules" label="분류" required></v-select>
+        <v-select v-model="select" :items="categorys" item-value="id" item-text="category" label="분류" required></v-select>
         <v-text-field v-model="title" :counter="30" :rules="titleRules" label="제목" required></v-text-field>
         <v-textarea v-model="content" :rules="contentRules" label="내용" class="mt-4" outlined></v-textarea>
         <v-btn :disabled="!valid" color="success" class="mr-4 btn" 
@@ -49,14 +49,6 @@ export default {
   },
   methods: {
     write() {
-      if (this.select === "일반") {
-        this.select = 1
-      } else if (this.select === "중요") {
-        this.select = 2
-      } else if (this.select === "테마") {
-        this.select = 3
-      }
-
       if (this.$refs.form.validate()) {
         var noticeCreateForms = {
           "category": this.select,
@@ -74,19 +66,11 @@ export default {
             })
           })
           .catch(err => {
-            console.log(err)
+            console.log(err.response)
           })
       }
     },
     update() {
-      if (this.select === "일반") {
-        this.select = 1
-      } else if (this.select === "중요") {
-        this.select = 2
-      } else if (this.select === "테마") {
-        this.select = 3
-      }
-
       if (this.$refs.form.validate()) {
         var noticeUpdateForms = {
           "category": this.select,
@@ -124,21 +108,18 @@ export default {
   },
   mounted() {
     this.noticeId = this.$route.params.noticeId
+    axios.get(`/articles/n_category/`, this.$store.getters.requestHeader)
+      .then(res => {
+        this.categorys = res.data.data
+      })
     if (this.noticeId !== undefined) {
       axios.get(`/articles/notices/${this.noticeId}/`)
         .then(response => {
-          if (response.data.writer_id === this.$store.getters.user_id) {
-            if (response.data.category === 1) {
-              this.select = "일반"
-            } else if (response.data.category === 2) {
-              this.select = "중요"
-            } else if (response.data.category === 3) {
-              this.select = "테마"
-            }
-            // this.select = response.data.category
+          if (response.data.writer === this.$store.getters.user_id) {
+            this.select = response.data.category
             this.title = response.data.title
             this.content = response.data.content
-            this.writer_id = response.data.writer_id
+            this.writer_id = response.data.writer
             this.isNoticeAll = response.data.isNoticeAll
           } else {
             alert("수정 권한이 없습니다.")
