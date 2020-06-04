@@ -30,7 +30,7 @@
           <v-slide-group v-model="model" class="pa-4" center-active show-arrows>
             <v-slide-item v-for="theme in themeArr" :key="theme" v-slot:default="{ active, toggle }">
               <v-card class="home-destination-card" min-height="290px" max-height="30vw" min-width="218px"
-                max-width="30vw" @click="toggle">
+                width="30vw" @click="toggle">
                 <div>
                   <div class="home-card-destination-header">
                     <div class="home-card-title">
@@ -44,7 +44,7 @@
 
                 <!-- <v-img @click="showDetail(theme.id)" :src="theme.image" width="100%" height="100%" /> -->
                 <!-- 임시 -->
-                <v-sheet class="d-flex justify-content-center align-items-center" @click="showDetail(theme.id)" color="#E91E63" width="100%" height="100%" style="border-radius: 0;">
+                <v-sheet class="d-flex justify-content-center align-items-center" @click="showDetail(theme.id)" color="#546E7A" width="100%" height="100%" style="border-radius: 0;">
                   <div class="text-light pb-12" style="font-family: 'Cafe24Simplehae'; font-size: 25px;">#.{{ theme.id }} {{ theme.region }}</div>
                 </v-sheet>
 
