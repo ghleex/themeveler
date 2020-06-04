@@ -9,7 +9,7 @@
       </div>
       <div class="body">
         <p class="service-writer"><i class="fas fa-user"></i> {{serviceData.request_user_nickname}}</p>
-        <p class="service-created-date"><i class="far fa-clock"></i> {{serviceData.created_at | moment('YYYY-MM-DD HH:mm')}}</p>
+        <p class="service-created-date"><i class="far fa-clock"></i> {{ serviceData.created_at | moment("YYYY-MM-DD LT") }}</p>
       </div>
       <div class="service-content mt-3">{{serviceData.content}}</div><br>
       <div class="service-detail-btn mt-12">
@@ -24,7 +24,7 @@
     <div class="comment-header-top"></div>
     <div class="service-comment">
       <v-form ref="form" class="service-comment-form" v-model="valid" lazy-validation v-if="isAuthenticated">
-        <div class="strLen mb-2">{{resultRemian}}/500</div>
+        <div class="strLen mb-2">{{ resultRemian }}/500</div>
         <div class="survice-comment-input">
           <i class="far fa-comments mr-5 mt-2" style="font-size: 23px;"></i>
           <v-textarea color="#607D8B" rows="3" class="service-comment-write" outlined label="댓글을 작성하세요."
@@ -45,7 +45,7 @@
             <v-icon @click="commentUpdate(comment)">mdi-pen</v-icon>
           </div>
           <div v-else>
-            {{ comment.manager }} - {{ comment.content }}
+            {{ comment.manager_name }} - {{ comment.content }}
             <v-icon @click="modify">mdi-pen</v-icon>
           </div>
         </div>
@@ -166,9 +166,8 @@ export default {
     const requestHeader = this.$store.getters.requestHeader
     axios.get(`/articles/voice/${this.serviceId}/`, requestHeader)
       .then(response => {
-        console.log(response.data)
         this.serviceData = response.data
-        this.commentList = response.data["reply"]
+        this.commentList = response.data["replys"]
       })
       .catch(err => {
         console.log(err)
