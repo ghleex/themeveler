@@ -112,8 +112,8 @@ export default {
     const requestHeader = this.$store.getters.requestHeader
     axios.get('/articles/n_category/', requestHeader)
       .then(response => {
-        console.log(response.data["data"])
-        this.categorys = response.data["data"]
+        console.log(response)
+        this.categorys = response.data
       })
       .catch(err => {
         console.log(err)
