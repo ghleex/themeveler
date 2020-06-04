@@ -429,26 +429,8 @@ class Notices(APIView):
     """
     def get(self, request, format=None):
         notices = Notice.objects.filter(isNoticeAll=True).order_by('-writed_at')
-        notice = []
-        for n in notices:
-            serializer_n = NoticeSerializer(n).data
-            writer = serializer_n['writer']
-            noti = {
-                'id': serializer_n['id'],
-                'title': serializer_n['title'],
-                'category': serializer_n['category'],
-                'writer_id': writer,
-                'writer_nickname': str(User.objects.get(pk=writer).nickname),
-                'writed_at': serializer_n['writed_at'],
-                'updated_at': serializer_n['updated_at'],
-                'theme': serializer_n['theme'],
-            }
-            notice.append(noti)
-
-        data = {
-            'notice': notice,
-        }
-        return Response(data, status=status.HTTP_200_OK)
+        serializer_n = NoticeSerializer(notices, many=True)
+        return Response(serializer_n.data, status=status.HTTP_200_OK)
 
 
 @permission_classes((AllowAny, ))
@@ -464,20 +446,8 @@ class NoticeView(APIView):
     def get(self, request, notice_pk, format=None):
         notice = self.get_object(notice_pk)
         try:
-            serializer_n = NoticeSerializer(notice).data
-            writer = serializer_n['writer']
-            data = {
-                'title': serializer_n['title'],
-                'content': serializer_n['content'],
-                'category': serializer_n['category'],
-                'writer_id': writer,
-                'writer_nickname': str(User.objects.get(pk=writer).nickname),
-                'writed_at': serializer_n['writed_at'],
-                'updated_at': serializer_n['updated_at'],
-                'theme': serializer_n['theme'],
-                'isNoticeAll': serializer_n['isNoticeAll'],
-            }
-            return Response(data, status=status.HTTP_200_OK)
+            serializer_n = NoticeSerializer(notice)
+            return Response(serializer_n.data, status=status.HTTP_200_OK)
         except:
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
     
@@ -497,26 +467,8 @@ class ThemeNoticesView(APIView):
         theme = self.get_theme(theme_pk)
         try:
             notices = theme.theme_notices.all().order_by('-writed_at')
-            notice = []
-            for n in notices:
-                serializer_n = NoticeSerializer(n).data
-                writer = serializer_n['writer']
-                ntc = {
-                    'id': serializer_n['id'],
-                    'title': serializer_n['title'],
-                    'category': serializer_n['category'],
-                    'writed_at': serializer_n['writed_at'],
-                    'updated_at': serializer_n['updated_at'],
-                    'writer_id': writer,
-                    'writer_nickname': str(User.objects.get(pk=writer).nickname),
-                    'theme': serializer_n['theme'],
-                    'isNoticeAll': serializer_n['isNoticeAll'],
-                }
-                notice.append(ntc)
-            data = {
-                'notices': notice,
-            }
-            return Response(data, status=status.HTTP_200_OK)
+            serializer_n = NoticeSerializer(notices, many=True)
+            return Response(serializer_n.data, status=status.HTTP_200_OK)
         except:
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
@@ -550,7 +502,7 @@ class ThemeNoticesPost(APIView):
 
 class ThemeNoticesChange(APIView):
     """
-        코스 공지사항 - 세부 내용(공통) | 관리자의 수정/삭제
+        코스 공지사항 - 세부 내용(공통) | 관리자의 수정/삭제    
         
         ---
     """
