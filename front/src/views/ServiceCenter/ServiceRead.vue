@@ -118,10 +118,6 @@ export default {
     padding: 2rem 0;
   }
 
-  .service-table-header {
-    padding-bottom: 5rem;
-  }
-
   .service-list-body {
     width: 100%;
     height: 1.2rem;

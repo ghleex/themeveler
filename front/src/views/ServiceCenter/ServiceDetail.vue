@@ -20,7 +20,7 @@
     </div>
 
     <!-- Comment -->
-    <div class="comment-header">댓글</div>
+    <div class="comment-header">관리자 댓글</div>
     <div class="comment-header-top"></div>
     <div class="service-comment">
       <v-form ref="form" class="service-comment-form" v-model="valid" lazy-validation>

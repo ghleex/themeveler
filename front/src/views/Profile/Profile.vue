@@ -10,7 +10,7 @@
           <v-card>
             <h5 class="card-title">
               <span>
-                좋아요 누른 장소
+                좋아요 누른 테마
                 <v-chip class="ma-2 px-2" small color="blue" text-color="white">{{ itemsThemes.length }}</v-chip>
               </span>
             </h5>
@@ -19,10 +19,9 @@
               <v-list-item v-for="item in itemsThemes" :key="item.name">
                 <v-list-item-content>
                   <v-list-item-title>{{ item.name }}</v-list-item-title>
-                  <!-- <v-list-item-subtitle>{{ item.subtitle }}</v-list-item-subtitle> -->
                 </v-list-item-content>
                 <v-list-item-action style="margin-left: auto;">
-                  <v-btn icon :to="'/spot/'+item.id"><v-icon color="grey lighten-1">mdi-information</v-icon></v-btn>
+                  <v-btn icon :to="'/travel/'+item.id"><v-icon color="grey lighten-1">mdi-information</v-icon></v-btn>
                 </v-list-item-action>
               </v-list-item>
             </v-list>
@@ -42,7 +41,7 @@
             </h5>
             <v-divider></v-divider>
             <v-list>
-              <v-list-item v-for="item in itemsDests" :key="item.name + 'asdfasdfsadf'">
+              <v-list-item v-for="item in itemsDests" :key="item.name">
                 <v-list-item-avatar>
                   <v-checkbox v-model="checked_list" :value="item.id"></v-checkbox>
                 </v-list-item-avatar>
@@ -116,19 +115,19 @@ export default {
   },
   mounted() {
     const requestHeader = this.$store.getters.requestHeader
-    axios.get('/travels/visited_dests/', requestHeader)
-      .then(response => {
-        console.log(response)
-        this.itemsDests = response.data.visited_dests
-      })
-      .catch(err => {
-        console.log(err)
-      })
-    
     axios.get('/travels/visited_themes/', requestHeader)
       .then(response => {
         console.log(response)
         this.itemsThemes = response.data.favorite_themes
+      })
+      .catch(err => {
+        console.log(err)
+      })  
+
+    axios.get('/travels/visited_dests/', requestHeader)
+      .then(response => {
+        console.log(response)
+        this.itemsDests = response.data.visited_dests
       })
       .catch(err => {
         console.log(err)
@@ -151,7 +150,8 @@ export default {
   @media (max-width: 600px) {
     #profile-content {
       margin-left: 56px;
-      width: 80%;
+      width: 85%;
+      margin-bottom: 16px;
     }
   }
 
