@@ -40,6 +40,7 @@ export default {
         v => (v && v.length <= 30) || "제목을 30자 이내로 작성해주세요",
       ],
       contentRules: [v => !!v || "내용을 작성해주세요"],
+      category: [],
       categorys: [
         "일반",
         "중요",
@@ -144,6 +145,14 @@ export default {
             alert("수정 권한이 없습니다.")
             this.$router.push("/notice")
           }
+        })
+        .catch(err => {
+          console.log(err)
+        })
+      const requestHeader = this.$store.getters.requestHeader
+      axios.get('/articles/n_category/', requestHeader)
+        .then(response => {
+          this.category = response.data["data"]
         })
         .catch(err => {
           console.log(err)

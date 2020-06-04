@@ -5,15 +5,14 @@
 
         <div class="container" id="container">
           <div class="form-container sign-up-container">
-            <form name="signup" action="" method="post" @submit.prevent="checkSignup()">
+            <form name="signup" class="form" method="post" @submit.prevent="checkSignup()">
               <h1>Create Account</h1>
               <span>or use your email for registration</span>
-
               <input type="email" placeholder="Email" v-model="credentials.email" />
               <v-row justify="center">
                 <v-dialog v-model="dialog" max-width="500px">
                   <template v-slot:activator="{ on }">
-                    <v-btn color="red lighten-2" dark v-on="on">이메일인증</v-btn>
+                    <v-btn color="red lighten-2 my-0" dark v-on="on">이메일인증</v-btn>
                   </template>
                   <v-card>
                     <v-card-title>
@@ -21,7 +20,7 @@
                     </v-card-title>
                     <v-card-text>
                       <v-container>
-                        <input type="text" placeholder="인증번호" v-model="emailcertcode" />
+                        <input type="text" placeholder="인증번호" v-model="emailcertcode" class="mr-4" />
                         <v-btn color="grey lighten-2" @click="checkEmail">인증번호 전송</v-btn>
                       </v-container>
                     </v-card-text>
@@ -40,8 +39,9 @@
               <button class="signupbtn">Sign Up</button>
             </form>
           </div>
+
           <div class="form-container sign-in-container">
-            <form name="signin" action="" method="post" @submit.prevent="checkSignin()">
+            <form name="signin" class="form" method="post" @submit.prevent="checkSignin()">
               <h1>Login</h1>
               <div class="social-container">
                 <a :href="baseURL+'/accounts/social/google/'" class="social"><i class="fab fa-google"></i></a>
@@ -210,6 +210,7 @@ import Swal from 'sweetalert2'
           })
           .catch(err => {
             console.log(err)
+            alert('이미 존재하는 닉네임입니다.')
           })
       },
       // 이메일 중복체크
@@ -236,6 +237,7 @@ import Swal from 'sweetalert2'
             })
             .catch(err => {
               console.log(err)
+              alert('이미 존재하는 이메일(ID)입니다.')
             })
         }
       },
@@ -254,6 +256,7 @@ import Swal from 'sweetalert2'
           })
           .catch(err => {
             console.log(err)
+            alert('이메일 인증에 실패하였습니다.')
           })
       },
       // 로그인 폼 체크
@@ -513,9 +516,6 @@ import Swal from 'sweetalert2'
     background: rgb(255, 166, 65);
     background: -webkit-linear-gradient(to right, rgb(255, 125, 38), rgb(255, 189, 90));
     background: linear-gradient(to right, rgb(255, 125, 38), rgb(255, 189, 90));
-    // background: #FF416C;
-    // background: -webkit-linear-gradient(to right, #FF4B2B, #FF416C);
-    // background: linear-gradient(to right, #FF4B2B, #FF416C);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: 0 0;
@@ -577,5 +577,11 @@ import Swal from 'sweetalert2'
     margin: 0 5px;
     height: 40px;
     width: 40px;
+  }
+
+  @media (max-width: 600px) {
+    .account-div form {
+      padding: 0 10px;
+    }
   }
 </style>
