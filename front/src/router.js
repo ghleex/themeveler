@@ -56,7 +56,8 @@ const routes = [
   {
     path: '/service',
     name: 'service-read',
-    component: ServiceRead
+    component: ServiceRead,
+    meta: {requiresAuth: true}
   },
   {
     path: '/service/create/:serviceId?',
