@@ -17,6 +17,10 @@
         <template v-slot:item.title="{ item }">
           <div @click="detail(item.id)">{{ item.title }}</div>
         </template>
+        <!-- 등록일 시간형식 -->
+        <template v-slot:item.created_at="{ item }">
+          <div>{{ item.created_at | moment("YYYY-MM-DD LT") }}</div>
+        </template>
         <!-- 데이터가 없을 경우 -->
         <template slot="no-data">작성한 댓글이 없습니다</template>
       </v-data-table>
@@ -40,6 +44,10 @@
         <!-- 리스트 제목 -->
         <template v-slot:item.title="{ item }">
           <div @click="redetail(item.id)">{{ item.title }}</div>
+        </template>
+        <!-- 등록일 시간형식 -->
+        <template v-slot:item.created_at="{ item }">
+          <div>{{ item.created_at | moment("YYYY-MM-DD LT") }}</div>
         </template>
         <!-- 데이터가 없을 경우 -->
         <template slot="no-data">작성한 대댓글이 없습니다</template>
