@@ -7,12 +7,10 @@ from django.shortcuts import redirect
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes, parser_classes
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from rest_framework_jwt.settings import api_settings
-from rest_framework_jwt.utils import jwt_decode_handler
 from rest_framework_jwt.views import obtain_jwt_token
-from rest_framework.parsers import FormParser
 from drf_yasg.utils import swagger_auto_schema
 from .serializers import UserCreationSerializer, UserNicknameSerializer, WaitingSerializer
 from .serializers import UsernameSerializer, ConfirmCodeSerializer, UserPasswordSerializer
@@ -86,13 +84,13 @@ class EmailAuth(APIView):
         if Waiting.objects.filter(username=username).exists():
             waiting_user = Waiting.objects.get(username=username)
             if waiting_user.is_confirm:
-                return Response({'message': ['이미 인증된 유저입니다.']})
+                return Response({'message': ['이미 인증된 유저입니다.']}, status=status.HTTP_400_BAD_REQUEST)
             if waiting_user.username == username and waiting_user.confirm_code == confirm_code:
                 if waiting_user.updated_at > datetime.now() - timedelta(minutes=10):
                     waiting_user.is_confirm = True
                     waiting_user.confirm_code = None
                     waiting_user.save()
-                    return Response({'message': ['메일 인증에 성공하였습니다..']})
+                    return Response({'message': ['메일 인증에 성공하였습니다..']}, status=status.HTTP_200_OK)
                 else:
                     return Response({'message': ['유효시간이 지났습니다.']}, status=status.HTTP_400_BAD_REQUEST)
         return Response({'message': ['인증에 실패하였습니다.']}, status=status.HTTP_400_BAD_REQUEST)
@@ -138,13 +136,13 @@ class EmailSend(APIView):
                     if serializer.is_valid(raise_exception=True):
                         waiting = serializer.save()
                         self.mail_send(data)
-                        return Response({'message': ['메일 재전송 완료.']})
+                        return Response({'message': ['메일 재전송 완료.']}, status=status.HTTP_200_OK)
                     return Response({'message': ['메일 전송에 실패하였습니다.']}, status=status.HTTP_400_BAD_REQUEST)
             serializer = WaitingSerializer(data=data)
             if serializer.is_valid(raise_exception=True):
                 self.mail_send(data)
                 waiting = serializer.save()
-                return Response({'message': ['메일 전송 완료.']})
+                return Response({'message': ['메일 전송 완료.']}, status=status.HTTP_200_OK)
             return Response({'message': ['메일 전송에 실패하였습니다.']}, status=status.HTTP_400_BAD_REQUEST)
         return Response({'message': ['이미 가입된 이메일입니다.']},status=status.HTTP_400_BAD_REQUEST)
 
@@ -163,7 +161,7 @@ class Nickname(APIView):
         }
         serializer = UserNicknameSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
-            return Response({'message': ['사용하실수 있는 닉네임입니다.']})
+            return Response({'message': ['사용하실수 있는 닉네임입니다.']}, status=status.HTTP_200_OK)
         return Response({'message': ['닉네임 중복체크를 실패하였습니다.']}, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -210,7 +208,7 @@ class SignUp(APIView):
                         user.set_password(request.data.get('password'))
                         user.anonymous = choice(prefix) + choice(suffix) + str(user.id)
                         user.save()
-                    return Response({'message': ['환영합니다! 회원가입이 정상적으로 처리되었습니다.']})
+                    return Response({'message': ['환영합니다! 회원가입이 정상적으로 처리되었습니다.']}, status=status.HTTP_200_OK)
                 else:
                     return Response({'message': ['유효시간이 지났습니다.']}, status=status.HTTP_400_BAD_REQUEST)
         else:
@@ -218,6 +216,7 @@ class SignUp(APIView):
         return Response({'message': ['회원가입이 실패하였습니다.']}, status=status.HTTP_400_BAD_REQUEST)
 
 
+@permission_classes((IsAuthenticated, ))
 class UserMgmt(APIView):
     def delete(self, request, format=None):
         """
@@ -244,10 +243,11 @@ class UserMgmt(APIView):
         if serializer.is_valid(raise_exception=True):
             user = serializer.save()
             user.save()
-            return Response({'message': ['회원정보가 정상적으로 변경되었습니다.']})
+            return Response({'message': ['회원정보가 정상적으로 변경되었습니다.']}, status=status.HTTP_200_OK)
         return Response({'message': ['회원정보 변경이 실패하였습니다.']}, status=status.HTTP_400_BAD_REQUEST)
 
 
+@permission_classes((IsAuthenticated, ))
 class Password(APIView):
     @swagger_auto_schema(request_body=UserPasswordSerializer)
     def put(self, request, format=None):
@@ -271,7 +271,7 @@ class Password(APIView):
                 user = serializer.save()
                 user.set_password(password_data.get('password'))
                 user.save()
-                return Response({'message': ['회원정보가 정상적으로 변경되었습니다.']})
+                return Response({'message': ['회원정보가 정상적으로 변경되었습니다.']}, status=status.HTTP_200_OK)
             return Response({'message': ['비밀번호가 올바르지않습니다.']}, status=status.HTTP_400_BAD_REQUEST)
         return Response({'message': ['비밀번호 변경이 실패하였습니다.']}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -304,7 +304,7 @@ class SignIn(APIView):
         token = login_response.data.get('token')
         if not token:
             return login_response
-        return Response({'nickname': sign_in_user.nickname, 'is_staff': sign_in_user.is_staff, 'token': token})
+        return Response({'nickname': sign_in_user.nickname, 'is_staff': sign_in_user.is_staff, 'token': token}, status=status.HTTP_200_OK)
 
 
 @permission_classes((IsAdminUser, ))
@@ -322,7 +322,7 @@ class UserBan(APIView):
         sign_in_user.banning_period = (datetime.today() + timedelta(days=int(request.data.get('banning_period')))).strftime('%Y-%m-%d')
         sign_in_user.is_active = False
         sign_in_user.save()
-        return Response({'message': [sign_in_user.username + '가 '+ sign_in_user.banning_period + '까지 정지처리 되었습니다.']})
+        return Response({'message': [sign_in_user.username + '가 '+ sign_in_user.banning_period + '까지 정지처리 되었습니다.']}, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(request_body=UsernameSerializer)
     def delete(self, request, user_pk, format=None):
@@ -336,7 +336,7 @@ class UserBan(APIView):
         sign_in_user.banning_period = None
         sign_in_user.is_active = True
         sign_in_user.save()
-        return Response({'message': [sign_in_user.username + '님의 정지처리가 취소되었습니다.']})
+        return Response({'message': [sign_in_user.username + '님의 정지처리가 취소되었습니다.']}, status=status.HTTP_200_OK)
 
 
 @permission_classes((AllowAny, ))
@@ -373,11 +373,11 @@ class KakaoSignInCallbackView(APIView):
             access_token = token_json.get('access_token')        
             error = token_json.get('error', None)
             if error is not None:
-                return Response({'message': 'code'}, status = 400)
+                return Response({'message': 'error'}, status=status.HTTP_400_BAD_REQUEST)
         except KeyError:
-            return Response({'message': 'INVALID_TOKEN'}, status = 400)
+            return Response({'message': 'INVALID_TOKEN'}, status=status.HTTP_400_BAD_REQUEST)
         except access_token.DoesNotExist:
-            return Response({'message': 'INVALID_TOKEN'}, status = 400)
+            return Response({'message': 'INVALID_TOKEN'}, status=status.HTTP_400_BAD_REQUEST)
         
         profile_request = requests.get(                          
             'https://kapi.kakao.com/v2/user/me', headers={'Authorization': f'Bearer {access_token}'},
@@ -503,6 +503,6 @@ class PasswordFind(APIView):
             user.set_password(password)
             user.save()
             self.mail_send(data=data)
-            return Response({'message': [username + '님에게 비밀번호를 전송했습니다.']})
+            return Response({'message': [username + '님에게 비밀번호를 전송했습니다.']}, status=status.HTTP_200_OK)
         else:
             return Response({'message': ['해당 유저는 회원 가입된 유저가 아니거나 소셜 로그인 유저입니다.']}, status=status.HTTP_400_BAD_REQUEST)
