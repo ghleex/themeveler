@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="home-how-to">
 
     <div class="home-how-to-box">
       <div class="home-howTo-img">
@@ -16,8 +16,8 @@
 
 
 
-    <v-row justify="center" class="home-how-to">
-      <v-dialog v-model="dialog" persistent min-width="350px" width="80vw" max-width="800px">
+    <!-- <v-row justify="center" class="home-how-to"> -->
+      <v-dialog v-model="dialog" class="row-home-how" persistent width="80vw">
         <v-card>
 
           <v-stepper v-model="e1">
@@ -96,7 +96,7 @@
         </v-card>
 
       </v-dialog>
-    </v-row>
+    <!-- </v-row> -->
 
   </div>
 </template>
@@ -164,7 +164,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 2rem 1rem;
+    padding: 1rem 1rem;
     font-size: 18px;
     font-family: 'Cafe24Simplehae';
     background-color: #2c3e50cb;

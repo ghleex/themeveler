@@ -210,7 +210,7 @@
     box-shadow: 2px 2px 3px rgb(104, 110, 110);
   }
 
-  .chatbot-box>i {
+  .chatbot-box .fa-comment-dots {
     font-size: 35px;
     // color: #2c3e50;
     // color: #ffbc2d;

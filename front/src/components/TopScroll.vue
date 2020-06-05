@@ -49,8 +49,10 @@
     visibility: visible;
   }
 
-  #button > i {
-    color: #FF5252
+
+  #button .fa-arrow-circle-up {
+    transition: 2s;
+    color: #FF5252;
   }
 
   .hvr-grow {
@@ -68,7 +70,4 @@
     transform: scale(1.1);
   }
 
-  .hvr-grow i:hover {
-    text-shadow: 0 0 3px rgb(255, 117, 82);
-  }
 </style>

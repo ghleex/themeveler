@@ -296,7 +296,7 @@
 <style>
   html,
   body {
-    overflow: hidden;
+    /* overflow: auto; */
   }
 
   .stepper-ok-btn {
