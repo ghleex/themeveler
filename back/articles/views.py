@@ -243,6 +243,9 @@ class ManagersReplying(APIView):
     def post(self, request, voice_pk, format=None):
         try:
             requests = request.data
+            voice = get_object_or_404(CustomersVoice, pk=voice_pk)
+            voice.is_fixed = True
+            voice.save()
             data = {
                 'content': requests.get('content'),
                 'voice': voice_pk,
