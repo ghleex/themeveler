@@ -3,17 +3,20 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,shrink-to-fit=no">
     <title>Themeveler</title>
     <link rel="icon" href="favicon.ico">
     <link rel="shortcut icon" href="favicon.ico">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link rel="stylesheet" href="../src/plugins/demo.css">
-    <script src="https://kit.fontawesome.com/e7c9242ec2.js" crossorigin="anonymous"></script>
+
+    <!-- <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet"> -->
+    <!-- fontawsome -->
+    <!-- data-auto-add-css 기본값은 true, security policy를 위해서는 false 
+      data-auto-replace-svg="nest"를 사용함으로서 기존의 i가 svg로 변환되는 것을 사용할 수 있게끔 함 -->
+    <script src="https://use.fontawesome.com/releases/v5.13.0/js/all.js" data-auto-add-css="false" data-auto-replace-svg="nest"></script>
+    <!-- 이 link가 없으면 fontawsome 크기가 무자비해짐 위의 nest값과 아래의 link 둘 다 있어야 정상 크기, 정상 작동 -->
+    <link href="https://use.fontawesome.com/releases/v5.13.0/css/svg-with-js.css" rel="stylesheet" /> 
+    <!-- fontawsome-kit -->
+    <!-- <script src="https://kit.fontawesome.com/e7c9242ec2.js" crossorigin="anonymous" data-auto-add-css="false"></script> -->
     <style>
       @font-face {
         font-family: 'Cafe24Simplehae';
@@ -31,20 +34,5 @@
     </noscript>
     <div id="app"></div>
 
-    <!-- Jquery -->
-    <!-- <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-      integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
-    </script> -->
-
-    <!-- built files will be auto injected -->
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-      integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
-    </script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
-    </script>
   </body>
 </html>

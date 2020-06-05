@@ -95,16 +95,16 @@ export default {
     const requestHeader = this.$store.getters.requestHeader
     axios.get(`/articles/comment_self/${this.userId}/`, requestHeader)
       .then(response => {
-        this.commentData = response.data["comments"]
-        this.commentCount = response.data["comments"].length
+        this.commentData = response.data
+        this.commentCount = response.data.length
       })
       .catch(err => {
         console.log(err)
       })
     axios.get(`/articles/recomment/${this.userId}/`, requestHeader)
       .then(response => {
-        this.reCommentData = response.data["recomments"]
-        this.reCommentCount = response.data["recomments"].length
+        this.reCommentData = response.data
+        this.reCommentCount = response.data.length
       })
       .catch(err => {
         console.log(err)

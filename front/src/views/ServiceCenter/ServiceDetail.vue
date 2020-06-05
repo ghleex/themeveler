@@ -5,13 +5,13 @@
     </div>
     <div class="service-body">
       <div class="service-body-header">
-        <div class="service-detail-title">{{serviceData.title}}</div>
+        <div class="service-detail-title">{{ serviceData.title }}</div>
       </div>
       <div class="body">
-        <p class="service-writer"><i class="fas fa-user"></i> {{serviceData.request_user_nickname}}</p>
-        <p class="service-created-date"><i class="far fa-clock"></i> {{serviceData.created_at | moment('YYYY-MM-DD HH:mm')}}</p>
+        <p class="service-writer"><i class="fas fa-user"></i> {{ serviceData.request_user_nickname }}</p>
+        <p class="service-created-date"><i class="far fa-clock"></i> {{ serviceData.created_at | moment("YYYY-MM-DD HH:mm") }}</p>
       </div>
-      <div class="service-content mt-3">{{serviceData.content}}</div><br>
+      <div class="service-content mt-3">{{ serviceData.content }}</div><br>
       <div class="service-detail-btn mt-12">
         <v-btn color="warning" class="text-light mr-4 btn-detail" @click="updateData">수정 <i class="fas fa-edit ml-1"></i></v-btn>
         <v-btn color="error" class="mr-4 btn-detail" @click="deleteData">삭제 <i class="fas fa-minus-square ml-1"></i></v-btn>
@@ -23,12 +23,12 @@
     <div class="comment-header">관리자 댓글</div>
     <div class="comment-header-top"></div>
     <div class="service-comment">
-      <v-form ref="form" class="service-comment-form" v-model="valid" lazy-validation>
-        <div class="strLen mb-2">{{resultRemian}}/500</div>
+      <v-form ref="form" class="service-comment-form" v-model="valid" lazy-validation v-if="isAuthenticated">
+        <div class="strLen mb-2">{{ resultRemian }}/500</div>
         <div class="survice-comment-input">
           <i class="far fa-comments mr-5 mt-2" style="font-size: 23px;"></i>
           <v-textarea color="#607D8B" rows="3" class="service-comment-write" outlined label="댓글을 작성하세요."
-            :rules="commentRules" v-model="strLen" @keyup="checkLen">
+            :rules="commentRules" v-model="addComment" @keyup="checkLen">
           </v-textarea>
         </div>
         <div class="service-comment-submitBtn-box">
@@ -37,12 +37,18 @@
           </v-btn>
         </div>
       </v-form>
-      <v-divider></v-divider>
+      <v-divider v-if="isAuthenticated"></v-divider>
       <div class="comment-list">
-        <li v-for="comment in commentList" :key="comment.id">
-          {{ comment.manager }} - {{ comment.content }}
-          <v-icon @click="commentUpdate(comment.id)">mdi-pen</v-icon>
-        </li>
+        <div class="comment-content" v-for="comment in commentList" :key="comment.id">
+          <div v-if="modifyState === true">
+            <v-text-field v-model="comment.content"></v-text-field>
+            <v-icon @click="commentUpdate(comment)">mdi-pen</v-icon>
+          </div>
+          <div v-else>
+            {{ comment.manager_name }} - {{ comment.content }}
+            <v-icon @click="modify">mdi-pen</v-icon>
+          </div>
+        </div>
       </div>
     </div>
     <div class="comment-header-bottom"></div>
@@ -66,7 +72,9 @@ export default {
       ],
       remain: 500,
       resultRemian: 500,
-      strLen: ""
+      addComment: "",
+      isAuthenticated: this.$session.get("staff"),
+      modifyState: false
     }
   },
   methods: {
@@ -74,11 +82,11 @@ export default {
       if (this.serviceData.request_user_id === this.$store.getters.user_id) {
         const requestHeader = this.$store.getters.requestHeader
         axios.delete(`/articles/voice/${this.serviceId}/`, requestHeader)
-          .then(
+          .then(() => {
             this.$router.push({
               path: '/service'
             })
-          )
+          })
           .catch(err => {
             console.log(err)
           })
@@ -98,21 +106,21 @@ export default {
       })
     },
     checkLen() {
-      var letterLength = this.strLen.length
+      var letterLength = this.addComment.length
       this.resultRemian = 0
       this.resultRemian = this.remain - letterLength
     },
     commentSubmit() {
       if (this.$session.get("staff") === true) {
         var commentForms = {
-          "content": this.strLen,
+          "content": this.addComment,
           "manager": this.$store.getters.user_id,
           "voice": this.serviceId
         }
         const requestHeader = this.$store.getters.requestHeader
         axios.post(`/articles/manager_reply/${this.serviceId}/`, commentForms, requestHeader)
           .then(response => {
-            console.log(response.data)
+            this.commentList.unshift(response.data)
           })
           .catch(err => {
             console.log(err)
@@ -122,15 +130,24 @@ export default {
         alert("권한이 없습니다.")
       }
     },
-    commentUpdate(commentId) {      
+    modify() {
       if (this.$session.get("staff") === true) {
+        this.modifyState = true
+      }
+      else {
+        alert("권한이 없습니다.")
+      }
+    },
+    commentUpdate(comment) {
+      if (this.$session.get("staff") === true) {
+        this.modifyState = false
         var commentForms = {
-          "content": this.strLen,
+          "content": comment.content,
           "manager": this.$store.getters.user_id,
           "voice": this.serviceId
         }
         const requestHeader = this.$store.getters.requestHeader
-        axios.put(`/articles/manager_reply/${this.serviceId}/${commentId}/`, commentForms, requestHeader)
+        axios.put(`/articles/manager_reply/${this.serviceId}/${comment.id}/`, commentForms, requestHeader)
           .then(response => {
             console.log(response.data)
           })
@@ -149,9 +166,8 @@ export default {
     const requestHeader = this.$store.getters.requestHeader
     axios.get(`/articles/voice/${this.serviceId}/`, requestHeader)
       .then(response => {
-        console.log(response.data)
         this.serviceData = response.data
-        this.commentList = response.data["reply"]
+        this.commentList = response.data["replys"]
       })
       .catch(err => {
         console.log(err)
@@ -275,13 +291,19 @@ export default {
     background-color: #fff;
     width: 75%;
     margin: 0 auto 0 auto;
-    padding: 2rem 0 1rem 2rem;
+    padding: 1rem 0 1rem 2rem;
     box-shadow: 1px 2px 2px 1px rgb(100, 105, 109);
+  }
+
+  .strLen {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 2rem;
   }
 
   .survice-comment-input {
     display: flex;
-    margin-right: 5em;
+    margin-right: 2em;
   }
 
   .service-comment-submitBtn-box {
@@ -299,28 +321,6 @@ export default {
     margin: 0 1rem;
   }
 
-  @media (max-width: 501px) {
-    .survice-comment-input {
-      margin-right: 0;
-    }
-
-    .service-content {
-      width: 100%;
-    }
-
-    .service-comment {
-      padding: 2rem 1.2rem .5rem 1.2rem;
-    }
-
-    .service-comment-submitBtn {
-      margin: 0;
-    }
-
-    .strLen {
-      margin-right: 0 !important;
-    }
-  }
-
   .service-comment-write {
     width: 80%;
   }
@@ -335,13 +335,61 @@ export default {
     box-shadow: 1px 2px 2px 1px rgb(100, 105, 109);
   }
 
-  .strLen {
-    display: flex;
-    justify-content: flex-end;
-    margin-right: 5rem;
+  @media (max-width: 600px) {
+    .comment-header {
+      margin: 0 auto 0 5%;
+    }
+
+    .comment-header-top {
+      width: 90%;
+    }
+
+    .strLen {
+      margin-right: 0 !important;
+    }
+
+    .survice-comment-input {
+      margin-right: 0;
+    }
+
+    .service-content {
+      width: 100%;
+    }
+
+    .service-comment {
+      width: 90%;
+      padding: 1rem 1.2rem 1rem 1.2rem;
+    }
+
+    .service-comment-submitBtn-box {
+      margin-right: 0;
+    }
+
+    .service-comment-submitBtn {
+      margin: 0;
+    }
+
+    .comment-header-bottom {
+      width: 90%;
+    }
   }
 
   .comment-list {
     text-align: left;
+  }
+
+  .comment-content {
+    width: 95%;
+    background-color: #d0d7df49;
+    border-radius: 5px;
+    border: 1px solid #2c3e5049;
+    text-align: start;
+    padding: 1rem;
+  }
+
+  @media (max-width: 600px) {
+    .comment-content {
+      width: 100%;
+    }
   }
 </style>
