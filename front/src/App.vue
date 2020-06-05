@@ -87,4 +87,11 @@ export default {
   color: #2c3e50;
   /* margin-top: 60px; */
 }
+body::-webkit-scrollbar { 
+  width: 5px; 
+  }
+body::-webkit-scrollbar-thumb {
+   background: #ffa93a; 
+   border-radius: 10px;
+   }
 </style>
