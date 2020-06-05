@@ -17,6 +17,10 @@
         <template v-slot:item.title="{ item }">
           <div @click="detail(item.id)">{{ item.title }}</div>
         </template>
+        <!-- 등록일 시간형식 -->
+        <template v-slot:item.created_at="{ item }">
+          <div>{{ item.created_at | moment("YYYY-MM-DD LT") }}</div>
+        </template>
         <!-- 데이터가 없을 경우 -->
         <template slot="no-data">작성한 댓글이 없습니다</template>
       </v-data-table>
@@ -33,13 +37,17 @@
         </h5>
       </div>
       <v-divider></v-divider>
-      <v-data-table :headers="headers" :items="reCommentData" :page.sync="page" :items-per-page="itemsPerPage"
-        hide-default-footer class="elevation-1" @page-count="pageCount = $event" :sort-by="['id']" :sort-desc="true" dense>
+      <v-data-table :headers="headers_re" :items="reCommentData" :page.sync="page_re" :items-per-page="itemsPerPage_re"
+        hide-default-footer class="elevation-1" @page-count="pageCount_re = $event" :sort-by="['id']" :sort-desc="true" dense>
         <template v-slot:top>
         </template>
         <!-- 리스트 제목 -->
         <template v-slot:item.title="{ item }">
           <div @click="redetail(item.id)">{{ item.title }}</div>
+        </template>
+        <!-- 등록일 시간형식 -->
+        <template v-slot:item.created_at="{ item }">
+          <div>{{ item.created_at | moment("YYYY-MM-DD LT") }}</div>
         </template>
         <!-- 데이터가 없을 경우 -->
         <template slot="no-data">작성한 대댓글이 없습니다</template>
@@ -73,6 +81,14 @@ export default {
       ],
       commentData: [],
       commentCount: 0,
+      page_re: 1,
+      pageCount_re: 0,
+      itemsPerPage_re: 10,
+      headers_re: [
+        { text: "번호", value: "id", sortable: false },
+        { text: "댓글 내용", value: "content", sortable: false },
+        { text: "등록일", value: "created_at", sortable: false }
+      ],
       reCommentData: [],
       reCommentCount: 0,
       userId: ""

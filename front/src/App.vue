@@ -31,13 +31,13 @@ export default {
     login(loginforms) {
       axios.post('/accounts/signin/', loginforms)
         .then(response => {
-          console.log(response)
+          // console.log(response)
           if (response.status === 200 && response.data["token"] !== null) {
             const token = response.data.token
             this.$session.start()
             this.$session.set("jwt", token)
             this.$session.set("nickname", response.data.nickname)
-            this.$session.set("expire", Date.now() + 21600)
+            this.$session.set("expire", Date.now() + 3600000)
             this.$session.set("staff", response.data.is_staff)
             this.$store.dispatch("login", token)
             this.$store.commit("setToken", token)
@@ -61,11 +61,18 @@ export default {
       this.$store.dispatch("login", stored.jwt)
       this.$store.commit("setToken", stored.jwt)
     }
-    // if (this.$session.exists()) {
-    //   if (this.$session.get("expire") < Date.now()) {
-    //     this.logout()
+    if (this.$store.getters.isLoggedIn) {
+      if (this.$store.getters.user_exptime * 1000 < Date.now()) {
+        this.logout()
+      }
+    }
+    // setInterval(() => {
+    //   if (this.$session.exists("jwt")) {
+    //     if (this.$session.getItem("expire") < Date.now()) {
+    //       this.logout()
+    //     }
     //   }
-    // }
+    // })
   },
   computed: {
     nickname() {
@@ -80,7 +87,6 @@ export default {
 
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
-  /* font-family: 'Roboto Condensed', sans-serif; */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;

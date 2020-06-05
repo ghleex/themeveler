@@ -158,10 +158,6 @@ export default {
     background-color: rgb(238, 240, 247);
   }
 
-  .reset {
-    text-align: right;
-  }
-
   #service-create .service-center-title {
     font-family: 'Cafe24Simplehae';
     font-size: 40px;
@@ -180,6 +176,10 @@ export default {
     margin: 0 auto 0 auto;
     border-radius: 0 0 7px 7px;
     box-shadow: 1px 2px 2px 1px rgb(100, 105, 109);
+  }
+
+  .reset {
+    text-align: right;
   }
 
   .btn-create {

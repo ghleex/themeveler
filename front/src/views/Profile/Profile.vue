@@ -117,7 +117,6 @@ export default {
     const requestHeader = this.$store.getters.requestHeader
     axios.get('/travels/visited_themes/', requestHeader)
       .then(response => {
-        console.log(response)
         this.itemsThemes = response.data.favorite_themes
       })
       .catch(err => {
@@ -126,7 +125,6 @@ export default {
 
     axios.get('/travels/visited_dests/', requestHeader)
       .then(response => {
-        console.log(response)
         this.itemsDests = response.data.visited_dests
       })
       .catch(err => {

@@ -14,7 +14,7 @@
       <div class="place-container" v-if="placeData.length !== 0">
         <v-divider></v-divider>
         <p class="sresult-type">장소 검색결과</p>
-        <li v-for="place in placeData" :key="place.id" @click="goPlacePage(place.theme[0])">{{ place.name }}</li>
+        <li v-for="place in placeData" :key="place.id" @click="goPlacePage(place.themes[0])">{{ place.name }}</li>
       </div>
       <div v-if="themeData.length+placeData.length === 0">일치하는 검색결과가 없습니다.</div>
     </div>

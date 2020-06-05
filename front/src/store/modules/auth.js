@@ -40,6 +40,12 @@ const getters = {
   },
   user_id(state) {
     return jwtDecode(state.token).user_id
+  },
+  username(state) {
+    return jwtDecode(state.token).username
+  },
+  user_exptime(state) {
+    return jwtDecode(state.token).exp
   }
 }
 
