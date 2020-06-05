@@ -6,34 +6,50 @@
         <div class="container" id="container">
           <div class="form-container sign-up-container">
             <form name="signup" class="form" method="post" @submit.prevent="checkSignup()">
-              <h1>Create Account</h1>
+              <h1 style="font-size: 30px;">Create Account</h1>
               <span>or use your email for registration</span>
               <input type="email" placeholder="Email" v-model="credentials.email" />
-              <v-row justify="center">
+              <v-row justify="content" style="flex: 0 0;">
                 <v-dialog v-model="dialog" max-width="500px">
                   <template v-slot:activator="{ on }">
-                    <v-btn color="red lighten-2 my-0" dark v-on="on">이메일인증</v-btn>
+                    <v-btn color="#FF8A65" small dark v-on="on"
+                    style="font-weight: 300;">
+                    <i class="fas fa-share-square mr-1"></i>
+                    이메일 인증</v-btn>
                   </template>
                   <v-card>
                     <v-card-title>
-                      <span class="headline" primary-title>이메일인증</span>
+                      <span class="headline" primary-title style="font-weight: 900;">
+                        <i class="far fa-paper-plane mr-1"></i>
+                        이메일 인증
+                      </span>
                     </v-card-title>
                     <v-card-text>
                       <v-container>
-                        <input type="text" placeholder="인증번호" v-model="emailcertcode" class="mr-4" />
-                        <v-btn color="grey lighten-2" @click="checkEmail">인증번호 전송</v-btn>
+                        
+                        <input type="text" placeholder="'-'포함 인증번호를 입력하세요" v-model="emailcertcode" class="mr-2 p-2 mb-2" style="width: 207px; border-radius: 50px; border:2px dotted #0097A7" />
+                        <v-btn color="#00ACC1" text rounded @click="checkEmail" style="background: #E0F7FA;">
+                          <i class="fas fa-envelope-open-text mr-1"></i>
+                          인증번호 전송</v-btn>
                       </v-container>
                     </v-card-text>
                     <v-card-actions>
                       <v-spacer></v-spacer>
-                      <v-btn color="blue darken-1" text @click="checkEmailCert">확인</v-btn>
-                      <v-btn color="blue darken-1" text @click="dialog = false">취소</v-btn>
+                      <v-btn color="blue darken-1" text @click="checkEmailCert">
+                        <i class="fas fa-check-circle mr-1"></i>
+                        확인</v-btn>
+                      <v-btn color="blue darken-1" text @click="dialog = false">
+                        <i class="fas fa-times-circle mr-1"></i>
+                        취소</v-btn>
                     </v-card-actions>
                   </v-card>
                 </v-dialog>
               </v-row>
               <input type="text" placeholder="Name" v-model="credentials.nickname" />
-              <v-btn color="red lighten-2" dark @click="checkNickname">중복확인</v-btn>
+              <v-btn color="#FF8A65" small dark @click="checkNickname"
+              style="font-weight: 300">
+              <i class="fas fa-share-square mr-1"></i>
+              중복 확인</v-btn>
               <input type="password" name="pw" placeholder="Password" v-model="credentials.pw" />
               <input type="password" name="rpw" placeholder="Confirm Password" v-model="credentials.rpw" />
               <button class="signupbtn">Sign Up</button>
@@ -57,7 +73,7 @@
           <div class="overlay-container">
             <div class="overlay">
               <div class="overlay-panel overlay-left">
-                <h1>Welcome Back!</h1>
+                <h1 style="font-size: 30px;">Welcome Back!</h1>
                 <p>개인 정보를 입력 하고 우리와 함께해요!</p>
                 <button class="ghost" id="signIn">Login</button>
               </div>
@@ -356,6 +372,7 @@ import Swal from 'sweetalert2'
     flex-direction: column;
     font-family: 'Montserrat', sans-serif;
     height: 100vh;
+    margin: 2rem .5rem 0 .5rem;
   }
 
   .account-div h1 {
