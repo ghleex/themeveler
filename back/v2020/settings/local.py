@@ -7,7 +7,7 @@ SECRET_KEY = 'j9b7^!ini06k49@=22-cy+7jl+4meyonf#yt(y(ks6zzd(-1_t'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1']
 
 
 # Database
