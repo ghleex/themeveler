@@ -77,6 +77,7 @@
                   <v-slide-group class="pa-4 pop-theme-slide-group" center-active show-arrows>
                     <!-- <v-slide-item v-for="(img, index) in cardBypopTheme(model)" :key="img"> -->
                     <v-slide-item v-for="(dest, index) in destinations" :key="dest">
+
                       <v-card class="ma-4 popTheme-sub-img" height="123" width="120">
                         <!-- <v-img :src="img" height="123" @click="openCardModal(img)"></v-img> -->
                         <!-- 임시 이미지 -->
@@ -274,6 +275,7 @@
         document.querySelector('#footer').style.display = 'block'
       },
       cardBypopTheme(id) {
+
         // var theme = this.popTheme.filter(theme => {
         //   return theme.id == id + 1
         // })
@@ -323,6 +325,7 @@
 
         var themeId = model + 1
         this.$router.push('/travel/' + themeId)
+
 
       }
     },
@@ -471,12 +474,12 @@
     width: 30%;
     height: 250px;
     border-right: dotted 2px white;
-    /* -webkit-clip-path: polygon(0 0, 76% 0, 24% 100%, 0% 100%);
-    clip-path: polygon(0 0, 76% 0, 24% 100%, 0% 100%); */
     border-radius: 0 20px 20px 0;
     display: flex;
     justify-content: center;
     align-items: center;
+    /* -webkit-clip-path: polygon(0 0, 76% 0, 24% 100%, 0% 100%);
+    clip-path: polygon(0 0, 76% 0, 24% 100%, 0% 100%); */
   }
 
   .describe-left>img {
@@ -653,7 +656,6 @@
     margin: 0 .3rem;
   }
 
-  /* media query가 좀 이상하게 작동 함 */
   @media (max-width: 950px) {
     .pop-theme-card-text {
       background: #2c3e50;

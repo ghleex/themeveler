@@ -221,7 +221,7 @@ class ChatView(APIView):
             # 내용
                 * headers에서 포함된 jwt 데이터의 user_id를 이용합니다.
                 * theme_pk: theme의 theme_id를 작성합니다. Int 형식입니다.
-                * page_no: 
+                * page_no: theme에 포함된 채팅 내역의 페이지입니다. 20개씩 제공됩니다.
         """
         try:
             chat_page = Paginator(Message.objects.all(), 20).page(page_no)            

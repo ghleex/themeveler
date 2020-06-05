@@ -9,6 +9,7 @@
               <h1 style="font-size: 30px;">Create Account</h1>
               <span>or use your email for registration</span>
               <input type="email" placeholder="Email" v-model="credentials.email" />
+
               <v-row style="flex: 0 0; justify-content: flex-end;">
                 <v-dialog v-model="dialog" max-width="500px">
                   <template v-slot:activator="{ on }">
@@ -50,14 +51,17 @@
                         <i class="fas fa-times-circle mr-1"></i>
                         취소</v-btn>
 
+
                     </v-card-actions>
                   </v-card>
                 </v-dialog>
               </v-row>
               <input type="text" placeholder="Name" v-model="credentials.nickname" />
+
               <v-btn depressed color="#FFA726" small dark @click="checkNickname" style="font-weight: 300">
                 <i class="fas fa-share-square mr-1"></i>
                 중복 확인</v-btn>
+
               <input type="password" name="pw" placeholder="Password" v-model="credentials.pw" />
               <input type="password" name="rpw" placeholder="Confirm Password" v-model="credentials.rpw" />
               <button class="signupbtn">Sign Up</button>
@@ -74,7 +78,7 @@
               <span>or use your account</span>
               <input type="email" placeholder="Email" v-model="credentials.email" />
               <input type="password" placeholder="Password" v-model="credentials.pw" />
-              <a @click="forgotPassword">Forgot your password?</a>
+              <a @click="forgotPassword"><i class="fas fa-share-square mr-1"></i>Forgot your password?</a>
               <button class="loginbtn">Login</button>
             </form>
           </div>
@@ -129,7 +133,6 @@
     methods: {
       // 회원가입 폼 체크
       checkSignup() {
-        // 검증 form
         // 이메일 입력하지 않은 경우
         if (!this.credentials.email) {
           Swal.fire({
@@ -194,14 +197,13 @@
             timer: 3000
           })
         }
-        // 검수를 다 거치고 난 후 회원가입
+        // 검수 후 회원가입
         else {
           const credentials = {
             'username': this.credentials.email,
             'password': this.credentials.pw,
             'nickname': this.credentials.nickname
           }
-          // console.log(credentials)
           axios.post('/accounts/signup/', credentials)
             .then(response => {
               if (response.status == 200) {
@@ -211,6 +213,7 @@
                   icon: "success",
                   timer: 3000
                 })
+
                 // 회원가입 후 자동로그인
                 var loginforms = new FormData()
                 loginforms.append('username', this.credentials.email)
@@ -408,17 +411,17 @@
       this.a()
 
       // signin&up js
-      const signUpButton = document.getElementById('signUp');
-      const signInButton = document.getElementById('signIn');
-      const container = document.getElementById('container');
+      const signUpButton = document.getElementById('signUp')
+      const signInButton = document.getElementById('signIn')
+      const container = document.getElementById('container')
 
       signUpButton.addEventListener('click', () => {
-        container.classList.add("right-panel-active");
-      });
+        container.classList.add("right-panel-active")
+      })
 
       signInButton.addEventListener('click', () => {
-        container.classList.remove("right-panel-active");
-      });
+        container.classList.remove("right-panel-active")
+      })
 
       // csrf // :value="scrf"
       // this.$scrfToken;

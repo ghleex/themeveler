@@ -56,7 +56,7 @@
         </v-list-item>
         <v-list-item class="side-no-padding" color="#263238" v-if="this.$store.getters.isLoggedIn" @click="logout()">
           <v-list-item-icon>
-            <v-icon class="pl-4">mdi-login-variant</v-icon>
+            <v-icon class="pl-4">mdi-logout-variant</v-icon>
           </v-list-item-icon>
           <v-list-item-title>LOGOUT</v-list-item-title>
         </v-list-item>
@@ -101,7 +101,7 @@
             <v-icon class="mr-2">mdi-login-variant</v-icon> Login
           </div>
           <div class="nav-link drop-no" v-else @click="logout()">
-            <v-icon class="mr-2">mdi-login-variant</v-icon> Logout
+            <v-icon class="mr-2">mdi-logout-variant</v-icon> Logout
           </div>
         </v-btn>
         <v-btn text v-if="this.$store.getters.isLoggedIn" @click="userpage">

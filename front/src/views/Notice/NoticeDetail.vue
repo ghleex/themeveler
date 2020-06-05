@@ -17,9 +17,9 @@
       </div>
       <div class="notice-detail-btn">
         <v-divider></v-divider>
-        <v-btn color="warning" class="mr-4 btn-detail" @click="updateData" v-if="isAuthenticated">수정 <i class="fas fa-edit ml-1"></i></v-btn>
-        <v-btn color="error" class="mr-4 btn-detail" @click="deleteData" v-if="isAuthenticated">삭제 <i class="fas fa-minus-square ml-1"></i></v-btn>
-        <v-btn color="rgb(238, 240, 247)" class="btn-detail" @click="back">목록 <i class="fas fa-bars ml-1"></i></v-btn>
+        <v-btn color="warning" class="mr-4 btn-detail" @click="updateData" v-if="isAuthenticated">수정<i class="fas fa-edit ml-1"></i></v-btn>
+        <v-btn color="error" class="mr-4 btn-detail" @click="deleteData" v-if="isAuthenticated">삭제<i class="fas fa-minus-square ml-1"></i></v-btn>
+        <v-btn color="rgb(238, 240, 247)" class="btn-detail" @click="back">목록<i class="fas fa-bars ml-1"></i></v-btn>
       </div>
     </div>
   </div>
@@ -52,15 +52,16 @@ export default {
           })
       } else {
         alert("삭제 권한이 없습니다.")
-        this.$router.push({
-          path: `/notice/detail/${this.noticeId}`
-        })  
       }
     },
     updateData() {
-      this.$router.push({
-        path: `/notice/create/${this.noticeId}`
-      })
+      if (this.noticeData.writer === this.$store.getters.user_id) {
+        this.$router.push({
+          path: `/notice/create/${this.noticeId}`
+        })
+      } else {
+        alert("수정 권한이 없습니다.")
+      }
     },
     back() {
       this.$router.push({

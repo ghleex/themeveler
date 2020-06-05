@@ -14,7 +14,7 @@
                   <v-file-input label="Profile Image" class="purple-input" type="file" />
                 </v-col>
                 <v-col cols="12" class="content-col">
-                  <v-text-field label="Email (ID)" class="purple-input" disabled />
+                  <v-text-field v-model="email" label="Email (ID)" class="purple-input" disabled />
                 </v-col>
                 <v-col cols="12" class="content-col">
                   <v-text-field v-model="nickname" label="Nickname" class="purple-input" />
@@ -33,12 +33,11 @@
 
         <v-col cols="12" md="4">
           <v-card-text class="text-center">
-            <h6 class="display-1 mb-1 grey--text">ad.</h6>
+            <h6 class="display-1 mb-1 grey--text">caution.</h6>
             <h4 class="display-2 font-weight-light mb-3 black--text"></h4>
             <p class="font-weight-light grey--text">
               개인정보 유출에 항상 주의하세요..
             </p>
-            <!-- <v-btn color="success" rounded class="mr-0">Read More</v-btn> -->
           </v-card-text>
         </v-col>
       </v-row>
@@ -58,6 +57,7 @@ export default {
   data() {
     return {
       dialog: false,
+      email: "",
       nickname: ""
     }
   },
@@ -66,7 +66,7 @@ export default {
       var result = confirm("정말로 회원을 탈퇴하시겠습니까?")
       if (result) {
         axios.delete('/accounts/usermgmt/', this.$store.getters.requestHeader)
-          .then(()=>{
+          .then(() => {
             if (this.$session.exists()) {
               this.$session.destroy()
             }
@@ -107,6 +107,7 @@ export default {
     }
   },
   mounted() {
+    this.email = this.$store.getters.username
     this.nickname = this.$session.get("nickname")
   }
 }

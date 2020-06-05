@@ -243,6 +243,9 @@ class ManagersReplying(APIView):
     def post(self, request, voice_pk, format=None):
         try:
             requests = request.data
+            voice = get_object_or_404(CustomersVoice, pk=voice_pk)
+            voice.is_fixed = True
+            voice.save()
             data = {
                 'content': requests.get('content'),
                 'voice': voice_pk,
@@ -447,6 +450,7 @@ class ThemeNoticesPost(APIView):
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
 
+@permission_classes((IsAuthenticated,))
 class ThemeNoticesChange(APIView):
     """
         코스 공지사항 - 세부 내용(공통) | 관리자의 수정/삭제    
@@ -454,16 +458,17 @@ class ThemeNoticesChange(APIView):
         ---
     """
     def get_notices(self, notice_pk, format=None):
-        return get_object_or_404(Notice, pk=notice_pk)
+        return get_object_or_404(Notice, pk=notice_pk)        
 
-    @permission_classes((IsAuthenticated,))
     def get(self, request, notice_pk, format=None):
         notice = self.get_notices(notice_pk)
         serializer_n = NoticeSerializer(notice)
         return Response(serializer_n.data, status=status.HTTP_200_OK)
     
-    @permission_classes((IsAdminUser,))
     def put(self, request, notice_pk, format=None):
+        user = get_user(request.headers['Authorization'].split(' '))
+        if not user.is_staff:
+            return Response(access_message, status=status.HTTP_401_UNAUTHORIZED)
         notice = self.get_notices(notice_pk)
         try:
             if request.user == notice.writer:
@@ -489,8 +494,10 @@ class ThemeNoticesChange(APIView):
         except:
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
-    @permission_classes((IsAdminUser,))
     def delete(self, request, notice_pk, format=None):
+        user = get_user(request.headers['Authorization'].split(' '))
+        if not user.is_staff:
+            return Response(access_message, status=status.HTTP_401_UNAUTHORIZED)
         try:
             notice = self.get_notices(notice_pk)
             if request.user == notice.writer:
