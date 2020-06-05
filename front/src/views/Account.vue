@@ -63,7 +63,7 @@
               <span>or use your account</span>
               <input type="email" placeholder="Email" v-model="credentials.email" />
               <input type="password" placeholder="Password" v-model="credentials.pw" />
-              <a @click="forgotPassword">Forgot your password?</a>
+              <a @click="forgotPassword"><i class="fas fa-share-square mr-1"></i>Forgot your password?</a>
               <button class="loginbtn">Login</button>
             </form>
           </div>
@@ -190,7 +190,7 @@ import Swal from 'sweetalert2'
           }
           axios.post('/accounts/signup/', credentials)
             .then(response => {
-              if (response.status==200) {
+              if (response.status == 200) {
                 alert('회원가입이 완료되었습니다.')
                 // 회원가입 후 자동로그인
                 var loginforms = new FormData()
@@ -211,7 +211,7 @@ import Swal from 'sweetalert2'
       checkNickname() {
         axios.get(`/accounts/nickname/${this.credentials.nickname}/`)
           .then(response => {
-            if (response.status==200) {
+            if (response.status == 200) {
               alert('사용 가능한 닉네임입니다.')
               this.credentials.checkNickname = true
             }
@@ -232,7 +232,7 @@ import Swal from 'sweetalert2'
         else {
           axios.get(`/accounts/username/${this.credentials.email}/`)
             .then(response => {
-              if (response.status==200) {
+              if (response.status == 200) {
                 // 인증번호 전송
                 axios.post('/accounts/email/send/', {'username': this.credentials.email})
                   .then(
@@ -256,7 +256,7 @@ import Swal from 'sweetalert2'
       checkEmailCert() {
         axios.get(`/accounts/email/auth/${this.credentials.email}/${this.emailcertcode}/`)
           .then(response => {
-            if (response.status==200) {
+            if (response.status == 200) {
               this.dialog=false
               alert('이메일 인증이 완료되었습니다.')
               this.credentials.checkEmailCert = true

@@ -79,7 +79,7 @@
   import ChatBot from '../../components/ChatBot.vue'
 
   export default {
-    name: 'TravelDetail',
+    name: "TravelDetail",
     components: {
       ChatBot,
     },

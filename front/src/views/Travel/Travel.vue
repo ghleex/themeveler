@@ -1,8 +1,5 @@
 <template>
   <div id="travel">
-
-
-
     <!-- carousel -->
     <div class="travel-img-font">
       여행을 읽다<br>
@@ -17,7 +14,6 @@
         </v-sheet>
       </v-carousel-item>
     </v-carousel>
-
 
 
 
@@ -61,10 +57,6 @@
 
 
 
-
-
-
-
         </v-sheet>
         <v-sheet class="ml-auto" max-width="90vw">
           <v-slide-group v-model="model_" class="pa-4" center-active show-arrows>
@@ -95,8 +87,9 @@
 
 <script>
   import axios from 'axios'
+
   export default {
-    name: 'Travel',
+    name: "Travel",
     data() {
       return {
         themeArr: [],

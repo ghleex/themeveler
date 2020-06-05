@@ -19,14 +19,26 @@
         </v-list-item>
         <v-divider></v-divider>
 
-        <v-list-item v-for="item in items" :key="item.title" link :to="item.path" class="list-item">
-          <v-list-item-icon>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
+        <div v-if="social === false">
+          <v-list-item v-for="item in items" :key="item.title" link :to="item.path" class="list-item">
+            <v-list-item-icon>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </div>
+        <div v-else>
+          <v-list-item v-for="item in items_social" :key="item.title" link :to="item.path" class="list-item">
+            <v-list-item-icon>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </div>
       </v-list>
     </v-navigation-drawer>
   </div>
@@ -41,15 +53,19 @@ export default {
         { title: '마이페이지', icon: 'mdi-view-dashboard', path: "/profiles" },
         { title: '비밀번호변경', icon: 'mdi-account-edit', path: "/editpassword" },
         { title: '회원정보수정', icon: 'mdi-account-edit', path: "/editprofile" },
-        { title: '댓글 활동', icon: 'mdi-comment-text', path: "/profile/comment" },
-        // { title: '미정..', icon: 'mdi-image', path: "/profiletest" },
+        { title: '댓글 활동', icon: 'mdi-comment-text', path: "/profile/comment" }
+      ],
+      items_social: [
+        { title: '마이페이지', icon: 'mdi-view-dashboard', path: "/profiles" },
+        { title: '회원정보수정', icon: 'mdi-account-edit', path: "/editprofile" },
+        { title: '댓글 활동', icon: 'mdi-comment-text', path: "/profile/comment" }
       ],
       color: "primary",
       miniVariant: false,
-      // miniVariant: window.innerWidth >= 600 ? false : true,
       expandOnHover: false,
       background: true,
-      innerWidth: window.innerWidth
+      innerWidth: window.innerWidth,
+      social: this.$session.get("social") ? true : false
     }
   },
   methods: {
@@ -73,13 +89,13 @@ export default {
       }
     }
   },
-  mounted() {
-    this.winWidth()
-  },
   computed: {
     bg () {
       return this.background ? "https://cdn.vuetifyjs.com/images/backgrounds/bg-2.jpg" : undefined
-    },
+    }
+  },
+  mounted() {
+    this.winWidth()
   }
 }
 </script>
