@@ -3,6 +3,10 @@
     <div class="bg-darker">
       <div class="account-div">
 
+        <v-overlay :value="overlay" style="z-index: 222;">
+          <i class="fas fa-circle-notch fa-spin" style="font-size:24px; color: white;"></i>
+        </v-overlay>
+
         <div class="container" id="container">
           <div class="form-container sign-up-container">
             <form name="signup" class="form" method="post" @submit.prevent="checkSignup()">
@@ -19,7 +23,8 @@
                   </template>
                   <v-card>
                     <v-card-title>
-                      <span class="headline" primary-title style="font-weight: 700; color: #263238; font-family: 'Cafe24Simplehae' !important; color: #263238">
+                      <span class="headline" primary-title
+                        style="font-weight: 700; color: #263238; font-family: 'Cafe24Simplehae' !important; color: #263238">
                         <i class="fas fa-envelope-open-text mr-1"></i>
                         이메일 인증
                       </span>
@@ -30,24 +35,23 @@
                         <i class="fas fa-code mr-1" style="color: #FFA726;"></i>
                         <input type="text" placeholder="'-'포함 인증번호를 입력하세요" v-model="emailcertcode" class="mr-2 p-2 mb-2"
                           style="width: 207px; border-bottom: 2px solid #FFA726" />
-                        <v-btn v-if="loading == false" color="#FF5F00" text rounded @click="checkEmail" style="font-family: 'Cafe24Simplehae' !important; background: #FFF3E0">
+                        <v-btn color="#FF5F00" text rounded @click="checkEmail"
+                          style="font-family: 'Cafe24Simplehae' !important; background: #FFF3E0">
                           <i class="far fa-paper-plane mr-1"></i>
                           인증번호 전송
                         </v-btn>
 
-                        <!-- email 인증 발송 되는 동안 스피너 사용하려고 했으나, loading이 매우 짧아서 안써도 될듯 함 -->
-                        <!-- <v-btn v-else color="#FF5F00" text rounded disabled style="background: #FFF3E0">
-                          <i class="fa fa-circle-o-notch fa-spin" style="font-size:24px; color: gray;"></i>
-                        </v-btn> -->
                       </v-container>
                     </v-card-text>
                     <v-card-actions class="pb-8 justify-content-center">
                       <!-- <v-spacer></v-spacer> -->
 
-                      <v-btn depressed class="mr-5" style="color: #37474F; font-family: 'Cafe24Simplehae' !important;" rounded color="#FFB74D" @click="checkEmailCert">
+                      <v-btn depressed class="mr-5" style="color: #37474F; font-family: 'Cafe24Simplehae' !important;"
+                        rounded color="#FFB74D" @click="checkEmailCert">
                         <i class="fas fa-check-circle mr-1"></i>
                         확인</v-btn>
-                      <v-btn depressed class="ml-5" style="color: #37474F; font-family: 'Cafe24Simplehae' !important;" rounded color="#FFB74D" @click="dialog = false">
+                      <v-btn depressed class="ml-5" style="color: #37474F; font-family: 'Cafe24Simplehae' !important;"
+                        rounded color="#FFB74D" @click="dialog = false">
                         <i class="fas fa-times-circle mr-1"></i>
                         취소</v-btn>
 
@@ -111,7 +115,7 @@
     name: 'Account',
     data() {
       return {
-        loading: false,
+        overlay: false,
         // emailRules: [
         //   v => !!v || 'E-mail is required',
         //   v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
@@ -388,6 +392,7 @@
         if (this.validEmail(this.credentials.email)) {
           axios.get(`/accounts/password/${this.credentials.email}/`)
             .then(response => {
+              this.overlay = !this.overlay
               console.log(response)
               Swal.fire({
                 title: "Success New Password",
@@ -396,13 +401,16 @@
                 timer: 3000
               })
             })
+          this.overlay = !this.overlay
         } else {
+          this.overlay = !this.overlay
           Swal.fire({
             title: "Check email",
             text: "올바른 이메일 형식을 입력해주세요.",
             icon: "warning",
             timer: 3000
           })
+          this.overlay = !this.overlay
         }
       }
     },
@@ -441,7 +449,10 @@
     background-size: cover;
     -ms-overflow-style: none;
   }
-  .account-box ::-webkit-scrollbar {display:none;}
+
+  .account-box ::-webkit-scrollbar {
+    display: none;
+  }
 
   .bg-darker {
     background-color: rgba(0, 0, 0, 0.8);
