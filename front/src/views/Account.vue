@@ -188,7 +188,6 @@ import Swal from 'sweetalert2'
             'password': this.credentials.pw,
             'nickname': this.credentials.nickname
           }
-          // console.log(credentials)
           axios.post('/accounts/signup/', credentials)
             .then(response => {
               if (response.status==200) {
@@ -306,8 +305,7 @@ import Swal from 'sweetalert2'
       forgotPassword() {
         if (this.validEmail(this.credentials.email)) {
           axios.get(`/accounts/password/${this.credentials.email}/`)
-            .then(response => {
-              console.log(response)
+            .then(() => {
               alert('해당 이메일로 새로운 비밀번호가 전송되었습니다.')
             })
         }

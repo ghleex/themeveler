@@ -43,7 +43,10 @@ const getters = {
   },
   username(state) {
     return jwtDecode(state.token).username
-  }  
+  },
+  user_exptime(state) {
+    return jwtDecode(state.token).exp
+  }
 }
 
 export default {
