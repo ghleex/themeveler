@@ -13,9 +13,9 @@
       </div>
       <div class="service-content mt-3">{{ serviceData.content }}</div><br>
       <div class="service-detail-btn mt-12">
-        <v-btn color="warning" class="text-light mr-4 btn-detail" @click="updateData">수정 <i class="fas fa-edit ml-1"></i></v-btn>
-        <v-btn color="error" class="mr-4 btn-detail" @click="deleteData">삭제 <i class="fas fa-minus-square ml-1"></i></v-btn>
-        <v-btn color="rgb(238, 240, 247)" class="btn-detail" @click="back">목록 <i class="fas fa-bars ml-1"></i></v-btn>
+        <v-btn color="warning" class="text-light mr-4 btn-detail" @click="updateData">수정<i class="fas fa-edit ml-1"></i></v-btn>
+        <v-btn color="error" class="mr-4 btn-detail" @click="deleteData">삭제<i class="fas fa-minus-square ml-1"></i></v-btn>
+        <v-btn color="rgb(238, 240, 247)" class="btn-detail" @click="back">목록<i class="fas fa-bars ml-1"></i></v-btn>
       </div>
     </div>
 
@@ -92,13 +92,16 @@ export default {
           })
       } else {
         alert("삭제 권한이 없습니다.")
-        this.$router.push(`/service/detail/${this.serviceId}`)  
       }
     },
     updateData() {
-      this.$router.push({
-        path: `/service/create/${this.serviceId}`
-      })
+      if (this.serviceData.request_user_id === this.$store.getters.user_id) {
+        this.$router.push({
+          path: `/service/create/${this.serviceId}`
+        })
+      } else {
+        alert("수정 권한이 없습니다.")
+      }
     },
     back() {
       this.$router.push({

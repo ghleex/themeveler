@@ -71,7 +71,6 @@
               <div class="pop-sub-img">
                 <v-sheet class="ml-0 mr-auto" max-width="90vw">
                   <v-slide-group class="pa-4 pop-theme-slide-group" center-active show-arrows>
-                    <!-- <v-slide-item v-for="(img, index) in cardBypopTheme(model)" :key="img"> -->
                     <v-slide-item v-for="img in cardBypopTheme(model)" :key="img">
                       <v-card class="ma-4 popTheme-sub-img" height="123" width="120">
                         <v-img :src="img" height="123" @click="openCardModal(img)"></v-img>
@@ -85,7 +84,6 @@
                     <v-dialog v-model="dialog" width="500">
                       <v-card>
                         <v-img :src="imgUrl" height="80vh" width="100vw"></v-img>
-                        <!-- {{ img }} {{ index }} -->
                         <v-card-actions style="justify-content: flex-end;">
                           <v-btn color="#2c3e50" class="text-light" @click="dialog = false">확인</v-btn>
                         </v-card-actions>
@@ -256,18 +254,15 @@
         var theme = this.popTheme.filter(theme => {
           return theme.id == id + 1
         })
-        // console.log(theme[0].imgs)
         return theme[0].imgs
       },
       cardBypopThemeContext(id) {
         var theme = this.popTheme.filter(theme => {
           return theme.id == id + 1
         })
-        // console.log(theme[0].context)
         this.eachContext = theme[0].context
       },
       openCardModal(imgUrl) {
-        // console.log(imgUrl)
         this.imgUrl = imgUrl
         this.dialog = true
       },
@@ -275,7 +270,6 @@
         var themeId = this.popTheme.filter(themeId => {
           return themeId.id == id + 1
         })
-        // console.log(themeId[0].id)
         const requestHeader = this.$store.getters.requestHeader
         axios.get(`/travels/start/${themeId[0].id}`, requestHeader)
         // this.$router.push('/travel' + this.travelId)
@@ -426,12 +420,12 @@
     width: 30%;
     height: 250px;
     border-right: dotted 2px white;
-    /* -webkit-clip-path: polygon(0 0, 76% 0, 24% 100%, 0% 100%);
-    clip-path: polygon(0 0, 76% 0, 24% 100%, 0% 100%); */
     border-radius: 0 20px 20px 0;
     display: flex;
     justify-content: center;
     align-items: center;
+    /* -webkit-clip-path: polygon(0 0, 76% 0, 24% 100%, 0% 100%);
+    clip-path: polygon(0 0, 76% 0, 24% 100%, 0% 100%); */
   }
 
   .describe-left>img {
@@ -608,7 +602,6 @@
     margin: 0 .3rem;
   }
 
-  /* media query가 좀 이상하게 작동 함 */
   @media (max-width: 950px) {
     .pop-theme-card-text {
       background: #2c3e50;

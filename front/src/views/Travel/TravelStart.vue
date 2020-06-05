@@ -121,7 +121,7 @@
   import Complete from '../../components/Complete.vue'
 
   export default {
-    name: 'TravelStart',
+    name: "TravelStart",
     components: {
       Complete,
     },

@@ -37,7 +37,7 @@
       <!-- 검색바 -->
       <div>
         <v-text-field v-model="search" append-icon="mdi-magnify" label="검색" single-line hide-details
-          class="searchbar"></v-text-field>
+          class="searchbar" color="#607D8B"></v-text-field>
       </div>
     </div>
   </div>

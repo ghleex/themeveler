@@ -26,6 +26,8 @@ import axios from "axios"
           this.$session.start()
           this.$session.set("jwt", token)
           this.$session.set("nickname", this.$route.params.nickname)
+          this.$session.set("staff", false)
+          this.$session.set("social", true)
           this.$store.dispatch("login", token)
           this.$store.commit("setToken", token)
           this.$store.dispatch("changeNickname", this.$route.params.nickname)
