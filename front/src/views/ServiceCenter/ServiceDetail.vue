@@ -9,7 +9,7 @@
       </div>
       <div class="body">
         <p class="service-writer"><i class="fas fa-user"></i> {{ serviceData.request_user_nickname }}</p>
-        <p class="service-created-date"><i class="far fa-clock"></i> {{ serviceData.created_at | moment("YYYY-MM-DD LT") }}</p>
+        <p class="service-created-date"><i class="far fa-clock"></i> {{ serviceData.created_at | moment("YYYY-MM-DD HH:mm") }}</p>
       </div>
       <div class="service-content mt-3">{{ serviceData.content }}</div><br>
       <div class="service-detail-btn mt-12">
