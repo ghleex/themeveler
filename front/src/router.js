@@ -16,7 +16,6 @@ import ProfileComment from './views/Profile/ProfileComment.vue'
 import Travel from './views/Travel/Travel.vue'
 import TravelDetail from './views/Travel/TravelDetail.vue'
 import TravelStart from './views/Travel/TravelStart.vue'
-
 import CheckToken from './views/Social/CheckToken.vue'
 import Error404 from './views/Error404.vue'
 
@@ -116,7 +115,6 @@ const routes = [
       themeId: Number(route.params.themeId)
     })
   },
-
   {
     path: '/checktoken/:nickname/:token',
     name: 'checkToken',
