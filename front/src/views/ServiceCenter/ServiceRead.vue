@@ -23,6 +23,11 @@
         <template v-slot:item.title="{ item }">
           <div class="service-list-body" @click="detail(item.id)">{{ item.title }}</div>
         </template>
+        <!-- 관리자 처리 -->
+        <template v-slot:item.is_fixed="{ item }">
+          <div v-if="item.is_fixed === true">미처리</div>
+          <div v-else>답변완료</div>
+        </template>
         <!-- 등록일 시간형식 -->
         <template v-slot:item.created_at="{ item }">
           <div>{{ item.created_at | moment("YYYY-MM-DD LT") }}</div>
@@ -58,6 +63,7 @@ export default {
         { text: "번호", value: "id", sortable: false },
         { text: "분류", value: "category_name" },
         { text: "제목", value: "title", sortable: false },
+        { text: "처리상태", value: "is_fixed", sortable: false },
         { text: "작성자", value: "request_user_nickname", sortable: false },
         { text: "등록일", value: "created_at" }
       ],

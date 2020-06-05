@@ -9,47 +9,44 @@
               <h1 style="font-size: 30px;">Create Account</h1>
               <span>or use your email for registration</span>
               <input type="email" placeholder="Email" v-model="credentials.email" />
-              <v-row justify="content" style="flex: 0 0;">
+              <v-row justify="center" style="flex: 0 0;">
                 <v-dialog v-model="dialog" max-width="500px">
                   <template v-slot:activator="{ on }">
-                    <v-btn color="#FF8A65" small dark v-on="on"
-                    style="font-weight: 300;">
-                    <i class="fas fa-share-square mr-1"></i>
-                    이메일 인증</v-btn>
+                    <v-btn color="#FF8A65" small dark v-on="on" style="font-weight: 300;">
+                      <i class="fas fa-share-square mr-1"></i>이메일 인증
+                    </v-btn>
                   </template>
                   <v-card>
                     <v-card-title>
                       <span class="headline" primary-title style="font-weight: 900;">
-                        <i class="far fa-paper-plane mr-1"></i>
-                        이메일 인증
+                        <i class="far fa-paper-plane mr-2"></i>이메일 인증
                       </span>
                     </v-card-title>
                     <v-card-text>
                       <v-container>
-                        
-                        <input type="text" placeholder="'-'포함 인증번호를 입력하세요" v-model="emailcertcode" class="mr-2 p-2 mb-2" style="width: 207px; border-radius: 50px; border:2px dotted #0097A7" />
+                        <input type="text" placeholder="'-'포함 인증번호를 입력하세요" v-model="emailcertcode" class="mr-2 p-2 mb-2"
+                          style="width: 207px; border-radius: 50px; border:2px dotted #0097A7" />
                         <v-btn color="#00ACC1" text rounded @click="checkEmail" style="background: #E0F7FA;">
-                          <i class="fas fa-envelope-open-text mr-1"></i>
-                          인증번호 전송</v-btn>
+                          <i class="fas fa-envelope-open-text mr-1"></i>인증번호 전송
+                        </v-btn>
                       </v-container>
                     </v-card-text>
                     <v-card-actions>
                       <v-spacer></v-spacer>
                       <v-btn color="blue darken-1" text @click="checkEmailCert">
-                        <i class="fas fa-check-circle mr-1"></i>
-                        확인</v-btn>
+                        <i class="fas fa-check-circle mr-1"></i>확인
+                      </v-btn>
                       <v-btn color="blue darken-1" text @click="dialog = false">
-                        <i class="fas fa-times-circle mr-1"></i>
-                        취소</v-btn>
+                        <i class="fas fa-times-circle mr-1"></i>취소
+                      </v-btn>
                     </v-card-actions>
                   </v-card>
                 </v-dialog>
               </v-row>
               <input type="text" placeholder="Name" v-model="credentials.nickname" />
-              <v-btn color="#FF8A65" small dark @click="checkNickname"
-              style="font-weight: 300">
-              <i class="fas fa-share-square mr-1"></i>
-              중복 확인</v-btn>
+              <v-btn color="#FF8A65" small dark @click="checkNickname" style="font-weight: 300">
+                <i class="fas fa-share-square mr-1"></i>중복 확인
+              </v-btn>
               <input type="password" name="pw" placeholder="Password" v-model="credentials.pw" />
               <input type="password" name="rpw" placeholder="Confirm Password" v-model="credentials.rpw" />
               <button class="signupbtn">Sign Up</button>
@@ -120,7 +117,6 @@ import Swal from 'sweetalert2'
     methods: {
       // 회원가입 폼 체크
       checkSignup() {
-        // 검증 form
         // 이메일 입력하지 않은 경우
         if (!this.credentials.email) {
           Swal.fire({
@@ -185,14 +181,13 @@ import Swal from 'sweetalert2'
             timer: 3000
           })
         }
-        // 검수를 다 거치고 난 후 회원가입
+        // 검수 후 회원가입
         else {
           const credentials = {
             'username': this.credentials.email,
             'password': this.credentials.pw,
             'nickname': this.credentials.nickname
           }
-          // console.log(credentials)
           axios.post('/accounts/signup/', credentials)
             .then(response => {
               if (response.status==200) {
@@ -310,8 +305,7 @@ import Swal from 'sweetalert2'
       forgotPassword() {
         if (this.validEmail(this.credentials.email)) {
           axios.get(`/accounts/password/${this.credentials.email}/`)
-            .then(response => {
-              console.log(response)
+            .then(() => {
               alert('해당 이메일로 새로운 비밀번호가 전송되었습니다.')
             })
         }
@@ -325,17 +319,17 @@ import Swal from 'sweetalert2'
       this.a()
 
       // signin&up js
-      const signUpButton = document.getElementById('signUp');
-      const signInButton = document.getElementById('signIn');
-      const container = document.getElementById('container');
+      const signUpButton = document.getElementById('signUp')
+      const signInButton = document.getElementById('signIn')
+      const container = document.getElementById('container')
 
       signUpButton.addEventListener('click', () => {
-        container.classList.add("right-panel-active");
-      });
+        container.classList.add("right-panel-active")
+      })
 
       signInButton.addEventListener('click', () => {
-        container.classList.remove("right-panel-active");
-      });
+        container.classList.remove("right-panel-active")
+      })
 
       // csrf // :value="scrf"
       // this.$scrfToken;
