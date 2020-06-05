@@ -37,7 +37,6 @@
             <p class="font-weight-light grey--text">
               개인정보 유출에 항상 주의하세요..
             </p>
-            <!-- <v-btn color="success" rounded class="mr-0">Read More</v-btn> -->
           </v-card-text>
         </v-col>
       </v-row>
