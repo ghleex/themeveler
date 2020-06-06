@@ -252,12 +252,28 @@ class Destinations(APIView):
     Theme의 모든 destination 정보, Theme의 like 정보를 return합니다.
     theme_pk가 0이라면 모든 destination을 return합니다.
     """
-    def get(self, request, theme_pk):
+    def get(self, request, theme_pk, page_num):
         destinations = []
         if theme_pk == 0:
-            all_destination = Destination.objects.all()
-            serialized_destinations = [DestinationSerializer(dest).data for dest in all_destination]
-            return Response({'all_destination' : serialized_destinations})
+            all_destination = Destination.objects.all().order_by('-created_at')
+            if all_destination:
+                dest_per_page = 4
+                all_len = len(all_destination)
+
+                if dest_per_page * (page_num-1)>= all_len:
+                    return Response('Page is not exist', status=status.HTTP_404_NOT_FOUND)
+
+                start = dest_per_page * (page_num-1)
+                end = start + dest_per_page if start+4 <= len(all_len) else len(all_len)
+
+                page_destination = []
+                for i in range(start, end+1):
+                    dest = all_destination[i]
+                    page_destination.append(DestinationSerializer(dest).data)
+
+                return Response({'page_destination' : page_destination})
+            else:
+                return Response('Destination is not exist', status=status.HTTP_400_BAD_REQUEST)
         else:
             theme = get_object_or_404(Theme, pk=theme_pk)
             """
