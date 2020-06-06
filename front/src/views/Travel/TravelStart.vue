@@ -1,4 +1,4 @@
-<template id="template">
+<template>
   <div class="travel-detail-stepper">
 
     <div style="margin: 2rem 0 3rem 0;">

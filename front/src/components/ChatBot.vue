@@ -3,11 +3,7 @@
     <div class="chatbot-box" @click="openModal">
       <i class="fas fa-comment-dots chatbot-icon"></i>
     </div>
-    <v-dialog
-      v-model="dialog"
-      max-width="290"
-      transition="scale-transition"
-    >
+    <v-dialog v-model="dialog" max-width="290" transition="scale-transition">
       <v-card>
         <p v-if="newChat">New Message</p>
         <v-card-title class="headline">여행지</v-card-title>
@@ -33,14 +29,8 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-
-          <v-btn
-            color="red"
-            text
-            @click="dialog = false"
-          >
-            나가기
-            <i class="fas fa-times-circle ml-1"></i>
+          <v-btn color="red" text @click="dialog = false">
+            나가기<i class="fas fa-times-circle ml-1"></i>
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -69,6 +59,7 @@
         scrollHeight: 0,
         chatLoading: false,
         newChat: false,
+        baseURL: ""
       }
     },
     created() {
@@ -92,7 +83,9 @@
       })
     },
     mounted() {
-      axios.get(`http://127.0.0.1:8000/api/travels/chat/${this.themeId}/${this.chatPage}/`, this.$store.getters.requestHeader)
+      this.baseURL = process.env.VUE_APP_IP
+
+      axios.get(this.baseURL+`/travels/chat/${this.themeId}/${this.chatPage}/`, this.$store.getters.requestHeader)
         .then(res => {
           this.memories = res.data
         })
@@ -127,7 +120,7 @@
           }, 100)
           setTimeout(() => {
             this.chatPage += 1
-            axios.get(`http://127.0.0.1:8000/api/travels/chat/${this.themeId}/${this.chatPage}/`, this.$store.getters.requestHeader)
+            axios.get(this.baseURL+`/travels/chat/${this.themeId}/${this.chatPage}/`, this.$store.getters.requestHeader)
               .then(res => {
                 this.memories = res.data.concat(this.memories)
                 setTimeout(() =>{
@@ -168,7 +161,7 @@
           let data = {
             "message":message
           }
-          axios.post(`http://127.0.0.1:8000/api/travels/chat/${this.themeId}/`, data, this.$store.getters.requestHeader)
+          axios.post(this.baseURL+`/travels/chat/${this.themeId}/`, data, this.$store.getters.requestHeader)
             .then(res =>{
               this.$socket.emit("sendMessage",{theme: this.themeId, nickname: res.data.nickname, message: message})
               this.messages.push(res.data)
@@ -188,15 +181,14 @@
 
 <style lang="scss" scoped>
   .chatbot-box {
-    z-index: 10;
     position: fixed;
-    bottom: 100px;
-    right: 30px;
     display: flex;
+    bottom: 95px;
+    right: 25px;
     border-radius: 100px;
-    width: 70px;
-    height: 70px;
-    // background: #994177;
+    width: 60px;
+    height: 60px;
+    z-index: 10;
     background: linear-gradient(#ff006a, #ff0c0c);
     justify-content: center;
     align-items: center;
@@ -205,13 +197,13 @@
   }
 
   .chatbot-box:hover {
-    width: 80px;
-    height: 80px;
+    width: 70px;
+    height: 70px;
     box-shadow: 2px 2px 3px rgb(104, 110, 110);
   }
 
   .chatbot-box .fa-comment-dots {
-    font-size: 35px;
+    font-size: 30px;
     // color: #2c3e50;
     // color: #ffbc2d;
     color: white;
