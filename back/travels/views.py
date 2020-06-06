@@ -224,7 +224,7 @@ class ChatView(APIView):
                 * page_no: theme에 포함된 채팅 내역의 페이지입니다. 20개씩 제공됩니다.
         """
         try:
-            chat_page = Paginator(Message.objects.all(), 20).page(page_no)            
+            chat_page = Paginator(Message.objects.filter(theme=theme_pk), 20).page(page_no)            
             serializer = MessageSerializer(chat_page, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except EmptyPage:
@@ -250,24 +250,30 @@ class AllTheme(APIView):
 class Destinations(APIView):
     """
     Theme의 모든 destination 정보, Theme의 like 정보를 return합니다.
+    theme_pk가 0이라면 모든 destination을 return합니다.
     """
     def get(self, request, theme_pk):
         destinations = []
-        theme = get_object_or_404(Theme, pk=theme_pk)
-        """
-        dest 순서에 맞게 serializer를 return하기 위해 list를 돌며 순서대로 append합니다.
-        """
-        for dest_pk in theme.dests:
-            try:
-                destination = Destination.objects.get(pk=dest_pk)
-                destinations.append(DestinationSerializer(destination).data)
-            except:
-                return Response('Destination is not exist', status=status.HTTP_400_BAD_REQUEST)
+        if theme_pk == 0:
+            all_destination = Destination.objects.all()
+            serialized_destinations = [DestinationSerializer(dest).data for dest in all_destination]
+            return Response({'all_destination' : serialized_destinations})
+        else:
+            theme = get_object_or_404(Theme, pk=theme_pk)
+            """
+            dest 순서에 맞게 serializer를 return하기 위해 list를 돌며 순서대로 append합니다.
+            """
+            for dest_pk in theme.dests:
+                try:
+                    destination = Destination.objects.get(pk=dest_pk)
+                    destinations.append(DestinationSerializer(destination).data)
+                except:
+                    return Response('Destination is not exist', status=status.HTTP_400_BAD_REQUEST)
 
-        data = {
-            'destinations' : destinations,
-        }
-        return Response(data) if destinations else Response(error_message, status=status.HTTP_400_BAD_REQUEST)
+            data = {
+                'destinations' : destinations,
+            }
+            return Response(data) if destinations else Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
 
 class DestinationContent(APIView):
@@ -296,14 +302,3 @@ class DestinationContent(APIView):
                 return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
         except:
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
-
-
-class FilteredTheme(APIView):
-    """
-    지역별로 분류된 테마를 return합니다. 만약 지역이 포함되어 있지 않다면 전체 테마를 return합니다.
-    """
-    def get(self, request, region):
-        filtered_theme = ThemeSerializer(Theme.objects.filter(region=region)) if region else ThemeSerializer(Theme.objects.all())
-        if not filtered_theme:
-            return Response('Theme is not existed', status=status.HTTP_400_BAD_REQUEST)
-        return filtered_theme
