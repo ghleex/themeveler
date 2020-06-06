@@ -42,7 +42,7 @@
       opacity .5s, visibility .5s;
     opacity: 0;
     visibility: hidden;
-    z-index: 1000;
+    z-index: 100;
   }
 
   #button.show {

@@ -5,47 +5,49 @@
       <h1 class="text-light d-inline-block p-2" style="background-color: #2c3e50;">#.{{ themeId }}
         {{ themeArr[themeId-1].name }}</h1>
       <h2 class="my-10">{{ e1 }} / {{ dests.length }}</h2>
-
-
-      <!-- 길 찾기 -->
-      <div class="find-road-btn text-end">
-        <v-btn dark color="#2c3e50" rounded @click.stop="dialog = true">
-          <i class="fas fa-map-marker-alt mr-1 text-danger"></i>
-          길 찾기
-        </v-btn>
-      </div>
     </div>
-    <v-dialog v-model="dialog" max-width="290">
-      <v-card>
-        <v-card-title class="headline">지도</v-card-title>
-        <v-card-text>
-          hello....sangwon,,,<br>
-          This is.. your needs : {{ e1 }}
 
-          <br>
-          <v-btn class="mt-8" rounded>🚩 {{ progress }}%</v-btn>
-          <div class="mt-3" style="font-size: 12px;">
-            <div v-if="progress < 35">
-              천천히 걸어볼까요?💦<br>
-              헛둘헛둘!
-            </div>
-            <div v-else-if="35 <= progress && progress < 69">
-              벌써 중간지점이에요!👏
-            </div>
-            <div v-else-if="69 <= progress">
-              이제 거의 다 왔어요!<br>
-              조금만 더 힘내볼까요?🥰
-            </div>
-          </div>
-        </v-card-text>
 
+
+    <!-- 길 찾기 -->
+    <div class="find-road-btn text-end">
+      <v-btn dark color="#2c3e50" rounded @click.stop="navigationUrl()">
+        <i class="fas fa-map-marker-alt mr-1 text-danger"></i>
+        길 찾기
+      </v-btn>
+    </div>
+    <v-dialog v-model="dialog" fullscreen transition="dialog-bottom-transition">
+      
+      <!-- {{ mapUrl }} -->
+      
+        <v-card>
         <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn rounded color="green darken-1" text @click="dialog = false">
-            확인<i class="fas fa-check-circle ml-1"></i>
-          </v-btn>
-        </v-card-actions>
-      </v-card>
+            <!-- <v-spacer></v-spacer> -->
+             <v-btn class="mx-auto" rounded color="#90A4AE" text @click="dialog = false" style="font-size: 30px; height: 60px !important; background: #ECEFF1">
+              <i class="fas fa-times"></i>
+            </v-btn>
+          </v-card-actions>
+          <!-- <v-card-title class="headline">지도</v-card-title> -->
+          <v-card-text>
+            <div class="mt-3 text-center" style="font-size: 12px;">
+              <div v-if="progress < 35">
+                천천히 걸어볼까요?💦<br>
+                헛둘헛둘!
+              </div>
+              <div v-else-if="35 <= progress && progress < 69">
+                벌써 중간지점이에요!👏
+              </div>
+              <div v-else-if="69 <= progress">
+                이제 거의 다 왔어요!<br>
+                조금만 더 힘내볼까요?🥰
+              </div>
+            <v-btn class="my-3" rounded color="#ECEFF1">🚩 {{ progress }}%</v-btn>
+            </div>
+          </v-card-text>
+
+        </v-card>
+        <iframe id="navigationModal" :src="mapUrl">
+      </iframe>
     </v-dialog>
 
 
@@ -69,7 +71,8 @@
       <v-stepper-items>
         <v-stepper-content height="auto" v-for="n in steps" :key="`${n}-content`" :step="n">
 
-          <div class="travel-start-text holder mt-5" data-aos="fade-up" data-aos-duration="3000" v-for="i in content" :key="i">
+          <div class="travel-start-text holder mt-5" data-aos="fade-up" data-aos-duration="3000" v-for="i in content"
+            :key="i.text">
             <v-card class="holder stepper-text-box" color="rgb(248, 248, 246)">
               {{ i.text }}
               <!-- {{ n }} {{ i.id }} -->
@@ -93,7 +96,7 @@
               이전
               <i class="fas fa-chevron-circle-left ml-1"></i>
             </v-btn>
-            <v-btn roudned text color="red" @click="returnDetail(themeId)">닫기 <i class="fas fa-times-circle ml-1"></i>
+            <v-btn rounded text color="red" @click="returnDetail(themeId)">닫기 <i class="fas fa-times-circle ml-1"></i>
             </v-btn>
           </div>
 
@@ -118,7 +121,7 @@
 
 <script>
   import axios from 'axios'
-  import Complete from '@/components/Complete.vue'
+  import Complete from '@/components/TravelComplete.vue'
 
   export default {
     name: "TravelStart",
@@ -138,6 +141,7 @@
         content: [],
         dialog: false,
         progress: 0,
+        mapUrl: "",
       }
     },
     methods: {
@@ -156,9 +160,9 @@
             // console.log(res.data)
             this.content = res.data.pages
           })
-          // .catch(err => {
-          //   console.log(err.response)
-          // })
+        // .catch(err => {
+        //   console.log(err.response)
+        // })
 
         document.getElementById(this.dests[n].id).tabIndex = -1;
         document.getElementById(this.dests[n].id).focus();
@@ -175,9 +179,9 @@
             // console.log(res.data)
             this.content = res.data.pages
           })
-          // .catch(err => {
-          //   console.log(err.response)
-          // })
+        // .catch(err => {
+        //   console.log(err.response)
+        // })
 
         document.getElementById(this.dests[n - 1].id).tabIndex = -1;
         document.getElementById(this.dests[n - 2].id).focus();
@@ -188,9 +192,44 @@
       a() {
         // document.querySelector("#navbar").style.display = 'none'
         document.querySelector("#footer").style.display = 'none'
-      }
+      },
+      getUrl(result) {
+        var start = result[0].address.address_name
+        var wayToGo = "car"
+        console.log(result)
+        // this.mapUrl = `https://map.kakao.com/link/to/${this.dests[this.e1-1].name},${this.dests[this.e1-1].latitude},${this.dests[this.e1-1].longitude}`
+        // this.mapUrl = `https://map.kakao.com/?target=${wayToGo}&sName=${start}&eName=${this.dests[this.e1-1].name}`
+        this.mapUrl = `https://map.kakao.com/?map_type=TYPE_MAP&target=${wayToGo}&rt=%2C%2C523953%2C1084098&rt1=${start}&rt2=${this.dests[this.e1-1].name}&rtIds=%2C&rtTypes=%2C`
+        // window.open(this.mapUrl,"_self")
+        this.dialog = true
+      },
+      getCurrentAddress(arr) {
+        var geocoder = new kakao.maps.services.Geocoder();
+
+        function searchDetailAddrFromCoords(lon, lat, callback) {
+          geocoder.coord2Address(lon, lat, callback);
+        }
+        searchDetailAddrFromCoords(arr[1], arr[0], this.getUrl)
+      },
+      success(position) {
+        var arr = new Array()
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+        arr.push(latitude)
+        arr.push(longitude)
+        this.getCurrentAddress(arr)
+      },
+      navigationUrl() {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(this.success)
+        }
+      },
     },
     mounted() {
+      const script = document.createElement('script')
+      script.src = `http://dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.VUE_APP_KAKAO_API_KEY}&libraries=services`
+      document.head.appendChild(script)
+
       const token = this.$session.get('jwt')
       const requestHeader = {
         headers: {
@@ -215,16 +254,27 @@
           this.content = res.data.pages
           // this.te = this.content[0].id
         })
-        // .catch(err => {
-        //   console.log(err.data)
-        // })
-
+      // .catch(err => {
+      //   console.log(err.data)
+      // })
       this.a()
     }
   }
 </script>
 
 <style>
+  #navigationModal{
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    top: 200px;
+    left: 0;
+    margin: 0;
+    border: 0;
+    overflow: hidden;
+  }
+
+
   .find-road-btn {
     margin-right: 10%;
   }

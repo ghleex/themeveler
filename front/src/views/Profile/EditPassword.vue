@@ -11,13 +11,13 @@
             <v-container class="py-0">
               <v-row>
                 <v-col cols="12" md="12" class="content-col">
-                  <v-text-field v-model="currentPassword" label="Current Password" class="purple-input" />
+                  <v-text-field v-model="currentPassword" label="Current Password" type="password" class="purple-input" />
                 </v-col>
                 <v-col cols="12" md="6" class="content-col">
-                  <v-text-field v-model="newPassword" label="New Password" class="purple-input" />
+                  <v-text-field v-model="newPassword" label="New Password" type="password" class="purple-input" />
                 </v-col>
                 <v-col cols="12" md="6" class="content-col">
-                  <v-text-field v-model="confirmPassword" label="Confirm Password" class="purple-input" />
+                  <v-text-field v-model="confirmPassword" label="Confirm Password" type="password" class="purple-input" />
                 </v-col>
                 <v-col cols="4" md="6" class="text-left">
                 </v-col>
