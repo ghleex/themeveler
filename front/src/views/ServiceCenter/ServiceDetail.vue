@@ -39,15 +39,22 @@
       </v-form>
       <v-divider v-if="isAuthenticated"></v-divider>
       <div class="comment-list">
-        <div class="comment-content" v-for="comment in commentList" :key="comment.id">
-          <div v-if="modifyState === true">
-            <v-text-field v-model="comment.content"></v-text-field>
-            <v-icon @click="commentUpdate(comment)">mdi-pen</v-icon>
+        <div v-if="commentList.length !== 0">
+          <div class="comment-content mb-1" v-for="comment in commentList" :key="comment.id">
+            <div>
+              <div v-if="modifyState === true">
+                <v-text-field v-model="comment.content"></v-text-field>
+                <v-icon @click="commentUpdate(comment)">mdi-pen</v-icon>
+              </div>
+              <div v-else>
+                {{ comment.manager_name }} - {{ comment.content }}
+                <v-icon @click="modify">mdi-pen</v-icon>
+              </div>
+            </div>
           </div>
-          <div v-else>
-            {{ comment.manager_name }} - {{ comment.content }}
-            <v-icon @click="modify">mdi-pen</v-icon>
-          </div>
+        </div>
+        <div v-else>
+          <div class="text-center">작성된 댓글이 없습니다.</div>
         </div>
       </div>
     </div>
