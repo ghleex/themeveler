@@ -11,8 +11,8 @@ const mutations = {
   setToken(state, token) {
     state.token = token
   },
-  setNickname(staet, nickname) {
-    staet.nickname = nickname
+  setNickname(state, nickname) {
+    state.nickname = nickname
   }
 }
 
