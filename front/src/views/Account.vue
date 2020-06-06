@@ -3,50 +3,69 @@
     <div class="bg-darker">
       <div class="account-div">
 
+        <v-overlay :value="overlay" style="z-index: 222;">
+          <i class="fas fa-circle-notch fa-spin" style="font-size:24px; color: white;"></i>
+        </v-overlay>
+
         <div class="container" id="container">
           <div class="form-container sign-up-container">
             <form name="signup" class="form" method="post" @submit.prevent="checkSignup()">
               <h1 style="font-size: 30px;">Create Account</h1>
               <span>or use your email for registration</span>
               <input type="email" placeholder="Email" v-model="credentials.email" />
-              <v-row justify="center" style="flex: 0 0;">
+
+              <v-row style="flex: 0 0; justify-content: flex-end;">
                 <v-dialog v-model="dialog" max-width="500px">
                   <template v-slot:activator="{ on }">
-                    <v-btn color="#FF8A65" small dark v-on="on" style="font-weight: 300;">
-                      <i class="fas fa-share-square mr-1"></i>이메일 인증
-                    </v-btn>
+                    <v-btn depressed color="#FFA726" small dark v-on="on" style="font-weight: 300;">
+                      <i class="fas fa-share-square mr-1"></i>
+                      이메일 인증</v-btn>
                   </template>
                   <v-card>
                     <v-card-title>
-                      <span class="headline" primary-title style="font-weight: 900;">
-                        <i class="far fa-paper-plane mr-2"></i>이메일 인증
+                      <span class="headline" primary-title
+                        style="font-weight: 700; color: #263238; font-family: 'Cafe24Simplehae' !important; color: #263238">
+                        <i class="fas fa-envelope-open-text mr-1"></i>
+                        이메일 인증
                       </span>
                     </v-card-title>
                     <v-card-text>
                       <v-container>
+
+                        <i class="fas fa-code mr-1" style="color: #FFA726;"></i>
                         <input type="text" placeholder="'-'포함 인증번호를 입력하세요" v-model="emailcertcode" class="mr-2 p-2 mb-2"
-                          style="width: 207px; border-radius: 50px; border:2px dotted #0097A7" />
-                        <v-btn color="#00ACC1" text rounded @click="checkEmail" style="background: #E0F7FA;">
-                          <i class="fas fa-envelope-open-text mr-1"></i>인증번호 전송
+                          style="width: 207px; border-bottom: 2px solid #FFA726" />
+                        <v-btn color="#FF5F00" text rounded @click="checkEmail"
+                          style="font-family: 'Cafe24Simplehae' !important; background: #FFF3E0">
+                          <i class="far fa-paper-plane mr-1"></i>
+                          인증번호 전송
                         </v-btn>
+
                       </v-container>
                     </v-card-text>
-                    <v-card-actions>
-                      <v-spacer></v-spacer>
-                      <v-btn color="blue darken-1" text @click="checkEmailCert">
-                        <i class="fas fa-check-circle mr-1"></i>확인
-                      </v-btn>
-                      <v-btn color="blue darken-1" text @click="dialog = false">
-                        <i class="fas fa-times-circle mr-1"></i>취소
-                      </v-btn>
+                    <v-card-actions class="pb-8 justify-content-center">
+                      <!-- <v-spacer></v-spacer> -->
+
+                      <v-btn depressed class="mr-5" style="color: #37474F; font-family: 'Cafe24Simplehae' !important;"
+                        rounded color="#FFB74D" @click="checkEmailCert">
+                        <i class="fas fa-check-circle mr-1"></i>
+                        확인</v-btn>
+                      <v-btn depressed class="ml-5" style="color: #37474F; font-family: 'Cafe24Simplehae' !important;"
+                        rounded color="#FFB74D" @click="dialog = false">
+                        <i class="fas fa-times-circle mr-1"></i>
+                        취소</v-btn>
+
+
                     </v-card-actions>
                   </v-card>
                 </v-dialog>
               </v-row>
               <input type="text" placeholder="Name" v-model="credentials.nickname" />
-              <v-btn color="#FF8A65" small dark @click="checkNickname" style="font-weight: 300">
-                <i class="fas fa-share-square mr-1"></i>중복 확인
-              </v-btn>
+
+              <v-btn depressed color="#FFA726" small dark @click="checkNickname" style="font-weight: 300">
+                <i class="fas fa-share-square mr-1"></i>
+                중복 확인</v-btn>
+
               <input type="password" name="pw" placeholder="Password" v-model="credentials.pw" />
               <input type="password" name="rpw" placeholder="Confirm Password" v-model="credentials.rpw" />
               <button class="signupbtn">Sign Up</button>
@@ -89,13 +108,14 @@
 </template>
 
 <script>
-import axios from 'axios'
-import Swal from 'sweetalert2'
+  import axios from 'axios'
+  import Swal from 'sweetalert2'
 
   export default {
     name: 'Account',
     data() {
       return {
+        overlay: false,
         // emailRules: [
         //   v => !!v || 'E-mail is required',
         //   v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
@@ -122,44 +142,44 @@ import Swal from 'sweetalert2'
           Swal.fire({
             title: "Check Email",
             text: "이메일을 입력하세요.",
-            type: "warning",
+            icon: "warning",
             timer: 3000
           })
-        } 
+        }
         // 이메일 valid From
         else if (!this.validEmail(this.credentials.email)) {
           Swal.fire({
             title: "Check Email",
             text: "이메일 형식을 확인하세요.",
-            type: "warning",
+            icon: "error",
             timer: 3000
           })
         } else if (this.credentials.checkEmailCert == false) {
           Swal.fire({
             title: "Check Email",
             text: "이메일 인증을 하세요.",
-            type: "warning",
+            icon: "warning",
             timer: 3000
           })
         } else if (this.credentials.nickname == "") {
           Swal.fire({
             title: "Check Name",
             text: "이름을 입력하세요.",
-            type: "warning",
+            icon: "warning",
             timer: 3000
           })
         } else if (this.credentials.nickname.length >= 7) {
           Swal.fire({
             title: "Check Name",
             text: "이름은 6자 이하로 가능합니다.",
-            type: "warning",
+            icon: "warning",
             timer: 3000
           })
         } else if (this.credentials.checkNickname == false) {
           Swal.fire({
             title: "Check Name",
             text: "이름 중복확인을 하세요.",
-            type: "warning",
+            icon: "warning",
             timer: 3000
           })
         }
@@ -168,7 +188,7 @@ import Swal from 'sweetalert2'
           Swal.fire({
             title: "Check Password",
             text: "비밀번호는 8자 이상 입력해주세요.",
-            type: "warning",
+            icon: "warning",
             timer: 3000
           })
         }
@@ -177,7 +197,7 @@ import Swal from 'sweetalert2'
           Swal.fire({
             title: "Repeat Password",
             text: "비밀번호가 일치하지 않습니다.",
-            type: "warning",
+            icon: "error",
             timer: 3000
           })
         }
@@ -191,15 +211,25 @@ import Swal from 'sweetalert2'
           axios.post('/accounts/signup/', credentials)
             .then(response => {
               if (response.status == 200) {
-                alert('회원가입이 완료되었습니다.')
+                Swal.fire({
+                  title: "Success Signup",
+                  text: "회원가입이 완료되었습니다.",
+                  icon: "success",
+                  timer: 3000
+                })
+
                 // 회원가입 후 자동로그인
                 var loginforms = new FormData()
                 loginforms.append('username', this.credentials.email)
                 loginforms.append('password', this.credentials.pw)
                 this.$emit('login', loginforms)
-              }
-              else {
-                alert('비밀번호가 너무 일상적인 단어입니다.')
+              } else {
+                Swal.fire({
+                  title: "Check Password",
+                  text: "비밀번호가 너무 일상적인 단어입니다.",
+                  icon: "warning",
+                  timer: 3000
+                })
               }
             })
             .catch(err => {
@@ -212,43 +242,77 @@ import Swal from 'sweetalert2'
         axios.get(`/accounts/nickname/${this.credentials.nickname}/`)
           .then(response => {
             if (response.status == 200) {
-              alert('사용 가능한 닉네임입니다.')
+              Swal.fire({
+                title: "Success Nickname",
+                text: "사용가능한 닉네임입니다.",
+                icon: "success",
+                timer: 3000
+              })
               this.credentials.checkNickname = true
-            }
-            else {
-              alert('이미 존재하는 닉네임입니다.')
+            } else {
+              Swal.fire({
+                title: "Check Nickname",
+                text: "이미 존재하는 닉네임 입니다.",
+                icon: "error",
+                timer: 3000
+              })
             }
           })
           .catch(err => {
             console.log(err)
-            alert('이미 존재하는 닉네임입니다.')
+            Swal.fire({
+              title: "Check Nickname",
+              text: "이미 존재하는 닉네임 입니다.",
+              icon: "error",
+              timer: 3000
+            })
           })
       },
       // 이메일 중복체크
       checkEmail() {
         if (!`${this.credentials.email}`) {
-          alert('이메일을 입력해주세요.')
-        }
-        else {
+          Swal.fire({
+            title: "Check email",
+            text: "이메일을 입력해주세요.",
+            icon: "warning",
+            timer: 3000
+          })
+        } else {
           axios.get(`/accounts/username/${this.credentials.email}/`)
             .then(response => {
               if (response.status == 200) {
                 // 인증번호 전송
-                axios.post('/accounts/email/send/', {'username': this.credentials.email})
+                axios.post('/accounts/email/send/', {
+                    'username': this.credentials.email
+                  })
                   .then(
-                    alert('인증번호가 전송되었습니다.')
+                    Swal.fire({
+                      title: "Success Secretkey",
+                      text: "인증번호가 전송되었습니다.",
+                      icon: "success",
+                      timer: 3000
+                    })
                   )
                   .catch(err => {
                     console.log(err)
                   })
-              }
-              else {
-                alert('이미 존재하는 이메일(ID)입니다.')
+              } else {
+                Swal.fire({
+                  title: "Check email",
+                  text: "이미 존재하는 이메일(ID)입니다.",
+                  icon: "error",
+                  timer: 3000
+                })
               }
             })
             .catch(err => {
               console.log(err)
-              alert('이미 존재하는 이메일(ID)입니다.')
+              Swal.fire({
+                title: "Check email",
+                text: "이미 존재하는 이메일(ID)입니다.",
+                icon: "error",
+                timer: 3000
+              })
             })
         }
       },
@@ -257,17 +321,31 @@ import Swal from 'sweetalert2'
         axios.get(`/accounts/email/auth/${this.credentials.email}/${this.emailcertcode}/`)
           .then(response => {
             if (response.status == 200) {
-              this.dialog=false
-              alert('이메일 인증이 완료되었습니다.')
+              this.dialog = false
+              Swal.fire({
+                title: "Success Certification",
+                text: "이메일 인증이 완료되었습니다.",
+                icon: "success",
+                timer: 3000
+              })
               this.credentials.checkEmailCert = true
-            }
-            else {
-              alert('이메일 인증에 실패하였습니다.')
+            } else {
+              Swal.fire({
+                title: "Check email",
+                text: "이메일 인증에 실패하였습니다.",
+                icon: "warning",
+                timer: 3000
+              })
             }
           })
           .catch(err => {
             console.log(err)
-            alert('이메일 인증에 실패하였습니다.')
+            Swal.fire({
+              title: "Check email",
+              text: "이메일 인증에 실패하였습니다.",
+              icon: "warning",
+              timer: 3000
+            })
           })
       },
       // 로그인 폼 체크
@@ -276,14 +354,21 @@ import Swal from 'sweetalert2'
           Swal.fire({
             title: "Check Email",
             text: "이메일을 입력하세요.",
-            type: "warning",
+            icon: "warning",
+            timer: 3000
+          })
+        } else if (!this.validEmail(this.credentials.email)) {
+          Swal.fire({
+            title: "Check Email",
+            text: "이메일 형식을 확인하세요.",
+            icon: "error",
             timer: 3000
           })
         } else if (!this.credentials.pw) {
           Swal.fire({
             title: "Check Password",
             text: "비밀번호를 입력하세요.",
-            type: "warning",
+            icon: "warning",
             timer: 3000
           })
         }
@@ -299,18 +384,33 @@ import Swal from 'sweetalert2'
         document.querySelector('#footer').style.display = 'none'
       },
       validEmail: function (email) {
-        var mailForm = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        var mailForm =
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         return mailForm.test(email)
       },
       forgotPassword() {
         if (this.validEmail(this.credentials.email)) {
           axios.get(`/accounts/password/${this.credentials.email}/`)
-            .then(() => {
-              alert('해당 이메일로 새로운 비밀번호가 전송되었습니다.')
+            .then(response => {
+              this.overlay = !this.overlay
+              console.log(response)
+              Swal.fire({
+                title: "Success New Password",
+                text: "해당 이메일로 새로운 비밀번호가 전송되었습니다.",
+                icon: "success",
+                timer: 3000
+              })
             })
-        }
-        else {
-          alert('올바른 이메일 형식을 입력해주세요.')
+          this.overlay = !this.overlay
+        } else {
+          this.overlay = !this.overlay
+          Swal.fire({
+            title: "Check email",
+            text: "올바른 이메일 형식을 입력해주세요.",
+            icon: "warning",
+            timer: 3000
+          })
+          this.overlay = !this.overlay
         }
       }
     },
@@ -343,17 +443,23 @@ import Swal from 'sweetalert2'
 <style lang="scss" scoped>
   .account-box {
     width: 100vw;
-    height: 100vh;
+    height: 105vh;
     background-image: url('../assets/image/bg-2.jpg');
     background-repeat: no-repeat;
     background-size: cover;
+    -ms-overflow-style: none;
+  }
+
+  .account-box ::-webkit-scrollbar {
+    display: none;
   }
 
   .bg-darker {
     background-color: rgba(0, 0, 0, 0.8);
     width: 100%;
     height: 100%;
-    position: absolute
+    position: absolute;
+    overflow-y: hidden;
   }
 
   // account card
@@ -367,6 +473,7 @@ import Swal from 'sweetalert2'
     font-family: 'Montserrat', sans-serif;
     height: 100vh;
     margin: 2rem .5rem 0 .5rem;
+    overflow-y: hidden;
   }
 
   .account-div h1 {
@@ -409,10 +516,11 @@ import Swal from 'sweetalert2'
     color: #FFFFFF;
     font-size: 12px;
     font-weight: bold;
-    padding: 12px 45px;
+    padding: 12px 40px;
     letter-spacing: 1px;
     text-transform: uppercase;
     transition: transform 80ms ease-in;
+    white-space: nowrap;
   }
 
   .account-div button:active {
@@ -495,6 +603,7 @@ import Swal from 'sweetalert2'
   }
 
   @keyframes show {
+
     0%,
     49.99% {
       opacity: 0;
@@ -549,7 +658,7 @@ import Swal from 'sweetalert2'
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    padding: 0 40px;
+    padding: 0 30px;
     text-align: center;
     top: 0;
     height: 100%;
