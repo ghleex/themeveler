@@ -113,7 +113,7 @@
     },
     methods: {
       showDetail(themeId) {
-        this.$router.push('/travel/' + themeId)
+        this.$router.push(`/travel/${themeId}`)
       }
     },
     mounted() {
@@ -123,7 +123,7 @@
           Authorization: "JWT " + token
         }
       }
-      axios.get("/travels/all_theme/", requestHeader)
+      axios.get('/travels/all_theme/', requestHeader)
         .then(response => {
           this.themeArr = response.data.all_theme
           // console.log(this.themeArr)

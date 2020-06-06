@@ -1,6 +1,7 @@
 <template>
   <a id="button" class="hvr-grow" style="display:scroll;">
-    <i class="fas fa-arrow-circle-up" style="font-size: 50px;"></i></a>
+    <i class="fas fa-arrow-circle-up" style="font-size: 50px;"></i>
+  </a>
 </template>
 
 <script>
@@ -49,7 +50,6 @@
     visibility: visible;
   }
 
-
   #button .fa-arrow-circle-up {
     transition: 2s;
     color: #FF5252;
@@ -64,10 +64,10 @@
     transition-duration: 0.3s;
     transition-property: transform;
   }
+
   .hvr-grow:hover,
   .hvr-grow:focus,
   .hvr-grow:active {
     transform: scale(1.1);
   }
-
 </style>
