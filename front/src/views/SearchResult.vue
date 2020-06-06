@@ -98,4 +98,9 @@
     font-family: 'Cafe24Simplehae';
     font-size: 18px;
   }
+
+  /* 검색창 너비 조정 */
+  /* .sresult-search-bar .search-box>.v-text-field.v-text-field--enclosed>.v-input__control>.v-input__slot {
+    width: 500px;
+  } */
 </style>
