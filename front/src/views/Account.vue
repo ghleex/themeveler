@@ -231,7 +231,7 @@
       checkEmail() {
         if (!`${this.credentials.email}`) {
           Swal.fire({
-            title: "Check email",
+            title: "Check Email",
             text: "이메일을 입력해주세요.",
             icon: "warning",
             timer: 3000
@@ -257,7 +257,7 @@
                   })
               } else {
                 Swal.fire({
-                  title: "Check email",
+                  title: "Check Email",
                   text: "이미 존재하는 이메일(ID)입니다.",
                   icon: "error",
                   timer: 3000
@@ -267,7 +267,7 @@
             .catch(err => {
               console.log(err)
               Swal.fire({
-                title: "Check email",
+                title: "Check Email",
                 text: "이미 존재하는 이메일(ID)입니다.",
                 icon: "error",
                 timer: 3000
@@ -290,7 +290,7 @@
               this.credentials.checkEmailCert = true
             } else {
               Swal.fire({
-                title: "Check email",
+                title: "Check Email",
                 text: "이메일 인증에 실패하였습니다.",
                 icon: "warning",
                 timer: 3000
@@ -300,7 +300,7 @@
           .catch(err => {
             console.log(err)
             Swal.fire({
-              title: "Check email",
+              title: "Check Email",
               text: "이메일 인증에 실패하였습니다.",
               icon: "warning",
               timer: 3000
@@ -404,7 +404,7 @@
             })
         } else {
           Swal.fire({
-            title: "Check email",
+            title: "Check Email",
             text: "올바른 이메일 형식을 입력해주세요.",
             icon: "warning",
             timer: 3000

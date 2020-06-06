@@ -52,16 +52,16 @@ export default {
         })
         .catch(err => {
           console.log(err)
-          if (err.response.status === 404) {
+          if (err.response.status == 404) {
             Swal.fire({
-              title: "Check email",
+              title: "Check Email",
               text: "등록된 사용자 정보가 없습니다.",
               icon: "warning",
               timer: 3000
             })            
-          } else if (err.response.status === 400) {
+          } else if (err.response.status == 400) {
             Swal.fire({
-              title: "Check email",
+              title: "Check Password",
               text: "비밀번호가 일치하지 않습니다.",
               icon: "warning",
               timer: 3000
