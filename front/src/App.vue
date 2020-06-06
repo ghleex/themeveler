@@ -10,6 +10,7 @@
 import axios from 'axios'
 import Navbar from './components/Navbar.vue'
 import Footer from './components/Footer.vue'
+import Swal from 'sweetalert2'
 
 export default {
   name: 'App',
@@ -51,7 +52,21 @@ export default {
         })
         .catch(err => {
           console.log(err)
-          alert("잘못된 정보입니다. 다시 입력해주세요.")
+          if (err.response.status == 404) {
+            Swal.fire({
+              title: "Check Email",
+              text: "등록된 사용자 정보가 없습니다.",
+              icon: "warning",
+              timer: 3000
+            })            
+          } else if (err.response.status == 400) {
+            Swal.fire({
+              title: "Check Password",
+              text: "비밀번호가 일치하지 않습니다.",
+              icon: "warning",
+              timer: 3000
+            })
+          }
         })
     }
   },
@@ -92,5 +107,14 @@ export default {
   text-align: center;
   color: #2c3e50;
   /* margin-top: 60px; */
+}
+
+body::-webkit-scrollbar { 
+  width: 5px; 
+}
+
+body::-webkit-scrollbar-thumb {
+  background: #ffa93a; 
+  border-radius: 10px;
 }
 </style>

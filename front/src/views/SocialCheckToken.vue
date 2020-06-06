@@ -5,13 +5,13 @@
 </template>
 
 <script>
-import axios from "axios"
+  import axios from 'axios'
 
   export default {
     beforeRouteEnter(to, from, next) {
       console.log(from)
       if (from.name) {
-        alert('잘못된 접근입니다.')
+        alert("잘못된 접근입니다.")
       }
       next((vm) => {
           vm.from = from;
@@ -36,7 +36,7 @@ import axios from "axios"
         .catch(error => {
           console.log(error)
           alert("잘못된 접근입니다.")
-          this.$router.push({name:'home'})
+          this.$router.push({ name:'home' })
         }) 
     }
   }
