@@ -224,7 +224,7 @@ class ChatView(APIView):
                 * page_no: 
         """
         try:
-            chat_page = Paginator(Message.objects.all(), 20).page(page_no)            
+            chat_page = Paginator(Message.objects.filter(theme=theme_pk), 20).page(page_no)            
             serializer = MessageSerializer(chat_page, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except EmptyPage:
