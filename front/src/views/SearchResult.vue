@@ -3,20 +3,23 @@
     <div class="container">
       <div class="sresultheader">
         <SearchBar class="sresult-search-bar mx-auto my-3 pb-4" />
-        <h5 class="sresult-header-text my-3">"{{ $route.query.q }}" 에 대한 검색결과 ({{ themeData.length+placeData.length }} 개)</h5>
+        <h5 class="sresult-header-text my-3">"{{ $route.query.q }}" 에 대한 검색결과 ({{ themeData.length+placeData.length }}
+          개)</h5>
       </div>
     </div>
-    <div class="container border">
-      <div class="theme-container" v-if="themeData.length !== 0">
-        <p class="sresult-type">테마 검색결과</p>
-        <li v-for="theme in themeData" :key="theme.id" @click="goThemePage(theme.id)">{{ theme.name }}</li>
+    <div class="result-search-content">
+      <div class="container border search-result-container">
+        <div class="theme-container" v-if="themeData.length !== 0">
+          <p class="sresult-type">테마 검색결과</p>
+          <li v-for="theme in themeData" :key="theme.id" @click="goThemePage(theme.id)">{{ theme.name }}</li>
+        </div>
+        <div class="place-container" v-if="placeData.length !== 0">
+          <v-divider></v-divider>
+          <p class="sresult-type">장소 검색결과</p>
+          <li v-for="place in placeData" :key="place.id" @click="goPlacePage(place.themes[0])">{{ place.name }}</li>
+        </div>
+        <div v-if="themeData.length+placeData.length === 0">일치하는 검색결과가 없습니다.</div>
       </div>
-      <div class="place-container" v-if="placeData.length !== 0">
-        <v-divider></v-divider>
-        <p class="sresult-type">장소 검색결과</p>
-        <li v-for="place in placeData" :key="place.id" @click="goPlacePage(place.themes[0])">{{ place.name }}</li>
-      </div>
-      <div v-if="themeData.length+placeData.length === 0">일치하는 검색결과가 없습니다.</div>
     </div>
   </div>
 </template>
@@ -48,6 +51,7 @@
           .then(response => {
             this.themeData = response.data.theme
             this.placeData = response.data.dest
+            console.log(this.placeData)
           })
       }
     },
@@ -74,9 +78,19 @@
   }
 
   .sresultheader {
-    background: #11A0DC;
-    border-radius: 10px 10px 10px 10px;
-    border: 1px solid lightgray;
+    /* background: #11A0DC; */
+    /* border-radius: 10px 10px 10px 10px; */
+    border-bottom: 1px solid;
+  }
+
+  .result-search-content {
+    background-color: #2c3e50;
+    width: 90vw;
+    margin: 2rem auto;
+    padding: 1rem;
+  }
+  .search-result-container {
+    background-color: #fff;
   }
 
   .sresult-search-bar {
@@ -99,8 +113,9 @@
     font-size: 18px;
   }
 
+
   /* 검색창 너비 조정 */
-  /* .sresult-search-bar .search-box>.v-text-field.v-text-field--enclosed>.v-input__control>.v-input__slot {
-    width: 500px;
-  } */
+  .sresult-search-bar .search-form {
+    width: 100%;
+  }
 </style>

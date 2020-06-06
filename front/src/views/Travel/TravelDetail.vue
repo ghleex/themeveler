@@ -1,7 +1,5 @@
 <template>
   <div class="theme-detail-origin-box">
-
-
     <div class="themeDetail-box">
       <div class="theme-detail-left">
       </div>
@@ -32,7 +30,7 @@
           </v-btn>
         </div>
       </div>
-      <ChatBot :themeId=themeId />
+      <ChatBot :themeId=themeId :themeName=themeName />
     </div>
 
     <v-btn class="my-5" to="/travel/" rounded dark color="#2c3e50">📃뒤로가기</v-btn>
@@ -55,7 +53,7 @@
     <v-sheet class="theme-detail-destination mx-auto d-flex justify-content-center" max-width="100vw"
       style="margin-bottom: 5rem;">
       <v-slide-group v-model="model" class="pa-4" center-active show-arrows>
-        <v-slide-item v-for="destination in destinations" :key="destination" v-slot:default="{ active, toggle }">
+        <v-slide-item v-for="destination in destinations" :key="destination.title" v-slot:default="{ active, toggle }">
           <v-card class="ma-4" height="200" width="180" @click="toggle">
 
             <!-- 이미지가 없으므로 임시 card -->
@@ -84,12 +82,15 @@
       ChatBot,
     },
     props: {
-      themeId: Number
+      themeId: Number,
+      themeName: String,
     },
     data() {
       return {
         toggle: false,
-        themeArr: [],
+        themeArr: [
+          {"name": "name"},
+        ],
         destinations: [],
         model: null,
         date: "",
@@ -124,6 +125,8 @@
       axios.get("/travels/all_theme/", requestHeader)
         .then(res => {
           this.themeArr = res.data.all_theme
+          this.themeName = this.themeArr[this.themeId-1].name
+          // console.log(this.themeName)
 
           var dateTime = res.data.all_theme[this.themeId - 1].created_at
           this.date = dateTime.substr(0, 10)
@@ -157,7 +160,9 @@
 </script>
 
 <style lang="scss" scoped>
-  .theme-detail-origin-box {}
+  .theme-detail-origin-box {
+    background-color: #ECEFF1;
+  }
 
   .theme-detail-destination {
     margin-bottom: 15rem !important;

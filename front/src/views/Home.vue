@@ -46,7 +46,8 @@
         <v-slide-group v-model="model" center-active show-arrows>
           <v-slide-item v-for="theme in themeArr" :key="theme.id" v-slot:default="{ active, toggle }">
             <div @click="cardBypopTheme(model)">
-              <v-card class="ma-4" min-height="320px" max-height="35vw" min-width="238px" max-width="30vw" @click="toggle">
+              <v-card class="ma-4" min-height="320px" max-height="35vw" min-width="238px" max-width="30vw"
+                @click="toggle">
                 <v-img :src="ticket" min-height="260px" max-height="18vw" />
                 <v-card-title class="pop-card-title">
                   <div class="mx-auto text-light pop-theme-card-text">
@@ -66,9 +67,9 @@
             class="home-pop-theme-subBox mx-auto">
             <div class="pop-theme-disc">
               <!-- true인 id값의 eachContext만 가져오는 -->
-              <!-- <v-text v-if="toggle == active ? cardBypopThemeContext(model):false"></v-text> -->
+              <v-text v-if="toggle == active ? cardBypopThemeContext(model):false"></v-text>
               <div class="popTheme-context">
-                "{{ model+1 }}의 {{ eachContext }}"
+                "{{ eachContext }}"
               </div>
             </div>
             <v-row class="mt-0" align="center" justify="center">
@@ -187,82 +188,82 @@
         ],
         themeArr: [],
         destinations: [],
-      //   popTheme: [{
-      //       id: 1,
-      //       img: require("../assets/image/pop1.webp"),
-      //       title: "타지 사람들 집합",
-      //       context: "지역 사람들만 아는 숨겨진 맛집과 명소를 소개합니다.",
-      //       imgs: [
-      //         require("../assets/image/pop1sub1.jpg"),
-      //         require("../assets/image/pop1sub2.jpg"),
-      //         require("../assets/image/pop1sub3.jpg"),
-      //         require("../assets/image/pop1sub4.jpg"),
-      //         require("../assets/image/pop1sub5.jpg"),
-      //       ]
-      //     },
-      //     {
-      //       id: 2,
-      //       img: require("../assets/image/pop2.jpg"),
-      //       title: "서울사람도 잘 몰라",
-      //       context: "일단 아무말이나 적어보자.",
-      //       imgs: [
-      //         require("../assets/image/pop2sub1.jpg"),
-      //         require("../assets/image/pop2sub2.jpg"),
-      //         require("../assets/image/pop2sub3.jpg"),
-      //         require("../assets/image/pop2sub4.jpg"),
-      //         require("../assets/image/pop2sub5.jpg"),
-      //       ]
-      //     },
-      //     {
-      //       id: 3,
-      //       img: require("../assets/image/pop3.jpg"),
-      //       title: "홍콩 어디까지 가봤니?",
-      //       context: "홍콩 에그타르트 JMT.",
-      //       imgs: [
-      //         require("../assets/image/pop3sub1.jpg"),
-      //         require("../assets/image/pop3sub2.jpg"),
-      //         require("../assets/image/pop3sub3.jpg"),
-      //         require("../assets/image/pop3sub4.jpg"),
-      //         require("../assets/image/pop3sub5.jpg"),
-      //       ]
-      //     },
-      //     {
-      //       id: 4,
-      //       img: require("../assets/image/pop4.jpg"),
-      //       title: "최고의 디즈니 랜드",
-      //       context: "도쿄는 생각보다 별롭니다. 플로리다 올랜도는 쩔어요. 가장 큰 디즈니 월드(world) 클라쓰~",
-      //       imgs: [
-      //         require("../assets/image/pop4sub1.jpg"),
-      //         require("../assets/image/pop4sub2.jpg"),
-      //         require("../assets/image/pop4sub3.jpg"),
-      //         require("../assets/image/pop4sub4.jpg"),
-      //         require("../assets/image/pop4sub5.jpg"),
-      //       ]
-      //     },
-      //     {
-      //       id: 5,
-      //       img: require("../assets/image/pop5.jpg"),
-      //       title: "혼저옵서예",
-      //       context: "유일한 제주 남부의 시장을 가면 싱싱한 회 팩이 마치 3만원!",
-      //       imgs: [
-      //         require("../assets/image/pop5sub1.jpg"),
-      //         require("../assets/image/pop5sub2.jpg"),
-      //         require("../assets/image/pop5sub3.jpg"),
-      //         require("../assets/image/pop5sub4.jpg"),
-      //         require("../assets/image/pop5sub5.jpg"),
-      //       ]
-      //     }
-      //   ],
-      //   destination: [
-      //     require("../assets/image/destination1.jpg"),
-      //     require("../assets/image/destination2.jpg"),
-      //     require("../assets/image/destination3.jpg"),
-      //     require("../assets/image/destination4.jpg"),
-      //     require("../assets/image/destination1.jpg"),
-      //     require("../assets/image/destination2.jpg"),
-      //     require("../assets/image/destination3.jpg"),
-      //     require("../assets/image/destination4.jpg"),
-      //   ],
+        //   popTheme: [{
+        //       id: 1,
+        //       img: require("../assets/image/pop1.webp"),
+        //       title: "타지 사람들 집합",
+        //       context: "지역 사람들만 아는 숨겨진 맛집과 명소를 소개합니다.",
+        //       imgs: [
+        //         require("../assets/image/pop1sub1.jpg"),
+        //         require("../assets/image/pop1sub2.jpg"),
+        //         require("../assets/image/pop1sub3.jpg"),
+        //         require("../assets/image/pop1sub4.jpg"),
+        //         require("../assets/image/pop1sub5.jpg"),
+        //       ]
+        //     },
+        //     {
+        //       id: 2,
+        //       img: require("../assets/image/pop2.jpg"),
+        //       title: "서울사람도 잘 몰라",
+        //       context: "일단 아무말이나 적어보자.",
+        //       imgs: [
+        //         require("../assets/image/pop2sub1.jpg"),
+        //         require("../assets/image/pop2sub2.jpg"),
+        //         require("../assets/image/pop2sub3.jpg"),
+        //         require("../assets/image/pop2sub4.jpg"),
+        //         require("../assets/image/pop2sub5.jpg"),
+        //       ]
+        //     },
+        //     {
+        //       id: 3,
+        //       img: require("../assets/image/pop3.jpg"),
+        //       title: "홍콩 어디까지 가봤니?",
+        //       context: "홍콩 에그타르트 JMT.",
+        //       imgs: [
+        //         require("../assets/image/pop3sub1.jpg"),
+        //         require("../assets/image/pop3sub2.jpg"),
+        //         require("../assets/image/pop3sub3.jpg"),
+        //         require("../assets/image/pop3sub4.jpg"),
+        //         require("../assets/image/pop3sub5.jpg"),
+        //       ]
+        //     },
+        //     {
+        //       id: 4,
+        //       img: require("../assets/image/pop4.jpg"),
+        //       title: "최고의 디즈니 랜드",
+        //       context: "도쿄는 생각보다 별롭니다. 플로리다 올랜도는 쩔어요. 가장 큰 디즈니 월드(world) 클라쓰~",
+        //       imgs: [
+        //         require("../assets/image/pop4sub1.jpg"),
+        //         require("../assets/image/pop4sub2.jpg"),
+        //         require("../assets/image/pop4sub3.jpg"),
+        //         require("../assets/image/pop4sub4.jpg"),
+        //         require("../assets/image/pop4sub5.jpg"),
+        //       ]
+        //     },
+        //     {
+        //       id: 5,
+        //       img: require("../assets/image/pop5.jpg"),
+        //       title: "혼저옵서예",
+        //       context: "유일한 제주 남부의 시장을 가면 싱싱한 회 팩이 마치 3만원!",
+        //       imgs: [
+        //         require("../assets/image/pop5sub1.jpg"),
+        //         require("../assets/image/pop5sub2.jpg"),
+        //         require("../assets/image/pop5sub3.jpg"),
+        //         require("../assets/image/pop5sub4.jpg"),
+        //         require("../assets/image/pop5sub5.jpg"),
+        //       ]
+        //     }
+        //   ],
+        //   destination: [
+        //     require("../assets/image/destination1.jpg"),
+        //     require("../assets/image/destination2.jpg"),
+        //     require("../assets/image/destination3.jpg"),
+        //     require("../assets/image/destination4.jpg"),
+        //     require("../assets/image/destination1.jpg"),
+        //     require("../assets/image/destination2.jpg"),
+        //     require("../assets/image/destination3.jpg"),
+        //     require("../assets/image/destination4.jpg"),
+        //   ],
         ticket: require("../assets/themeveler.png"),
       }
     },
@@ -281,7 +282,7 @@
           .then(response => {
             // console.log(response.data.destinations)
             this.destinations = response.data.destinations
-            this.eachContext = "테마를 설명하는 내용"
+            // this.eachContext = "테마를 설명하는 내용"
           })
         // .catch(err => {
         //   console.log(err)
@@ -293,16 +294,10 @@
         // })
         // // console.log(theme[0].context)
         // this.eachContext = theme[0].context
-        const requestHeader = this.$store.getters.requestHeader
-        axios.get(`/travels/destinations/${id+1}`, requestHeader)
-          .then(response => {
-            this.destinations = response.data.destinations[id + 1]
-            // console.log(response.data)
-            // console.log(this.destinations)
-          })
-        // .catch(err => {
-        //   console.log(err)
-        // })
+
+        this.eachContext = this.themeArr[id].content
+        // console.log(response.data)
+        console.log(this.eachContext)
       },
       openCardModal(dest) {
         this.dests = dest

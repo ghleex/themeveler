@@ -57,7 +57,7 @@
     margin: 3rem auto;
   }
   .complete-box {
-    font-family: 'Cafe24Simplehae';
+    font-family: 'Cafe24Simplehae' !important;
   }
   .complete-img {
     margin: 1rem auto;
