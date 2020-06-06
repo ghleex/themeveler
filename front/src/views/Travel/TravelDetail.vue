@@ -76,7 +76,7 @@
 
 <script>
   import axios from 'axios'
-  import ChatBot from '../../components/ChatBot.vue'
+  import ChatBot from '@/components/ChatBot.vue'
 
   export default {
     name: "TravelDetail",

@@ -118,7 +118,7 @@
 
 <script>
   import axios from 'axios'
-  import Complete from '../../components/Complete.vue'
+  import Complete from '@/components/Complete.vue'
 
   export default {
     name: "TravelStart",

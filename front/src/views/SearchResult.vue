@@ -22,49 +22,49 @@
 </template>
 
 <script>
-import axios from 'axios'
-import SearchBar from '@/components/SearchBar.vue'
+  import axios from 'axios'
+  import SearchBar from '@/components/SearchBar.vue'
 
-export default {
-  name: "SearchResult",
-  components: {
-    SearchBar
-  },
-  data() {
-    return {
-			themeData: [],
-			placeData: []
-		}
-  },
-  methods: {
-    goThemePage(themeId) {
-      this.$router.push(`/travel/${themeId}`)
+  export default {
+    name: "SearchResult",
+    components: {
+      SearchBar
     },
-    goPlacePage(themeId) {
-      this.$router.push(`/travel/${themeId}`)
-		},
-    searchNow(query) {
-      axios.get(`/articles/search/${query}/`)
-        .then(response => {
-					this.themeData = response.data.theme
-          this.placeData = response.data.dest
-        })
+    data() {
+      return {
+        themeData: [],
+        placeData: []
+      }
+    },
+    methods: {
+      goThemePage(themeId) {
+        this.$router.push(`/travel/${themeId}`)
+      },
+      goPlacePage(themeId) {
+        this.$router.push(`/travel/${themeId}`)
+      },
+      searchNow(query) {
+        axios.get(`/articles/search/${query}/`)
+          .then(response => {
+            this.themeData = response.data.theme
+            this.placeData = response.data.dest
+          })
+      }
+    },
+    watch: {
+      keyword() {
+        this.searchNow(this.keyword)
+      }
+    },
+    computed: {
+      keyword() {
+        return this.$route.query.q
+      }
+    },
+    mounted() {
+      this.searchNow(this.$route.query.q)
     }
-  },
-  watch: {
-    keyword() {
-      this.searchNow(this.keyword)
-    }
-  },
-  computed: {
-    keyword() {
-      return this.$route.query.q
-    }
-  },
-	mounted() {
-    this.searchNow(this.$route.query.q)
-	}
-}
+  }
 </script>
 
 <style>
@@ -98,4 +98,9 @@ export default {
     font-family: 'Cafe24Simplehae';
     font-size: 18px;
   }
+
+  /* 검색창 너비 조정 */
+  /* .sresult-search-bar .search-box>.v-text-field.v-text-field--enclosed>.v-input__control>.v-input__slot {
+    width: 500px;
+  } */
 </style>
