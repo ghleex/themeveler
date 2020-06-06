@@ -4,7 +4,8 @@
       <v-icon>mdi-magnify</v-icon>
       <v-autocomplete color="#4DD0E1" v-model="query" :loading="loading" :search-input.sync="search" cache-items
         class="form-input mx-4" flat hide-no-data hide-details label="Where do you want to go?" solo-inverted
-        type="text">
+        >
+        <!-- type="text" -->
       </v-autocomplete>
       <v-btn color="#2c3e50" class="text-light mt-1" type="submit">검색</v-btn>
     </form>
@@ -18,7 +19,7 @@
     name: "searchbar",
     data() {
       return {
-        query: "",
+        query: null,
         search: "",
         searchResult: [],
         select: null,
@@ -29,7 +30,7 @@
     },
     watch: {
       search(val) {
-        val && val !== this.select && this.querySelections(val)
+        val && val !== this.query && this.querySelections(val)
       },
     },
     methods: {
@@ -57,7 +58,7 @@
           for (var i = 0; i < theme.length; i++) {
             this.states.push(theme[i].name);
           }
-          // console.log(this.states)
+          console.log(this.states)
         })
       
       // all_destination name 담기

@@ -278,7 +278,7 @@
         // // console.log(theme[0].imgs)
         // return theme[0].imgs
         const requestHeader = this.$store.getters.requestHeader
-        axios.get(`/travels/destinations/${id+1}`, requestHeader)
+        axios.get(`/travels/destinations/${id+1}/0`, requestHeader)
           .then(response => {
             // console.log(response.data.destinations)
             this.destinations = response.data.destinations

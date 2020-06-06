@@ -1,6 +1,16 @@
 <template>
   <div id="search-result">
     <div class="container">
+      
+      <div class="search-result-header d-flex mx-auto justify-content-center align-items-center mb-12 mt-5">
+        <div>
+        <v-img class="mr-5" src="../assets/navlogo.png" alt="" width="150px"></v-img>
+        </div>
+        <div class="d-flex justify-content-center align-items-center" style="font-weight: 700; font-style: italic; font-family: 'Cafe24Simplehae'; font-size: 70px;">
+          Themeveler
+        </div>
+      </div>
+
       <div class="sresultheader">
         <SearchBar class="sresult-search-bar mx-auto my-3 pb-4" />
       </div>
@@ -10,12 +20,12 @@
           개)</h5>
       <div class="container border search-result-container">
         <div class="theme-container" v-if="themeData.length !== 0">
-          <p class="sresult-type">테마 검색결과</p>
+          <p class="sresult-type"><i class="fas fa-search-location mr-2"></i>테마 검색결과</p>
           <li v-for="theme in themeData" :key="theme.id" @click="goThemePage(theme.id)">{{ theme.name }}</li>
         </div>
         <div class="place-container" v-if="placeData.length !== 0">
           <v-divider></v-divider>
-          <p class="sresult-type">장소 검색결과</p>
+          <p class="sresult-type"><i class="fas fa-search-location mr-2"></i>장소 검색결과</p>
           <li v-for="place in placeData" :key="place.id" @click="goPlacePage(place.themes[0])">{{ place.name }}</li>
         </div>
         <div v-if="themeData.length+placeData.length === 0">일치하는 검색결과가 없습니다.</div>
@@ -87,7 +97,7 @@
   .result-search-content {
     background-color: #2c3e50;
     width: 90vw;
-    margin: 2rem auto;
+    margin: 2rem auto 5rem auto;
     padding: .5rem 1rem;
     border-radius: 5px;
   }
@@ -108,9 +118,20 @@
     text-align: left;
   }
 
+  .theme-container > li,
+  .place-container > li {
+    padding: .5rem
+  }
+  .theme-container > li:hover,
+  .place-container > li:hover {
+    background-color: rgba(52, 41, 95, 0.05);
+    cursor: pointer;
+    font-weight: bold;
+  }
+
   .sresult-type {
     font-family: 'Cafe24Simplehae';
-    font-size: 18px;
+    font-size: 25px;
   }
 
 

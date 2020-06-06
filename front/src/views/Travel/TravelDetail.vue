@@ -38,15 +38,17 @@
 
 
     <!-- destinations -->
-    <div v-if="model == null" class="text-gray text-center mt-12" style="font-size: 12px;">
-      * 이미지를 클릭하면 장소를 알 수 있어요!
-    </div>
-    <div class="text-center mt-12" width="100%">
-      <div class="d-flex mt-5 justify-content-center">
-        <v-btn class="btn-round-num mr-2" v-model="destination" color="red" dark rounded v-if="model != null">
-          {{ model + 1 }}
-        </v-btn>
-        <div v-if="model >= 0">{{ destination }}</div>
+    <div style="margin: 3rem 0 1rem 0">
+      <div v-if="model == null" class="text-gray text-center mb-4" style="font-size: 12px;">
+        * 이미지를 클릭하면 장소를 알 수 있어요!
+      </div>
+      <div class="text-center" width="100%">
+        <div class="d-flex justify-content-center">
+          <v-btn class="btn-round-num mr-2" v-model="destination" color="red" dark rounded v-if="model != null">
+            {{ model + 1 }}
+          </v-btn>
+          <div v-if="model >= 0">{{ destination }}</div>
+        </div>
       </div>
     </div>
 
@@ -69,6 +71,28 @@
         </v-slide-item>
       </v-slide-group>
     </v-sheet>
+
+
+    <!-- detination modal -->
+    <v-dialog v-model="dialog" max-width="350">
+      <v-card>
+        <v-card-title class="headline">
+          여행지 이름
+        </v-card-title>
+
+        <v-card-text>
+          댓글,, 어쩌구
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn rounded color="red" text @click="dialog = false" style="background: #FFEBEE;">
+            나가기
+            <i class="fas fa-sign-out-alt ml-1"></i>
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -88,9 +112,9 @@
     data() {
       return {
         toggle: false,
-        themeArr: [
-          {"name": "name"},
-        ],
+        themeArr: [{
+          "name": "name"
+        }, ],
         destinations: [],
         model: null,
         date: "",
@@ -98,6 +122,7 @@
         like: false,
         destination: "",
         likeCount: 0,
+        dialog: false,
       }
     },
     methods: {
@@ -114,6 +139,7 @@
         }
       },
       toggleDestination(destination) {
+        this.dialog = true
         this.destination = destination.name
       },
       goThemeStory() {
@@ -125,7 +151,7 @@
       axios.get("/travels/all_theme/", requestHeader)
         .then(res => {
           this.themeArr = res.data.all_theme
-          this.themeName = this.themeArr[this.themeId-1].name
+          this.themeName = this.themeArr[this.themeId - 1].name
           // console.log(this.themeName)
 
           var dateTime = res.data.all_theme[this.themeId - 1].created_at
@@ -137,24 +163,24 @@
           // console.log(this.themeArr)
         })
 
-      axios.get(`/travels/destinations/${this.themeId}`, requestHeader)
+      axios.get(`/travels/destinations/${this.themeId}/0`, requestHeader)
         .then(res => {
           this.destinations = res.data.destinations
           // console.log(res.data)
         })
-        // .catch(err => {
-        //   console.log(err.response)
-        // })
+      // .catch(err => {
+      //   console.log(err.response)
+      // })
 
       axios.get(`/travels/like/${this.themeId}`, requestHeader)
         .then(res => {
           this.likeCount = res.data.like_users_count
           this.like = res.data.did_user_like
         })
-        // .catch(err => {
-        //   console.log(err.response)
-        // })
-        document.querySelector("#footer").style.display = 'block'
+      // .catch(err => {
+      //   console.log(err.response)
+      // })
+      document.querySelector("#footer").style.display = 'block'
     }
   }
 </script>
