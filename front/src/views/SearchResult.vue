@@ -3,11 +3,11 @@
     <div class="container">
       <div class="sresultheader">
         <SearchBar class="sresult-search-bar mx-auto my-3 pb-4" />
-        <h5 class="sresult-header-text my-3">"{{ $route.query.q }}" 에 대한 검색결과 ({{ themeData.length+placeData.length }}
-          개)</h5>
       </div>
     </div>
     <div class="result-search-content">
+      <h5 class="sresult-header-text my-3 text-light">"{{ $route.query.q }}" 에 대한 검색결과 ({{ themeData.length+placeData.length }}
+          개)</h5>
       <div class="container border search-result-container">
         <div class="theme-container" v-if="themeData.length !== 0">
           <p class="sresult-type">테마 검색결과</p>
@@ -75,32 +75,32 @@
   #search-result {
     margin-top: 64px;
     padding-top: 16px;
+    background-color: #ECEFF1;
+    height: 100%;
   }
 
   .sresultheader {
     /* background: #11A0DC; */
     /* border-radius: 10px 10px 10px 10px; */
-    border-bottom: 1px solid;
   }
 
   .result-search-content {
     background-color: #2c3e50;
     width: 90vw;
     margin: 2rem auto;
-    padding: 1rem;
+    padding: .5rem 1rem;
+    border-radius: 5px;
   }
   .search-result-container {
     background-color: #fff;
   }
 
-  .sresult-search-bar {
-    width: 95%;
-  }
-
   .sresult-header-text {
     font-family: 'Cafe24Simplehae';
     text-align: left;
-    margin-left: 24px;
+    margin:0 24px;
+    border-bottom: 1px solid white;
+    padding-bottom: .5rem;
   }
 
   .theme-container,

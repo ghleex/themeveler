@@ -162,6 +162,7 @@
 <style lang="scss" scoped>
   .theme-detail-origin-box {
     background-color: #ECEFF1;
+    height: 100%;
   }
 
   .theme-detail-destination {

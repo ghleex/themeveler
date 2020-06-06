@@ -5,8 +5,8 @@ import vuetify from './plugins/vuetify'
 import VueSession from 'vue-session'
 import store from './store' // vuex
 import VueCsrf from 'vue-csrf'
-import VueSimpleAlert from "vue-simple-alert"
 import axios from 'axios'
+import VueSimpleAlert from "vue-simple-alert"
 import AOS from 'aos' // fadeIn 이외에 scoll 효과
 import 'aos/dist/aos.css'
 import 'bootstrap/dist/css/bootstrap.min.css' // bootstrap
