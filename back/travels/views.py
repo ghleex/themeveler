@@ -262,6 +262,9 @@ class Destinations(APIView):
             if all_destination:
                 dest_per_page = 4
                 all_len = len(all_destination)
+                page = all_len // dest_per_page 
+                if all_len % dest_per_page:
+                    page += 1
 
                 if dest_per_page * (page_num-1)>= all_len:
                     return Response('Page is not exist', status=status.HTTP_404_NOT_FOUND)
@@ -274,7 +277,7 @@ class Destinations(APIView):
                     dest = all_destination[i]
                     page_destination.append(DestinationSerializer(dest).data)
                 data = {
-                    'all_length' : all_len,
+                    'all_length' : page,
                     'page_destination': page_destination
                 }
                 return Response(data)
