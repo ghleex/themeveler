@@ -256,6 +256,9 @@ class Destinations(APIView):
         destinations = []
         if theme_pk == 0:
             all_destination = Destination.objects.all().order_by('-created_at')
+            if page_num == 0:
+                serialized_all_destination = [DestinationSerializer(dest).data for dest in all_destination]
+                return Response({'all_destination': serialized_all_destination})
             if all_destination:
                 dest_per_page = 4
                 all_len = len(all_destination)
@@ -264,14 +267,17 @@ class Destinations(APIView):
                     return Response('Page is not exist', status=status.HTTP_404_NOT_FOUND)
 
                 start = dest_per_page * (page_num-1)
-                end = start + dest_per_page if start+4 <= len(all_len) else len(all_len)
+                end = start + dest_per_page-1 if start+4 <= all_len else all_len
 
                 page_destination = []
                 for i in range(start, end+1):
                     dest = all_destination[i]
                     page_destination.append(DestinationSerializer(dest).data)
-
-                return Response({'page_destination' : page_destination})
+                data = {
+                    'all_length' : all_len,
+                    'page_destination': page_destination
+                }
+                return Response(data)
             else:
                 return Response('Destination is not exist', status=status.HTTP_400_BAD_REQUEST)
         else:
