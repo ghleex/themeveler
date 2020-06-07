@@ -11,45 +11,56 @@
 </template>
 
 <script>
+  import axios from 'axios'
 
-export default {
-  name: "searchbar",
-  data() {
-    return {
-      query: "",
-      search: "",
-      searchResult: [],
-      select: null,
-      loading: false,
-      items: [],
-      states: [
-        'Spring Season',
-        'Independent Activist',
-        'Timeleap'
-      ]
-    }
-  },
-  watch: {
-    search(val) {
-      val && val !== this.select && this.querySelections(val)
+  export default {
+    name: "searchbar",
+    data() {
+      return {
+        query: null,
+        search: "",
+        searchResult: [],
+        select: null,
+        loading: false,
+        items: [],
+        states: []
+      }
     },
-  },
-  methods: {
-    querySelections(v) {
-      this.loading = true
-      // Simulated ajax query
-      setTimeout(() => {
-        this.items = this.states.filter(e => {
-          return (e || '').toLowerCase().indexOf((v || '').toLowerCase()) > -1
+    watch: {
+      search(val) {
+        val && val !== this.query && this.querySelections(val)
+      }
+    },
+    methods: {
+      querySelections(v) {
+        this.loading = true
+        // Simulated ajax query
+        setTimeout(() => {
+          this.items = this.states.filter(e => {
+            return (e || '').toLowerCase().indexOf((v || '').toLowerCase()) > -1
+          })
+          this.loading = false
+        }, 500)
+      },
+      searching() {
+        this.$router.push(`/searchresult?q=${this.search}`)
+      }
+    },
+    mounted() {
+      // all_theme name 담기
+      const requestHeader = this.$store.getters.requestHeader
+      axios.get('/travels/all_theme/', requestHeader)
+        .then(response => {
+          var theme = response.data.all_theme
+          for (var i = 0; i < theme.length; i++) {
+            this.states.push(theme[i].name);
+          }
+          console.log(this.states)
         })
-        this.loading = false
-      }, 500)
-    },
-    searching() {
-      this.$router.push(`/searchresult?q=${this.search}`)
+      // all_destination name 담기
+
     }
   }
-}
 </script>
 
 <style>
@@ -59,7 +70,6 @@ export default {
   }
 
   .search-box .theme--light.v-text-field--solo-inverted.v-input--is-focused>.v-input__control>.v-input__slot {
-    /* background: #4242426b; */
     background: #2c3e50;
   }
 

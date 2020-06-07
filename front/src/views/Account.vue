@@ -2,7 +2,6 @@
   <div class="account-box">
     <div class="bg-darker">
       <div class="account-div">
-
         <v-overlay :value="overlay" style="z-index: 222;">
           <i class="fas fa-circle-notch fa-spin" style="font-size:24px; color: white;"></i>
         </v-overlay>
@@ -106,10 +105,6 @@
     name: "Account",
     data() {
       return {
-        // emailRules: [
-        //   v => !!v || 'E-mail is required',
-        //   v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
-        // ],
         dialog: false,
         credentials: {
           email: "",
@@ -397,11 +392,12 @@
                 icon: "success",
                 timer: 3000
               })
-              this.overlay = !this.overlay
             })
             .catch(err => {
+              this.overlay = !this.overlay
               console.log(err)
             })
+            this.overlay = !this.overlay
         } else {
           Swal.fire({
             title: "Check Email",

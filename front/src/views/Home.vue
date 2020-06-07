@@ -11,8 +11,7 @@
       </v-carousel>
     </div><br>
 
-
-    <!-- card -->
+    <!-- describe card -->
     <div class="describe">
       <div class="describe-card-left"></div>
       <div class="describe-left">
@@ -38,7 +37,6 @@
       여행을 쫓다 꿈을 좇다 테마블러
     </div>
 
-
     <!-- 인기 테마 -->
     <div class="pop-box">
       <h2 class="home-h2-title"><i class="fas fa-bookmark mr-2"></i>인기 테마</h2>
@@ -59,54 +57,46 @@
             </div>
           </v-slide-item>
         </v-slide-group>
-
         <!-- 아래쪽에 나타나는 부분 -->
         <v-expand-transition>
           <v-sheet v-if="model != null" color="grey lighten-4" height="350" width="95%" tile
             class="home-pop-theme-subBox mx-auto">
             <div class="pop-theme-disc">
               <!-- true인 id값의 eachContext만 가져오는 -->
-              <!-- <v-text v-if="toggle == active ? cardBypopThemeContext(model):false"></v-text> -->
+              <v-text v-if="toggle == active ? cardBypopThemeContext(model):false"></v-text>
               <div class="popTheme-context">
-                "{{ model+1 }}의 {{ eachContext }}"
+                "{{ eachContext }}"
               </div>
             </div>
             <v-row class="mt-0" align="center" justify="center">
               <div class="pop-sub-img">
                 <v-sheet class="ml-0 mr-auto" max-width="90vw">
                   <v-slide-group class="pa-4 pop-theme-slide-group" center-active show-arrows>
-                    <!-- <v-slide-item v-for="(img, index) in cardBypopTheme(model)" :key="img"> -->
                     <v-slide-item v-for="(dest, index) in destinations" :key="dest">
                       <v-card class="ma-4 popTheme-sub-img" height="123" width="120">
-                        <!-- <v-img :src="img" height="123" @click="openCardModal(img)"></v-img> -->
-                        <!-- 임시 이미지 -->
+                        <!-- 이미지 -->
                         <v-sheet color="#37474F" height="123" @click="openCardModal(dest)">
                           <div class="text-light pb-8" style="font-family: 'Cafe24Simplehae'; font-size: 25px;">
                             #.{{ index+1 }} {{ dest.name }}</div>
                         </v-sheet>
-
-                        <!-- modal -->
                         <v-row class="fill-height" align="center" justify="center">
                         </v-row>
                       </v-card>
                     </v-slide-item>
-
+                    <!-- modal -->
                     <v-dialog v-model="dialog" width="500">
                       <v-card>
-                        <!-- 임시 이미지 -->
+                        <!-- 이미지 -->
                         <v-sheet color="#37474F" height="80vh">
                           <div class="text-light pb-8" style="font-family: 'Cafe24Simplehae'; font-size: 25px;">
                             #.{{ dests.id }} {{ dests.name }}
-                            <!-- {{ dests }} -->
                           </div>
                         </v-sheet>
-                        <!-- {{ img }} {{ index }} -->
                         <v-card-actions style="justify-content: flex-end;">
                           <v-btn color="#2c3e50" class="text-light" @click="dialog = false">확인</v-btn>
                         </v-card-actions>
                       </v-card>
                     </v-dialog>
-
                   </v-slide-group>
                 </v-sheet>
               </div>
@@ -121,7 +111,6 @@
         </v-expand-transition>
       </v-sheet>
     </div>
-
 
     <!-- 인기 여행지 -->
     <!-- <div class="pop-box">
@@ -176,7 +165,6 @@
         toggle: false,
         active: false,
         dialog: false,
-        // imgUrl: "",
         dests: [],
         model: null,
         model_: null,
@@ -187,83 +175,83 @@
         ],
         themeArr: [],
         destinations: [],
-      //   popTheme: [{
-      //       id: 1,
-      //       img: require("../assets/image/pop1.webp"),
-      //       title: "타지 사람들 집합",
-      //       context: "지역 사람들만 아는 숨겨진 맛집과 명소를 소개합니다.",
-      //       imgs: [
-      //         require("../assets/image/pop1sub1.jpg"),
-      //         require("../assets/image/pop1sub2.jpg"),
-      //         require("../assets/image/pop1sub3.jpg"),
-      //         require("../assets/image/pop1sub4.jpg"),
-      //         require("../assets/image/pop1sub5.jpg"),
-      //       ]
-      //     },
-      //     {
-      //       id: 2,
-      //       img: require("../assets/image/pop2.jpg"),
-      //       title: "서울사람도 잘 몰라",
-      //       context: "일단 아무말이나 적어보자.",
-      //       imgs: [
-      //         require("../assets/image/pop2sub1.jpg"),
-      //         require("../assets/image/pop2sub2.jpg"),
-      //         require("../assets/image/pop2sub3.jpg"),
-      //         require("../assets/image/pop2sub4.jpg"),
-      //         require("../assets/image/pop2sub5.jpg"),
-      //       ]
-      //     },
-      //     {
-      //       id: 3,
-      //       img: require("../assets/image/pop3.jpg"),
-      //       title: "홍콩 어디까지 가봤니?",
-      //       context: "홍콩 에그타르트 JMT.",
-      //       imgs: [
-      //         require("../assets/image/pop3sub1.jpg"),
-      //         require("../assets/image/pop3sub2.jpg"),
-      //         require("../assets/image/pop3sub3.jpg"),
-      //         require("../assets/image/pop3sub4.jpg"),
-      //         require("../assets/image/pop3sub5.jpg"),
-      //       ]
-      //     },
-      //     {
-      //       id: 4,
-      //       img: require("../assets/image/pop4.jpg"),
-      //       title: "최고의 디즈니 랜드",
-      //       context: "도쿄는 생각보다 별롭니다. 플로리다 올랜도는 쩔어요. 가장 큰 디즈니 월드(world) 클라쓰~",
-      //       imgs: [
-      //         require("../assets/image/pop4sub1.jpg"),
-      //         require("../assets/image/pop4sub2.jpg"),
-      //         require("../assets/image/pop4sub3.jpg"),
-      //         require("../assets/image/pop4sub4.jpg"),
-      //         require("../assets/image/pop4sub5.jpg"),
-      //       ]
-      //     },
-      //     {
-      //       id: 5,
-      //       img: require("../assets/image/pop5.jpg"),
-      //       title: "혼저옵서예",
-      //       context: "유일한 제주 남부의 시장을 가면 싱싱한 회 팩이 마치 3만원!",
-      //       imgs: [
-      //         require("../assets/image/pop5sub1.jpg"),
-      //         require("../assets/image/pop5sub2.jpg"),
-      //         require("../assets/image/pop5sub3.jpg"),
-      //         require("../assets/image/pop5sub4.jpg"),
-      //         require("../assets/image/pop5sub5.jpg"),
-      //       ]
-      //     }
-      //   ],
-      //   destination: [
-      //     require("../assets/image/destination1.jpg"),
-      //     require("../assets/image/destination2.jpg"),
-      //     require("../assets/image/destination3.jpg"),
-      //     require("../assets/image/destination4.jpg"),
-      //     require("../assets/image/destination1.jpg"),
-      //     require("../assets/image/destination2.jpg"),
-      //     require("../assets/image/destination3.jpg"),
-      //     require("../assets/image/destination4.jpg"),
-      //   ],
-        ticket: require("../assets/themeveler.png"),
+        ticket: require("../assets/themeveler.png")
+        //   popTheme: [{
+        //       id: 1,
+        //       img: require("../assets/image/pop1.webp"),
+        //       title: "타지 사람들 집합",
+        //       context: "지역 사람들만 아는 숨겨진 맛집과 명소를 소개합니다.",
+        //       imgs: [
+        //         require("../assets/image/pop1sub1.jpg"),
+        //         require("../assets/image/pop1sub2.jpg"),
+        //         require("../assets/image/pop1sub3.jpg"),
+        //         require("../assets/image/pop1sub4.jpg"),
+        //         require("../assets/image/pop1sub5.jpg"),
+        //       ]
+        //     },
+        //     {
+        //       id: 2,
+        //       img: require("../assets/image/pop2.jpg"),
+        //       title: "서울사람도 잘 몰라",
+        //       context: "일단 아무말이나 적어보자.",
+        //       imgs: [
+        //         require("../assets/image/pop2sub1.jpg"),
+        //         require("../assets/image/pop2sub2.jpg"),
+        //         require("../assets/image/pop2sub3.jpg"),
+        //         require("../assets/image/pop2sub4.jpg"),
+        //         require("../assets/image/pop2sub5.jpg"),
+        //       ]
+        //     },
+        //     {
+        //       id: 3,
+        //       img: require("../assets/image/pop3.jpg"),
+        //       title: "홍콩 어디까지 가봤니?",
+        //       context: "홍콩 에그타르트 JMT.",
+        //       imgs: [
+        //         require("../assets/image/pop3sub1.jpg"),
+        //         require("../assets/image/pop3sub2.jpg"),
+        //         require("../assets/image/pop3sub3.jpg"),
+        //         require("../assets/image/pop3sub4.jpg"),
+        //         require("../assets/image/pop3sub5.jpg"),
+        //       ]
+        //     },
+        //     {
+        //       id: 4,
+        //       img: require("../assets/image/pop4.jpg"),
+        //       title: "최고의 디즈니 랜드",
+        //       context: "도쿄는 생각보다 별롭니다. 플로리다 올랜도는 쩔어요. 가장 큰 디즈니 월드(world) 클라쓰~",
+        //       imgs: [
+        //         require("../assets/image/pop4sub1.jpg"),
+        //         require("../assets/image/pop4sub2.jpg"),
+        //         require("../assets/image/pop4sub3.jpg"),
+        //         require("../assets/image/pop4sub4.jpg"),
+        //         require("../assets/image/pop4sub5.jpg"),
+        //       ]
+        //     },
+        //     {
+        //       id: 5,
+        //       img: require("../assets/image/pop5.jpg"),
+        //       title: "혼저옵서예",
+        //       context: "유일한 제주 남부의 시장을 가면 싱싱한 회 팩이 마치 3만원!",
+        //       imgs: [
+        //         require("../assets/image/pop5sub1.jpg"),
+        //         require("../assets/image/pop5sub2.jpg"),
+        //         require("../assets/image/pop5sub3.jpg"),
+        //         require("../assets/image/pop5sub4.jpg"),
+        //         require("../assets/image/pop5sub5.jpg"),
+        //       ]
+        //     }
+        //   ],
+        //   destination: [
+        //     require("../assets/image/destination1.jpg"),
+        //     require("../assets/image/destination2.jpg"),
+        //     require("../assets/image/destination3.jpg"),
+        //     require("../assets/image/destination4.jpg"),
+        //     require("../assets/image/destination1.jpg"),
+        //     require("../assets/image/destination2.jpg"),
+        //     require("../assets/image/destination3.jpg"),
+        //     require("../assets/image/destination4.jpg"),
+        //   ]
       }
     },
     methods: {
@@ -277,15 +265,14 @@
         // // console.log(theme[0].imgs)
         // return theme[0].imgs
         const requestHeader = this.$store.getters.requestHeader
-        axios.get(`/travels/destinations/${id+1}`, requestHeader)
+        axios.get(`/travels/destinations/${id+1}/0/`, requestHeader)
           .then(response => {
-            // console.log(response.data.destinations)
             this.destinations = response.data.destinations
-            this.eachContext = "테마를 설명하는 내용"
+            // this.eachContext = "테마를 설명하는 내용"
           })
-        // .catch(err => {
-        //   console.log(err)
-        // })
+          .catch(err => {
+            console.log(err)
+          })
       },
       cardBypopThemeContext(id) {
         // var theme = this.popTheme.filter(theme => {
@@ -293,16 +280,8 @@
         // })
         // // console.log(theme[0].context)
         // this.eachContext = theme[0].context
-        const requestHeader = this.$store.getters.requestHeader
-        axios.get(`/travels/destinations/${id+1}`, requestHeader)
-          .then(response => {
-            this.destinations = response.data.destinations[id + 1]
-            // console.log(response.data)
-            // console.log(this.destinations)
-          })
-        // .catch(err => {
-        //   console.log(err)
-        // })
+        this.eachContext = this.themeArr[id].content
+        console.log(this.eachContext)
       },
       openCardModal(dest) {
         this.dests = dest
@@ -325,11 +304,10 @@
       axios.get("/travels/all_theme/", requestHeader)
         .then(response => {
           this.themeArr = response.data.all_theme
-          // console.log(this.themeArr)
         })
-      // .catch(err => {
-      //   console.log(err)
-      // })
+        .catch(err => {
+          console.log(err)
+        })
 
       this.a()
     }
@@ -468,8 +446,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    /* -webkit-clip-path: polygon(0 0, 76% 0, 24% 100%, 0% 100%);
-    clip-path: polygon(0 0, 76% 0, 24% 100%, 0% 100%); */
   }
 
   .describe-left>img {
@@ -502,8 +478,6 @@
     font-family: 'Cafe24Simplehae';
     padding: 4.7%;
     background-color: rgb(250, 249, 249);
-    /* -webkit-clip-path: polygon(76% 0, 100% 0, 100% 100%, 24% 100%);
-    clip-path: polygon(76% 0, 100% 0, 100% 100%, 24% 100%); */
   }
 
   .describe-right>i {
