@@ -144,32 +144,22 @@
         const requestHeader = this.$store.getters.requestHeader
         axios.get(`/travels/dest_content/${this.themeId}/${this.e1-1}/`, requestHeader)
           .then(res => {
-            // this.content = res.data
-            // console.log(res.data)
             this.content = res.data.pages
           })
-        // .catch(err => {
-        //   console.log(err.response)
-        // })
 
         document.getElementById(this.dests[n].id).tabIndex = -1;
         document.getElementById(this.dests[n].id).focus();
       },
       beforeStep(n) {
         this.e1 = n - 1
-        // Math.around
         this.progress = ((this.e1 / this.dests.length) * 100).toFixed(1)
 
         const requestHeader = this.$store.getters.requestHeader
         axios.get(`/travels/dest_content/${this.themeId}/${this.e1-1}/`, requestHeader)
           .then(res => {
-            // this.content = res.data
-            // console.log(res.data)
             this.content = res.data.pages
           })
-        // .catch(err => {
-        //   console.log(err.response)
-        // })
+
 
         document.getElementById(this.dests[n - 1].id).tabIndex = -1;
         document.getElementById(this.dests[n - 2].id).focus();
@@ -178,53 +168,32 @@
         this.$router.push(`/travel/${themeId}/`)
       },
       a() {
-        // document.querySelector("#navbar").style.display = 'none'
         document.querySelector("#footer").style.display = 'none'
       },
-      getUrl(result) {
-        var start = result[0].address.address_name
-        var wayToGo = "car"
-        console.log(result)
-        // this.mapUrl = `https://map.kakao.com/link/to/${this.dests[this.e1-1].name},${this.dests[this.e1-1].latitude},${this.dests[this.e1-1].longitude}`
-        // this.mapUrl = `https://map.kakao.com/?target=${wayToGo}&sName=${start}&eName=${this.dests[this.e1-1].name}`
-        this.mapUrl = `https://map.kakao.com/?map_type=TYPE_MAP&target=${wayToGo}&rt=%2C%2C523953%2C1084098&rt1=${start}&rt2=${this.dests[this.e1-1].name}&rtIds=%2C&rtTypes=%2C`
-        // window.open(this.mapUrl,"_self")
+      success() {
+        var destLat = this.dests[this.e1-1].latitude
+        var destLong = this.dests[this.e1-1].longitude
+        var destName = this.dests[this.e1-1].name
+        this.mapUrl = `https://map.kakao.com/link/to/${destName},${destLat},${destLong}`
         this.dialog = true
-      },
-      getCurrentAddress(arr) {
-        var geocoder = new kakao.maps.services.Geocoder();
-
-        function searchDetailAddrFromCoords(lon, lat, callback) {
-          geocoder.coord2Address(lon, lat, callback);
-        }
-        searchDetailAddrFromCoords(arr[1], arr[0], this.getUrl)
-      },
-      success(position) {
-        var arr = new Array()
-        const latitude = position.coords.latitude;
-        const longitude = position.coords.longitude;
-        arr.push(latitude)
-        arr.push(longitude)
-        this.getCurrentAddress(arr)
       },
       navigationUrl() {
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(this.success)
+        } else {
+          alert("위치 정보를 사용할 수 없습니다.")
+          return false
         }
       }
     },
     mounted() {
-      const script = document.createElement('script')
-      script.src = `http://dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.VUE_APP_KAKAO_API_KEY}&libraries=services`
-      document.head.appendChild(script)
-
       const token = this.$session.get('jwt')
       const requestHeader = {
         headers: {
           Authorization: "JWT " + token
         }
       }
-      axios.get(`/travels/destinations/${this.themeId}/`, requestHeader)
+      axios.get(`/travels/destinations/${this.themeId}/0/`, requestHeader)
         .then(res => {
           this.dests = res.data.destinations
           this.steps = this.dests.length
@@ -236,14 +205,8 @@
 
       axios.get(`/travels/dest_content/${this.themeId}/${this.e1-1}/`, requestHeader)
         .then(res => {
-          // this.content = res.data
-          // console.log(res.data)
           this.content = res.data.pages
-          // this.te = this.content[0].id
         })
-      // .catch(err => {
-      //   console.log(err.data)
-      // })
       this.a()
     }
   }
