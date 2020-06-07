@@ -118,35 +118,6 @@
       </v-sheet>
     </div>
 
-    <!-- 인기 여행지 -->
-    <!-- <div class="pop-box">
-      <div class="main-section">
-        <h2 class="home-h2-title text-center ml-0"><i class="fas fa-bus-alt mr-2"></i>인기 여행지</h2>
-        <v-sheet class="mx-auto" max-width="100vw">
-          <v-slide-group v-model="model_" class="pa-4" center-active show-arrows>
-            <v-slide-item v-for="n in 8" :key="n" v-slot:default="{ active, toggle }">
-
-              <v-card class="home-destination-card" min-height="290px" max-height="30vw" min-width="218px"
-                max-width="30vw" @click="toggle">
-                <div>
-                  <div class="home-card-destination-header">
-                    <div class="home-card-title">
-                      <i class="fas fa-bus-alt mr-1"></i>
-                      여행지_이름
-                    </div>
-                    <i class="fas fa-window-close"></i>
-                  </div>
-                </div>
-                <v-img :src="destination[n-1]" width="100%" height="100%" />
-                <v-row class="fill-height" align="center" justify="center">
-                </v-row>
-              </v-card>
-            </v-slide-item>
-          </v-slide-group>
-        </v-sheet>
-      </div>
-    </div> -->
-
     <HowToUse></HowToUse>
     <TopScroll></TopScroll>
   </div>
