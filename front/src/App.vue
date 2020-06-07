@@ -20,7 +20,6 @@ export default {
   },
   data() {
     return {
-
     }
   },
   methods: {
@@ -38,12 +37,13 @@ export default {
             this.$session.start()
             this.$session.set("jwt", token)
             this.$session.set("nickname", response.data.nickname)
+            this.$session.set("anonymous", response.data.anonymous)
             this.$session.set("expire", Date.now() + 3600000)
             this.$session.set("staff", response.data.is_staff)
             this.$store.dispatch("login", token)
             this.$store.commit("setToken", token)
             this.$store.dispatch("changeNickname", response.data.nickname)
-            this.$router.push('/')
+            this.$router.push("/")
           }
           else {
             alert("잘못된 정보입니다. 다시 입력해주세요.")

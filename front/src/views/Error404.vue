@@ -11,7 +11,7 @@
   export default {
     methods: {
       a() {
-        document.querySelector('#footer').style.display = 'none'
+        document.querySelector("#footer").style.display = 'none'
       }
     },
     mounted() {

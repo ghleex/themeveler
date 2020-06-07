@@ -44,8 +44,10 @@
         <v-slide-group v-model="model" center-active show-arrows>
           <v-slide-item v-for="theme in themeArr" :key="theme.id" v-slot:default="{ active, toggle }">
             <div @click="cardBypopTheme(model)">
-              <v-card class="ma-4" min-height="320px" max-height="35vw" min-width="238px" max-width="30vw" @click="toggle">
-                <v-img :src="ticket" min-height="260px" max-height="18vw" />
+              <v-card class="ma-4" min-height="320px" max-height="35vw" min-width="238px" max-width="30vw"
+                @click="toggle">
+                <v-img :src="'http://localhost:8000/uploads/theme/'+theme.name+'.jpg'" min-height="260px"
+                  max-height="18vw" />
                 <v-card-title class="pop-card-title">
                   <div class="mx-auto text-light pop-theme-card-text">
                     <i class="fas fa-quote-left"></i>{{ theme.name }}<i class="fas fa-quote-right"></i>
@@ -72,29 +74,30 @@
               <div class="pop-sub-img">
                 <v-sheet class="ml-0 mr-auto" max-width="90vw">
                   <v-slide-group class="pa-4 pop-theme-slide-group" center-active show-arrows>
-                    <v-slide-item v-for="(dest, index) in destinations" :key="dest">
+                    <v-slide-item v-for="dest in destinations" :key="dest">
                       <v-card class="ma-4 popTheme-sub-img" height="123" width="120">
                         <!-- 이미지 -->
-                        <v-sheet color="#37474F" height="123" @click="openCardModal(dest)">
+                        <!-- <v-sheet color="#37474F" height="123" @click="openCardModal(dest)">
                           <div class="text-light pb-8" style="font-family: 'Cafe24Simplehae'; font-size: 25px;">
                             #.{{ index+1 }} {{ dest.name }}</div>
-                        </v-sheet>
+                        </v-sheet> -->
+                        <v-img height="123" @click="openCardModal(dest)"
+                          :src="'http://localhost:8000/uploads/destination/'+dest.name+'.jpg'"></v-img>
+
                         <v-row class="fill-height" align="center" justify="center">
                         </v-row>
                       </v-card>
                     </v-slide-item>
                     <!-- modal -->
-                    <v-dialog v-model="dialog" width="500">
+                    <v-dialog content-class="dest-picture-modal" v-model="dialog" width="500">
                       <v-card>
                         <!-- 이미지 -->
-                        <v-sheet color="#37474F" height="80vh">
-                          <div class="text-light pb-8" style="font-family: 'Cafe24Simplehae'; font-size: 25px;">
-                            #.{{ dests.id }} {{ dests.name }}
-                          </div>
-                        </v-sheet>
-                        <v-card-actions style="justify-content: flex-end;">
-                          <v-btn color="#2c3e50" class="text-light" @click="dialog = false">확인</v-btn>
-                        </v-card-actions>
+                        <v-card-title  class="headline d-flex justify-content-between" style="font-family: 'Cafe24Simplehae'!important; background: #2c3e50; color: white;">
+                          #.{{ dests.id }} {{ dests.name }}
+                          <v-btn x-large icon @click="dialog = false"><i class="far fa-times-circle text-light" style="font-style: 50px"></i></v-btn>
+                        </v-card-title>
+                        <v-img height="80vh" :src="'http://localhost:8000/uploads/destination/'+dests.name+'.jpg'"></v-img>
+
                       </v-card>
                     </v-dialog>
                   </v-slide-group>
@@ -111,35 +114,6 @@
         </v-expand-transition>
       </v-sheet>
     </div>
-
-    <!-- 인기 여행지 -->
-    <!-- <div class="pop-box">
-      <div class="main-section">
-        <h2 class="home-h2-title text-center ml-0"><i class="fas fa-bus-alt mr-2"></i>인기 여행지</h2>
-        <v-sheet class="mx-auto" max-width="100vw">
-          <v-slide-group v-model="model_" class="pa-4" center-active show-arrows>
-            <v-slide-item v-for="n in 8" :key="n" v-slot:default="{ active, toggle }">
-
-              <v-card class="home-destination-card" min-height="290px" max-height="30vw" min-width="218px"
-                max-width="30vw" @click="toggle">
-                <div>
-                  <div class="home-card-destination-header">
-                    <div class="home-card-title">
-                      <i class="fas fa-bus-alt mr-1"></i>
-                      여행지_이름
-                    </div>
-                    <i class="fas fa-window-close"></i>
-                  </div>
-                </div>
-                <v-img :src="destination[n-1]" width="100%" height="100%" />
-                <v-row class="fill-height" align="center" justify="center">
-                </v-row>
-              </v-card>
-            </v-slide-item>
-          </v-slide-group>
-        </v-sheet>
-      </div>
-    </div> -->
 
     <HowToUse></HowToUse>
     <TopScroll></TopScroll>
@@ -171,7 +145,7 @@
         eachContext: "",
         slides: [
           require("../assets/image/bg.jpg"),
-          require("../assets/image/bg-3.jpg"),
+          require("../assets/image/bg2.jpg"),
         ],
         themeArr: [],
         destinations: [],
@@ -256,7 +230,7 @@
     },
     methods: {
       a() {
-        document.querySelector('#footer').style.display = 'block'
+        document.querySelector("#footer").style.display = 'block'
       },
       cardBypopTheme(id) {
         // var theme = this.popTheme.filter(theme => {
@@ -268,7 +242,6 @@
         axios.get(`/travels/destinations/${id+1}/0/`, requestHeader)
           .then(response => {
             this.destinations = response.data.destinations
-            // this.eachContext = "테마를 설명하는 내용"
           })
           .catch(err => {
             console.log(err)
@@ -281,7 +254,6 @@
         // // console.log(theme[0].context)
         // this.eachContext = theme[0].context
         this.eachContext = this.themeArr[id].content
-        console.log(this.eachContext)
       },
       openCardModal(dest) {
         this.dests = dest
@@ -315,10 +287,6 @@
 </script>
 
 <style>
-  /* .stepper-ok-btn {
-    border: 1px solid;
-  } */
-
   .v-stepper {
     box-shadow: 0 0 0 0 rgba(0, 0, 0, 0) !important;
   }
@@ -329,7 +297,6 @@
 
   .home-how-to-box {
     display: flex;
-    /* border: 1px solid; */
     width: 75vw;
     height: 400px;
     margin: 0 auto 0 auto;
@@ -346,8 +313,6 @@
   }
 
   .header .home-howTo-img>img {
-    /* width: 85%;
-    height: 100%; */
     margin: 0;
   }
 
@@ -544,7 +509,7 @@
     }
 
     .describe-middle {
-      padding: .4rem
+      padding: .4rem;
     }
   }
 
@@ -699,7 +664,7 @@
     }
 
     .info-img {
-      width: 330px
+      width: 330px;
     }
   }
 
