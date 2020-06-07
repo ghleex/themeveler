@@ -438,7 +438,7 @@
   .account-box {
     width: 100vw;
     height: 105vh;
-    background-image: url('../assets/image/bg-2.jpg');
+    background-image: url('../assets/image/bg3.jpg');
     background-repeat: no-repeat;
     background-size: cover;
     -ms-overflow-style: none;

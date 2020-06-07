@@ -341,7 +341,7 @@
   .chatbot-box .fa-comment-dots {
     font-size: 30px;
     color: white;
-    // text-shadow: 1px 1px 1px #ffbc2d;;
+    // text-shadow: 1px 1px 1px #ffbc2d;
   }
 
   .chatbot-title {
