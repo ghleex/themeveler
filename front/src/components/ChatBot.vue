@@ -3,18 +3,14 @@
     <div class="chatbot-box" @click="openModal">
       <i class="fas fa-comment-dots chatbot-icon"></i>
     </div>
-
     <v-dialog content-class="chatbot-card" v-model="dialog" max-width="310" transition="scale-transition">
-      <v-card class="chatbot-card" color="">
-
+      <v-card class="chatbot-card">
         <p v-if="newChat">New Message</p>
         <v-card-title class="headline chatbot-title justify-content-between"
           style="font-family: 'Cafe24Simplehae' !important;">
           <div>
-            <i class="fas fa-map-marker-alt mr-2 text-danger"></i>
-            {{ themeName }}
+            <i class="fas fa-map-marker-alt mr-2 text-danger"></i>{{ themeName }}
           </div>
-
           <div>
             <v-btn x-large icon @click="dialog = false">
               <i class="far fa-times-circle text-light" style="font-style: 50px"></i>
@@ -29,11 +25,12 @@
             <p class="text-start m-0" style="font-weight: 500; font-family: 'Cafe24Simplehae' !important;">
               <i v-if="memory.nickname !== 'admin'" class="fas fa-user mr-1"></i>
               <i v-else class="fas fa-crown mr-1"></i>
-              {{ memory.nickname }}</p>
+              {{ memory.nickname }}
+            </p>
             <p class="d-inline-block ml-3"
               style="font-family: 'Cafe24Simplehae' !important; max-width: 170px; margin: 0; background: #546E7A; border-radius: 15px; color: white; padding: .5rem .6rem;">
-              {{ memory.message }}</p>
-
+              {{ memory.message }}
+            </p>
             <p class="d-inline-block ml-1 text-muted" style="font-weight: 100; font-size: 12px;">
               <i>{{ memory.created_at | moment("LT") }}</i>
             </p>
@@ -42,27 +39,23 @@
 
         <span v-if="messages">
           <v-card-text class="text-start" v-for="(message, idx) in messages" :key="idx">
-
             <p v-if="message.nickname == '공지사항'" class="text-start m-0"
               style="color: #EF5350;font-weight: 700; font-family: 'Cafe24Simplehae' !important;">
-              <i class="fas fa-flag mr-1"></i>
-              {{ message.nickname }}
+              <i class="fas fa-flag mr-1"></i>{{ message.nickname }}
             </p>
-
             <p v-else class="text-start m-0" style="font-family: 'Cafe24Simplehae' !important;">
               <i v-if="message.nickname !== 'admin'" class="fas fa-user mr-1"></i>
               <i v-else class="fas fa-crown mr-1"></i>
-              {{ message.nickname }}</p>
-              
-
+              {{ message.nickname }}
+            </p>
             <p v-if="message.nickname !== '공지사항'" class="d-inline-block ml-3"
               style="max-width: 170px; margin: 0; background: #546E7A; border-radius: 15px; color: white; padding: .5rem .6rem; font-family: 'Cafe24Simplehae' !important;">
-              {{ message.message }}</p>
+              {{ message.message }}
+            </p>
             <p v-else class="d-inline-block ml-3"
               style="max-width: 170px; margin: 0; background: #FFF3E0; color: #FF7043; border-radius: 15px; padding: .5rem .6rem; font-family: 'Cafe24Simplehae' !important;">
-              {{ message.message }}</p>
-
-
+              {{ message.message }}
+            </p>
             <p class="d-inline-block ml-1 text-muted" style="font-weight: 100; font-size: 12px;">
               <i>{{ message.created_at | moment("LT") }}</i>
             </p>
@@ -83,15 +76,12 @@
             <i class="fas fa-exclamation-triangle mr-1"></i>연결안됨
           </span>
         </div>
-
-        <!-- <v-card-actions class="justify-content-center mt-1 mb-2"> -->
-        <!-- <v-spacer></v-spacer> -->
-        <!-- <v-btn rounded color="red" text @click="dialog = false" style="background: #FFEBEE;">
-            나가기
-            <i class="fas fa-sign-out-alt ml-1"></i>
+        <!-- <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn rounded color="red" text @click="dialog = false" style="background: #FFEBEE;">
+            나가기<i class="fas fa-sign-out-alt ml-1"></i>
           </v-btn>
         </v-card-actions> -->
-
       </v-card>
     </v-dialog>
   </div>
@@ -145,8 +135,8 @@
     },
     mounted() {
       this.baseURL = process.env.VUE_APP_IP
-      axios.get(this.baseURL+`/travels/chat/${this.themeId}/${this.chatPage}/`, this.$store.getters.requestHeader)
 
+      axios.get(this.baseURL+`/travels/chat/${this.themeId}/${this.chatPage}/`, this.$store.getters.requestHeader)
         .then(res => {
           this.memories = res.data
         })
@@ -154,9 +144,7 @@
           console.log(err)
         })
       this.messages = []
-      this.$socket.emit("startMessage", {
-        theme: this.themeId
-      })
+      this.$socket.emit("startMessage", {theme: this.themeId})
       this.$socket.on("joined", data => {
         data["created_at"] = this.$moment(new Date()).format("YYYY-MM-DD LT")
         this.messages = [data]
@@ -286,8 +274,6 @@
 
   .chatbot-box .fa-comment-dots {
     font-size: 30px;
-    // color: #2c3e50;
-    // color: #ffbc2d;
     color: white;
     // text-shadow: 1px 1px 1px #ffbc2d;;
   }
@@ -312,4 +298,3 @@
     border-radius: 10px;
   }
 </style>
-
