@@ -53,7 +53,6 @@
               {{ dests[n-1].name }}
               <i class="fas fa-caret-right swal2-success-circular-line-right" v-if="n !== steps"></i>
             </v-stepper-step>
-            <!-- <v-divider v-if="n !== steps" :key="n"></v-divider> -->
           </template>
         </v-stepper-header>
       </v-slide-group>
@@ -64,7 +63,6 @@
             :key="i.text">
             <v-card class="holder stepper-text-box" color="rgb(248, 248, 246)">
               {{ i.text }}
-              <!-- {{ n }} {{ i.id }} -->
               <!-- <v-img :src="'@/assets/' + n + '-' + i.id + '.jpg'"></v-img> -->
             </v-card>
             <div class="text-gray mt-3">
@@ -76,7 +74,6 @@
             다음
             <i class="fas fa-chevron-circle-right ml-1"></i>
           </v-btn>
-
           <Complete :themeId=themeId v-else-if="e1 == dests.length" />
 
           <div v-if="e1 !== 1 && e1 !== dests.length" class="d-flex justify-content-between mb-5">
@@ -87,19 +84,16 @@
             <v-btn rounded text color="red" @click="returnDetail(themeId)">닫기 <i class="fas fa-times-circle ml-1"></i>
             </v-btn>
           </div>
-
           <div class="mb-5" v-else-if="e1 == dests.length">
             <v-btn class="mr-3" v-if="e1 !== 1" @click="beforeStep(n)" rounded color="">
               이전
               <i class="fas fa-chevron-circle-left ml-1"></i>
             </v-btn>
           </div>
-
           <div v-else class="d-flex justify-content-end mb-5">
             <v-btn roudned text color="red" @click="returnDetail(themeId)">닫기 <i class="fas fa-times-circle ml-1"></i>
             </v-btn>
           </div>
-
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
@@ -116,7 +110,7 @@
       Complete
     },
     props: {
-      themeId: Number,
+      themeId: Number
     },
     data() {
       return {

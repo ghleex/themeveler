@@ -38,7 +38,6 @@
                       </v-container>
                     </v-card-text>
                     <v-card-actions class="pb-8 justify-content-center">
-                      <!-- <v-spacer></v-spacer> -->
                       <v-btn depressed class="mr-5" style="color: #37474F; font-family: 'Cafe24Simplehae' !important;"
                         rounded color="#FFB74D" @click="checkEmailCert">
                         <i class="fas fa-check-circle mr-1"></i>확인
@@ -207,7 +206,7 @@
                 var loginforms = new FormData()
                 loginforms.append("username", this.credentials.email)
                 loginforms.append("password", this.credentials.pw)
-                this.$emit('login', loginforms)
+                this.$emit("login", loginforms)
               } else {
                 Swal.fire({
                   title: "Check Password",
@@ -369,7 +368,7 @@
           var loginforms = new FormData()
           loginforms.append("username", this.credentials.email)
           loginforms.append("password", this.credentials.pw)
-          this.$emit('login', loginforms)
+          this.$emit("login", loginforms)
         }
       },
       a() {

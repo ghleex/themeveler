@@ -138,7 +138,6 @@
         .then(response => {
           this.themeArr = response.data.all_theme
         })
-
       this.getPaginationDestination()
     }
   }
