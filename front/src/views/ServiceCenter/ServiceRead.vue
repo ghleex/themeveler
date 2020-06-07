@@ -25,7 +25,7 @@
         </template>
         <!-- 관리자 처리 -->
         <template v-slot:item.is_fixed="{ item }">
-          <div v-if="item.is_fixed === true">미처리</div>
+          <div v-if="item.is_fixed === false">미처리</div>
           <div v-else>답변완료</div>
         </template>
         <!-- 등록일 시간형식 -->
