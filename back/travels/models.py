@@ -9,7 +9,7 @@ class Theme(models.Model):
     name = models.CharField(max_length=50)
     content = models.TextField()
     region = models.CharField(max_length=50)
-    image = models.ImageField(blank=True, upload_to="'theme')
+    image = models.ImageField(blank=True, upload_to='theme')
     created_at = models.DateTimeField(auto_now_add=True) # date is updated just created
     updated_at = models.DateTimeField(auto_now=True) # date is updated when created and updated
     visitors = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='visited_themes', blank=True) # User.visited_themes.all()
