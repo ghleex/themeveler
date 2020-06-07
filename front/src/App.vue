@@ -38,6 +38,7 @@ export default {
             this.$session.start()
             this.$session.set("jwt", token)
             this.$session.set("nickname", response.data.nickname)
+            this.$session.set("anonymous", response.data.anonymous)
             this.$session.set("expire", Date.now() + 3600000)
             this.$session.set("staff", response.data.is_staff)
             this.$store.dispatch("login", token)

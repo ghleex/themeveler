@@ -177,7 +177,7 @@
         eachContext: "",
         slides: [
           require("../assets/image/bg.jpg"),
-          require("../assets/image/bg-3.jpg"),
+          require("../assets/image/bg2.jpg"),
         ],
         themeArr: [],
         destinations: [],
