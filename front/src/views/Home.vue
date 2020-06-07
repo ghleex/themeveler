@@ -74,24 +74,29 @@
                   <v-slide-group class="pa-4 pop-theme-slide-group" center-active show-arrows>
                     <v-slide-item v-for="(dest, index) in destinations" :key="dest">
                       <v-card class="ma-4 popTheme-sub-img" height="123" width="120">
+                        
                         <!-- 이미지 -->
                         <v-sheet color="#37474F" height="123" @click="openCardModal(dest)">
                           <div class="text-light pb-8" style="font-family: 'Cafe24Simplehae'; font-size: 25px;">
                             #.{{ index+1 }} {{ dest.name }}</div>
                         </v-sheet>
+
                         <v-row class="fill-height" align="center" justify="center">
                         </v-row>
                       </v-card>
                     </v-slide-item>
+
                     <!-- modal -->
                     <v-dialog v-model="dialog" width="500">
                       <v-card>
+
                         <!-- 이미지 -->
                         <v-sheet color="#37474F" height="80vh">
                           <div class="text-light pb-8" style="font-family: 'Cafe24Simplehae'; font-size: 25px;">
                             #.{{ dests.id }} {{ dests.name }}
                           </div>
                         </v-sheet>
+                        
                         <v-card-actions style="justify-content: flex-end;">
                           <v-btn color="#2c3e50" class="text-light" @click="dialog = false">확인</v-btn>
                         </v-card-actions>
@@ -171,7 +176,7 @@
         eachContext: "",
         slides: [
           require("../assets/image/bg.jpg"),
-          require("../assets/image/bg-3.jpg"),
+          require("../assets/image/bg2.jpg"),
         ],
         themeArr: [],
         destinations: [],
@@ -315,10 +320,6 @@
 </script>
 
 <style>
-  /* .stepper-ok-btn {
-    border: 1px solid;
-  } */
-
   .v-stepper {
     box-shadow: 0 0 0 0 rgba(0, 0, 0, 0) !important;
   }
@@ -329,7 +330,6 @@
 
   .home-how-to-box {
     display: flex;
-    /* border: 1px solid; */
     width: 75vw;
     height: 400px;
     margin: 0 auto 0 auto;
@@ -346,8 +346,6 @@
   }
 
   .header .home-howTo-img>img {
-    /* width: 85%;
-    height: 100%; */
     margin: 0;
   }
 
@@ -544,7 +542,7 @@
     }
 
     .describe-middle {
-      padding: .4rem
+      padding: .4rem;
     }
   }
 
@@ -699,7 +697,7 @@
     }
 
     .info-img {
-      width: 330px
+      width: 330px;
     }
   }
 

@@ -11,7 +11,7 @@
 </template>
 
 <script>
-  import axios from 'axios'
+  // import axios from 'axios'
 
   export default {
     name: "searchbar",
@@ -23,7 +23,7 @@
         select: null,
         loading: false,
         items: [],
-        states: []
+        // states: []
       }
     },
     watch: {
@@ -46,20 +46,19 @@
         this.$router.push(`/searchresult?q=${this.search}`)
       }
     },
-    mounted() {
-      // all_theme name 담기
-      const requestHeader = this.$store.getters.requestHeader
-      axios.get('/travels/all_theme/', requestHeader)
-        .then(response => {
-          var theme = response.data.all_theme
-          for (var i = 0; i < theme.length; i++) {
-            this.states.push(theme[i].name);
-          }
-          console.log(this.states)
-        })
-      // all_destination name 담기
+    // mounted() {
+    //   // all_theme name 담기
+    //   const requestHeader = this.$store.getters.requestHeader
+    //   axios.get('/travels/all_theme/', requestHeader)
+    //     .then(response => {
+    //       var theme = response.data.all_theme
+    //       for (var i = 0; i < theme.length; i++) {
+    //         this.states.push(theme[i].name);
+    //       }
+    //     })
+    //   // all_destination name 담기
 
-    }
+    // }
   }
 </script>
 

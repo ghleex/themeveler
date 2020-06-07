@@ -40,7 +40,7 @@ export default {
         v => (v && v.length <= 30) || "제목을 30자 이내로 작성해주세요",
       ],
       contentRules: [v => !!v || "내용을 작성해주세요"],
-      categorys: [] // categorys: ["일반","중요","테마"]
+      categorys: [] // ["일반","중요","테마"]
     }
   },
   methods: {

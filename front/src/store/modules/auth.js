@@ -3,7 +3,8 @@ import getter from './getter.js'
 
 const state = {
   token: getter.getToken(),
-  nickname: getter.getNickname()
+  nickname: getter.getNickname(),
+  anonymous: getter.getAnonymous()
 }
 
 // token을 받아와서 state를 update
@@ -13,6 +14,9 @@ const mutations = {
   },
   setNickname(state, nickname) {
     state.nickname = nickname
+  },
+  setAnonymous(state, anonymous) {
+    state.anonymous = anonymous
   }
 }
 
@@ -26,12 +30,22 @@ const actions =  {
   },
   changeNickname(context, nickname) {
     context.commit('setNickname', nickname)
+  },
+  changeAnonymous(context, anonymous) {
+    context.commit('setAnonymous', anonymous)
   }
 }
 
 const getters = {
   isLoggedIn: state => state.token ? true : false,
   requestHeader(state) {
+    if (state.token == null || state.token == undefined) {
+      return {
+        headers: {
+          Authorization: ''
+        }
+      }
+    }
     return {
       headers: {
         Authorization: `JWT ${state.token}`

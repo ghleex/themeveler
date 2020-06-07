@@ -3,6 +3,7 @@ from .models import Theme, Destination, Message, DestContent, ContentPage
 from django.db import models
 from django.forms import Textarea
 from .inlines import MessageInline
+from articles.inlines import CommentInline
 
 # Register your models here.
 
@@ -24,6 +25,9 @@ class DestinationAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'contents', 'image', 'created_at', 'updated_at',)
     search_fields = ('name',)
     list_display_links = ('name',)
+    inlines = [
+        CommentInline,
+    ]
 
     def contents(self, obj):
         contents = DestContent.objects.filter(destination=obj)

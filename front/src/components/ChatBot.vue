@@ -5,11 +5,11 @@
     </div>
     <v-dialog content-class="chatbot-card" v-model="dialog" max-width="310" transition="scale-transition">
       <v-card class="chatbot-card">
-        <p v-if="newChat">New Message</p>
         <v-card-title class="headline chatbot-title justify-content-between"
           style="font-family: 'Cafe24Simplehae' !important;">
           <div>
-            <i class="fas fa-map-marker-alt mr-2 text-danger"></i>{{ themeName }}
+            <i class="fas fa-map-marker-alt mr-2 text-danger"></i>
+            {{ themeName }}
           </div>
           <div>
             <v-btn x-large icon @click="dialog = false">
@@ -17,71 +17,87 @@
             </v-btn>
           </div>
         </v-card-title>
+        
         <p v-if="chatLoading" class="chatLoading" style="margin-top: 8rem; color: gray;">Loading</p>
         <p style="margin-top: 8rem;"></p>
+        <span class="new-message-text">
+          <v-card-text>
+            <p v-if="newChat" class="text-light bg-danger new-message" style="border-radius: 50px;">New Message</p>
+          </v-card-text>
+        </span>
 
         <span v-if="memories">
           <v-card-text class="text-start" v-for="(memory, idx) in memories" :key="idx">
-            <p class="text-start m-0" style="font-weight: 500; font-family: 'Cafe24Simplehae' !important;">
-              <i v-if="memory.nickname !== 'admin'" class="fas fa-user mr-1"></i>
-              <i v-else class="fas fa-crown mr-1"></i>
-              {{ memory.nickname }}
-            </p>
-            <p class="d-inline-block ml-3"
-              style="font-family: 'Cafe24Simplehae' !important; max-width: 170px; margin: 0; background: #546E7A; border-radius: 15px; color: white; padding: .5rem .6rem;">
-              {{ memory.message }}
-            </p>
-            <p class="d-inline-block ml-1 text-muted" style="font-weight: 100; font-size: 12px;">
-              <i>{{ memory.created_at | moment("LT") }}</i>
-            </p>
+            <span v-if="memory.theme != 'time'">
+              <p class="text-start m-0" :class="{'text-dark': anonymous !== memory.nickname}"
+                style="font-weight: 500; font-family: 'Cafe24Simplehae' !important;">
+                <i class="fas fa-user mr-1"></i>
+                {{ memory.nickname }}
+              </p>
+              <p class="d-inline-block ml-3" :class="{'bg-info': anonymous !== memory.nickname}"
+                style="font-family: 'Cafe24Simplehae' !important; max-width: 170px; margin: 0; background: #546E7A; border-radius: 15px; color: white; padding: .5rem .6rem;">
+                {{ memory.message }}
+              </p>
+              <p class="d-inline-block ml-1 text-muted" style="font-weight: 100; font-size: 12px;">
+                <i>{{ memory.created_at | checkChatDateTime }}</i>
+              </p>
+            </span>
+            <span v-else>
+              <hr>
+              <p class="text-center" style="color: gray;">
+                <i>{{ memory.message | moment("YYYY-MM-DD") }}</i>
+              </p>
+            </span>
           </v-card-text>
         </span>
 
         <span v-if="messages">
           <v-card-text class="text-start" v-for="(message, idx) in messages" :key="idx">
-            <p v-if="message.nickname == '공지사항'" class="text-start m-0"
-              style="color: #EF5350;font-weight: 700; font-family: 'Cafe24Simplehae' !important;">
-              <i class="fas fa-flag mr-1"></i>{{ message.nickname }}
-            </p>
-            <p v-else class="text-start m-0" style="font-family: 'Cafe24Simplehae' !important;">
-              <i v-if="message.nickname !== 'admin'" class="fas fa-user mr-1"></i>
-              <i v-else class="fas fa-crown mr-1"></i>
-              {{ message.nickname }}
-            </p>
-            <p v-if="message.nickname !== '공지사항'" class="d-inline-block ml-3"
-              style="max-width: 170px; margin: 0; background: #546E7A; border-radius: 15px; color: white; padding: .5rem .6rem; font-family: 'Cafe24Simplehae' !important;">
-              {{ message.message }}
-            </p>
-            <p v-else class="d-inline-block ml-3"
-              style="max-width: 170px; margin: 0; background: #FFF3E0; color: #FF7043; border-radius: 15px; padding: .5rem .6rem; font-family: 'Cafe24Simplehae' !important;">
-              {{ message.message }}
-            </p>
-            <p class="d-inline-block ml-1 text-muted" style="font-weight: 100; font-size: 12px;">
-              <i>{{ message.created_at | moment("LT") }}</i>
-            </p>
-            <hr>
-            <p class="text-center" style="color: gray;">
-              <i>{{ message.created_at | moment("YYYY-MM-DD") }}</i></p>
+            <span v-if="message.theme != 'time'">
+              <p v-if="message.nickname == '공지사항'" class="text-start m-0"
+                style="color: #EF5350;font-weight: 700; font-family: 'Cafe24Simplehae' !important;">
+                <i class="fas fa-flag mr-1"></i>
+                {{ message.nickname }}
+              </p>
+              <p v-else class="text-start m-0" :class="{'text-info': anonymous !== message.nickname}"
+                style="font-family: 'Cafe24Simplehae' !important;">
+                <i class="fas fa-user mr-1"></i>
+                {{ message.nickname }}
+              </p>
+              <p v-if="message.nickname !== '공지사항'" :class="{'bg-info': anonymous !== memory.nickname}"
+                class="d-inline-block ml-3"
+                style="max-width: 170px; margin: 0; background: #546E7A; border-radius: 15px; color: white; padding: .5rem .6rem; font-family: 'Cafe24Simplehae' !important;">
+                {{ message.message }}
+              </p>
+              <p v-else class="d-inline-block ml-3"
+                style="max-width: 170px; margin: 0; background: #FFF3E0; color: #FF7043; border-radius: 15px; padding: .5rem .6rem; font-family: 'Cafe24Simplehae' !important;">
+                {{ message.message }}
+              </p>
+              <p class="d-inline-block ml-1 text-muted" style="font-weight: 100; font-size: 12px;">
+                <i>{{ message.created_at | moment("YYYY-MM-DD") }}</i>
+              </p>
+            </span>
+            <span v-else>
+              <hr>
+              <p class="text-center" style="color: gray;">
+                <i>{{ message.created_at | moment("YYYY-MM-DD") }}</i>
+              </p>
+            </span>
           </v-card-text>
         </span>
+        <br><br>
         <hr>
-        <div class="py-5" style="background: #ECEFF1;">
+        <v-card-text class="py-5 chat-write" style="background: #ECEFF1;">
           <div v-if="connected">
             <input class="p-1" type="text" v-model="message" @keypress.enter="sendMessage"
               style="border-bottom: 1px #546E7A; background: white; border-radius: 5px;">
             <v-btn @click="sendMessage" class="ml-2" rounded color="#546E7A" small><i class="fas fa-feather"
-                style="color: white; padding: 0 !important;"></i></v-btn>
+              style="color: white; padding: 0 !important;"></i></v-btn>
           </div>
           <span class="text-danger" v-else style="font-weight: 700; font-family: 'Cafe24Simplehae' !important;">
             <i class="fas fa-exclamation-triangle mr-1"></i>연결안됨
           </span>
-        </div>
-        <!-- <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn rounded color="red" text @click="dialog = false" style="background: #FFEBEE;">
-            나가기<i class="fas fa-sign-out-alt ml-1"></i>
-          </v-btn>
-        </v-card-actions> -->
+        </v-card-text>
       </v-card>
     </v-dialog>
   </div>
@@ -93,9 +109,32 @@
 
   export default {
     name: "ChatBot",
+    computed: {
+      anonymous() {
+        return this.$store.state.auth.anonymous
+      }
+    },
+    filters: {
+      checkChatDateTime(created_at) {
+        var now = new Date()
+        var date = new Date(created_at)
+        var dateDiff = Math.ceil((now.getTime() - date.getTime()) / (60000))
+        if (dateDiff <= 1440) {
+          var hour = parseInt(dateDiff / 60)
+          if (hour) {
+            return (`${hour}시간 전`)
+          } else {
+            var minute = dateDiff % 60
+            return (`${minute}분 전`)
+          }
+        }
+        var ap = date.getHours() < 12 ? "AM" : "PM"
+        return `${date.getHours()}:${date.getMinutes()} ${ap}`
+      }
+    },
     props: {
       themeId: Number,
-      themeName: String,
+      themeName: String
     },
     data: () => {
       return {
@@ -110,7 +149,8 @@
         scrollHeight: 0,
         chatLoading: false,
         newChat: false,
-        baseURL: ""
+        baseURL: "",
+        chatDate: []
       }
     },
     created() {
@@ -135,16 +175,27 @@
     },
     mounted() {
       this.baseURL = process.env.VUE_APP_IP
-
-      axios.get(this.baseURL+`/travels/chat/${this.themeId}/${this.chatPage}/`, this.$store.getters.requestHeader)
+      axios.get(this.baseURL + `/travels/chat/${this.themeId}/${this.chatPage}/`, this.$store.getters.requestHeader)
         .then(res => {
-          this.memories = res.data
+          res.data.forEach(value => {
+            var created_at = this.$moment(value.created_at).format("YYYY-MM-DD")
+            if (this.checkChatDate(created_at)) {
+              this.memories.push({
+                theme: "time",
+                nickname: "시간",
+                message: value.created_at
+              })
+            }
+            this.memories.push(value)
+          });
         })
         .catch(err => {
           console.log(err)
         })
       this.messages = []
-      this.$socket.emit("startMessage", {theme: this.themeId})
+      this.$socket.emit("startMessage", {
+        theme: this.themeId
+      })
       this.$socket.on("joined", data => {
         data["created_at"] = this.$moment(new Date()).format("YYYY-MM-DD LT")
         this.messages = [data]
@@ -161,6 +212,13 @@
       this.dialog = false
     },
     methods: {
+      checkChatDate(created_at) {
+        if (this.chatDate.indexOf(created_at) == -1) {
+          this.chatDate.push(created_at)
+          return true
+        }
+        return false
+      },
       handleScroll(scrollTop) {
         let scrollMoveTrigger = Math.round(scrollTop.srcElement.scrollTop) == scrollTop.srcElement.scrollHeight -
           scrollTop.srcElement.clientHeight
@@ -175,17 +233,15 @@
           }, 100)
           setTimeout(() => {
             this.chatPage += 1
-            axios.get(this.baseURL+`/travels/chat/${this.themeId}/${this.chatPage}/`, this.$store.getters.requestHeader)
+            axios.get(this.baseURL + `/travels/chat/${this.themeId}/${this.chatPage}/`, this.$store.getters.requestHeader)
               .then(res => {
                 this.memories = res.data.concat(this.memories)
                 setTimeout(() => {
-                  document.getElementsByClassName("v-dialog")[0].scrollTop = this.scrollHeight * res.data
-                    .length
+                  document.getElementsByClassName("v-dialog")[0].scrollTop = this.scrollHeight * res.data.length
                 }, 10)
               })
               .catch(err => {
                 console.log(err)
-                // alert("마지막 메시지 입니다.")
                 Swal.fire({
                   title: "Last Message",
                   text: "마지막 메시지 입니다.",
@@ -223,9 +279,21 @@
           let data = {
             "message": message
           }
-          axios.post(this.baseURL+`/travels/chat/${this.themeId}/`, data, this.$store.getters.requestHeader)
-            .then(res =>{
-              this.$socket.emit("sendMessage",{theme: this.themeId, nickname: res.data.nickname, message: message})
+          axios.post(this.baseURL + `/travels/chat/${this.themeId}/`, data, this.$store.getters.requestHeader)
+            .then(res => {
+              this.$socket.emit("sendMessage", {
+                theme: this.themeId,
+                nickname: res.data.nickname,
+                message: message
+              })
+              var created_at = this.$moment(res.data.created_at).format("YYYY-MM-DD")
+              if (this.checkChatDate(created_at)) {
+                this.messages.push({
+                  theme: "time",
+                  nickname: "시간",
+                  message: created_at
+                })
+              }
               this.messages.push(res.data)
             })
             .catch(err => {
@@ -250,6 +318,27 @@
 </script>
 
 <style lang="scss" scoped>
+  .new-message-text {
+    position: fixed;
+    top: 1rem;
+    width: 270px;
+  }
+
+  .chat-write {
+    position: fixed;
+    bottom: 1.5rem;
+    width: 310px;
+  }
+
+  .new-message {
+    background-color: rgba(255, 255, 255, 0);
+    position: relative;
+    top: 7.5rem;
+    left: 30%;
+    width: 270px;
+    margin: .3rem auto;
+  }
+
   .chatbot-box {
     position: fixed;
     display: flex;
@@ -275,14 +364,13 @@
   .chatbot-box .fa-comment-dots {
     font-size: 30px;
     color: white;
-    // text-shadow: 1px 1px 1px #ffbc2d;;
   }
 
   .chatbot-title {
     position: fixed;
     background-color: #2c3e50;
     color: white;
-    width: 290px;
+    width: 310px;
   }
 
   .chatbot-card {

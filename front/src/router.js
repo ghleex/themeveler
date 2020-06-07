@@ -117,7 +117,7 @@ const routes = [
     })
   },
   {
-    path: '/checktoken/:nickname/:token',
+    path: '/checktoken/:jwtData/:token',
     name: 'checkToken',
     component: CheckToken
   },

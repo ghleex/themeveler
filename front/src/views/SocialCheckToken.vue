@@ -6,6 +6,7 @@
 
 <script>
   import axios from 'axios'
+  import jwtDecode from 'jwt-decode'
 
   export default {
     beforeRouteEnter(to, from, next) {
@@ -19,18 +20,21 @@
     },
     mounted() {
       const token = this.$route.params.token
+      const jwtData = jwtDecode(this.$route.params.jwtData)
       var form = new FormData()
       form.append("token", token)
       axios.post("/accounts/token/verify/", form)
         .then(() => {
           this.$session.start()
           this.$session.set("jwt", token)
-          this.$session.set("nickname", this.$route.params.nickname)
+          this.$session.set("nickname", jwtData.nickname)
+          this.$session.set("anonymous", jwtData.anonymous)
           this.$session.set("staff", false)
           this.$session.set("social", true)
           this.$store.dispatch("login", token)
           this.$store.commit("setToken", token)
-          this.$store.dispatch("changeNickname", this.$route.params.nickname)
+          this.$store.dispatch("changeNickname", jwtData.nickname)
+          this.$store.dispatch("changeAnonymous", jwtData.anonymous)
           this.$router.push({name:'home'})
         })
         .catch(error => {
