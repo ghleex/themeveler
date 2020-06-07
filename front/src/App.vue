@@ -40,6 +40,7 @@ export default {
             this.$session.set("nickname", response.data.nickname)
             this.$session.set("expire", Date.now() + 3600000)
             this.$session.set("staff", response.data.is_staff)
+            this.$session.set("anonymous", response.data.anonymous)
             this.$store.dispatch("login", token)
             this.$store.commit("setToken", token)
             this.$store.dispatch("changeNickname", response.data.nickname)

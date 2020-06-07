@@ -15,4 +15,12 @@ export default {
       return null
     }
   },
+  getAnonymous() {
+    try {
+      return JSON.parse(localStorage.getItem("vue-session-key")).anonymous
+    }
+    catch {
+      return null
+    }
+  },
 }
