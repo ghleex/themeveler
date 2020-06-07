@@ -212,6 +212,7 @@ class Chat(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+@permission_classes((AllowAny,))
 class ChatView(APIView):
     @swagger_auto_schema(query_serializer=MessageViewSerializer)
     def get(self, request, theme_pk, page_no, format=None):

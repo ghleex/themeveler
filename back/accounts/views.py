@@ -304,7 +304,7 @@ class SignIn(APIView):
         token = login_response.data.get('token')
         if not token:
             return login_response
-        return Response({'nickname': sign_in_user.nickname, 'is_staff': sign_in_user.is_staff, 'token': token}, status=status.HTTP_200_OK)
+        return Response({'nickname': sign_in_user.nickname, 'is_staff': sign_in_user.is_staff, 'token': token, 'anonymous': sign_in_user.anonymous}, status=status.HTTP_200_OK)
 
 
 @permission_classes((IsAdminUser, ))
@@ -404,7 +404,12 @@ class KakaoSignInCallbackView(APIView):
                 user.anonymous = choice(prefix) + choice(suffix) + str(user.id)
                 user.save()
         jwt = encoder(payload(user))
-        return redirect(f'{front_url}/checktoken/{user.nickname}/{jwt}/') 
+        data = {
+            'nickname': user.nickname,
+            'anonymous': user.anonymous
+        }
+        jwt_data = encoder(data)
+        return redirect(f'{front_url}/checktoken/{jwt_data}/{jwt}/') 
 
 
 @permission_classes((AllowAny, ))
@@ -471,7 +476,12 @@ class GoogleSignInCallbackView(APIView):
                 user.anonymous = choice(prefix) + choice(suffix) + str(user.id)
                 user.save()
         jwt = encoder(payload(user))
-        return redirect(f'{front_url}/checktoken/{user.nickname}/{jwt}/')
+        data = {
+            'nickname': user.nickname,
+            'anonymous': user.anonymous
+        }
+        jwt_data = encoder(data)
+        return redirect(f'{front_url}/checktoken/{jwt_data}/{jwt}/')
 
 
 @permission_classes((AllowAny, ))
