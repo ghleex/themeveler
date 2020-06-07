@@ -120,7 +120,6 @@
         }
         axios.get(`/travels/destinations/0/${this.page}/`, requestHeader)
           .then(response => {
-            console.log(response.data)
             this.paginationDest = response.data.page_destination
             this.pageLength = response.data.all_length
           })
@@ -137,9 +136,7 @@
         .then(response => {
           this.themeArr = response.data.all_theme
         })
-        .catch(err => {
-          console.log(err)
-        })
+
       this.getPaginationDestination()
     },
   }
