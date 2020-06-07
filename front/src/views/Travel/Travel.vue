@@ -35,7 +35,6 @@
                 </div>
 
                 <!-- <v-img @click="showDetail(theme.id)" :src="theme.image" width="100%" height="100%" /> -->
-                <!-- 임시 -->
                 <v-sheet class="d-flex justify-content-center align-items-center" @click="showDetail(theme.id)"
                   color="#546E7A" width="100%" height="100%" style="border-radius: 0;">
                   <div class="text-light pb-12" style="font-family: 'Cafe24Simplehae'; font-size: 25px;">
@@ -92,18 +91,18 @@
         model_: null,
         page: 1,
         slides: [
-          require('../../assets/bg1.jpg'),
-          require('../../assets/bg5.jpg'),
+          require("../../assets/bg1.jpg"),
+          require("../../assets/bg5.jpg"),
         ],
         destination: [
-          require('../../assets/image/destination1.jpg'),
-          require('../../assets/image/destination2.jpg'),
-          require('../../assets/image/destination3.jpg'),
-          require('../../assets/image/destination4.jpg'),
-          require('../../assets/image/destination1.jpg'),
-          require('../../assets/image/destination2.jpg'),
-          require('../../assets/image/destination3.jpg'),
-          require('../../assets/image/destination4.jpg'),
+          require("../../assets/image/destination1.jpg"),
+          require("../../assets/image/destination2.jpg"),
+          require("../../assets/image/destination3.jpg"),
+          require("../../assets/image/destination4.jpg"),
+          require("../../assets/image/destination1.jpg"),
+          require("../../assets/image/destination2.jpg"),
+          require("../../assets/image/destination3.jpg"),
+          require("../../assets/image/destination4.jpg"),
         ],
       }
     },
@@ -123,6 +122,9 @@
             this.paginationDest = response.data.page_destination
             this.pageLength = response.data.all_length
           })
+          .catch(err => {
+            console.log(err)
+          })
       }
     },
     mounted() {
@@ -138,7 +140,7 @@
         })
 
       this.getPaginationDestination()
-    },
+    }
   }
 </script>
 

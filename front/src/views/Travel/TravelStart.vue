@@ -17,7 +17,6 @@
       <!-- {{ mapUrl }} -->
       <v-card>
         <v-card-actions>
-          <!-- <v-spacer></v-spacer> -->
           <v-btn class="mx-auto" rounded color="#90A4AE" text @click="dialog = false" style="font-size: 30px; height: 60px !important; background: #ECEFF1">
             <i class="fas fa-times"></i>
           </v-btn>
@@ -114,7 +113,7 @@
   export default {
     name: "TravelStart",
     components: {
-      Complete,
+      Complete
     },
     props: {
       themeId: Number,
@@ -160,7 +159,6 @@
             this.content = res.data.pages
           })
 
-
         document.getElementById(this.dests[n - 1].id).tabIndex = -1;
         document.getElementById(this.dests[n - 2].id).focus();
       },
@@ -187,7 +185,7 @@
       }
     },
     mounted() {
-      const token = this.$session.get('jwt')
+      const token = this.$session.get("jwt")
       const requestHeader = {
         headers: {
           Authorization: "JWT " + token
@@ -207,6 +205,7 @@
         .then(res => {
           this.content = res.data.pages
         })
+
       this.a()
     }
   }

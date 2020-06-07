@@ -236,17 +236,15 @@
             .then(response => {
               if (response.status == 200) {
                 // 인증번호 전송
-                axios.post('/accounts/email/send/', {
-                    'username': this.credentials.email
-                  })
-                  .then(
+                axios.post('/accounts/email/send/', {"username": this.credentials.email})
+                  .then(() => {
                     Swal.fire({
                       title: "Success Secretkey",
                       text: "인증번호가 전송되었습니다.",
                       icon: "success",
                       timer: 3000
                     })
-                  )
+                  })
                   .catch(err => {
                     console.log(err)
                   })
@@ -375,7 +373,7 @@
         }
       },
       a() {
-        document.querySelector('#footer').style.display = 'none'
+        document.querySelector("#footer").style.display = 'none'
       },
       validEmail: function (email) {
         var mailForm = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -413,15 +411,15 @@
       this.a()
 
       // signin&up js
-      const signUpButton = document.getElementById('signUp')
-      const signInButton = document.getElementById('signIn')
-      const container = document.getElementById('container')
+      const signUpButton = document.getElementById("signUp")
+      const signInButton = document.getElementById("signIn")
+      const container = document.getElementById("container")
 
-      signUpButton.addEventListener('click', () => {
+      signUpButton.addEventListener("click", () => {
         container.classList.add("right-panel-active")
       })
 
-      signInButton.addEventListener('click', () => {
+      signInButton.addEventListener("click", () => {
         container.classList.remove("right-panel-active")
       })
 
@@ -438,7 +436,7 @@
   .account-box {
     width: 100vw;
     height: 105vh;
-    background-image: url('../assets/image/bg3.jpg');
+    background-image: url("../assets/image/bg3.jpg");
     background-repeat: no-repeat;
     background-size: cover;
     -ms-overflow-style: none;

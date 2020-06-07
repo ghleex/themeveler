@@ -261,7 +261,7 @@
     },
     methods: {
       a() {
-        document.querySelector('#footer').style.display = 'block'
+        document.querySelector("#footer").style.display = 'block'
       },
       cardBypopTheme(id) {
         // var theme = this.popTheme.filter(theme => {
