@@ -3,7 +3,9 @@
     <Drawer class="drawer" />
 
     <v-content id="profile-content">
-      <h2 class="content-title">비밀번호변경</h2>
+      <h2 class="content-title">
+        <i class="fas fa-key"></i>
+        비밀번호변경</h2>
       <hr>
       <v-row justify="center">
         <v-col cols="12" md="8">
