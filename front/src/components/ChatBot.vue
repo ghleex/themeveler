@@ -1,6 +1,5 @@
 <template>
   <div class="chatbot">
-    
     <div class="chatbot-box" @click="openModal">
       <i class="fas fa-comment-dots chatbot-icon"></i>
     </div>
@@ -21,14 +20,9 @@
         
         <p v-if="chatLoading" class="chatLoading" style="margin-top: 8rem; color: gray;">Loading</p>
         <p style="margin-top: 8rem;"></p>
-<<<<<<< HEAD
-
-=======
->>>>>>> 1d1899c75410b30396b4c130dfa1ddf000b56948
         <span class="new-message-text">
           <p v-if="newChat" @click="scrollDown" class="text-light bg-danger new-message" style="border-radius: 50px;">New Message</p>
         </span>
-        
 
         <span v-if="memories">
           <v-card-text class="text-start" v-for="(memory, idx) in memories" :key="idx">
