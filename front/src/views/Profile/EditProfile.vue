@@ -46,85 +46,71 @@
 </template>
 
 <script>
-  import axios from 'axios'
-  import Drawer from '@/components/Drawer.vue'
-  import Swal from 'sweetalert2'
+import axios from 'axios'
+import Drawer from '@/components/Drawer.vue'
 
-  export default {
-    name: "editprofile",
-    components: {
-      Drawer
-    },
-    data() {
-      return {
-        dialog: false,
-        email: "",
-        nickname: ""
-      }
-    },
-    methods: {
-      userdelete() {
-        var result = Swal.fire({
-          title: '정말로 회원을 탈퇴하시겠습니까?',
-          text: "다시는 되돌릴 수 없습니다.",
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: '탈퇴 할래요!'
-        })
-        // var result = confirm("정말로 회원을 탈퇴하시겠습니까?")
-        if (result) {
-          axios.delete('/accounts/usermgmt/', this.$store.getters.requestHeader)
-            .then(() => {
-              if (this.$session.exists()) {
-                this.$session.destroy()
-                Swal.fire(
-                  '탈퇴 되었습니다!',
-                  '당신의 정보가 삭제되었습니다.',
-                  'success'
-                )
-              }
-              this.$store.dispatch('logout')
-              this.$router.push({
-                path: '/'
-              })
-            })
-            .catch(err => {
-              console.log(err)
-            })
-        } else {
-          this.$router.push({
-            path: '/profiles'
-          })
-        }
-      },
-      update() {
-        let form = new FormData()
-        form.append("nickname", this.nickname)
-        axios.put('/accounts/usermgmt/', form, this.$store.getters.requestHeader)
+export default {
+  name: "editprofile",
+  components: {
+    Drawer
+  },
+  data() {
+    return {
+      dialog: false,
+      email: "",
+      nickname: ""
+    }
+  },
+  methods: {
+    userdelete() {
+      var result = confirm("정말로 회원을 탈퇴하시겠습니까?")
+      if (result) {
+        axios.delete('/accounts/usermgmt/', this.$store.getters.requestHeader)
           .then(() => {
-            alert("회원 정보가 성공적으로 변경되었습니다.")
-            this.$session.set("nickname", this.nickname)
-            this.$store.dispatch("changeNickname", this.nickname)
-            this.$router.push('/profiles')
+            if (this.$session.exists()) {
+              this.$session.destroy()
+            }
+            this.$store.dispatch('logout')
+            this.$router.push({
+              path: '/'
+            })
           })
           .catch(err => {
             console.log(err)
-            alert("회원 정보 변경이 실패하였습니다. 잠시후 다시 시도해주십시오.")
           })
-      },
-      updatecancel() {
+      }
+      else {
         this.$router.push({
           path: '/profiles'
         })
       }
     },
-    mounted() {
-      this.email = this.$store.getters.username
-      this.nickname = this.$session.get("nickname")
+    update() {
+      let form = new FormData()
+      form.append("nickname", this.nickname)
+      axios.put('/accounts/usermgmt/', form, this.$store.getters.requestHeader)
+        .then(() => {
+          alert("회원 정보가 성공적으로 변경되었습니다.")
+          this.$session.set("nickname", this.nickname)
+          this.$store.dispatch("changeNickname", this.nickname)
+          this.$router.push('/profiles')
+        })
+        .catch(err =>{
+          console.log(err)
+          alert("회원 정보 변경이 실패하였습니다. 잠시후 다시 시도해주십시오.")
+        })
+    },
+    updatecancel () {
+      this.$router.push({
+        path: '/profiles'
+      })
     }
+  },
+  mounted() {
+    this.email = this.$store.getters.username
+    this.nickname = this.$session.get("nickname")
   }
+}
 </script>
 
 <style scoped>

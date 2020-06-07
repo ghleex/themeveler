@@ -44,8 +44,10 @@
         <v-slide-group v-model="model" center-active show-arrows>
           <v-slide-item v-for="theme in themeArr" :key="theme.id" v-slot:default="{ active, toggle }">
             <div @click="cardBypopTheme(model)">
-              <v-card class="ma-4" min-height="320px" max-height="35vw" min-width="238px" max-width="30vw" @click="toggle">
-                <v-img :src="ticket" min-height="260px" max-height="18vw" />
+              <v-card class="ma-4" min-height="320px" max-height="35vw" min-width="238px" max-width="30vw"
+                @click="toggle">
+                <v-img :src="'http://localhost:8000/uploads/theme/'+theme.name+'.jpg'" min-height="260px"
+                  max-height="18vw" />
                 <v-card-title class="pop-card-title">
                   <div class="mx-auto text-light pop-theme-card-text">
                     <i class="fas fa-quote-left"></i>{{ theme.name }}<i class="fas fa-quote-right"></i>
@@ -72,14 +74,16 @@
               <div class="pop-sub-img">
                 <v-sheet class="ml-0 mr-auto" max-width="90vw">
                   <v-slide-group class="pa-4 pop-theme-slide-group" center-active show-arrows>
-                    <v-slide-item v-for="(dest, index) in destinations" :key="dest">
+                    <v-slide-item v-for="dest in destinations" :key="dest">
                       <v-card class="ma-4 popTheme-sub-img" height="123" width="120">
-                        
+
                         <!-- 이미지 -->
-                        <v-sheet color="#37474F" height="123" @click="openCardModal(dest)">
+                        <!-- <v-sheet color="#37474F" height="123" @click="openCardModal(dest)">
                           <div class="text-light pb-8" style="font-family: 'Cafe24Simplehae'; font-size: 25px;">
                             #.{{ index+1 }} {{ dest.name }}</div>
-                        </v-sheet>
+                        </v-sheet> -->
+                        <v-img height="123" @click="openCardModal(dest)"
+                          :src="'http://localhost:8000/uploads/destination/'+dest.name+'.jpg'"></v-img>
 
                         <v-row class="fill-height" align="center" justify="center">
                         </v-row>
@@ -87,19 +91,16 @@
                     </v-slide-item>
 
                     <!-- modal -->
-                    <v-dialog v-model="dialog" width="500">
+                    <v-dialog content-class="dest-picture-modal" v-model="dialog" width="500">
                       <v-card>
 
                         <!-- 이미지 -->
-                        <v-sheet color="#37474F" height="80vh">
-                          <div class="text-light pb-8" style="font-family: 'Cafe24Simplehae'; font-size: 25px;">
-                            #.{{ dests.id }} {{ dests.name }}
-                          </div>
-                        </v-sheet>
-                        
-                        <v-card-actions style="justify-content: flex-end;">
-                          <v-btn color="#2c3e50" class="text-light" @click="dialog = false">확인</v-btn>
-                        </v-card-actions>
+                        <v-card-title  class="headline d-flex justify-content-between" style="font-family: 'Cafe24Simplehae'!important; background: #2c3e50; color: white;">
+                          #.{{ dests.id }} {{ dests.name }}
+                          <v-btn x-large icon @click="dialog = false"><i class="far fa-times-circle text-light" style="font-style: 50px"></i></v-btn>
+                        </v-card-title>
+                        <v-img height="80vh" :src="'http://localhost:8000/uploads/destination/'+dests.name+'.jpg'"></v-img>
+
                       </v-card>
                     </v-dialog>
                   </v-slide-group>
