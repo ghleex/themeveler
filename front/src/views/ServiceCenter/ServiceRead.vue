@@ -83,8 +83,8 @@ export default {
       })
     },
     getColor(category) {
-      if (category == "신고") return "#FF5252"
-      else if (category == "건의") return "dark"
+      if (category == "테마") return "#FF5252"
+      else if (category == "장소") return "dark"
       else return "#BA68C8"
     }
   },
