@@ -5,7 +5,6 @@
     </div>
     <v-dialog content-class="chatbot-card" v-model="dialog" max-width="310" transition="scale-transition">
       <v-card class="chatbot-card" color="">
-        <p v-if="newChat">New Message</p>
         <v-card-title class="headline chatbot-title justify-content-between"
           style="font-family: 'Cafe24Simplehae' !important;">
           <div>
@@ -21,15 +20,23 @@
         <p v-if="chatLoading" class="chatLoading" style="margin-top: 8rem; color: gray;">Loading</p>
         <p style="margin-top: 8rem;"></p>
 
+
+        <span class="new-message-text">
+          <v-card-text>
+            <p v-if="newChat" class="text-light bg-danger new-message" style="border-radius: 50px;">New Message</p>
+          </v-card-text>
+        </span>
+
+
         <span v-if="memories">
           <v-card-text class="text-start" v-for="(memory, idx) in memories" :key="idx">
             <span v-if="memory.theme != 'time'">
-              <p class="text-start m-0" :class="{'text-end': anonymous == memory.nickname}" style="font-weight: 500; font-family: 'Cafe24Simplehae' !important;">
-                <i v-if="memory !== 'admin'" class="fas fa-user mr-1"></i>
-                <i v-else class="fas fa-crown mr-1"></i>
+              <p class="text-start m-0" :class="{'text-dark': anonymous !== memory.nickname}"
+                style="font-weight: 500; font-family: 'Cafe24Simplehae' !important;">
+                <i class="fas fa-user mr-1"></i>
                 {{ memory.nickname }}
               </p>
-              <p class="d-inline-block ml-3"
+              <p class="d-inline-block ml-3" :class="{'bg-info': anonymous !== memory.nickname}"
                 style="font-family: 'Cafe24Simplehae' !important; max-width: 170px; margin: 0; background: #546E7A; border-radius: 15px; color: white; padding: .5rem .6rem;">
                 {{ memory.message }}
               </p>
@@ -49,19 +56,21 @@
 
         <span v-if="messages">
           <v-card-text class="text-start" v-for="(message, idx) in messages" :key="idx">
-            <p v-if="message.nickname == '공지사항'" class="text-start m-0"
-              style="color: #EF5350;font-weight: 700; font-family: 'Cafe24Simplehae' !important;">
-              <i class="fas fa-flag mr-1"></i>
-              {{ message.nickname }}
-            </p>
-
-            <p v-else class="text-start m-0" :class="{'text-end': anonymous == message.nickname}" style="font-family: 'Cafe24Simplehae' !important;">
-              <i v-if="message.nickname !== 'admin'" class="fas fa-user mr-1"></i>
-              <i v-else class="fas fa-crown mr-1"></i>
-              {{ message.nickname }}
-            </p>
             <span v-if="message.theme != 'time'">
-              <p v-if="message.nickname !== '공지사항'" class="d-inline-block ml-3"
+              <p v-if="message.nickname == '공지사항'" class="text-start m-0"
+                style="color: #EF5350;font-weight: 700; font-family: 'Cafe24Simplehae' !important;">
+                <i class="fas fa-flag mr-1"></i>
+                {{ message.nickname }}
+              </p>
+
+              <p v-else class="text-start m-0" :class="{'text-info': anonymous !== message.nickname}"
+                style="font-family: 'Cafe24Simplehae' !important;">
+                <i class="fas fa-user mr-1"></i>
+                {{ message.nickname }}
+              </p>
+
+              <p v-if="message.nickname !== '공지사항'" :class="{'bg-info': anonymous !== memory.nickname}"
+                class="d-inline-block ml-3"
                 style="max-width: 170px; margin: 0; background: #546E7A; border-radius: 15px; color: white; padding: .5rem .6rem; font-family: 'Cafe24Simplehae' !important;">
                 {{ message.message }}
               </p>
@@ -70,7 +79,7 @@
                 {{ message.message }}
               </p>
               <p class="d-inline-block ml-1 text-muted" style="font-weight: 100; font-size: 12px;">
-                <i>{{ message.created_at | checkChatDateTime }}</i>
+                <i>{{ message.created_at | moment("YYYY-MM-DD") }}</i>
               </p>
             </span>
             <span v-else>
@@ -81,8 +90,9 @@
             </span>
           </v-card-text>
         </span>
+        <br><br>
         <hr>
-        <div class="py-5" style="background: #ECEFF1;">
+        <v-card-text class="py-5 chat-write" style="background: #ECEFF1;">
           <div v-if="connected">
             <input class="p-1" type="text" v-model="message" @keypress.enter="sendMessage"
               style="border-bottom: 1px #546E7A; background: white; border-radius: 5px;">
@@ -92,7 +102,7 @@
           <span class="text-danger" v-else style="font-weight: 700; font-family: 'Cafe24Simplehae' !important;">
             <i class="fas fa-exclamation-triangle mr-1"></i>연결안됨
           </span>
-        </div>
+        </v-card-text>
         <!-- <v-card-actions class="justify-content-center mt-1 mb-2"> -->
         <!-- <v-spacer></v-spacer> -->
         <!-- <v-btn rounded color="red" text @click="dialog = false" style="background: #FFEBEE;">
@@ -120,7 +130,7 @@
       checkChatDateTime(created_at) {
         var now = new Date()
         var date = new Date(created_at)
-        var dateDiff = Math.ceil((now.getTime()-date.getTime()) / (60000))
+        var dateDiff = Math.ceil((now.getTime() - date.getTime()) / (60000))
         if (dateDiff <= 1440) {
           var hour = parseInt(dateDiff / 60)
           if (hour) {
@@ -132,7 +142,7 @@
         }
         var ap = date.getHours() < 12 ? "AM" : "PM"
         return `${date.getHours()}:${date.getMinutes()} ${ap}`
-      },  
+      },
     },
     props: {
       themeId: Number,
@@ -177,7 +187,7 @@
     },
     mounted() {
       this.baseURL = process.env.VUE_APP_IP
-      axios.get(this.baseURL+`/travels/chat/${this.themeId}/${this.chatPage}/`, this.$store.getters.requestHeader)
+      axios.get(this.baseURL + `/travels/chat/${this.themeId}/${this.chatPage}/`, this.$store.getters.requestHeader)
         .then(res => {
           res.data.forEach(value => {
             var created_at = this.$moment(value.created_at).format("YYYY-MM-DD")
@@ -235,11 +245,14 @@
           }, 100)
           setTimeout(() => {
             this.chatPage += 1
-            axios.get(this.baseURL+`/travels/chat/${this.themeId}/${this.chatPage}/`, this.$store.getters.requestHeader)
+            axios.get(this.baseURL + `/travels/chat/${this.themeId}/${this.chatPage}/`, this.$store.getters
+                .requestHeader)
               .then(res => {
                 this.memories = res.data.concat(this.memories)
                 setTimeout(() => {
-                  document.getElementsByClassName("v-dialog")[0].scrollTop = this.scrollHeight * res.data.length                }, 10)
+                  document.getElementsByClassName("v-dialog")[0].scrollTop = this.scrollHeight * res.data
+                    .length
+                }, 10)
               })
               .catch(err => {
                 console.log(err)
@@ -281,9 +294,13 @@
           let data = {
             "message": message
           }
-          axios.post(this.baseURL+`/travels/chat/${this.themeId}/`, data, this.$store.getters.requestHeader)
-            .then(res =>{
-              this.$socket.emit("sendMessage",{theme: this.themeId, nickname: res.data.nickname, message: message})
+          axios.post(this.baseURL + `/travels/chat/${this.themeId}/`, data, this.$store.getters.requestHeader)
+            .then(res => {
+              this.$socket.emit("sendMessage", {
+                theme: this.themeId,
+                nickname: res.data.nickname,
+                message: message
+              })
               var created_at = this.$moment(res.data.created_at).format("YYYY-MM-DD")
               if (this.checkChatDate(created_at)) {
                 this.messages.push({
@@ -316,6 +333,28 @@
 </script>
 
 <style lang="scss" scoped>
+  .new-message-text {
+    position: fixed;
+    top: 1rem;
+    width: 270px;
+    // right: 16rem;
+  }
+
+  .chat-write {
+    position: fixed;
+    bottom: 1.5rem;
+    width: 310px;
+  }
+
+  .new-message {
+    background-color: rgba(255, 255, 255, 0);
+    position: relative;
+    top: 7.5rem;
+    left: 30%;
+    width: 270px;
+    margin: .3rem auto;
+  }
+
   .chatbot-box {
     position: fixed;
     display: flex;
