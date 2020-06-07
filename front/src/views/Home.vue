@@ -76,7 +76,6 @@
                   <v-slide-group class="pa-4 pop-theme-slide-group" center-active show-arrows>
                     <v-slide-item v-for="dest in destinations" :key="dest">
                       <v-card class="ma-4 popTheme-sub-img" height="123" width="120">
-
                         <!-- 이미지 -->
                         <!-- <v-sheet color="#37474F" height="123" @click="openCardModal(dest)">
                           <div class="text-light pb-8" style="font-family: 'Cafe24Simplehae'; font-size: 25px;">
@@ -89,11 +88,9 @@
                         </v-row>
                       </v-card>
                     </v-slide-item>
-
                     <!-- modal -->
                     <v-dialog content-class="dest-picture-modal" v-model="dialog" width="500">
                       <v-card>
-
                         <!-- 이미지 -->
                         <v-card-title  class="headline d-flex justify-content-between" style="font-family: 'Cafe24Simplehae'!important; background: #2c3e50; color: white;">
                           #.{{ dests.id }} {{ dests.name }}
@@ -233,7 +230,7 @@
     },
     methods: {
       a() {
-        document.querySelector('#footer').style.display = 'block'
+        document.querySelector("#footer").style.display = 'block'
       },
       cardBypopTheme(id) {
         // var theme = this.popTheme.filter(theme => {
@@ -245,7 +242,6 @@
         axios.get(`/travels/destinations/${id+1}/0/`, requestHeader)
           .then(response => {
             this.destinations = response.data.destinations
-            // this.eachContext = "테마를 설명하는 내용"
           })
           .catch(err => {
             console.log(err)
@@ -258,7 +254,6 @@
         // // console.log(theme[0].context)
         // this.eachContext = theme[0].context
         this.eachContext = this.themeArr[id].content
-        console.log(this.eachContext)
       },
       openCardModal(dest) {
         this.dests = dest

@@ -20,7 +20,6 @@ export default {
   },
   data() {
     return {
-
     }
   },
   methods: {
@@ -44,7 +43,7 @@ export default {
             this.$store.dispatch("login", token)
             this.$store.commit("setToken", token)
             this.$store.dispatch("changeNickname", response.data.nickname)
-            this.$router.push('/')
+            this.$router.push("/")
           }
           else {
             alert("잘못된 정보입니다. 다시 입력해주세요.")

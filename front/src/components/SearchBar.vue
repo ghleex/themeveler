@@ -23,7 +23,7 @@
         select: null,
         loading: false,
         items: [],
-        // states: []
+        states: []
       }
     },
     watch: {

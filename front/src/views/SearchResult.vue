@@ -109,12 +109,6 @@
     font-size: 70px;
   }
 
-  /* .search-result-header {
-    background: #11A0DC;
-    border-radius: 10px 10px 10px 10px;
-    border: 1px solid lightgray;
-  } */
-
   .result-search-content {
     background-color: #2c3e50;
     width: 90vw;
