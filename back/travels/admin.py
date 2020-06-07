@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import Theme, Destination, Message, DestContent, ContentPage
 from django.db import models
 from django.forms import Textarea
-from .inlines import MessageInline
+from .inlines import MessageInline, DestinationVisitorsInline
 from articles.inlines import CommentInline
 
 # Register your models here.
@@ -26,6 +26,7 @@ class DestinationAdmin(admin.ModelAdmin):
     search_fields = ('name',)
     list_display_links = ('name',)
     inlines = [
+        DestinationVisitorsInline, 
         CommentInline,
     ]
 
