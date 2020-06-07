@@ -4,12 +4,13 @@
       <i class="fas fa-comment-dots chatbot-icon"></i>
     </div>
     <v-dialog content-class="chatbot-card" v-model="dialog" max-width="310" transition="scale-transition">
-      <v-card class="chatbot-card">
+      <v-card class="chatbot-card" color="">
         <p v-if="newChat">New Message</p>
         <v-card-title class="headline chatbot-title justify-content-between"
           style="font-family: 'Cafe24Simplehae' !important;">
           <div>
-            <i class="fas fa-map-marker-alt mr-2 text-danger"></i>{{ themeName }}
+            <i class="fas fa-map-marker-alt mr-2 text-danger"></i>
+            {{ themeName }}
           </div>
           <div>
             <v-btn x-large icon @click="dialog = false">
@@ -22,18 +23,27 @@
 
         <span v-if="memories">
           <v-card-text class="text-start" v-for="(memory, idx) in memories" :key="idx">
-            <p class="text-start m-0" style="font-weight: 500; font-family: 'Cafe24Simplehae' !important;">
-              <i v-if="memory.nickname !== 'admin'" class="fas fa-user mr-1"></i>
-              <i v-else class="fas fa-crown mr-1"></i>
-              {{ memory.nickname }}
-            </p>
-            <p class="d-inline-block ml-3"
-              style="font-family: 'Cafe24Simplehae' !important; max-width: 170px; margin: 0; background: #546E7A; border-radius: 15px; color: white; padding: .5rem .6rem;">
-              {{ memory.message }}
-            </p>
-            <p class="d-inline-block ml-1 text-muted" style="font-weight: 100; font-size: 12px;">
-              <i>{{ memory.created_at | moment("LT") }}</i>
-            </p>
+            <span v-if="memory.theme != 'time'">
+              <p class="text-start m-0" :class="{'text-end': anonymous == memory.nickname}" style="font-weight: 500; font-family: 'Cafe24Simplehae' !important;">
+                <i v-if="memory !== 'admin'" class="fas fa-user mr-1"></i>
+                <i v-else class="fas fa-crown mr-1"></i>
+                {{ memory.nickname }}
+              </p>
+              <p class="d-inline-block ml-3"
+                style="font-family: 'Cafe24Simplehae' !important; max-width: 170px; margin: 0; background: #546E7A; border-radius: 15px; color: white; padding: .5rem .6rem;">
+                {{ memory.message }}
+              </p>
+              <p class="d-inline-block ml-1 text-muted" style="font-weight: 100; font-size: 12px;">
+                <!-- <i>{{ memory.created_at | moment("LT") }}</i> -->
+                <i>{{ memory.created_at | checkChatDateTime }}</i>
+              </p>
+            </span>
+            <span v-else>
+              <hr>
+              <p class="text-center" style="color: gray;">
+                <i>{{ memory.message | moment("YYYY-MM-DD") }}</i>
+              </p>
+            </span>
           </v-card-text>
         </span>
 
@@ -41,27 +51,34 @@
           <v-card-text class="text-start" v-for="(message, idx) in messages" :key="idx">
             <p v-if="message.nickname == '공지사항'" class="text-start m-0"
               style="color: #EF5350;font-weight: 700; font-family: 'Cafe24Simplehae' !important;">
-              <i class="fas fa-flag mr-1"></i>{{ message.nickname }}
+              <i class="fas fa-flag mr-1"></i>
+              {{ message.nickname }}
             </p>
-            <p v-else class="text-start m-0" style="font-family: 'Cafe24Simplehae' !important;">
+
+            <p v-else class="text-start m-0" :class="{'text-end': anonymous == message.nickname}" style="font-family: 'Cafe24Simplehae' !important;">
               <i v-if="message.nickname !== 'admin'" class="fas fa-user mr-1"></i>
               <i v-else class="fas fa-crown mr-1"></i>
               {{ message.nickname }}
             </p>
-            <p v-if="message.nickname !== '공지사항'" class="d-inline-block ml-3"
-              style="max-width: 170px; margin: 0; background: #546E7A; border-radius: 15px; color: white; padding: .5rem .6rem; font-family: 'Cafe24Simplehae' !important;">
-              {{ message.message }}
-            </p>
-            <p v-else class="d-inline-block ml-3"
-              style="max-width: 170px; margin: 0; background: #FFF3E0; color: #FF7043; border-radius: 15px; padding: .5rem .6rem; font-family: 'Cafe24Simplehae' !important;">
-              {{ message.message }}
-            </p>
-            <p class="d-inline-block ml-1 text-muted" style="font-weight: 100; font-size: 12px;">
-              <i>{{ message.created_at | moment("LT") }}</i>
-            </p>
-            <hr>
-            <p class="text-center" style="color: gray;">
-              <i>{{ message.created_at | moment("YYYY-MM-DD") }}</i></p>
+            <span v-if="message.theme != 'time'">
+              <p v-if="message.nickname !== '공지사항'" class="d-inline-block ml-3"
+                style="max-width: 170px; margin: 0; background: #546E7A; border-radius: 15px; color: white; padding: .5rem .6rem; font-family: 'Cafe24Simplehae' !important;">
+                {{ message.message }}
+              </p>
+              <p v-else class="d-inline-block ml-3"
+                style="max-width: 170px; margin: 0; background: #FFF3E0; color: #FF7043; border-radius: 15px; padding: .5rem .6rem; font-family: 'Cafe24Simplehae' !important;">
+                {{ message.message }}
+              </p>
+              <p class="d-inline-block ml-1 text-muted" style="font-weight: 100; font-size: 12px;">
+                <i>{{ message.created_at | checkChatDateTime }}</i>
+              </p>
+            </span>
+            <span v-else>
+              <hr>
+              <p class="text-center" style="color: gray;">
+                <i>{{ message.created_at | moment("YYYY-MM-DD") }}</i>
+              </p>
+            </span>
           </v-card-text>
         </span>
         <hr>
@@ -76,10 +93,11 @@
             <i class="fas fa-exclamation-triangle mr-1"></i>연결안됨
           </span>
         </div>
-        <!-- <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn rounded color="red" text @click="dialog = false" style="background: #FFEBEE;">
-            나가기<i class="fas fa-sign-out-alt ml-1"></i>
+        <!-- <v-card-actions class="justify-content-center mt-1 mb-2"> -->
+        <!-- <v-spacer></v-spacer> -->
+        <!-- <v-btn rounded color="red" text @click="dialog = false" style="background: #FFEBEE;">
+            나가기
+            <i class="fas fa-sign-out-alt ml-1"></i>
           </v-btn>
         </v-card-actions> -->
       </v-card>
@@ -93,6 +111,29 @@
 
   export default {
     name: "ChatBot",
+    computed: {
+      anonymous() {
+        return this.$store.state.auth.anonymous
+      }
+    },
+    filters: {
+      checkChatDateTime(created_at) {
+        var now = new Date()
+        var date = new Date(created_at)
+        var dateDiff = Math.ceil((now.getTime()-date.getTime()) / (60000))
+        if (dateDiff <= 1440) {
+          var hour = parseInt(dateDiff / 60)
+          if (hour) {
+            return (`${hour}시간 전`)
+          } else {
+            var minute = dateDiff % 60
+            return (`${minute}분 전`)
+          }
+        }
+        var ap = date.getHours() < 12 ? "AM" : "PM"
+        return `${date.getHours()}:${date.getMinutes()} ${ap}`
+      },  
+    },
     props: {
       themeId: Number,
       themeName: String,
@@ -110,7 +151,8 @@
         scrollHeight: 0,
         chatLoading: false,
         newChat: false,
-        baseURL: ""
+        baseURL: "",
+        chatDate: []
       }
     },
     created() {
@@ -135,16 +177,27 @@
     },
     mounted() {
       this.baseURL = process.env.VUE_APP_IP
-
       axios.get(this.baseURL+`/travels/chat/${this.themeId}/${this.chatPage}/`, this.$store.getters.requestHeader)
         .then(res => {
-          this.memories = res.data
+          res.data.forEach(value => {
+            var created_at = this.$moment(value.created_at).format("YYYY-MM-DD")
+            if (this.checkChatDate(created_at)) {
+              this.memories.push({
+                theme: "time",
+                nickname: "시간",
+                message: value.created_at
+              })
+            }
+            this.memories.push(value)
+          });
         })
         .catch(err => {
           console.log(err)
         })
       this.messages = []
-      this.$socket.emit("startMessage", {theme: this.themeId})
+      this.$socket.emit("startMessage", {
+        theme: this.themeId
+      })
       this.$socket.on("joined", data => {
         data["created_at"] = this.$moment(new Date()).format("YYYY-MM-DD LT")
         this.messages = [data]
@@ -161,6 +214,13 @@
       this.dialog = false
     },
     methods: {
+      checkChatDate(created_at) {
+        if (this.chatDate.indexOf(created_at) == -1) {
+          this.chatDate.push(created_at)
+          return true
+        }
+        return false
+      },
       handleScroll(scrollTop) {
         let scrollMoveTrigger = Math.round(scrollTop.srcElement.scrollTop) == scrollTop.srcElement.scrollHeight -
           scrollTop.srcElement.clientHeight
@@ -179,9 +239,7 @@
               .then(res => {
                 this.memories = res.data.concat(this.memories)
                 setTimeout(() => {
-                  document.getElementsByClassName("v-dialog")[0].scrollTop = this.scrollHeight * res.data
-                    .length
-                }, 10)
+                  document.getElementsByClassName("v-dialog")[0].scrollTop = this.scrollHeight * res.data.length                }, 10)
               })
               .catch(err => {
                 console.log(err)
@@ -226,6 +284,14 @@
           axios.post(this.baseURL+`/travels/chat/${this.themeId}/`, data, this.$store.getters.requestHeader)
             .then(res =>{
               this.$socket.emit("sendMessage",{theme: this.themeId, nickname: res.data.nickname, message: message})
+              var created_at = this.$moment(res.data.created_at).format("YYYY-MM-DD")
+              if (this.checkChatDate(created_at)) {
+                this.messages.push({
+                  theme: "time",
+                  nickname: "시간",
+                  message: created_at
+                })
+              }
               this.messages.push(res.data)
             })
             .catch(err => {
@@ -282,7 +348,7 @@
     position: fixed;
     background-color: #2c3e50;
     color: white;
-    width: 290px;
+    width: 310px;
   }
 
   .chatbot-card {
