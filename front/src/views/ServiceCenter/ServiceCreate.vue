@@ -52,7 +52,7 @@ export default {
           "title": this.title,
           "content": this.content,
           "request_user": this.$store.getters.user_id,
-          "is_fixed": 0,
+          "is_fixed": false,
         }
         const requestHeader = this.$store.getters.requestHeader
         axios.post(`/articles/customer/${this.userId}/`, serviceCreateForms, requestHeader)

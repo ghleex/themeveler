@@ -86,13 +86,18 @@ export default {
   },
   methods: {
     deleteData() {
-      if (this.serviceData.request_user_id === this.$store.getters.user_id) {
+      if (this.serviceData.request_user === this.$store.getters.user_id) {
         const requestHeader = this.$store.getters.requestHeader
         axios.delete(`/articles/voice/${this.serviceId}/`, requestHeader)
-          .then(() => {
-            this.$router.push({
-              path: '/service'
-            })
+          .then(response => {
+            if (response.data.message) {
+              alert("관리자 댓글이 있는 글은 삭제하실 수 없습니다.")
+            }
+            else {
+              this.$router.push({
+                path: '/service'
+              })
+            }
           })
           .catch(err => {
             console.log(err)
@@ -102,7 +107,7 @@ export default {
       }
     },
     updateData() {
-      if (this.serviceData.request_user_id === this.$store.getters.user_id) {
+      if (this.serviceData.request_user === this.$store.getters.user_id) {
         this.$router.push({
           path: `/service/create/${this.serviceId}`
         })
@@ -158,8 +163,8 @@ export default {
         }
         const requestHeader = this.$store.getters.requestHeader
         axios.put(`/articles/manager_reply/${this.serviceId}/${comment.id}/`, commentForms, requestHeader)
-          .then(response => {
-            console.log(response.data)
+          .then(() => {
+
           })
           .catch(err => {
             console.log(err)
