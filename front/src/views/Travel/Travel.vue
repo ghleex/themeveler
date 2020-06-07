@@ -34,14 +34,13 @@
                   </div>
                 </div>
 
-                <!-- <v-img @click="showDetail(theme.id)" :src="theme.image" width="100%" height="100%" /> -->
+                <v-img @click="showDetail(theme.id)" :src="'http://localhost:8000/uploads/theme/'+theme.name+'.jpg'" width="100%" height="100%" />
                 <!-- 임시 -->
-                <v-sheet class="d-flex justify-content-center align-items-center" @click="showDetail(theme.id)"
+                <!-- <v-sheet class="d-flex justify-content-center align-items-center" @click="showDetail(theme.id)"
                   color="#546E7A" width="100%" height="100%" style="border-radius: 0;">
                   <div class="text-light pb-12" style="font-family: 'Cafe24Simplehae'; font-size: 25px;">
                     #.{{ theme.id }} {{ theme.region }}</div>
-                </v-sheet>
-
+                </v-sheet> -->
                 <v-row class="fill-height" align="center" justify="center">
                 </v-row>
               </v-card>
@@ -49,7 +48,7 @@
           </v-slide-group>
         </v-sheet>
 
-        <div class="mx-2">
+        <div class="mb-12" style="width: 90vw; margin: 1rem auto 3rem auto;">
           <v-row class="d-flex justify-content-center">
             <v-col class="d-flex justify-content-center" v-for="dest in paginationDest" :key="dest.id" cols="12" lg="3" sm="6" xs="1">
               <v-card class="home-destination-card row" min-height="290px" max-height="30vw" style="width: 100%;" @click="toggle">
@@ -92,19 +91,19 @@
         model_: null,
         page: 1,
         slides: [
-          require('../../assets/bg1.jpg'),
-          require('../../assets/bg5.jpg'),
+          require("../../assets/bg1.jpg"),
+          require("../../assets/bg5.jpg"),
         ],
-        destination: [
-          require('../../assets/image/destination1.jpg'),
-          require('../../assets/image/destination2.jpg'),
-          require('../../assets/image/destination3.jpg'),
-          require('../../assets/image/destination4.jpg'),
-          require('../../assets/image/destination1.jpg'),
-          require('../../assets/image/destination2.jpg'),
-          require('../../assets/image/destination3.jpg'),
-          require('../../assets/image/destination4.jpg'),
-        ],
+        // destination: [
+        //   require('../../assets/image/destination1.jpg'),
+        //   require('../../assets/image/destination2.jpg'),
+        //   require('../../assets/image/destination3.jpg'),
+        //   require('../../assets/image/destination4.jpg'),
+        //   require('../../assets/image/destination1.jpg'),
+        //   require('../../assets/image/destination2.jpg'),
+        //   require('../../assets/image/destination3.jpg'),
+        //   require('../../assets/image/destination4.jpg'),
+        // ]
       }
     },
     methods: {
@@ -120,9 +119,11 @@
         }
         axios.get(`/travels/destinations/0/${this.page}/`, requestHeader)
           .then(response => {
-            console.log(response.data)
             this.paginationDest = response.data.page_destination
             this.pageLength = response.data.all_length
+          })
+          .catch(err => {
+            console.log(err)
           })
       }
     },
@@ -137,11 +138,8 @@
         .then(response => {
           this.themeArr = response.data.all_theme
         })
-        .catch(err => {
-          console.log(err)
-        })
       this.getPaginationDestination()
-    },
+    }
   }
 </script>
 
