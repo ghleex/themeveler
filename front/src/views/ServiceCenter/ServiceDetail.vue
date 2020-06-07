@@ -43,12 +43,18 @@
           <div class="comment-content mb-1" v-for="comment in commentList" :key="comment.id">
             <div>
               <div v-if="modifyState === true">
-                <v-text-field v-model="comment.content"></v-text-field>
-                <v-icon @click="commentUpdate(comment)">mdi-pen</v-icon>
+                <div v-if="commentId === comment.id">
+                  <v-text-field v-model="comment.content"></v-text-field>
+                  <v-icon @click="commentUpdate(comment)">mdi-pen</v-icon>
+                </div>
+                <div v-else>
+                  {{ comment.manager_name }} - {{ comment.content }}
+                  <v-icon @click="modify(comment)">mdi-pen</v-icon>
+                </div>
               </div>
               <div v-else>
                 {{ comment.manager_name }} - {{ comment.content }}
-                <v-icon @click="modify">mdi-pen</v-icon>
+                <v-icon @click="modify(comment)">mdi-pen</v-icon>
               </div>
             </div>
           </div>
@@ -81,7 +87,8 @@ export default {
       resultRemian: 500,
       addComment: "",
       isAuthenticated: this.$session.get("staff"),
-      modifyState: false
+      modifyState: false,
+      commentId: ""
     }
   },
   methods: {
@@ -145,9 +152,15 @@ export default {
         alert("권한이 없습니다.")
       }
     },
-    modify() {
+    modify(comment) {
       if (this.$session.get("staff") === true) {
-        this.modifyState = true
+        if (comment.manager === this.$store.getters.user_id) {
+          this.modifyState = true
+          this.commentId = comment.id
+        }
+        else {
+          alert("권한이 없습니다.")
+        }
       }
       else {
         alert("권한이 없습니다.")
@@ -155,20 +168,25 @@ export default {
     },
     commentUpdate(comment) {
       if (this.$session.get("staff") === true) {
-        this.modifyState = false
-        var commentForms = {
-          "content": comment.content,
-          "manager": this.$store.getters.user_id,
-          "voice": this.serviceId
+        if (comment.manager === this.$store.getters.user_id) {
+          this.modifyState = false
+          this.commentId = ""
+          var commentForms = {
+            "content": comment.content,
+            "manager": this.$store.getters.user_id,
+            "voice": this.serviceId
+          }
+          const requestHeader = this.$store.getters.requestHeader
+          axios.put(`/articles/manager_reply/${this.serviceId}/${comment.id}/`, commentForms, requestHeader)
+            .then(() => {
+            })
+            .catch(err => {
+              console.log(err)
+            })
         }
-        const requestHeader = this.$store.getters.requestHeader
-        axios.put(`/articles/manager_reply/${this.serviceId}/${comment.id}/`, commentForms, requestHeader)
-          .then(() => {
-
-          })
-          .catch(err => {
-            console.log(err)
-          })
+        else {
+          alert("권한이 없습니다.")
+        }
       }
       else {
         alert("권한이 없습니다.")

@@ -86,7 +86,6 @@
                       </v-card>
                     </v-slide-item>
 
-
                     <!-- modal -->
                     <v-dialog v-model="dialog" width="500">
                       <v-card>
@@ -321,10 +320,6 @@
 </script>
 
 <style>
-  /* .stepper-ok-btn {
-    border: 1px solid;
-  } */
-
   .v-stepper {
     box-shadow: 0 0 0 0 rgba(0, 0, 0, 0) !important;
   }
@@ -335,7 +330,6 @@
 
   .home-how-to-box {
     display: flex;
-    /* border: 1px solid; */
     width: 75vw;
     height: 400px;
     margin: 0 auto 0 auto;
@@ -352,8 +346,6 @@
   }
 
   .header .home-howTo-img>img {
-    /* width: 85%;
-    height: 100%; */
     margin: 0;
   }
 
@@ -550,7 +542,7 @@
     }
 
     .describe-middle {
-      padding: .4rem
+      padding: .4rem;
     }
   }
 
@@ -705,7 +697,7 @@
     }
 
     .info-img {
-      width: 330px
+      width: 330px;
     }
   }
 
