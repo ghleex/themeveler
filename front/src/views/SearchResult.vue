@@ -1,23 +1,20 @@
 <template>
   <div id="search-result">
     <div class="container">
-      
-      <div class="search-result-header d-flex mx-auto justify-content-center align-items-center mb-12 mt-5">
+      <div class="search-result-banner">
         <div>
-        <v-img class="mr-5" src="../assets/navlogo.png" alt="" width="150px"></v-img>
+          <v-img class="mr-5" src="../assets/navlogo.png" width="150px"></v-img>
         </div>
-        <div class="d-flex justify-content-center align-items-center" style="font-weight: 700; font-style: italic; font-family: 'Cafe24Simplehae'; font-size: 70px;">
+        <div class="search-result-banner-text">
           Themeveler
         </div>
       </div>
-
-      <div class="sresultheader">
+      <div class="search-result-header">
         <SearchBar class="sresult-search-bar mx-auto my-3 pb-4" />
       </div>
     </div>
     <div class="result-search-content">
-      <h5 class="sresult-header-text my-3 text-light">"{{ $route.query.q }}" 에 대한 검색결과 ({{ themeData.length+placeData.length }}
-          개)</h5>
+      <h5 class="sresult-header-text my-3 text-light">"{{ $route.query.q }}" 에 대한 검색결과 ({{ themeData.length+placeData.length }} 개)</h5>
       <div class="container border search-result-container">
         <div class="theme-container" v-if="themeData.length !== 0">
           <p class="sresult-type"><i class="fas fa-search-location mr-2"></i>테마 검색결과</p>
@@ -51,17 +48,23 @@
     },
     methods: {
       goThemePage(themeId) {
-        this.$router.push(`/travel/${themeId}`)
+        this.$router.push({
+          path: `/travel/${themeId}`
+        })
       },
       goPlacePage(themeId) {
-        this.$router.push(`/travel/${themeId}`)
+        this.$router.push({
+          path: `/travel/${themeId}`
+        })
       },
       searchNow(query) {
         axios.get(`/articles/search/${query}/`)
           .then(response => {
             this.themeData = response.data.theme
             this.placeData = response.data.dest
-            console.log(this.placeData)
+          })
+          .catch(err => {
+            console.log(err)
           })
       }
     },
@@ -89,10 +92,28 @@
     height: 100%;
   }
 
-  .sresultheader {
-    /* background: #11A0DC; */
-    /* border-radius: 10px 10px 10px 10px; */
+  .search-result-banner {
+    display: flex;
+    margin: 20px auto 48px auto;
+    justify-content: center;
+    align-items: center;
   }
+
+  .search-result-banner-text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    font-family: 'Cafe24Simplehae';
+    font-style: italic;
+    font-size: 70px;
+  }
+
+  /* .search-result-header {
+    background: #11A0DC;
+    border-radius: 10px 10px 10px 10px;
+    border: 1px solid lightgray;
+  } */
 
   .result-search-content {
     background-color: #2c3e50;
@@ -101,6 +122,7 @@
     padding: .5rem 1rem;
     border-radius: 5px;
   }
+
   .search-result-container {
     background-color: #fff;
   }
@@ -120,8 +142,9 @@
 
   .theme-container > li,
   .place-container > li {
-    padding: .5rem
+    padding: .5rem;
   }
+
   .theme-container > li:hover,
   .place-container > li:hover {
     background-color: rgba(52, 41, 95, 0.05);
@@ -134,8 +157,6 @@
     font-size: 25px;
   }
 
-
-  /* 검색창 너비 조정 */
   .sresult-search-bar .search-form {
     width: 100%;
   }

@@ -7,9 +7,10 @@ import store from './store' // vuex
 import VueCsrf from 'vue-csrf'
 import axios from 'axios'
 import VueSimpleAlert from "vue-simple-alert"
+import 'bootstrap/dist/css/bootstrap.min.css' // bootstrap
+import fontawesome from '@fortawesome/fontawesome-free' // fontawesome
 import AOS from 'aos' // fadeIn 이외에 scoll 효과
 import 'aos/dist/aos.css'
-import 'bootstrap/dist/css/bootstrap.min.css' // bootstrap
 import io from 'socket.io-client' // socket chat
 
 require('dotenv').config()
@@ -25,7 +26,6 @@ const socket = io(process.env.VUE_APP_SOCKET)
 Vue.prototype.$socket = socket
 
 // fontawsome security policy 참고 (해당 config로 인한 i => svg 태그로 자동 변환, 이에 따른 태그 적용은 index.html head에 유효)
-import fontawesome from '@fortawesome/fontawesome-free'
 fontawesome.config = {
   autoAddCss: false
 }

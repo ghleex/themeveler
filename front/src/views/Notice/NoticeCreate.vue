@@ -6,10 +6,11 @@
         <v-btn color="error" outlined class="btns" @click="reset"><i class="fas fa-redo-alt mr-1"></i>다시 작성</v-btn>
       </div>
       <v-form ref="form" class="notice-create-form" v-model="valid" lazy-validation>
-        <v-select v-model="select" :items="categorys" item-value="id" item-text="category" :rules="categoryRules" label="분류" required></v-select>
+        <v-select v-model="select" :items="categorys" item-value="id" item-text="category" :rules="categoryRules"
+          label="분류" required></v-select>
         <v-text-field v-model="title" :counter="30" :rules="titleRules" label="제목" required></v-text-field>
         <v-textarea v-model="content" :rules="contentRules" label="내용" class="mt-4" outlined></v-textarea>
-        <v-btn :disabled="!valid" dark color="#607D8B" class="mr-4 btns" 
+        <v-btn :disabled="!valid" color="#607D8B" class="mr-4 btns text-light" 
           @click="noticeId !== undefined ? update() : write()">{{ noticeId !== undefined ? "수정" : "작성" }}
           <i class="fas fa-check-circle ml-1"></i></v-btn>
         <v-btn color="error" class="btns" @click="noticeId !== undefined ? updatecancel() : addcancel()">취소
@@ -39,12 +40,7 @@ export default {
         v => (v && v.length <= 30) || "제목을 30자 이내로 작성해주세요",
       ],
       contentRules: [v => !!v || "내용을 작성해주세요"],
-      categorys: [],
-      // categorys: [
-      //   "일반",
-      //   "중요",
-      //   "테마"
-      // ]
+      categorys: [] // categorys: ["일반","중요","테마"]
     }
   },
   methods: {
@@ -112,7 +108,7 @@ export default {
         this.categorys = response.data
       })
       .catch(err => {
-        console.log(err.response)
+        console.log(err)
       })
     if (this.noticeId !== undefined) {
       axios.get(`/articles/notices/${this.noticeId}/`)

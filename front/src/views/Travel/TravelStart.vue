@@ -1,13 +1,10 @@
 <template>
   <div class="travel-detail-stepper">
-
     <div style="margin: 2rem 0 3rem 0;">
       <h1 class="text-light d-inline-block p-2" style="background-color: #2c3e50;">#.{{ themeId }}
         {{ themeArr[themeId-1].name }}</h1>
       <h2 class="my-10">{{ e1 }} / {{ dests.length }}</h2>
     </div>
-
-
 
     <!-- 길 찾기 -->
     <div class="find-road-btn text-end">
@@ -17,52 +14,46 @@
       </v-btn>
     </div>
     <v-dialog v-model="dialog" fullscreen transition="dialog-bottom-transition">
-      
       <!-- {{ mapUrl }} -->
-      
-        <v-card>
+      <v-card>
         <v-card-actions>
-            <!-- <v-spacer></v-spacer> -->
-             <v-btn class="mx-auto" rounded color="#90A4AE" text @click="dialog = false" style="font-size: 30px; height: 60px !important; background: #ECEFF1">
-              <i class="fas fa-times"></i>
-            </v-btn>
-          </v-card-actions>
-          <!-- <v-card-title class="headline">지도</v-card-title> -->
-          <v-card-text>
-            <div class="mt-3 text-center" style="font-size: 12px;">
-              <div v-if="progress < 35">
-                천천히 걸어볼까요?💦<br>
-                헛둘헛둘!
-              </div>
-              <div v-else-if="35 <= progress && progress < 69">
-                벌써 중간지점이에요!👏
-              </div>
-              <div v-else-if="69 <= progress">
-                이제 거의 다 왔어요!<br>
-                조금만 더 힘내볼까요?🥰
-              </div>
-            <v-btn class="my-3" rounded color="#ECEFF1">🚩 {{ progress }}%</v-btn>
+          <!-- <v-spacer></v-spacer> -->
+          <v-btn class="mx-auto" rounded color="#90A4AE" text @click="dialog = false" style="font-size: 30px; height: 60px !important; background: #ECEFF1">
+            <i class="fas fa-times"></i>
+          </v-btn>
+        </v-card-actions>
+        <!-- <v-card-title class="headline">지도</v-card-title> -->
+        <v-card-text>
+          <div class="mt-3 text-center" style="font-size: 12px;">
+            <div v-if="progress < 35">
+              천천히 걸어볼까요?💦<br>
+              헛둘헛둘!
             </div>
-          </v-card-text>
-
-        </v-card>
-        <iframe id="navigationModal" :src="mapUrl">
+            <div v-else-if="35 <= progress && progress < 69">
+              벌써 중간지점이에요!👏
+            </div>
+            <div v-else-if="69 <= progress">
+              이제 거의 다 왔어요!<br>
+              조금만 더 힘내볼까요?🥰
+            </div>
+          <v-btn class="my-3" rounded color="#ECEFF1">🚩 {{ progress }}%</v-btn>
+          </div>
+        </v-card-text>
+      </v-card>
+      <iframe id="navigationModal" :src="mapUrl">
       </iframe>
     </v-dialog>
-
 
     <!-- stepper -->
     <v-stepper v-model="e1" class="theme-start-stepper">
       <v-slide-group class="stepper-start-slide" show-arrows>
         <v-stepper-header>
           <template v-for="n in steps">
-
             <!--  editable -->
             <v-stepper-step :id="dests[n-1].id" :key="`${n}-step`" :complete="e1 > n" :step="n">
               {{ dests[n-1].name }}
               <i class="fas fa-caret-right swal2-success-circular-line-right" v-if="n !== steps"></i>
             </v-stepper-step>
-
             <!-- <v-divider v-if="n !== steps" :key="n"></v-divider> -->
           </template>
         </v-stepper-header>
@@ -70,7 +61,6 @@
 
       <v-stepper-items>
         <v-stepper-content height="auto" v-for="n in steps" :key="`${n}-content`" :step="n">
-
           <div class="travel-start-text holder mt-5" data-aos="fade-up" data-aos-duration="3000" v-for="i in content"
             :key="i.text">
             <v-card class="holder stepper-text-box" color="rgb(248, 248, 246)">
@@ -82,7 +72,6 @@
               *이미지 자료
             </div>
           </div>
-
 
           <v-btn class="start-next-btn" v-if="e1 !== steps" color="red" dark @click="nextStep(n)">
             다음
@@ -115,7 +104,6 @@
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
-
   </div>
 </template>
 
@@ -141,7 +129,7 @@
         content: [],
         dialog: false,
         progress: 0,
-        mapUrl: "",
+        mapUrl: ""
       }
     },
     methods: {
@@ -169,7 +157,7 @@
       },
       beforeStep(n) {
         this.e1 = n - 1
-        // Math.around ?
+        // Math.around
         this.progress = ((this.e1 / this.dests.length) * 100).toFixed(1)
 
         const requestHeader = this.$store.getters.requestHeader
@@ -223,7 +211,7 @@
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(this.success)
         }
-      },
+      }
     },
     mounted() {
       const script = document.createElement('script')
@@ -236,8 +224,7 @@
           Authorization: "JWT " + token
         }
       }
-
-      axios.get(`/travels/destinations/${this.themeId}`, requestHeader)
+      axios.get(`/travels/destinations/${this.themeId}/`, requestHeader)
         .then(res => {
           this.dests = res.data.destinations
           this.steps = this.dests.length
@@ -273,7 +260,6 @@
     border: 0;
     overflow: hidden;
   }
-
 
   .find-road-btn {
     margin-right: 10%;

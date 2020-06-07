@@ -11,8 +11,7 @@
       </v-carousel>
     </div><br>
 
-
-    <!-- card -->
+    <!-- describe card -->
     <div class="describe">
       <div class="describe-card-left"></div>
       <div class="describe-left">
@@ -38,7 +37,6 @@
       여행을 쫓다 꿈을 좇다 테마블러
     </div>
 
-
     <!-- 인기 테마 -->
     <div class="pop-box">
       <h2 class="home-h2-title"><i class="fas fa-bookmark mr-2"></i>인기 테마</h2>
@@ -46,8 +44,7 @@
         <v-slide-group v-model="model" center-active show-arrows>
           <v-slide-item v-for="theme in themeArr" :key="theme.id" v-slot:default="{ active, toggle }">
             <div @click="cardBypopTheme(model)">
-              <v-card class="ma-4" min-height="320px" max-height="35vw" min-width="238px" max-width="30vw"
-                @click="toggle">
+              <v-card class="ma-4" min-height="320px" max-height="35vw" min-width="238px" max-width="30vw" @click="toggle">
                 <v-img :src="ticket" min-height="260px" max-height="18vw" />
                 <v-card-title class="pop-card-title">
                   <div class="mx-auto text-light pop-theme-card-text">
@@ -60,7 +57,6 @@
             </div>
           </v-slide-item>
         </v-slide-group>
-
         <!-- 아래쪽에 나타나는 부분 -->
         <v-expand-transition>
           <v-sheet v-if="model != null" color="grey lighten-4" height="350" width="95%" tile
@@ -76,38 +72,31 @@
               <div class="pop-sub-img">
                 <v-sheet class="ml-0 mr-auto" max-width="90vw">
                   <v-slide-group class="pa-4 pop-theme-slide-group" center-active show-arrows>
-                    <!-- <v-slide-item v-for="(img, index) in cardBypopTheme(model)" :key="img"> -->
                     <v-slide-item v-for="(dest, index) in destinations" :key="dest">
                       <v-card class="ma-4 popTheme-sub-img" height="123" width="120">
-                        <!-- <v-img :src="img" height="123" @click="openCardModal(img)"></v-img> -->
-                        <!-- 임시 이미지 -->
+                        <!-- 이미지 -->
                         <v-sheet color="#37474F" height="123" @click="openCardModal(dest)">
                           <div class="text-light pb-8" style="font-family: 'Cafe24Simplehae'; font-size: 25px;">
                             #.{{ index+1 }} {{ dest.name }}</div>
                         </v-sheet>
-
-                        <!-- modal -->
                         <v-row class="fill-height" align="center" justify="center">
                         </v-row>
                       </v-card>
                     </v-slide-item>
-
+                    <!-- modal -->
                     <v-dialog v-model="dialog" width="500">
                       <v-card>
-                        <!-- 임시 이미지 -->
+                        <!-- 이미지 -->
                         <v-sheet color="#37474F" height="80vh">
                           <div class="text-light pb-8" style="font-family: 'Cafe24Simplehae'; font-size: 25px;">
                             #.{{ dests.id }} {{ dests.name }}
-                            <!-- {{ dests }} -->
                           </div>
                         </v-sheet>
-                        <!-- {{ img }} {{ index }} -->
                         <v-card-actions style="justify-content: flex-end;">
                           <v-btn color="#2c3e50" class="text-light" @click="dialog = false">확인</v-btn>
                         </v-card-actions>
                       </v-card>
                     </v-dialog>
-
                   </v-slide-group>
                 </v-sheet>
               </div>
@@ -122,7 +111,6 @@
         </v-expand-transition>
       </v-sheet>
     </div>
-
 
     <!-- 인기 여행지 -->
     <!-- <div class="pop-box">
@@ -177,7 +165,6 @@
         toggle: false,
         active: false,
         dialog: false,
-        // imgUrl: "",
         dests: [],
         model: null,
         model_: null,
@@ -188,6 +175,7 @@
         ],
         themeArr: [],
         destinations: [],
+        ticket: require("../assets/themeveler.png")
         //   popTheme: [{
         //       id: 1,
         //       img: require("../assets/image/pop1.webp"),
@@ -263,8 +251,7 @@
         //     require("../assets/image/destination2.jpg"),
         //     require("../assets/image/destination3.jpg"),
         //     require("../assets/image/destination4.jpg"),
-        //   ],
-        ticket: require("../assets/themeveler.png"),
+        //   ]
       }
     },
     methods: {
@@ -278,15 +265,14 @@
         // // console.log(theme[0].imgs)
         // return theme[0].imgs
         const requestHeader = this.$store.getters.requestHeader
-        axios.get(`/travels/destinations/${id+1}/0`, requestHeader)
+        axios.get(`/travels/destinations/${id+1}/0/`, requestHeader)
           .then(response => {
-            // console.log(response.data.destinations)
             this.destinations = response.data.destinations
             // this.eachContext = "테마를 설명하는 내용"
           })
-        // .catch(err => {
-        //   console.log(err)
-        // })
+          .catch(err => {
+            console.log(err)
+          })
       },
       cardBypopThemeContext(id) {
         // var theme = this.popTheme.filter(theme => {
@@ -294,9 +280,7 @@
         // })
         // // console.log(theme[0].context)
         // this.eachContext = theme[0].context
-
         this.eachContext = this.themeArr[id].content
-        // console.log(response.data)
         console.log(this.eachContext)
       },
       openCardModal(dest) {
@@ -320,11 +304,10 @@
       axios.get("/travels/all_theme/", requestHeader)
         .then(response => {
           this.themeArr = response.data.all_theme
-          // console.log(this.themeArr)
         })
-      // .catch(err => {
-      //   console.log(err)
-      // })
+        .catch(err => {
+          console.log(err)
+        })
 
       this.a()
     }
@@ -463,8 +446,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    /* -webkit-clip-path: polygon(0 0, 76% 0, 24% 100%, 0% 100%);
-    clip-path: polygon(0 0, 76% 0, 24% 100%, 0% 100%); */
   }
 
   .describe-left>img {
@@ -497,8 +478,6 @@
     font-family: 'Cafe24Simplehae';
     padding: 4.7%;
     background-color: rgb(250, 249, 249);
-    /* -webkit-clip-path: polygon(76% 0, 100% 0, 100% 100%, 24% 100%);
-    clip-path: polygon(76% 0, 100% 0, 100% 100%, 24% 100%); */
   }
 
   .describe-right>i {

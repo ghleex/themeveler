@@ -32,10 +32,7 @@
       </div>
       <ChatBot :themeId=themeId :themeName=themeName />
     </div>
-
     <v-btn class="my-5" to="/travel/" rounded dark color="#2c3e50">📃뒤로가기</v-btn>
-
-
 
     <!-- destinations -->
     <div style="margin: 3rem 0 1rem 0">
@@ -57,21 +54,18 @@
       <v-slide-group v-model="model" class="pa-4" center-active show-arrows>
         <v-slide-item v-for="destination in destinations" :key="destination.title" v-slot:default="{ active, toggle }">
           <v-card class="ma-4" height="200" width="180" @click="toggle">
-
             <!-- 이미지가 없으므로 임시 card -->
             <v-sheet @click="toggleDestination(destination)" class="d-flex justify-content-center align-items-center"
               color="#37474F" width="100%" height="100%" style="border-radius: 0;">
               <div class="text-light pb-8" style="font-family: 'Cafe24Simplehae'; font-size: 25px;">
                 #.{{ destination.id }} {{ destination.name }}</div>
             </v-sheet>
-
             <v-row class="fill-height" align="center" justify="center">
             </v-row>
           </v-card>
         </v-slide-item>
       </v-slide-group>
     </v-sheet>
-
 
     <!-- detination modal -->
     <v-dialog v-model="dialog" max-width="350">
@@ -122,7 +116,7 @@
         like: false,
         destination: "",
         likeCount: 0,
-        dialog: false,
+        dialog: false
       }
     },
     methods: {
@@ -163,7 +157,7 @@
           // console.log(this.themeArr)
         })
 
-      axios.get(`/travels/destinations/${this.themeId}/0`, requestHeader)
+      axios.get(`/travels/destinations/${this.themeId}/0/`, requestHeader)
         .then(res => {
           this.destinations = res.data.destinations
           // console.log(res.data)
@@ -172,7 +166,7 @@
       //   console.log(err.response)
       // })
 
-      axios.get(`/travels/like/${this.themeId}`, requestHeader)
+      axios.get(`/travels/like/${this.themeId}/`, requestHeader)
         .then(res => {
           this.likeCount = res.data.like_users_count
           this.like = res.data.did_user_like
@@ -252,7 +246,6 @@
     font-size: 18px;
   }
 
-
   .theme-detail-content {
     width: 80%;
     text-align: start;
@@ -284,7 +277,6 @@
       width: 80vw;
       height: inherit;
       padding: 2rem;
-
     }
   }
 </style>

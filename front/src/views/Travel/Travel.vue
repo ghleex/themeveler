@@ -15,9 +15,6 @@
       </v-carousel-item>
     </v-carousel>
 
-
-
-
     <!-- 여행지 -->
     <div class="pop-box mt-8">
       <div class="main-section">
@@ -37,7 +34,6 @@
                   </div>
                 </div>
 
-
                 <!-- <v-img @click="showDetail(theme.id)" :src="theme.image" width="100%" height="100%" /> -->
                 <!-- 임시 -->
                 <v-sheet class="d-flex justify-content-center align-items-center" @click="showDetail(theme.id)"
@@ -45,7 +41,6 @@
                   <div class="text-light pb-12" style="font-family: 'Cafe24Simplehae'; font-size: 25px;">
                     #.{{ theme.id }} {{ theme.region }}</div>
                 </v-sheet>
-
 
                 <v-row class="fill-height" align="center" justify="center">
                 </v-row>
@@ -57,9 +52,7 @@
         <div class="mx-2">
           <v-row class="d-flex justify-content-center">
             <v-col class="d-flex justify-content-center" v-for="dest in paginationDest" :key="dest.id" cols="12" lg="3" sm="6" xs="1">
-              <v-card class="home-destination-card row" min-height="290px" max-height="30vw" style="width: 100%;"
-                @click="toggle">
-
+              <v-card class="home-destination-card row" min-height="290px" max-height="30vw" style="width: 100%;" @click="toggle">
                 <div style="width: 100%;" class="">
                   <!-- <div class="home-card-destination-name pt-2 text-light">여행지</div> -->
                   <div class="home-card-destination-header" style="width: 100%">
@@ -143,12 +136,11 @@
       axios.get('/travels/all_theme/', requestHeader)
         .then(response => {
           this.themeArr = response.data.all_theme
-          // console.log(this.themeArr)
+        })
+        .catch(err => {
+          console.log(err)
         })
       this.getPaginationDestination()
-      // .catch(err => {
-      //   console.log(err)
-      // })
     },
   }
 </script>
