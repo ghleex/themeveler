@@ -41,7 +41,7 @@ export default {
         v => (v && v.length <= 30) || "제목을 30자 이내로 작성해주세요",
       ],
       contentRules: [v => !!v || "내용을 작성해주세요"],
-      categorys: [] // categorys: ["건의","신고"]
+      categorys: [] // ["테마","장소","기타 서비스"]
     }
   },
   methods: {
