@@ -2,7 +2,7 @@
   <div class="theme-detail-origin-box">
     <div class="themeDetail-box">
       <div class="theme-detail-left">
-        <v-img :src="'http://localhost:8000/uploads/theme/theme_'+themeId+'.jpg'" width="inherit" height="inherit">
+        <v-img :src="'http://localhost:8000/uploads/theme/theme_'+themeArr[themeId-1].name+'.jpg'" width="inherit" height="inherit">
         </v-img>
       </div>
       <div class="theme-detail-right">
@@ -14,7 +14,6 @@
         <div class="theme-detail-content">
           <i class="fas fa-map-marker-alt mr-3"></i><b>지역</b><br>
           {{ themeArr[themeId-1].region }} <br><br>
-
           <i class="fas fa-thumbtack mr-2"></i><b>내용</b><br>
           {{ themeArr[themeId-1].content }} <br><br>
           <div class="text-center">
@@ -23,16 +22,26 @@
           </div>
           <div class="like-theme text-center">
             {{ likeCount }} <br>
-            <i @click="likeTheme()" v-if="like == false" class="far fa-heart"></i>
-            <i @click="likeTheme()" v-else-if="like == true" class="fas fa-heart text-danger"></i>
+            <div v-if="isAuthenticated">
+              <i @click="likeTheme()" v-if="like == false" class="far fa-heart"></i>
+              <i @click="likeTheme()" v-else-if="like == true" class="fas fa-heart text-danger"></i>
+            </div>
+            <div v-else>
+              <i @click="requireLogin()" class="far fa-heart"></i>
+            </div>
           </div>
         </div>
         <div class="theme-detail-go text-end">
-          <v-btn color="red" @click="goThemeStory()" dark rounded><b>GO!</b><i class="fas fa-play-circle ml-1"></i>
-          </v-btn>
+          <div v-if="isAuthenticated">
+            <v-btn color="red" @click="goThemeStory()" dark rounded><b>GO!</b><i class="fas fa-play-circle ml-1"></i></v-btn>
+          </div>
+          <div v-else>
+            <v-btn color="red" @click="requireLogin()" dark rounded><b>GO!</b><i class="fas fa-play-circle ml-1"></i></v-btn>
+          </div>
         </div>
       </div>
-      <ChatBot :themeId=themeId :themeName=themeName />
+      <ChatBot :themeId=themeId :themeName=themeName v-if="isAuthenticated" />
+      <ChatBot v-else @click="requireLogin()" />
     </div>
     <v-btn class="my-5" to="/travel/" rounded dark color="#2c3e50">📃뒤로가기</v-btn>
 
@@ -51,29 +60,17 @@
       </div>
     </div> -->
 
-    <v-sheet class="theme-detail-destination mx-auto d-flex justify-content-center" max-width="100vw"
-      style="margin-bottom: 5rem;">
+    <v-sheet class="theme-detail-destination" max-width="100vw">
       <v-slide-group v-model="model" class="pa-4" center-active show-arrows>
         <v-slide-item v-for="(destination, index) in destinations" :key="destination.title"
           v-slot:default="{ active, toggle }">
           <v-card class="ma-4" height="200" width="180" @click="toggle">
-            <!-- 이미지가 없으므로 임시 card -->
-            <!-- <v-sheet @click="toggleDestination(destination, destination.id)" class="d-flex justify-content-center align-items-center"
-              color="#37474F" width="100%" height="100%" style="border-radius: 0;">
-              <div class="text-light pb-8" style="font-family: 'Cafe24Simplehae'; font-size: 25px;">
-                #.{{ destination.id }} {{ destination.name }}</div>
-            </v-sheet> -->
-            <v-card-title @click="toggleDestination(destination.id)" class="text-light" style="margin-left: auto;
-            margin-right: auto; width: auto;
-            left: 0; top: 35%; right: 0; 
-            justify-content: center; 
-            position: absolute; z-index: 5; background: rgba(0, 0, 0, 0.6); 
-            font-family: 'Cafe24Simplehae'; font-size: 15px;">
+            <v-card-title @click="toggleDestination(destination.id)" class="detail-destination-title text-light">
               <b>{{ index + 1 }}.</b> {{ destination.name }}
             </v-card-title>
             <v-img @click="toggleDestination(destination.id)"
-              :src="'http://localhost:8000/uploads/destination/destination_'+destination.id+'.jpg'" width="100%"
-              height="100%"></v-img>
+              :src="'http://localhost:8000/uploads/destination/destination_'+destination.name+'.jpg'" width="100%" height="100%">
+            </v-img>
             <v-row class="fill-height" align="center" justify="center">
             </v-row>
           </v-card>
@@ -88,16 +85,7 @@
           <div>#{{ model + 1 }}. {{ destsName }}</div>
           <v-btn x-large icon @click="dialog = false"><i class="far fa-times-circle text-light" style="font-style: 50px"></i></v-btn>
         </v-card-title>
-
         <v-img :src="destImg" height="80vh"></v-img>
-
-        <!-- <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn rounded color="red" text @click="dialog = false" style="background: #FFEBEE;">
-            나가기
-            <i class="fas fa-sign-out-alt ml-1"></i>
-          </v-btn>
-        </v-card-actions> -->
       </v-card>
     </v-dialog>
   </div>
@@ -110,18 +98,18 @@
   export default {
     name: "TravelDetail",
     components: {
-      ChatBot,
+      ChatBot
     },
     props: {
       themeId: Number,
-      themeName: String,
+      themeName: String
     },
     data() {
       return {
         toggle: false,
         themeArr: [{
           "name": "name"
-        }, ],
+        }],
         destinations: [],
         model: null,
         date: "",
@@ -133,6 +121,7 @@
         destId: 0,
         destsName: "",
         destImg: "",
+        isAuthenticated: this.$session.get("jwt")
       }
     },
     methods: {
@@ -150,12 +139,16 @@
       },
       toggleDestination(id) {
         this.destsName = this.destinations[id-1].name
-        this.destImg = "http://localhost:8000/uploads/destination/destination_" + id + ".jpg"
-        // console.log(this.destImg)
+        this.destImg = "http://localhost:8000/uploads/destination/destination_"+name+".jpg"
         this.dialog = true
       },
       goThemeStory() {
-        this.$router.push(`/travel/${this.themeId}/start`)
+        this.$router.push({
+          path: `/travel/${this.themeId}/start`
+        })
+      },
+      requireLogin() {
+        alert("로그인 후 이용해주세요.")
       }
     },
     mounted() {
@@ -179,6 +172,7 @@
           this.likeCount = res.data.like_users_count
           this.like = res.data.did_user_like
         })
+      
       document.querySelector("#footer").style.display = 'block'
     }
   }
@@ -188,6 +182,7 @@
   .dest-picture-modal::-webkit-scrollbar {
     width: 5px;
   }
+
   .dest-picture-modal::-webkit-scrollbar-thumb {
     background: #2c3e50;
     border-radius: 10px;
@@ -199,7 +194,24 @@
   }
 
   .theme-detail-destination {
-    margin-bottom: 15rem !important;
+    display: flex;
+    justify-content: center;
+    margin: 3rem auto 3rem auto;
+  }
+
+  .detail-destination-title {
+    margin-left: auto;
+    margin-right: auto;
+    width: auto;
+    top: 35%;
+    left: 0;
+    right: 0; 
+    justify-content: center; 
+    position: absolute;
+    z-index: 5;
+    background: rgba(0, 0, 0, 0.6); 
+    font-family: 'Cafe24Simplehae';
+    font-size: 15px;
   }
 
   .btn-round-num {
@@ -224,7 +236,6 @@
     width: 55vw;
     height: 37vw;
     margin: 8rem 0 5rem 10%;
-    /* background-image: url("../../assets/image/daegu.jpg"); */
     background-size: cover;
     border-radius: 3px 0 0 3px;
     box-shadow: 1px 1px 3px 1px rgb(187, 184, 184);
@@ -248,7 +259,6 @@
   .theme-detail-title {
     display: flex;
     justify-content: center;
-    /* align-items: center; */
     background-color: #2c3e50;
     color: white;
     padding: .5rem .5rem 0 .5rem;
