@@ -267,7 +267,7 @@ class Destinations(APIView):
                 if all_len % dest_per_page:
                     page += 1
 
-                if dest_per_page * (page_num-1)>= all_len:
+                if dest_per_page * (page_num) >= all_len:
                     return Response('Page is not exist', status=status.HTTP_404_NOT_FOUND)
 
                 start = dest_per_page * (page_num-1)
