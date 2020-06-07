@@ -146,34 +146,21 @@
         .then(res => {
           this.themeArr = res.data.all_theme
           this.themeName = this.themeArr[this.themeId - 1].name
-          // console.log(this.themeName)
-
           var dateTime = res.data.all_theme[this.themeId - 1].created_at
           this.date = dateTime.substr(0, 10)
           this.time = dateTime.substr(11, 5)
-          // console.log(this.date)
-          // console.log(this.time)
-
-          // console.log(this.themeArr)
         })
 
       axios.get(`/travels/destinations/${this.themeId}/0/`, requestHeader)
         .then(res => {
           this.destinations = res.data.destinations
-          // console.log(res.data)
         })
-      // .catch(err => {
-      //   console.log(err.response)
-      // })
 
       axios.get(`/travels/like/${this.themeId}/`, requestHeader)
         .then(res => {
           this.likeCount = res.data.like_users_count
           this.like = res.data.did_user_like
         })
-      // .catch(err => {
-      //   console.log(err.response)
-      // })
       document.querySelector("#footer").style.display = 'block'
     }
   }
