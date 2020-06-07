@@ -2,7 +2,7 @@
   <div class="theme-detail-origin-box">
     <div class="themeDetail-box">
       <div class="theme-detail-left">
-        <v-img :src="'http://localhost:8000/uploads/theme/theme_'+themeId+'.jpg'" width="inherit" height="inherit">
+        <v-img :src="'http://localhost:8000/uploads/theme/theme_'+themeArr[themeId-1].name+'.jpg'" width="inherit" height="inherit">
         </v-img>
       </div>
       <div class="theme-detail-right">
@@ -69,7 +69,7 @@
               <b>{{ index + 1 }}.</b> {{ destination.name }}
             </v-card-title>
             <v-img @click="toggleDestination(destination.id)"
-              :src="'http://localhost:8000/uploads/destination/destination_'+destination.id+'.jpg'" width="100%" height="100%">
+              :src="'http://localhost:8000/uploads/destination/destination_'+destination.name+'.jpg'" width="100%" height="100%">
             </v-img>
             <v-row class="fill-height" align="center" justify="center">
             </v-row>
@@ -139,7 +139,7 @@
       },
       toggleDestination(id) {
         this.destsName = this.destinations[id-1].name
-        this.destImg = "http://localhost:8000/uploads/destination/destination_" + id + ".jpg"
+        this.destImg = "http://localhost:8000/uploads/destination/destination_"+name+".jpg"
         this.dialog = true
       },
       goThemeStory() {
