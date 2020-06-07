@@ -112,6 +112,7 @@ const routes = [
     path: '/travel/:themeId/start',
     name: 'travel-start',
     component: TravelStart,
+    meta: {requiresAuth: true},
     props: route => ({
       themeId: Number(route.params.themeId)
     })

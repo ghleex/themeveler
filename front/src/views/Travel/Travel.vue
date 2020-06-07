@@ -41,8 +41,6 @@
                   <div class="text-light pb-12" style="font-family: 'Cafe24Simplehae'; font-size: 25px;">
                     #.{{ theme.id }} {{ theme.region }}</div>
                 </v-sheet> -->
-                
-
                 <v-row class="fill-height" align="center" justify="center">
                 </v-row>
               </v-card>
@@ -105,7 +103,7 @@
         //   require('../../assets/image/destination2.jpg'),
         //   require('../../assets/image/destination3.jpg'),
         //   require('../../assets/image/destination4.jpg'),
-        // ],
+        // ]
       }
     },
     methods: {
