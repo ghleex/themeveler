@@ -9,7 +9,7 @@ class Theme(models.Model):
     name = models.CharField(max_length=50)
     content = models.TextField()
     region = models.CharField(max_length=50)
-    image = models.ImageField(blank=True)
+    image = models.ImageField(blank=True, upload_to="theme")
     created_at = models.DateTimeField(auto_now_add=True) # date is updated just created
     updated_at = models.DateTimeField(auto_now=True) # date is updated when created and updated
     visitors = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='visited_themes', blank=True) # User.visited_themes.all()
@@ -30,7 +30,7 @@ class Theme(models.Model):
 class Destination(models.Model):
     name = models.CharField(max_length=50)
     themes = models.ManyToManyField(Theme, related_name='spots', blank=True) # Theme.spots.all() / # Destination.themes.all -> return list
-    image = models.ImageField(blank=True)
+    image = models.ImageField(blank=True, upload_to="destination")
     latitude = models.CharField(max_length=100) # 위도
     longitude = models.CharField(max_length=100) # 경도
     created_at = models.DateTimeField(auto_now_add=True) # date is updated just created

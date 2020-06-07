@@ -41,11 +41,7 @@ export default {
         v => (v && v.length <= 30) || "제목을 30자 이내로 작성해주세요",
       ],
       contentRules: [v => !!v || "내용을 작성해주세요"],
-      categorys: [],
-      // categorys: [
-      //   "건의",
-      //   "신고",
-      // ]
+      categorys: [] // categorys: ["건의","신고"]
     }
   },
   methods: {
@@ -58,15 +54,6 @@ export default {
           "request_user": this.$store.getters.user_id,
           "is_fixed": 0,
         }
-        // var today = new Date();
-        // var year = today.getFullYear(); // 년도
-        // var month = today.getMonth() + 1; // 월
-        // var date = today.getDate(); // 날짜
-        // // var day = today.getDay(); // 요일
-        // // var hour = today.getHours() // 시간
-        // // var min = today.getMinutes()
-        // // this.writed_at = `${year}-${month}-${date} | ${hour}:${min}`
-        // this.writed_at = `${year}-${month}-${date}`
         const requestHeader = this.$store.getters.requestHeader
         axios.post(`/articles/customer/${this.userId}/`, serviceCreateForms, requestHeader)
           .then(() => {

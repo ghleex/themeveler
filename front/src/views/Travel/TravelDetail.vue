@@ -1,7 +1,5 @@
 <template>
   <div class="theme-detail-origin-box">
-
-
     <div class="themeDetail-box">
       <div class="theme-detail-left">
       </div>
@@ -32,45 +30,63 @@
           </v-btn>
         </div>
       </div>
-      <ChatBot :themeId=themeId />
+      <ChatBot :themeId=themeId :themeName=themeName />
     </div>
-
     <v-btn class="my-5" to="/travel/" rounded dark color="#2c3e50">📃뒤로가기</v-btn>
 
-
-
     <!-- destinations -->
-    <div v-if="model == null" class="text-gray text-center mt-12" style="font-size: 12px;">
-      * 이미지를 클릭하면 장소를 알 수 있어요!
-    </div>
-    <div class="text-center mt-12" width="100%">
-      <div class="d-flex mt-5 justify-content-center">
-        <v-btn class="btn-round-num mr-2" v-model="destination" color="red" dark rounded v-if="model != null">
-          {{ model + 1 }}
-        </v-btn>
-        <div v-if="model >= 0">{{ destination }}</div>
+    <div style="margin: 3rem 0 1rem 0">
+      <div v-if="model == null" class="text-gray text-center mb-4" style="font-size: 12px;">
+        * 이미지를 클릭하면 장소를 알 수 있어요!
+      </div>
+      <div class="text-center" width="100%">
+        <div class="d-flex justify-content-center">
+          <v-btn class="btn-round-num mr-2" v-model="destination" color="red" dark rounded v-if="model != null">
+            {{ model + 1 }}
+          </v-btn>
+          <div v-if="model >= 0">{{ destination }}</div>
+        </div>
       </div>
     </div>
 
     <v-sheet class="theme-detail-destination mx-auto d-flex justify-content-center" max-width="100vw"
       style="margin-bottom: 5rem;">
       <v-slide-group v-model="model" class="pa-4" center-active show-arrows>
-        <v-slide-item v-for="destination in destinations" :key="destination" v-slot:default="{ active, toggle }">
+        <v-slide-item v-for="destination in destinations" :key="destination.title" v-slot:default="{ active, toggle }">
           <v-card class="ma-4" height="200" width="180" @click="toggle">
-
             <!-- 이미지가 없으므로 임시 card -->
             <v-sheet @click="toggleDestination(destination)" class="d-flex justify-content-center align-items-center"
               color="#37474F" width="100%" height="100%" style="border-radius: 0;">
               <div class="text-light pb-8" style="font-family: 'Cafe24Simplehae'; font-size: 25px;">
                 #.{{ destination.id }} {{ destination.name }}</div>
             </v-sheet>
-
             <v-row class="fill-height" align="center" justify="center">
             </v-row>
           </v-card>
         </v-slide-item>
       </v-slide-group>
     </v-sheet>
+
+    <!-- detination modal -->
+    <v-dialog v-model="dialog" max-width="350">
+      <v-card>
+        <v-card-title class="headline">
+          여행지 이름
+        </v-card-title>
+
+        <v-card-text>
+          댓글,, 어쩌구
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn rounded color="red" text @click="dialog = false" style="background: #FFEBEE;">
+            나가기
+            <i class="fas fa-sign-out-alt ml-1"></i>
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -84,12 +100,15 @@
       ChatBot,
     },
     props: {
-      themeId: Number
+      themeId: Number,
+      themeName: String,
     },
     data() {
       return {
         toggle: false,
-        themeArr: [],
+        themeArr: [{
+          "name": "name"
+        }, ],
         destinations: [],
         model: null,
         date: "",
@@ -97,6 +116,7 @@
         like: false,
         destination: "",
         likeCount: 0,
+        dialog: false
       }
     },
     methods: {
@@ -113,6 +133,7 @@
         }
       },
       toggleDestination(destination) {
+        this.dialog = true
         this.destination = destination.name
       },
       goThemeStory() {
@@ -124,6 +145,8 @@
       axios.get("/travels/all_theme/", requestHeader)
         .then(res => {
           this.themeArr = res.data.all_theme
+          this.themeName = this.themeArr[this.themeId - 1].name
+          // console.log(this.themeName)
 
           var dateTime = res.data.all_theme[this.themeId - 1].created_at
           this.date = dateTime.substr(0, 10)
@@ -134,30 +157,33 @@
           // console.log(this.themeArr)
         })
 
-      axios.get(`/travels/destinations/${this.themeId}`, requestHeader)
+      axios.get(`/travels/destinations/${this.themeId}/0/`, requestHeader)
         .then(res => {
           this.destinations = res.data.destinations
           // console.log(res.data)
         })
-        // .catch(err => {
-        //   console.log(err.response)
-        // })
+      // .catch(err => {
+      //   console.log(err.response)
+      // })
 
-      axios.get(`/travels/like/${this.themeId}`, requestHeader)
+      axios.get(`/travels/like/${this.themeId}/`, requestHeader)
         .then(res => {
           this.likeCount = res.data.like_users_count
           this.like = res.data.did_user_like
         })
-        // .catch(err => {
-        //   console.log(err.response)
-        // })
-        document.querySelector("#footer").style.display = 'block'
+      // .catch(err => {
+      //   console.log(err.response)
+      // })
+      document.querySelector("#footer").style.display = 'block'
     }
   }
 </script>
 
 <style lang="scss" scoped>
-  .theme-detail-origin-box {}
+  .theme-detail-origin-box {
+    background-color: #ECEFF1;
+    height: 100%;
+  }
 
   .theme-detail-destination {
     margin-bottom: 15rem !important;
@@ -220,7 +246,6 @@
     font-size: 18px;
   }
 
-
   .theme-detail-content {
     width: 80%;
     text-align: start;
@@ -252,7 +277,6 @@
       width: 80vw;
       height: inherit;
       padding: 2rem;
-
     }
   }
 </style>

@@ -165,8 +165,6 @@ export default {
   }
 
   .card-title {
-    /* padding-top: 16px; */
-    /* margin-bottom: 0px; */
     margin-top: 8px;
     margin-bottom: 8px;
     height: 48px;
