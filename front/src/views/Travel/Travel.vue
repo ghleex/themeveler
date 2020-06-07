@@ -41,6 +41,8 @@
                   <div class="text-light pb-12" style="font-family: 'Cafe24Simplehae'; font-size: 25px;">
                     #.{{ theme.id }} {{ theme.region }}</div>
                 </v-sheet> -->
+                
+
                 <v-row class="fill-height" align="center" justify="center">
                 </v-row>
               </v-card>
@@ -50,7 +52,7 @@
 
         <div class="mb-12" style="width: 90vw; margin: 1rem auto 3rem auto;">
           <v-row class="d-flex justify-content-center">
-            <v-col class="d-flex justify-content-center" v-for="dest in paginationDest" :key="dest.id" cols="12" lg="3" sm="6" xs="1">
+            <v-col class="d-flex justify-content-center" v-for="dest in computedPageDestination" :key="dest.id" cols="12" lg="3" sm="6" xs="1">
               <v-card class="home-destination-card row" min-height="290px" max-height="30vw" style="width: 100%;" @click="toggle">
                 <div style="width: 100%;" class="">
                   <!-- <div class="home-card-destination-name pt-2 text-light">여행지</div> -->
@@ -62,7 +64,7 @@
                     <i class="fas fa-window-close"></i>
                   </div>
                 </div>
-                <v-img :src="dest.image" width="100%" height="100%" />
+                <v-img :src="'http://localhost:8000/uploads/destination/'+dest.name+'.jpg'" width="100%" height="100%" />
                 <v-row class="fill-height" align="center" justify="center">
                 </v-row>
               </v-card>
@@ -91,8 +93,8 @@
         model_: null,
         page: 1,
         slides: [
-          require("../../assets/bg1.jpg"),
-          require("../../assets/bg5.jpg"),
+          require('../../assets/bg1.jpg'),
+          require('../../assets/bg5.jpg'),
         ],
         // destination: [
         //   require('../../assets/image/destination1.jpg'),
@@ -103,7 +105,7 @@
         //   require('../../assets/image/destination2.jpg'),
         //   require('../../assets/image/destination3.jpg'),
         //   require('../../assets/image/destination4.jpg'),
-        // ]
+        // ],
       }
     },
     methods: {
@@ -122,9 +124,6 @@
             this.paginationDest = response.data.page_destination
             this.pageLength = response.data.all_length
           })
-          .catch(err => {
-            console.log(err)
-          })
       }
     },
     mounted() {
@@ -138,7 +137,14 @@
         .then(response => {
           this.themeArr = response.data.all_theme
         })
+
       this.getPaginationDestination()
+    },
+
+    computed: {
+      computedPageDestination() {
+        return this.paginationDest
+      }
     }
   }
 </script>
