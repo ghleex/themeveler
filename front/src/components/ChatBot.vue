@@ -3,8 +3,8 @@
     <div class="chatbot-box" @click="openModal">
       <i class="fas fa-comment-dots chatbot-icon"></i>
     </div>
-    <v-dialog content-class="chatbot-card" v-model="dialog" max-width="310" transition="scale-transition">
-      <v-card class="chatbot-card">
+    <v-dialog content-class="dialog-chat" v-model="dialog" max-width="400" transition="scale-transition">
+      <v-card>
         <v-card-title class="headline chatbot-title justify-content-between"
           style="font-family: 'Cafe24Simplehae' !important;">
           <div>
@@ -13,11 +13,12 @@
           </div>
           <div>
             <v-btn x-large icon @click="dialog = false">
-              <i class="far fa-times-circle text-light" style="font-style: 50px"></i>
+              <i class="far fa-times-circle text-light fa-2x" style="font-style: 50px"></i>
             </v-btn>
           </div>
         </v-card-title>
         
+        <div class="chatbot-card">
         <p v-if="chatLoading" class="chatLoading" style="margin-top: 8rem; color: gray;">Loading</p>
         <p style="margin-top: 8rem;"></p>
         <span class="new-message-text">
@@ -62,7 +63,7 @@
                 <i class="fas fa-user mr-1"></i>
                 {{ message.nickname }}
               </p>
-              <p v-if="message.nickname !== '공지사항'" :class="{'bg-info': anonymous !== memory.nickname}"
+              <p v-if="message.nickname !== '공지사항'" :class="{'bg-info': anonymous !== message.nickname}"
                 class="d-inline-block ml-3"
                 style="max-width: 170px; margin: 0; background: #546E7A; border-radius: 15px; color: white; padding: .5rem .6rem; font-family: 'Cafe24Simplehae' !important;">
                 {{ message.message }}
@@ -83,8 +84,7 @@
             </span>
           </v-card-text>
         </span>
-        <br><br>
-        <hr>
+        </div>
         <v-card-text class="py-5 chat-write" style="background: #ECEFF1;">
           <div v-if="connected">
             <input class="p-1" type="text" v-model="message" @keypress.enter="sendMessage"
@@ -127,7 +127,11 @@
           }
         }
         var ap = date.getHours() < 12 ? "AM" : "PM"
-        return `${date.getHours()}:${date.getMinutes()} ${ap}`
+        var hourFormat = date.getHours() % 12
+        if (hourFormat >= 12) {
+          hourFormat %= 12
+        }
+        return `${hourFormat}:${date.getMinutes()} ${ap}`
       }
     },
     props: {
@@ -148,7 +152,8 @@
         chatLoading: false,
         newChat: false,
         baseURL: "",
-        chatDate: []
+        chatDate: [],
+        moreData: true
       }
     },
     created() {
@@ -160,7 +165,7 @@
           created_at: this.$moment(new Date()).format("YYYY-MM-DD LT")
         }
         this.addMessage(value)
-        let scroll = document.getElementsByClassName("v-dialog")[0]
+        let scroll = document.getElementsByClassName("chatbot-card")[0]
         let scrollBottom = scroll.scrollHeight - scroll.clientHeight
         let scrollMoveTrigger = false
         if (scrollBottom - 1 <= Math.round(scroll.scrollTop) && Math.round(scroll.scrollTop) <= scrollBottom + 1) {
@@ -206,7 +211,7 @@
     },
     methods: {
       scrollDown() {
-        let scroll = document.getElementsByClassName("v-dialog")[0]
+        let scroll = document.getElementsByClassName("chatbot-card")[0]
         scroll.scrollTop = scroll.scrollHeight
       },
       addMessage(value) {
@@ -241,6 +246,9 @@
         return false
       },
       handleScroll(scrollTop) {
+        if (this.moreData == false) {
+          return
+        }
         let scrollMoveTrigger = Math.round(scrollTop.srcElement.scrollTop) == scrollTop.srcElement.scrollHeight -
           scrollTop.srcElement.clientHeight
         if (scrollTop.srcElement.scrollTop == 0) {
@@ -258,11 +266,12 @@
               .then(res => {
                 this.addMemories(res.data)
                 setTimeout(() => {
-                  document.getElementsByClassName("v-dialog")[0].scrollTop = this.scrollHeight * res.data.length
+                  document.getElementsByClassName("chatbot-card")[0].scrollTop = this.scrollHeight * res.data.length
                 }, 10)
               })
               .catch(err => {
                 console.log(err)
+                this.moreData = false
                 Swal.fire({
                   title: "Last Message",
                   text: "마지막 메시지 입니다.",
@@ -279,14 +288,14 @@
         }
       },
       scroll() {
-        var scroll = document.getElementsByClassName("v-dialog")[0]
+        var scroll = document.getElementsByClassName("chatbot-card")[0]
         scroll.scrollTop = scroll.scrollHeight
       },
       openModal() {
         this.dialog = true
         setTimeout(this.scroll, 10)
         setTimeout(() => {
-          document.getElementsByClassName("v-dialog")[0].addEventListener("scroll", this.handleScroll)
+          document.getElementsByClassName("chatbot-card")[0].addEventListener("scroll", this.handleScroll)
           this.scrollHeight = document.getElementsByClassName("v-card__text")[0].scrollHeight
         }, 50)
       },
@@ -333,14 +342,7 @@
 <style lang="scss">
   .new-message-text {
     position: fixed;
-    // top: -1rem;
-    width: 270px;
-  }
-
-  .chat-write {
-    position: fixed;
-    bottom: 1.5rem;
-    width: 310px;
+    top: 30%;
   }
 
   .new-message {
@@ -348,7 +350,14 @@
     position: relative;
     right: 48%;
     top: -2rem;
+    width: 16rem;
     cursor: pointer;
+  }
+
+  .chat-write {
+    // position: fixed;
+    bottom: 4rem;
+    // width: 310px;
   }
 
   .chatbot-box {
@@ -379,14 +388,16 @@
   }
 
   .chatbot-title {
-    position: fixed;
+    // position: fixed;
     background-color: #2c3e50;
     color: white;
-    width: 310px;
+    // width: 310px;
+    top: 6%;
   }
 
   .chatbot-card {
     overflow-y: scroll;
+    height: 24rem;
   }
 
   .chatbot-card::-webkit-scrollbar {

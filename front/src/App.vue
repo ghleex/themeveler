@@ -44,6 +44,7 @@ export default {
             this.$store.dispatch("login", token)
             this.$store.commit("setToken", token)
             this.$store.dispatch("changeNickname", response.data.nickname)
+            this.$store.dispatch("changeAnonymous", response.data.anonymous)
             this.$router.push('/')
           }
           else {
