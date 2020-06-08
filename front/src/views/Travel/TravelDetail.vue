@@ -2,7 +2,7 @@
   <div class="theme-detail-origin-box">
     <div class="themeDetail-box">
       <div class="theme-detail-left">
-        <v-img :src="'http://localhost:8000/uploads/theme/theme_'+themeArr[themeId-1].name+'.jpg'" width="inherit" height="inherit">
+        <v-img :src="`${baseURL}/uploads/theme/${themeArr[themeId-1].name}.jpg`" width="inherit" height="inherit">
         </v-img>
       </div>
       <div class="theme-detail-right">
@@ -69,7 +69,7 @@
               <b>{{ index + 1 }}.</b> {{ destination.name }}
             </v-card-title>
             <v-img @click="toggleDestination(destination.id)"
-              :src="'http://localhost:8000/uploads/destination/destination_'+destination.name+'.jpg'" width="100%" height="100%">
+              :src="`${baseURL}/uploads/destination/${destination.name}.jpg`" width="100%" height="100%">
             </v-img>
             <v-row class="fill-height" align="center" justify="center">
             </v-row>
@@ -121,7 +121,8 @@
         destId: 0,
         destsName: "",
         destImg: "",
-        isAuthenticated: this.$session.get("jwt")
+        isAuthenticated: this.$session.get("jwt"),
+        baseURL: ""
       }
     },
     methods: {
@@ -139,7 +140,7 @@
       },
       toggleDestination(id) {
         this.destsName = this.destinations[id-1].name
-        this.destImg = "http://localhost:8000/uploads/destination/destination_"+name+".jpg"
+        this.destImg = `${this.baseURL}/uploads/destination/${name}.jpg`
         this.dialog = true
       },
       goThemeStory() {
@@ -173,6 +174,8 @@
           this.like = response.data.did_user_like
         })
       
+      this.baseURL = process.env.VUE_APP_IP
+
       document.querySelector("#footer").style.display = "block"
     }
   }

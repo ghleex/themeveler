@@ -24,8 +24,7 @@
         select: null,
         loading: false,
         items: [],
-        states: [],
-
+        states: []
       }
     },
     watch: {
@@ -43,7 +42,6 @@
           })
           this.loading = false
         }, 500)
-        // this.loading = false
       },
       searching() {
         this.$router.push(`/searchresult?q=${this.search}`)
@@ -59,16 +57,20 @@
             this.states.push(theme[i].name);
           }
         })
+        .catch(err => {
+          console.log(err)
+        })
       // all_destination name 담기
       axios.get("/travels/destinations/0/0/", requestHeader)
         .then(response => {
-          // console.log(response.data)
           var dest = response.data.all_destination
           for (var i = 0; i < dest.length; i++) {
             this.states.push(dest[i].name);
           }
         })
-      // console.log(this.states)
+        .catch(err => {
+          console.log(err)
+        })
     }
   }
 </script>
