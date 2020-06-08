@@ -10,7 +10,7 @@
 
   export default {
     beforeRouteEnter(to, from, next) {
-      console.log(from)
+      // console.log(from)
       if (from.name) {
         alert("잘못된 접근입니다.")
       }

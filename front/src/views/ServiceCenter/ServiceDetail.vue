@@ -81,7 +81,7 @@ export default {
       commentList: [],
       valid: false,
       commentRules: [
-        v => (v && v.length <= 500) || '댓글은 최대 500자 이내로 작성해주세요.'
+        v => (v && v.length <= 500) || "댓글은 최대 500자 이내로 작성해주세요."
       ],
       remain: 500,
       resultRemian: 500,

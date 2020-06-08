@@ -14,14 +14,12 @@
       </v-btn>
     </div>
     <v-dialog v-model="dialog" fullscreen transition="dialog-bottom-transition">
-      <!-- {{ mapUrl }} -->
       <v-card>
         <v-card-actions>
           <v-btn class="mx-auto" rounded color="#90A4AE" text @click="dialog = false" style="font-size: 30px; height: 60px !important; background: #ECEFF1">
             <i class="fas fa-times"></i>
           </v-btn>
         </v-card-actions>
-        <!-- <v-card-title class="headline">지도</v-card-title> -->
         <v-card-text>
           <div class="mt-3 text-center" style="font-size: 12px;">
             <div v-if="progress < 35">
@@ -63,7 +61,6 @@
             :key="i.text">
             <v-card class="holder stepper-text-box" color="rgb(248, 248, 246)">
               {{ i.text }}
-              <!-- <v-img :src="'@/assets/' + n + '-' + i.id + '.jpg'"></v-img> -->
             </v-card>
             <div class="text-gray mt-3">
               *이미지 자료
@@ -136,8 +133,8 @@
         // 다음 detination script 가져오기
         const requestHeader = this.$store.getters.requestHeader
         axios.get(`/travels/dest_content/${this.themeId}/${this.e1-1}/`, requestHeader)
-          .then(res => {
-            this.content = res.data.pages
+          .then(response => {
+            this.content = response.data.pages
           })
 
         document.getElementById(this.dests[n].id).tabIndex = -1;
@@ -149,8 +146,8 @@
 
         const requestHeader = this.$store.getters.requestHeader
         axios.get(`/travels/dest_content/${this.themeId}/${this.e1-1}/`, requestHeader)
-          .then(res => {
-            this.content = res.data.pages
+          .then(response => {
+            this.content = response.data.pages
           })
 
         document.getElementById(this.dests[n - 1].id).tabIndex = -1;
@@ -160,7 +157,7 @@
         this.$router.push(`/travel/${themeId}/`)
       },
       a() {
-        document.querySelector("#footer").style.display = 'none'
+        document.querySelector("#footer").style.display = "none"
       },
       success() {
         var destLat = this.dests[this.e1-1].latitude
@@ -186,18 +183,18 @@
         }
       }
       axios.get(`/travels/destinations/${this.themeId}/0/`, requestHeader)
-        .then(res => {
-          this.dests = res.data.destinations
+        .then(response => {
+          this.dests = response.data.destinations
           this.steps = this.dests.length
         })
       axios.get("/travels/all_theme/", requestHeader)
-        .then(res => {
-          this.themeArr = res.data.all_theme
+        .then(response => {
+          this.themeArr = response.data.all_theme
         })
 
       axios.get(`/travels/dest_content/${this.themeId}/${this.e1-1}/`, requestHeader)
-        .then(res => {
-          this.content = res.data.pages
+        .then(response => {
+          this.content = response.data.pages
         })
 
       this.a()

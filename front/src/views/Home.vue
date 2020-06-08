@@ -83,7 +83,6 @@
                         </v-sheet> -->
                         <v-img height="123" @click="openCardModal(dest)"
                           :src="`http://localhost:8000/uploads/destination/${dest.name}.jpg`"></v-img>
-
                         <v-row class="fill-height" align="center" justify="center">
                         </v-row>
                       </v-card>
@@ -97,7 +96,6 @@
                           <v-btn x-large icon @click="dialog = false"><i class="far fa-times-circle text-light" style="font-style: 50px"></i></v-btn>
                         </v-card-title>
                         <v-img height="80vh" :src="`http://localhost:8000/uploads/destination/${dests.name}.jpg`"></v-img>
-
                       </v-card>
                     </v-dialog>
                   </v-slide-group>
@@ -233,11 +231,6 @@
         document.querySelector("#footer").style.display = 'block'
       },
       cardBypopTheme(id) {
-        // var theme = this.popTheme.filter(theme => {
-        //   return theme.id == id + 1
-        // })
-        // // console.log(theme[0].imgs)
-        // return theme[0].imgs
         const requestHeader = this.$store.getters.requestHeader
         axios.get(`/travels/destinations/${id+1}/0/`, requestHeader)
           .then(response => {
@@ -248,11 +241,6 @@
           })
       },
       cardBypopThemeContext(id) {
-        // var theme = this.popTheme.filter(theme => {
-        //   return theme.id == id + 1
-        // })
-        // // console.log(theme[0].context)
-        // this.eachContext = theme[0].context
         this.eachContext = this.themeArr[id].content
       },
       openCardModal(dest) {
@@ -260,10 +248,6 @@
         this.dialog = true
       },
       goTheme(model) {
-        // var themeId = this.popTheme.filter(themeId => {
-        //   return themeId.id == id + 1
-        // })
-        // console.log(themeId[0].id)
         var themeId = model + 1
         this.$router.push({
           path: `/travel/${themeId}`

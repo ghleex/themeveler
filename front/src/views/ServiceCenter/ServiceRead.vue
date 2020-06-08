@@ -93,7 +93,7 @@ export default {
     const requestHeader = this.$store.getters.requestHeader
     axios.get(`/articles/customer/${this.userId}/`, requestHeader)
       .then(response => {
-        console.log(response.data)
+        // console.log(response.data)
         this.serviceData = response.data
       })
       .catch(err => {

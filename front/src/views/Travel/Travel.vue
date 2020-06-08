@@ -22,8 +22,7 @@
         <v-sheet class="mr-auto" max-width="90vw">
           <v-slide-group v-model="model" class="pa-4" center-active show-arrows>
             <v-slide-item v-for="theme in themeArr" :key="theme" v-slot:default="{ active, toggle }">
-              <v-card class="home-destination-card" min-height="290px" max-height="30vw" min-width="218px" width="30vw"
-                @click="toggle">
+              <v-card class="home-destination-card" min-height="290px" max-height="30vw" min-width="218px" width="30vw" @click="toggle">
                 <div>
                   <div class="home-card-destination-header">
                     <div class="home-card-title">
@@ -33,16 +32,12 @@
                     <i class="fas fa-window-close"></i>
                   </div>
                 </div>
-
                 <v-img @click="showDetail(theme.id)" :src="'http://localhost:8000/uploads/theme/'+theme.name+'.jpg'" width="100%" height="100%" />
-                <!-- 임시 -->
                 <!-- <v-sheet class="d-flex justify-content-center align-items-center" @click="showDetail(theme.id)"
                   color="#546E7A" width="100%" height="100%" style="border-radius: 0;">
                   <div class="text-light pb-12" style="font-family: 'Cafe24Simplehae'; font-size: 25px;">
                     #.{{ theme.id }} {{ theme.region }}</div>
                 </v-sheet> -->
-                
-
                 <v-row class="fill-height" align="center" justify="center">
                 </v-row>
               </v-card>
@@ -55,7 +50,6 @@
             <v-col class="d-flex justify-content-center" v-for="dest in computedPageDestination" :key="dest.id" cols="12" lg="3" sm="6" xs="1">
               <v-card class="home-destination-card row" min-height="290px" max-height="30vw" style="width: 100%;" @click="toggle">
                 <div style="width: 100%;" class="">
-                  <!-- <div class="home-card-destination-name pt-2 text-light">여행지</div> -->
                   <div class="home-card-destination-header" style="width: 100%">
                     <div class="home-card-title">
                       <i class="fas fa-file-alt"></i>
@@ -93,24 +87,16 @@
         model_: null,
         page: 1,
         slides: [
-          require('../../assets/bg1.jpg'),
-          require('../../assets/bg5.jpg'),
-        ],
-        // destination: [
-        //   require('../../assets/image/destination1.jpg'),
-        //   require('../../assets/image/destination2.jpg'),
-        //   require('../../assets/image/destination3.jpg'),
-        //   require('../../assets/image/destination4.jpg'),
-        //   require('../../assets/image/destination1.jpg'),
-        //   require('../../assets/image/destination2.jpg'),
-        //   require('../../assets/image/destination3.jpg'),
-        //   require('../../assets/image/destination4.jpg'),
-        // ],
+          require("../../assets/bg1.jpg"),
+          require("../../assets/bg5.jpg"),
+        ]
       }
     },
     methods: {
       showDetail(themeId) {
-        this.$router.push(`/travel/${themeId}`)
+        this.$router.push({
+          path: `/travel/${themeId}`
+        })
       },
       getPaginationDestination() {
         const token = this.$session.get("jwt")
@@ -137,10 +123,8 @@
         .then(response => {
           this.themeArr = response.data.all_theme
         })
-
       this.getPaginationDestination()
     },
-
     computed: {
       computedPageDestination() {
         return this.paginationDest
