@@ -1,8 +1,9 @@
 <template>
   <div id="drawer">
-    <v-navigation-drawer
-      v-model="drawer" :color="color" :expand-on-hover="expandOnHover" :mini-variant.sync="miniVariant"
-      :right="false" :permanent="true" :src="bg" absolute dark
+    <!-- deep-blue accent-4 -->
+    <v-navigation-drawer class="deep-purple accent-4"
+      v-model="drawer" :mini-variant.sync="miniVariant" expand-on-hover
+      :right="false" permanent absolute dark
     >
       <v-list dense nav class="py-0">
         <v-list-item two-line :class="miniVariant && 'px-0'">
@@ -103,5 +104,9 @@ export default {
 <style scoped>
   .list-item:hover {
     text-decoration: none;
+  }
+
+  .navi-drawer {
+    background-color: rgb(233, 88, 88);
   }
 </style>

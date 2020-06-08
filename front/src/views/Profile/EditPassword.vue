@@ -4,7 +4,7 @@
 
     <v-content id="profile-content">
       <h2 class="content-title">
-        <v-icon style="font-size: 32px; color: black;">mdi-key-variant</v-icon> 비밀번호변경
+        <v-icon style="font-size: 32px; color: #2c3e50;">mdi-key-variant</v-icon> 비밀번호변경
       </h2>
       <hr>
       <v-row justify="center">
@@ -24,8 +24,10 @@
                 <v-col cols="4" md="6" class="text-left">
                 </v-col>
                 <v-col cols="8" md="6" class="text-right">
-                  <v-btn color="success" class="mr-4" @click="update">수정</v-btn>
-                  <v-btn color="success" class="mr-0" @click="updatecancel">취소</v-btn>
+                  <v-btn color="success" class="mr-4" @click="update">
+                    <i class="fas fa-check-circle mr-1"></i>수정</v-btn>
+                  <v-btn color="red" dark class="mr-0" @click="updatecancel">
+                    <i class="fas fa-times-circle mr-1"></i>취소</v-btn>
                 </v-col>
               </v-row>
             </v-container>
@@ -107,11 +109,19 @@
   #editpassword {
     margin-top: 64px;
     background-color: rgba(245, 245, 245, 0.5);
+    height: 100%;
+    font-family: 'Cafe24Simplehae';
+    color: #2c3e50;
   }
 
   #profile-content {
-    margin-left: 256px;
+    /* margin-left: 256px; */
+    margin-left: 10%;
     width: 80%;
+  }
+
+  .content-title {
+    margin-top: 2rem;
   }
 
   @media (max-width: 600px) {
@@ -124,7 +134,7 @@
   .content-title {
     text-align: left;
     margin-left: 20px;
-    margin-top: 8px;
+    /* margin-top: 8px; */
   }
 
   .content-col {
