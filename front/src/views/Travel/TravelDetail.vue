@@ -62,17 +62,17 @@
 
     <v-sheet class="theme-detail-destination" max-width="100vw">
       <v-slide-group v-model="model" class="pa-4" center-active show-arrows>
-        <v-slide-item v-for="(destination, index) in destinations" :key="destination.title"
-          v-slot:default="{ active, toggle }">
-          <v-card class="ma-4" height="200" width="180" @click="toggle">
-            <v-card-title @click="toggleDestination(destination)" class="detail-destination-title text-light">
-              <b>{{ index + 1 }}.</b> {{ destination.name }}
-            </v-card-title>
-            <v-img @click="toggleDestination(destination.id)"
-              :src="`${baseURL}/${destination.image}`" width="100%" height="100%">
-            </v-img>
-            <v-row class="fill-height" align="center" justify="center">
-            </v-row>
+        <v-slide-item v-for="(destination, index) in destinations" :key="destination.title" v-slot:default="{ active, toggle }">
+          <v-card class="ma-4" height="200" width="180" @click="toggleDestination(index)">
+            <div @click="toggle">
+              <v-card-title class="detail-destination-title text-light">
+                <b>{{ index + 1 }}.</b> {{ destination.name }}
+              </v-card-title>
+              <v-img @click="toggleDestination(index)" :src="`${baseURL}/${destination.image}`" width="100%" height="100%">
+              </v-img>
+              <v-row class="fill-height" align="center" justify="center">
+              </v-row>
+            </div>
           </v-card>
         </v-slide-item>
       </v-slide-group>
@@ -122,7 +122,7 @@
         destsName: "",
         destImg: "",
         isAuthenticated: this.$session.get("jwt"),
-        baseURL: ""
+        baseURL: process.env.VUE_APP_IP
       }
     },
     methods: {
@@ -139,8 +139,8 @@
         }
       },
       toggleDestination(id) {
-        this.destsName = this.destinations[id-1].name
-        this.destImg = `${this.baseURL}/${this.destinations[id-1].image}`
+        this.destsName = this.destinations[id].name
+        this.destImg = `${this.baseURL}/${this.destinations[id].image}`
         this.dialog = true
       },
       goThemeStory() {
@@ -173,8 +173,6 @@
           this.likeCount = response.data.like_users_count
           this.like = response.data.did_user_like
         })
-      
-      this.baseURL = process.env.VUE_APP_IP
 
       document.querySelector("#footer").style.display = "block"
     }

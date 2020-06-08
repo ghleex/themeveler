@@ -16,7 +16,7 @@
     </v-carousel>
 
     <!-- 여행지 -->
-    <div class="pop-box mt-8">
+    <div class="pop-box">
       <div class="main-section">
         <h2 class="home-h2-title text-center ml-0"><i class="fas fa-book mr-4"></i>어디로 떠날까요?</h2>
         <v-sheet class="mr-auto" max-width="90vw">
@@ -90,7 +90,7 @@
           require("../../assets/bg1.jpg"),
           require("../../assets/bg5.jpg"),
         ],
-        baseURL: ""
+        baseURL: process.env.VUE_APP_IP
       }
     },
     methods: {
@@ -125,8 +125,6 @@
           this.themeArr = response.data.all_theme
         })
       this.getPaginationDestination()
-
-      this.baseURL = process.env.VUE_APP_IP
     },
     computed: {
       computedPageDestination() {
@@ -152,5 +150,15 @@
     font-family: 'Cafe24Simplehae';
     color: white;
     text-shadow: black 1px 1px 1px;
+  }
+
+  .pop-box{
+    margin-top: 32px;
+    margin-bottom: 32px;
+  }
+
+  .main-section {
+    margin-top: 0;
+    margin-bottom: 0;
   }
 </style>

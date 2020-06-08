@@ -1,21 +1,25 @@
 <template>
   <div id="drawer">
-    <v-navigation-drawer
+    <!-- <v-navigation-drawer
       v-model="drawer" :color="color" :expand-on-hover="expandOnHover" :mini-variant.sync="miniVariant"
       :right="false" :permanent="true" :src="bg" absolute dark
+    > -->
+    <v-navigation-drawer
+      v-model="drawer" class="deep-purple accent-4" expand-on-hover="true" :mini-variant.sync="miniVariant"
+      :right="false" :permanent="true" absolute dark
     >
       <v-list dense nav class="py-0">
         <v-list-item two-line :class="miniVariant && 'px-0'">
           <v-list-item-avatar>
-            <h2><i class="fas fa-user-circle"></i></h2>
+            <h3><i class="fas fa-user-circle"></i></h3>
           </v-list-item-avatar>
           <v-list-item-content>
             <v-list-item-title>{{ username() }}님</v-list-item-title>
             <v-list-item-subtitle>{{ userrole() }}</v-list-item-subtitle>
           </v-list-item-content>
-          <v-btn icon @click.stop="miniVariant = !miniVariant" v-if="this.innerWidth < 600">
+          <!-- <v-btn icon @click.stop="miniVariant = !miniVariant" v-if="this.innerWidth < 600">
             <v-icon>mdi-chevron-left</v-icon>
-          </v-btn>
+          </v-btn> -->
         </v-list-item>
         <v-divider></v-divider>
 
