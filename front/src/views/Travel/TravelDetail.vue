@@ -122,8 +122,7 @@
         destsName: "",
         destImg: "",
         isAuthenticated: this.$session.get("jwt"),
-        baseURL: "",
-        releasePath : process.env.VUE_APP_RELEASE_PATH
+        baseURL: ""
       }
     },
     methods: {
