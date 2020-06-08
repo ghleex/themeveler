@@ -194,6 +194,7 @@
       })
       this.$socket.on("joined", data => {
         data["created_at"] = this.$moment(new Date()).format("YYYY-MM-DD LT")
+        data["message"] = `"${this.themeName}"방에 들어오셨습니다.`
         this.messages = [data]
         this.connected = true
       })
@@ -301,37 +302,39 @@
         return this.$socket.connected
       },
       sendMessage() {
-        var message = this.message
-        this.message = ""
-        if (this.checkConnected) {
-          let data = {
-            "message": message
-          }
-          axios.post(`/travels/chat/${this.themeId}/`, data, this.$store.getters.requestHeader)
-            .then(res => {
-              this.$socket.emit("sendMessage", {
-                theme: this.themeId,
-                nickname: res.data.nickname,
-                message: message
+        if (this.message !== "") {
+          var message = this.message
+          this.message = ""
+          if (this.checkConnected) {
+            let data = {
+              "message": message
+            }
+            axios.post(`/travels/chat/${this.themeId}/`, data, this.$store.getters.requestHeader)
+              .then(res => {
+                this.$socket.emit("sendMessage", {
+                  theme: this.themeId,
+                  nickname: res.data.nickname,
+                  message: message
+                })
+                this.addMessage(res.data)
               })
-              this.addMessage(res.data)
-            })
-            .catch(err => {
-              console.log(err)
-              this.messages = [{
-                theme: "error",
-                nickname: "관리자",
-                message: "에러발생"
-              }]
-            })
-        } else {
-          this.messages = [{
-            theme: "error",
-            nickname: "관리자",
-            message: "에러발생"
-          }]
+              .catch(err => {
+                console.log(err)
+                this.messages = [{
+                  theme: "error",
+                  nickname: "관리자",
+                  message: "에러발생"
+                }]
+              })
+          } else {
+            this.messages = [{
+              theme: "error",
+              nickname: "관리자",
+              message: "에러발생"
+            }]
+          }   
+          setTimeout(this.scroll, 40)
         }
-        setTimeout(this.scroll, 40)
       }
     }
   }
