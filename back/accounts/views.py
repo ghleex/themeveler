@@ -394,7 +394,7 @@ class KakaoSignInCallbackView(APIView):
             if not social_user.has_usable_password():
                 user = social_user
             else:
-                return Response({'message': ['해당 유저는 소셜로그인 유저가 아닙니다.']}, status=status.HTTP_400_BAD_REQUEST)
+                return redirect(f'{front_url}/login/')
         else:
             serializer = UsernameSerializer(data=data)
             if serializer.is_valid(raise_exception=True):
@@ -466,7 +466,7 @@ class GoogleSignInCallbackView(APIView):
             if not social_user.has_usable_password():
                 user = social_user
             else:
-                return Response({'message': ['해당 유저는 소셜로그인 유저가 아닙니다.']}, status=status.HTTP_400_BAD_REQUEST)
+                return redirect(f'{front_url}/login/')
         else:
             serializer = UsernameSerializer(data=data)
             if serializer.is_valid(raise_exception=True):
