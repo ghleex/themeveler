@@ -132,12 +132,14 @@ class VisitedDest(APIView):
         dests = user.dests.all()
         req_dests = request.data.get('updated_dests').split(', ')
         update_dates = request.data.get('update_dates').split(', ')
-        for idx in range(len(req_dests)):
-            rd = DestinationVisitors.objects.get(user_id=user.id, destination_id=req_dests[idx])
-            rd.visited_at = update_dates[idx]
-            rd.save()
+        try:
+            for idx in range(len(req_dests)):
+                rd = DestinationVisitors.objects.get(user_id=user.id, destination_id=req_dests[idx])
+                rd.visited_at = update_dates[idx]
+                rd.save()
             return Response({'message': '방문일자 업데이트에 성공하였습니다.'}, status=status.HTTP_200_OK)
-        return Response({'message': '방문일자 업데이트에 실패하였습니다.'}, status=status.HTTP_400_BAD_REQUEST)
+        except:
+            return Response({'message': '방문일자 업데이트에 실패하였습니다.'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @permission_classes((IsAuthenticated,))
