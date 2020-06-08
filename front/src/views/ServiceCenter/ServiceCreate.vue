@@ -41,7 +41,7 @@ export default {
         v => (v && v.length <= 30) || "제목을 30자 이내로 작성해주세요",
       ],
       contentRules: [v => !!v || "내용을 작성해주세요"],
-      categorys: [] // categorys: ["건의","신고"]
+      categorys: [] // ["테마","장소","기타 서비스"]
     }
   },
   methods: {
@@ -52,7 +52,7 @@ export default {
           "title": this.title,
           "content": this.content,
           "request_user": this.$store.getters.user_id,
-          "is_fixed": 0,
+          "is_fixed": false,
         }
         const requestHeader = this.$store.getters.requestHeader
         axios.post(`/articles/customer/${this.userId}/`, serviceCreateForms, requestHeader)

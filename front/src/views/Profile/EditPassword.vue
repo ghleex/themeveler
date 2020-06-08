@@ -3,7 +3,9 @@
     <Drawer class="drawer" />
 
     <v-content id="profile-content">
-      <h2 class="content-title">비밀번호변경</h2>
+      <h2 class="content-title">
+        <v-icon style="font-size: 32px; color: black;">mdi-key-variant</v-icon> 비밀번호변경
+      </h2>
       <hr>
       <v-row justify="center">
         <v-col cols="12" md="8">
@@ -45,60 +47,60 @@
 </template>
 
 <script>
-import axios from 'axios'
-import Drawer from '@/components/Drawer.vue'
-var jwt = require('jwt-simple')
+  import axios from 'axios'
+  import Drawer from '@/components/Drawer.vue'
+  var jwt = require('jwt-simple')
 
-export default {
-  name: "editprofile",
-  components: {
-    Drawer
-  },
-  data() {
-    return {
-      dialog: false,
-      currentPassword: "",
-      newPassword: "",
-      confirmPassword: ""
-    }
-  },
-  methods: {
-    update() {
-      if (this.newPassword === this.confirmPassword) {
-        if (this.newPassword.length > 7) {
-          let data = {
-            "password": this.newPassword,
-            "original_password": this.currentPassword
-          }
-          const token = jwt.encode(data, process.env.VUE_APP_JWT_SECRET_KEY, process.env.VUE_APP_JWT_ALGORITHM)
-          let form = new FormData()
-          form.append("data", token)
-          const requestHeader = this.$store.getters.requestHeader
-          axios.put('/accounts/password/', form, requestHeader)
-            .then(() => {
-              this.$router.push({
-                path: '/profiles'
-              })
-            })
-            .catch(err => {
-              console.log(err)
-            })
-        }
-        else {
-          alert("비밀번호는 8자리이상이여야 합니다.")
-        }
-      }
-      else {
-        alert("비밀번호가 일치하지 않습니다.")
+  export default {
+    name: "editprofile",
+    components: {
+      Drawer
+    },
+    data() {
+      return {
+        dialog: false,
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: ""
       }
     },
-    updatecancel () {
-      this.$router.push({
-        path: '/profiles'
-      })
+    methods: {
+      update() {
+        if (this.newPassword === this.confirmPassword) {
+          if (this.newPassword.length > 7) {
+            let data = {
+              "password": this.newPassword,
+              "original_password": this.currentPassword
+            }
+            const token = jwt.encode(data, process.env.VUE_APP_JWT_SECRET_KEY, process.env.VUE_APP_JWT_ALGORITHM)
+            let form = new FormData()
+            form.append("data", token)
+            const requestHeader = this.$store.getters.requestHeader
+            axios.put('/accounts/password/', form, requestHeader)
+              .then(() => {
+                this.$router.push({
+                  path: '/profiles'
+                })
+              })
+              .catch(err => {
+                console.log(err)
+              })
+          }
+          else {
+            alert("비밀번호는 8자리이상이여야 합니다.")
+          }
+        }
+        else {
+          alert("비밀번호가 일치하지 않습니다.")
+        }
+      },
+      updatecancel () {
+        this.$router.push({
+          path: '/profiles'
+        })
+      }
     }
   }
-}
 </script>
 
 <style scoped>

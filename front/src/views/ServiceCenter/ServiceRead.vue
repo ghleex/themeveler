@@ -25,7 +25,7 @@
         </template>
         <!-- 관리자 처리 -->
         <template v-slot:item.is_fixed="{ item }">
-          <div v-if="item.is_fixed === true">미처리</div>
+          <div v-if="item.is_fixed === false">미처리</div>
           <div v-else>답변완료</div>
         </template>
         <!-- 등록일 시간형식 -->
@@ -83,8 +83,8 @@ export default {
       })
     },
     getColor(category) {
-      if (category == "신고") return "#FF5252"
-      else if (category == "건의") return "dark"
+      if (category == "테마") return "#FF5252"
+      else if (category == "장소") return "dark"
       else return "#BA68C8"
     }
   },
@@ -93,7 +93,7 @@ export default {
     const requestHeader = this.$store.getters.requestHeader
     axios.get(`/articles/customer/${this.userId}/`, requestHeader)
       .then(response => {
-        console.log(response.data)
+        // console.log(response.data)
         this.serviceData = response.data
       })
       .catch(err => {

@@ -3,7 +3,8 @@
     <form class="search-form" @submit.prevent="searching()">
       <v-icon>mdi-magnify</v-icon>
       <v-autocomplete color="#4DD0E1" v-model="query" :loading="loading" :search-input.sync="search" cache-items
-        class="form-input mx-4" flat hide-no-data hide-details label="Where do you want to go?" solo-inverted type="text">
+        class="form-input mx-4" flat hide-no-data hide-details label="Where do you want to go?" solo-inverted
+        type="text">
       </v-autocomplete>
       <v-btn color="#2c3e50" class="text-light mt-1" type="submit">검색</v-btn>
     </form>
@@ -49,16 +50,27 @@
     mounted() {
       // all_theme name 담기
       const requestHeader = this.$store.getters.requestHeader
-      axios.get('/travels/all_theme/', requestHeader)
+      axios.get("/travels/all_theme/", requestHeader)
         .then(response => {
           var theme = response.data.all_theme
           for (var i = 0; i < theme.length; i++) {
             this.states.push(theme[i].name);
           }
-          console.log(this.states)
+        })
+        .catch(err => {
+          console.log(err)
         })
       // all_destination name 담기
-
+      axios.get("/travels/destinations/0/0/", requestHeader)
+        .then(response => {
+          var dest = response.data.all_destination
+          for (var i = 0; i < dest.length; i++) {
+            this.states.push(dest[i].name);
+          }
+        })
+        .catch(err => {
+          console.log(err)
+        })
     }
   }
 </script>

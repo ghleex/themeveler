@@ -43,7 +43,6 @@ class VisitedThemes(APIView):
     """
         사용자의 여행 코스 관리
 
-        ---
         # 내용
             * 방문했던 코스(테마) 목록 열람, 추가/삭제
     """
@@ -90,7 +89,6 @@ class VisitedDest(APIView):
     """
         사용자가 방문한 장소 목록/추가
         
-        ---
     """    
     def get(self, request, format=None):
         user = get_user(request.headers['Authorization'].split(' '))
@@ -148,7 +146,6 @@ class Like(APIView):
     """
         사용자의 테마 좋아요/취소
         
-        ---
     """
     def get_theme(self, theme_pk, format=None):
         return get_object_or_404(Theme, pk=theme_pk)
@@ -236,7 +233,8 @@ class ChatView(APIView):
 @permission_classes((AllowAny,))
 class AllTheme(APIView):
     """
-    모든 테마를 return합니다
+        전체 테마 출력
+
     """
     def get(self, request):
         all_theme = Theme.objects.all()
@@ -252,8 +250,11 @@ class AllTheme(APIView):
 @permission_classes((IsAuthenticated,))
 class Destinations(APIView):
     """
-    Theme의 모든 destination 정보, Theme의 like 정보를 return합니다.
-    theme_pk가 0이라면 모든 destination을 return합니다.
+        테마 정보
+
+        # 내용
+          * 개별 테마의 모든 목적지 정보와 '좋아요'를 한 사람의 수
+          * theme_pk 가 0인 경우 모든 목적지 출력
     """
     def get(self, request, theme_pk, page_num):
         destinations = []
@@ -307,7 +308,8 @@ class Destinations(APIView):
 @permission_classes((IsAuthenticated,))
 class DestinationContent(APIView):
     """
-    destination의 content를 return합니다.
+        목적지 콘텐츠
+        
     """
     def get(self, request, theme_pk, dest_idx):
         theme = get_object_or_404(Theme, pk=theme_pk)
@@ -317,9 +319,7 @@ class DestinationContent(APIView):
             if dest_content:
                 contents = dest_content.contents
                 pages = []
-                """
-                순서를 지키기 위해 list를 돌며 serializer를 append합니다.
-                """
+                
                 for page_pk in contents:
                     content_page = ContentPage.objects.get(pk=page_pk)
                     pages.append(ContentPageSerializer(content_page).data)

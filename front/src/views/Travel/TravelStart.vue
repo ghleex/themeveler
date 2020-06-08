@@ -14,15 +14,12 @@
       </v-btn>
     </div>
     <v-dialog v-model="dialog" fullscreen transition="dialog-bottom-transition">
-      <!-- {{ mapUrl }} -->
       <v-card>
         <v-card-actions>
-          <!-- <v-spacer></v-spacer> -->
           <v-btn class="mx-auto" rounded color="#90A4AE" text @click="dialog = false" style="font-size: 30px; height: 60px !important; background: #ECEFF1">
             <i class="fas fa-times"></i>
           </v-btn>
         </v-card-actions>
-        <!-- <v-card-title class="headline">지도</v-card-title> -->
         <v-card-text>
           <div class="mt-3 text-center" style="font-size: 12px;">
             <div v-if="progress < 35">
@@ -54,7 +51,6 @@
               {{ dests[n-1].name }}
               <i class="fas fa-caret-right swal2-success-circular-line-right" v-if="n !== steps"></i>
             </v-stepper-step>
-            <!-- <v-divider v-if="n !== steps" :key="n"></v-divider> -->
           </template>
         </v-stepper-header>
       </v-slide-group>
@@ -65,8 +61,6 @@
             :key="i.text">
             <v-card class="holder stepper-text-box" color="rgb(248, 248, 246)">
               {{ i.text }}
-              <!-- {{ n }} {{ i.id }} -->
-              <!-- <v-img :src="'@/assets/' + n + '-' + i.id + '.jpg'"></v-img> -->
             </v-card>
             <div class="text-gray mt-3">
               *이미지 자료
@@ -77,7 +71,6 @@
             다음
             <i class="fas fa-chevron-circle-right ml-1"></i>
           </v-btn>
-
           <Complete :themeId=themeId v-else-if="e1 == dests.length" />
 
           <div v-if="e1 !== 1 && e1 !== dests.length" class="d-flex justify-content-between mb-5">
@@ -88,19 +81,16 @@
             <v-btn rounded text color="red" @click="returnDetail(themeId)">닫기 <i class="fas fa-times-circle ml-1"></i>
             </v-btn>
           </div>
-
           <div class="mb-5" v-else-if="e1 == dests.length">
             <v-btn class="mr-3" v-if="e1 !== 1" @click="beforeStep(n)" rounded color="">
               이전
               <i class="fas fa-chevron-circle-left ml-1"></i>
             </v-btn>
           </div>
-
           <div v-else class="d-flex justify-content-end mb-5">
             <v-btn roudned text color="red" @click="returnDetail(themeId)">닫기 <i class="fas fa-times-circle ml-1"></i>
             </v-btn>
           </div>
-
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
@@ -114,10 +104,10 @@
   export default {
     name: "TravelStart",
     components: {
-      Complete,
+      Complete
     },
     props: {
-      themeId: Number,
+      themeId: Number
     },
     data() {
       return {
@@ -143,8 +133,8 @@
         // 다음 detination script 가져오기
         const requestHeader = this.$store.getters.requestHeader
         axios.get(`/travels/dest_content/${this.themeId}/${this.e1-1}/`, requestHeader)
-          .then(res => {
-            this.content = res.data.pages
+          .then(response => {
+            this.content = response.data.pages
           })
 
         document.getElementById(this.dests[n].id).tabIndex = -1;
@@ -156,10 +146,9 @@
 
         const requestHeader = this.$store.getters.requestHeader
         axios.get(`/travels/dest_content/${this.themeId}/${this.e1-1}/`, requestHeader)
-          .then(res => {
-            this.content = res.data.pages
+          .then(response => {
+            this.content = response.data.pages
           })
-
 
         document.getElementById(this.dests[n - 1].id).tabIndex = -1;
         document.getElementById(this.dests[n - 2].id).focus();
@@ -168,7 +157,7 @@
         this.$router.push(`/travel/${themeId}/`)
       },
       a() {
-        document.querySelector("#footer").style.display = 'none'
+        document.querySelector("#footer").style.display = "none"
       },
       success() {
         var destLat = this.dests[this.e1-1].latitude
@@ -187,26 +176,27 @@
       }
     },
     mounted() {
-      const token = this.$session.get('jwt')
+      const token = this.$session.get("jwt")
       const requestHeader = {
         headers: {
           Authorization: "JWT " + token
         }
       }
       axios.get(`/travels/destinations/${this.themeId}/0/`, requestHeader)
-        .then(res => {
-          this.dests = res.data.destinations
+        .then(response => {
+          this.dests = response.data.destinations
           this.steps = this.dests.length
         })
       axios.get("/travels/all_theme/", requestHeader)
-        .then(res => {
-          this.themeArr = res.data.all_theme
+        .then(response => {
+          this.themeArr = response.data.all_theme
         })
 
       axios.get(`/travels/dest_content/${this.themeId}/${this.e1-1}/`, requestHeader)
-        .then(res => {
-          this.content = res.data.pages
+        .then(response => {
+          this.content = response.data.pages
         })
+
       this.a()
     }
   }

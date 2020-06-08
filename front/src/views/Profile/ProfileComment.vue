@@ -18,8 +18,8 @@
           <div @click="detail(item.id)">{{ item.title }}</div>
         </template>
         <!-- 등록일 시간형식 -->
-        <template v-slot:item.created_at="{ item }">
-          <div>{{ item.created_at | moment("YYYY-MM-DD LT") }}</div>
+        <template v-slot:item.writed_at="{ item }">
+          <div>{{ item.writed_at | moment("YYYY-MM-DD LT") }}</div>
         </template>
         <!-- 데이터가 없을 경우 -->
         <template slot="no-data">작성한 댓글이 없습니다</template>
@@ -46,87 +46,87 @@
           <div @click="redetail(item.id)">{{ item.title }}</div>
         </template>
         <!-- 등록일 시간형식 -->
-        <template v-slot:item.created_at="{ item }">
-          <div>{{ item.created_at | moment("YYYY-MM-DD LT") }}</div>
+        <template v-slot:item.writed_at="{ item }">
+          <div>{{ item.writed_at | moment("YYYY-MM-DD LT") }}</div>
         </template>
         <!-- 데이터가 없을 경우 -->
         <template slot="no-data">작성한 대댓글이 없습니다</template>
       </v-data-table>
       <!-- 페이지 번호 -->
       <div class="text-center pt-2">
-        <v-pagination v-model="page" :length="pageCount"></v-pagination>
+        <v-pagination v-model="page_re" :length="pageCount_re"></v-pagination>
       </div>
     </div>
   </v-app>
 </template>
 
 <script>
-import axios from 'axios'
-import Drawer from '@/components/Drawer.vue'
+  import axios from 'axios'
+  import Drawer from '@/components/Drawer.vue'
 
-export default {
-  name: "ProfileComment",
-  components: {
-    Drawer
-  },
-  data() {
-    return {
-      page: 1,
-      pageCount: 0,
-      itemsPerPage: 10,
-      headers: [
-        { text: "번호", value: "id", sortable: false },
-        { text: "댓글 내용", value: "content", sortable: false },
-        { text: "등록일", value: "created_at", sortable: false }
-      ],
-      commentData: [],
-      commentCount: 0,
-      page_re: 1,
-      pageCount_re: 0,
-      itemsPerPage_re: 10,
-      headers_re: [
-        { text: "번호", value: "id", sortable: false },
-        { text: "댓글 내용", value: "content", sortable: false },
-        { text: "등록일", value: "created_at", sortable: false }
-      ],
-      reCommentData: [],
-      reCommentCount: 0,
-      userId: ""
-    }
-  },
-  methods: {
-    detail(commentsId) {
-      this.$router.push({
-        path: `/articles/cv/${this.userId}/${commentsId}`
-      })
+  export default {
+    name: "ProfileComment",
+    components: {
+      Drawer
     },
-    redetail(reCommentsId) {
-      this.$router.push({
-        path: `/articles/cv/${this.userId}/${reCommentsId}`
-      })
+    data() {
+      return {
+        page: 1,
+        pageCount: 0,
+        itemsPerPage: 10,
+        headers: [
+          { text: "번호", value: "id", sortable: false },
+          { text: "댓글 내용", value: "content", sortable: false },
+          { text: "등록일", value: "writed_at", sortable: false }
+        ],
+        commentData: [],
+        commentCount: 0,
+        page_re: 1,
+        pageCount_re: 0,
+        itemsPerPage_re: 10,
+        headers_re: [
+          { text: "번호", value: "id", sortable: false },
+          { text: "댓글 내용", value: "content", sortable: false },
+          { text: "등록일", value: "writed_at", sortable: false }
+        ],
+        reCommentData: [],
+        reCommentCount: 0,
+        userId: ""
+      }
+    },
+    methods: {
+      detail(commentsId) {
+        this.$router.push({
+          path: `/articles/cv/${this.userId}/${commentsId}`
+        })
+      },
+      redetail(reCommentsId) {
+        this.$router.push({
+          path: `/articles/cv/${this.userId}/${reCommentsId}`
+        })
+      }
+    },
+    mounted() {
+      this.userId = this.$store.getters.user_id
+      const requestHeader = this.$store.getters.requestHeader
+      axios.get(`/articles/comment_self/${this.userId}/`, requestHeader)
+        .then(response => {
+          this.commentData = response.data
+          this.commentCount = response.data.length
+        })
+        .catch(err => {
+          console.log(err)
+        })
+      axios.get(`/articles/recomment/${this.userId}/`, requestHeader)
+        .then(response => {
+          this.reCommentData = response.data
+          this.reCommentCount = response.data.length
+        })
+        .catch(err => {
+          console.log(err)
+        })
     }
-  },
-  mounted() {
-    this.userId = this.$store.getters.user_id
-    const requestHeader = this.$store.getters.requestHeader
-    axios.get(`/articles/comment_self/${this.userId}/`, requestHeader)
-      .then(response => {
-        this.commentData = response.data
-        this.commentCount = response.data.length
-      })
-      .catch(err => {
-        console.log(err)
-      })
-    axios.get(`/articles/recomment/${this.userId}/`, requestHeader)
-      .then(response => {
-        this.reCommentData = response.data
-        this.reCommentCount = response.data.length
-      })
-      .catch(err => {
-        console.log(err)
-      })
   }
-}
 </script>
 
 <style scoped>

@@ -3,9 +3,9 @@
     <div class="container">
       <div class="search-result-banner">
         <div>
-          <v-img class="mr-5" src="../assets/navlogo.png" width="150px"></v-img>
+          <v-img class="mr-5" src="../assets/navlogo.png" width="15vw"></v-img>
         </div>
-        <div class="search-result-banner-text">
+        <div class="search-result-banner-text" style="font-size: 8vw">
           Themeveler
         </div>
       </div>
@@ -14,13 +14,13 @@
       </div>
     </div>
     <div class="result-search-content">
-      <h5 class="sresult-header-text my-3 text-light">"{{ $route.query.q }}" 에 대한 검색결과 ({{ themeData.length+placeData.length }} 개)</h5>
+      <h5 class="sresult-header-text my-4 mx-8"><b style="font-size: 25px;">"{{ $route.query.q }}"</b> 에 대한 검색결과 ({{ themeData.length+placeData.length }} 개)</h5>
       <div class="container border search-result-container">
         <div class="theme-container" v-if="themeData.length !== 0">
           <p class="sresult-type"><i class="fas fa-search-location mr-2"></i>테마 검색결과</p>
           <li v-for="theme in themeData" :key="theme.id" @click="goThemePage(theme.id)">{{ theme.name }}</li>
         </div>
-        <div class="place-container" v-if="placeData.length !== 0">
+        <div class="place-container" style="border: 0;" v-if="placeData.length !== 0">
           <v-divider></v-divider>
           <p class="sresult-type"><i class="fas fa-search-location mr-2"></i>장소 검색결과</p>
           <li v-for="place in placeData" :key="place.id" @click="goPlacePage(place.themes[0])">{{ place.name }}</li>
@@ -109,14 +109,8 @@
     font-size: 70px;
   }
 
-  /* .search-result-header {
-    background: #11A0DC;
-    border-radius: 10px 10px 10px 10px;
-    border: 1px solid lightgray;
-  } */
-
   .result-search-content {
-    background-color: #2c3e50;
+    /* background-color: #2c3e50; */
     width: 90vw;
     margin: 2rem auto 5rem auto;
     padding: .5rem 1rem;
@@ -131,7 +125,7 @@
     font-family: 'Cafe24Simplehae';
     text-align: left;
     margin:0 24px;
-    border-bottom: 1px solid white;
+    border-bottom: 1px solid;
     padding-bottom: .5rem;
   }
 
