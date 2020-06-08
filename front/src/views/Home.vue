@@ -34,7 +34,7 @@
     </div>
     <div class="slogan">
       <i class="fas fa-map-marker-alt mr-1"></i>
-      여행을 쫓다 꿈을 좇다 테마블러
+      여행을 쫓다 감각을 좇다 테마블러
     </div>
 
     <!-- 인기 테마 -->
@@ -46,7 +46,7 @@
             <div @click="cardBypopTheme(model)">
               <v-card class="ma-4" min-height="320px" max-height="35vw" min-width="238px" max-width="30vw"
                 @click="toggle">
-                <v-img :src="'http://localhost:8000/uploads/theme/'+theme.name+'.jpg'" min-height="260px"
+                <v-img width="100%" height="100%" :src="`http://localhost:8000/uploads/theme/${theme.name}.jpg`" min-height="260px"
                   max-height="18vw" />
                 <v-card-title class="pop-card-title">
                   <div class="mx-auto text-light pop-theme-card-text">
@@ -82,7 +82,7 @@
                             #.{{ index+1 }} {{ dest.name }}</div>
                         </v-sheet> -->
                         <v-img height="123" @click="openCardModal(dest)"
-                          :src="'http://localhost:8000/uploads/destination/'+dest.name+'.jpg'"></v-img>
+                          :src="`http://localhost:8000/uploads/destination/${dest.name}.jpg`"></v-img>
 
                         <v-row class="fill-height" align="center" justify="center">
                         </v-row>
@@ -96,7 +96,7 @@
                           #.{{ dests.id }} {{ dests.name }}
                           <v-btn x-large icon @click="dialog = false"><i class="far fa-times-circle text-light" style="font-style: 50px"></i></v-btn>
                         </v-card-title>
-                        <v-img height="80vh" :src="'http://localhost:8000/uploads/destination/'+dests.name+'.jpg'"></v-img>
+                        <v-img height="80vh" :src="`http://localhost:8000/uploads/destination/${dests.name}.jpg`"></v-img>
 
                       </v-card>
                     </v-dialog>

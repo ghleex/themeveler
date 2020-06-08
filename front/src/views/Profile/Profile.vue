@@ -3,7 +3,9 @@
     <Drawer class="drawer" />
 
     <v-content id="profile-content">
-      <h2 class="content-title">마이페이지</h2>
+      <h2 class="content-title">
+        <v-icon style="font-size: 40px; color: black;">mdi-view-dashboard</v-icon>
+        마이페이지</h2>
       <v-divider></v-divider>
       <v-row justify="center" class="content-body">
         <v-col cols="12" md="6">
@@ -138,6 +140,7 @@ export default {
   #profile {
     margin-top: 64px;
     background-color: rgba(245, 245, 245, 0.5);
+    /* padding-right: 10vw; */
   }
 
   #profile-content {
@@ -157,6 +160,7 @@ export default {
     text-align: left;
     margin-left: 20px;
     margin-top: 8px;
+    /* font-family: 'Cafe24Simplehae' */
   }
 
   .content-body {
