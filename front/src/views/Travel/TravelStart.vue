@@ -8,7 +8,7 @@
 
     <!-- 길 찾기 -->
     <div class="find-road-btn text-end">
-      <v-btn dark color="#2c3e50" rounded @click.stop="navigationUrl()">
+      <v-btn dark color="#2c3e50" rounded @click.stop="navigationUrl(1)">
         <i class="fas fa-map-marker-alt mr-1 text-danger"></i>
         길 찾기
       </v-btn>
@@ -67,10 +67,21 @@
             </div>
           </div>
 
-          <v-btn class="start-next-btn" v-if="e1 !== steps" color="red" dark @click="nextStep(n)">
-            다음
-            <i class="fas fa-chevron-circle-right ml-1"></i>
-          </v-btn>
+          <div class="start-next-btn-box" v-if="e1 < dests.length" >
+            <v-btn
+              dark color="#2c3e50" 
+              rounded 
+              @click.stop="navigationUrl(0)">
+              <i class="fas fa-map-marker-alt mr-1 text-danger"></i>
+              다음 장소 {{dests[e1].name}}까지 길 찾기
+            </v-btn>
+            
+            <v-btn class="start-next-btn" v-if="e1 !== steps" color="red" dark @click="nextStep(n)">
+              다음
+              <i class="fas fa-chevron-circle-right ml-1"></i>
+            </v-btn>
+          </div>
+
           <Complete :themeId=themeId v-else-if="e1 == dests.length" />
 
           <div v-if="e1 !== 1 && e1 !== dests.length" class="d-flex justify-content-between mb-5">
@@ -121,7 +132,8 @@
         content: [],
         dialog: false,
         progress: 0,
-        mapUrl: ""
+        mapUrl: "",
+        mapStatus: 0
       }
     },
     methods: {
@@ -161,14 +173,28 @@
       a() {
         document.querySelector("#footer").style.display = "none"
       },
-      success() {
-        var destLat = this.dests[this.e1-1].latitude
-        var destLong = this.dests[this.e1-1].longitude
-        var destName = this.dests[this.e1-1].name
-        this.mapUrl = `https://map.kakao.com/link/to/${destName},${destLat},${destLong}`
+      success(position) {
+        var flag = this.mapStatus
+        var destLat = this.dests[this.e1-flag].latitude
+        var destLong = this.dests[this.e1-flag].longitude
+        var destName = this.dests[this.e1-flag].name
+
+        if (this.isMobile()) {
+          this.mapUrl = `https://map.kakao.com/link/to/${destName},${destLat},${destLong}`
+        } else {
+          var currentLat = position.coords.latitude
+          var currentLong = position.coords.longitude
+          axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${currentLat},${currentLong}&key=${process.env.VUE_APP_GOOGLE_API_KEY}`)
+            .then(response => {
+              var currentAddr = response.data.results[0].formatted_address
+              this.mapUrl = `https://map.kakao.com/?sName=${currentAddr}&eName=${destName}`
+            })
+            
+        }
         this.dialog = true
       },
-      navigationUrl() {
+      navigationUrl(status) {
+        this.mapStatus = status
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(this.success)
         } else {
@@ -176,22 +202,13 @@
           return false
         }
       },
-      addDestList(dest_id) {
-        const token = this.$session.get("jwt")
-        const requestHeader = {
-          headers: {
-            Authorization: "JWT " + token
-          }
-        }
-        var form = {
-          "user": this.$store.getters.user_id,
-          "destination": dest_id
-        }
-        axios.post('/travels/visited_dests/', form, requestHeader)
-          .then(() => {})
+
+      isMobile() {
+          return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
       }
     },
     mounted() {
+      console.log(this.isMobile())
       const token = this.$session.get("jwt")
       const requestHeader = {
         headers: {
@@ -256,6 +273,14 @@
 
   .travel-detail-stepper {
     padding: 0 10%;
+  }
+
+  .start-next-btn-box {
+    margin: 0 auto;
+    align-items: center;
+    width: 290px;
+    display: flex;
+    flex-direction: column;
   }
 
   @media (max-width: 550px) {
