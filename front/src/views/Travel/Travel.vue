@@ -32,7 +32,7 @@
                     <i class="fas fa-window-close"></i>
                   </div>
                 </div>
-                <v-img @click="showDetail(theme.id)" :src="'http://localhost:8000/uploads/theme/'+theme.name+'.jpg'" width="100%" height="100%" />
+                <v-img @click="showDetail(theme.id)" :src="`${baseURL}/uploads/theme/${theme.name}.jpg`" width="100%" height="100%" />
                 <!-- <v-sheet class="d-flex justify-content-center align-items-center" @click="showDetail(theme.id)"
                   color="#546E7A" width="100%" height="100%" style="border-radius: 0;">
                   <div class="text-light pb-12" style="font-family: 'Cafe24Simplehae'; font-size: 25px;">
@@ -58,7 +58,7 @@
                     <i class="fas fa-window-close"></i>
                   </div>
                 </div>
-                <v-img :src="'http://localhost:8000/uploads/destination/'+dest.name+'.jpg'" width="100%" height="100%" />
+                <v-img :src="`${baseURL}/uploads/destination/${dest.name}.jpg`" width="100%" height="100%" />
                 <v-row class="fill-height" align="center" justify="center">
                 </v-row>
               </v-card>
@@ -89,7 +89,8 @@
         slides: [
           require("../../assets/bg1.jpg"),
           require("../../assets/bg5.jpg"),
-        ]
+        ],
+        baseURL: ""
       }
     },
     methods: {
@@ -124,6 +125,8 @@
           this.themeArr = response.data.all_theme
         })
       this.getPaginationDestination()
+
+      this.baseURL = process.env.VUE_APP_IP
     },
     computed: {
       computedPageDestination() {

@@ -46,7 +46,7 @@
             <div @click="cardBypopTheme(model)">
               <v-card class="ma-4" min-height="320px" max-height="35vw" min-width="238px" max-width="30vw"
                 @click="toggle">
-                <v-img width="100%" height="100%" :src="`http://localhost:8000/uploads/theme/${theme.name}.jpg`" min-height="260px"
+                <v-img width="100%" height="100%" :src="`${baseURL}/uploads/theme/${theme.name}.jpg`" min-height="260px"
                   max-height="18vw" />
                 <v-card-title class="pop-card-title">
                   <div class="mx-auto text-light pop-theme-card-text">
@@ -77,12 +77,8 @@
                     <v-slide-item v-for="dest in destinations" :key="dest">
                       <v-card class="ma-4 popTheme-sub-img" height="123" width="120">
                         <!-- 이미지 -->
-                        <!-- <v-sheet color="#37474F" height="123" @click="openCardModal(dest)">
-                          <div class="text-light pb-8" style="font-family: 'Cafe24Simplehae'; font-size: 25px;">
-                            #.{{ index+1 }} {{ dest.name }}</div>
-                        </v-sheet> -->
                         <v-img height="123" @click="openCardModal(dest)"
-                          :src="`http://localhost:8000/uploads/destination/${dest.name}.jpg`"></v-img>
+                          :src="`${baseURL}/uploads/destination/${dest.name}.jpg`"></v-img>
                         <v-row class="fill-height" align="center" justify="center">
                         </v-row>
                       </v-card>
@@ -95,7 +91,7 @@
                           #.{{ dests.id }} {{ dests.name }}
                           <v-btn x-large icon @click="dialog = false"><i class="far fa-times-circle text-light" style="font-style: 50px"></i></v-btn>
                         </v-card-title>
-                        <v-img height="80vh" :src="`http://localhost:8000/uploads/destination/${dests.name}.jpg`"></v-img>
+                        <v-img height="80vh" :src="`${baseURL}/uploads/destination/${dests.name}.jpg`"></v-img>
                       </v-card>
                     </v-dialog>
                   </v-slide-group>
@@ -147,7 +143,8 @@
         ],
         themeArr: [],
         destinations: [],
-        ticket: require("../assets/themeveler.png")
+        ticket: require("../assets/themeveler.png"),
+        baseURL: ""
         //   popTheme: [{
         //       id: 1,
         //       img: require("../assets/image/pop1.webp"),
@@ -264,6 +261,8 @@
         .catch(err => {
           console.log(err)
         })
+
+      this.baseURL = process.env.VUE_APP_IP
 
       this.a()
     }
