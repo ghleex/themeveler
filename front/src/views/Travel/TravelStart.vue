@@ -194,8 +194,7 @@
             .then(response => {
               var currentAddr = response.data.results[0].formatted_address
               this.mapUrl = `https://map.kakao.com/?sName=${currentAddr}&eName=${destName}`
-            })
-            
+            }) 
         }
         this.dialog = true
       },
@@ -208,9 +207,22 @@
           return false
         }
       },
-
+      addDestList(dest_id) {
+        const token = this.$session.get("jwt")
+        const requestHeader = {
+          headers: {
+            Authorization: "JWT " + token
+          }
+        }
+        var form = {
+          "user": this.$store.getters.user_id,
+          "destination": dest_id
+        }
+        axios.post('/travels/visited_dests/', form, requestHeader)
+          .then(() => {})
+      },
       isMobile() {
-          return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
       }
     },
     mounted() {
@@ -231,7 +243,6 @@
         .then(response => {
           this.themeArr = response.data.all_theme
         })
-
       axios.get(`/travels/dest_content/${this.themeId}/${this.e1-1}/`, requestHeader)
         .then(response => {
           this.content = response.data.pages
