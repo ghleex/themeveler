@@ -4,7 +4,7 @@
 
     <v-content id="profile-content">
       <h2 class="content-title">
-        <v-icon style="font-size: 40px; color: black;">mdi-account-edit</v-icon>회원정보수정
+        <v-icon style="font-size: 32px; color: black;">mdi-account-edit</v-icon> 회원정보수정
       </h2>
       <hr>
       <v-row justify="center">
