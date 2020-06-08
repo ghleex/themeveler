@@ -90,7 +90,7 @@
           require("../../assets/bg1.jpg"),
           require("../../assets/bg5.jpg"),
         ],
-        baseURL: ""
+        baseURL: process.env.VUE_APP_IP
       }
     },
     methods: {
@@ -125,8 +125,6 @@
           this.themeArr = response.data.all_theme
         })
       this.getPaginationDestination()
-
-      this.baseURL = process.env.VUE_APP_IP
     },
     computed: {
       computedPageDestination() {

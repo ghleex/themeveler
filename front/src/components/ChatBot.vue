@@ -301,7 +301,7 @@
       checkConnected() {
         return this.$socket.connected
       },
-      sendMessage() {
+      async sendMessage() {
         if (this.message !== "") {
           var message = this.message
           this.message = ""
@@ -309,7 +309,7 @@
             let data = {
               "message": message
             }
-            axios.post(`/travels/chat/${this.themeId}/`, data, this.$store.getters.requestHeader)
+            await axios.post(`/travels/chat/${this.themeId}/`, data, this.$store.getters.requestHeader)
               .then(res => {
                 this.$socket.emit("sendMessage", {
                   theme: this.themeId,
@@ -333,7 +333,7 @@
               message: "에러발생"
             }]
           }   
-          setTimeout(this.scroll, 40)
+          setTimeout(this.scroll, 80)
         }
       }
     }

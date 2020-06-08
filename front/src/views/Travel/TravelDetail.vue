@@ -122,7 +122,7 @@
         destsName: "",
         destImg: "",
         isAuthenticated: this.$session.get("jwt"),
-        baseURL: ""
+        baseURL: process.env.VUE_APP_IP
       }
     },
     methods: {
@@ -173,8 +173,6 @@
           this.likeCount = response.data.like_users_count
           this.like = response.data.did_user_like
         })
-      
-      this.baseURL = process.env.VUE_APP_IP
 
       document.querySelector("#footer").style.display = "block"
     }
