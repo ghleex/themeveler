@@ -5,6 +5,7 @@
         {{ themeArr[themeId-1].name }}</h1>
       <h2 class="my-10">{{ e1 }} / {{ dests.length }}</h2>
     </div>
+  
 
     <!-- 길 찾기 -->
     <div class="find-road-btn text-end">
@@ -55,7 +56,11 @@
         </v-stepper-header>
       </v-slide-group>
 
+      
+      <!-- stepper content -->
       <v-stepper-items>
+        <v-img :src="`${baseURL}/${dests[e1-1].image}`"></v-img>
+        {{ baseURL }}
         <v-stepper-content height="auto" v-for="n in steps" :key="`${n}-content`" :step="n">
           <div class="travel-start-text holder mt-5" data-aos="fade-up" data-aos-duration="3000" v-for="i in content"
             :key="i.text">
@@ -133,7 +138,8 @@
         dialog: false,
         progress: 0,
         mapUrl: "",
-        mapStatus: 0
+        mapStatus: 0,
+        baseURL: ""
       }
     },
     methods: {
@@ -218,6 +224,7 @@
       axios.get(`/travels/destinations/${this.themeId}/0/`, requestHeader)
         .then(response => {
           this.dests = response.data.destinations
+          console.log(this.dests)
           this.steps = this.dests.length
         })
       axios.get("/travels/all_theme/", requestHeader)
@@ -229,7 +236,7 @@
         .then(response => {
           this.content = response.data.pages
         })
-
+      this.baseURL = process.env.VUE_APP_IP
       this.a()
     }
   }
