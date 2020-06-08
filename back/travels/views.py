@@ -113,18 +113,17 @@ class VisitedDest(APIView):
         user = get_user(request.headers['Authorization'].split(' '))
         try:
             dests = user.dests.all()
-            req_dests = request.data.get('visited_dests').split(', ')
+            req_dests = request.data.get('destination')
             message = {
                 'message': '',
             }
-            for rd in req_dests:
-                if dests.filter(pk=rd).exists():
-                    user.dests.remove(rd)
-                    message['message'] = f'{user.username} is removed from visitors'
-                else:
-                    user.dests.add(rd)
-                    message['message'] = f'{user.username} is added to visitors'
-                return Response(message, status=status.HTTP_200_OK)
+            if dests.filter(pk=req_dests).exists():
+                user.dests.remove(req_dests)
+                message['message'] = f'{user.username} is removed from visitors'
+            else:
+                user.dests.add(req_dests)
+                message['message'] = f'{user.username} is added to visitors'
+            return Response(message, status=status.HTTP_200_OK)
         except:
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
@@ -137,8 +136,8 @@ class VisitedDest(APIView):
             rd = DestinationVisitors.objects.get(user_id=user.id, destination_id=req_dests[idx])
             rd.visited_at = update_dates[idx]
             rd.save()
-            return Response({'message':['사용자가 방문한 장소에 날짜를 업데이트하였습니다.']}, status=status.HTTP_200_OK)
-        return Response({'message':['사용자가 방문한 장소에 날짜를 업데이트하는대 실패하였습니다.']}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'message': '방문일자 업데이트에 성공하였습니다.'}, status=status.HTTP_200_OK)
+        return Response({'message': '방문일자 업데이트에 실패하였습니다.'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @permission_classes((IsAuthenticated,))
@@ -239,7 +238,7 @@ class AllTheme(APIView):
     def get(self, request):
         all_theme = Theme.objects.all()
         if not all_theme:
-            return Response('Theme is not existed', status=status.HTTP_400_BAD_REQUEST)
+            return Response('Theme does not exist', status=status.HTTP_400_BAD_REQUEST)
         serialized_all_theme = [ThemeSerializer(theme).data for theme in all_theme]
         data = {
             'all_theme' : serialized_all_theme
@@ -271,7 +270,7 @@ class Destinations(APIView):
                     page += 1
 
                 if dest_per_page * (page_num-1) >= all_len:
-                    return Response('Page is not exist', status=status.HTTP_404_NOT_FOUND)
+                    return Response('Page does not exist', status=status.HTTP_404_NOT_FOUND)
 
                 start = dest_per_page * (page_num-1)
                 end = start+dest_per_page if start+dest_per_page <= all_len else all_len
@@ -286,18 +285,16 @@ class Destinations(APIView):
                 }
                 return Response(data)
             else:
-                return Response('Destination is not exist', status=status.HTTP_400_BAD_REQUEST)
+                return Response('Destination does not exist', status=status.HTTP_400_BAD_REQUEST)
         else:
             theme = get_object_or_404(Theme, pk=theme_pk)
-            """
-            dest 순서에 맞게 serializer를 return하기 위해 list를 돌며 순서대로 append합니다.
-            """
+            # dest 순서에 맞게 serializer를 return하기 위해 list를 돌며 순서대로 append
             for dest_pk in theme.dests:
                 try:
                     destination = Destination.objects.get(pk=dest_pk)
                     destinations.append(DestinationSerializer(destination).data)
                 except:
-                    return Response('Destination is not exist', status=status.HTTP_400_BAD_REQUEST)
+                    return Response('Destination does not exist', status=status.HTTP_400_BAD_REQUEST)
 
             data = {
                 'destinations' : destinations,
