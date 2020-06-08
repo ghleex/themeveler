@@ -3,16 +3,18 @@
     <Drawer class="drawer" />
 
     <v-content id="profile-content">
-      <h2 class="content-title">회원정보수정</h2>
+      <h2 class="content-title">
+        <v-icon style="font-size: 32px; color: black;">mdi-account-edit</v-icon> 회원정보수정
+      </h2>
       <hr>
       <v-row justify="center">
         <v-col cols="12" md="8">
           <v-form>
             <v-container class="py-0">
               <v-row>
-                <v-col cols="12" class="content-col">
+                <!-- <v-col cols="12" class="content-col">
                   <v-file-input label="Profile Image" class="purple-input" type="file" />
-                </v-col>
+                </v-col> -->
                 <v-col cols="12" class="content-col">
                   <v-text-field v-model="email" label="Email (ID)" class="purple-input" disabled />
                 </v-col>

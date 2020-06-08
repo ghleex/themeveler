@@ -4,8 +4,8 @@
 
     <v-content id="profile-content">
       <h2 class="content-title">
-        <i class="fas fa-key"></i>
-        비밀번호변경</h2>
+        <v-icon style="font-size: 32px; color: black;">mdi-key-variant</v-icon> 비밀번호변경
+      </h2>
       <hr>
       <v-row justify="center">
         <v-col cols="12" md="8">
