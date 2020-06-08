@@ -3,9 +3,7 @@
     <Drawer class="drawer" />
 
     <v-content id="profile-content">
-      <h2 class="content-title">
-        <i class="fas fa-user-edit"></i>
-        회원정보수정</h2>
+      <h2 class="content-title">회원정보수정</h2>
       <hr>
       <v-row justify="center">
         <v-col cols="12" md="8">
@@ -50,7 +48,6 @@
 <script>
   import axios from 'axios'
   import Drawer from '@/components/Drawer.vue'
-  import Swal from 'sweetalert2'
 
   export default {
     name: "editprofile",
@@ -66,70 +63,46 @@
     },
     methods: {
       userdelete() {
-        Swal.fire({
-          title: '정말로 회원을 탈퇴하시겠습니까?',
-          text: "탈퇴 후 해당 계정을 복원할 수 없습니다.",
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'OK'
-        }).then((result) => {
-          if (result.value) {
-            axios.delete('/accounts/usermgmt/', this.$store.getters.requestHeader)
-              .then(() => {
-                if (this.$session.exists()) {
-                  this.$session.destroy()
-                }
-                this.$store.dispatch('logout')
-                this.$router.push({
-                  path: '/'
-                })
-                Swal.fire(
-                  '탈퇴 되었습니다!',
-                  '당신의 정보가 삭제되었습니다.',
-                  'success'
-                )
+        var result = confirm("정말로 회원을 탈퇴하시겠습니까?")
+        if (result) {
+          axios.delete('/accounts/usermgmt/', this.$store.getters.requestHeader)
+            .then(() => {
+              if (this.$session.exists()) {
+                this.$session.destroy()
+              }
+              this.$store.dispatch("logout")
+              this.$router.push({
+                path: '/'
               })
-              .catch(err => {
-                console.log(err)
-              })
-          } else {
-            this.$router.push({
-              path: '/profiles'
             })
-          }
-        })
-        // var result = confirm("정말로 회원을 탈퇴하시겠습니까?")
+            .catch(err => {
+              console.log(err)
+            })
+        }
+        else {
+          this.$router.push({
+            path: '/profiles'
+          })
+        }
       },
       update() {
         let form = new FormData()
         form.append("nickname", this.nickname)
         axios.put('/accounts/usermgmt/', form, this.$store.getters.requestHeader)
           .then(() => {
-            // alert("회원 정보가 성공적으로 변경되었습니다.")
-            Swal.fire({
-              icon: 'success',
-              title: '회원 정보가 성공적으로 변경되었습니다.',
-              showConfirmButton: false,
-              timer: 1500
-            })
+            alert("회원 정보가 성공적으로 변경되었습니다.")
             this.$session.set("nickname", this.nickname)
             this.$store.dispatch("changeNickname", this.nickname)
-            this.$router.push('/profiles')
-          })
-          .catch(err => {
-            console.log(err)
-            // alert("회원 정보 변경이 실패하였습니다. 잠시후 다시 시도해주십시오.")
-            Swal.fire({
-              icon: 'error',
-              title: '회원 정보 변경이 실패하였습니다. 잠시후 다시 시도해주십시오.',
-              showConfirmButton: false,
-              timer: 1500
+            this.$router.push({
+              path: '/profiles'
             })
           })
+          .catch(err =>{
+            console.log(err)
+            alert("회원 정보 변경이 실패하였습니다. 잠시후 다시 시도해주십시오.")
+          })
       },
-      updatecancel() {
+      updatecancel () {
         this.$router.push({
           path: '/profiles'
         })

@@ -128,8 +128,8 @@
       likeTheme() {
         const requestHeader = this.$store.getters.requestHeader
         axios.post(`/travels/like/${this.themeId}/`, this.themeId, requestHeader)
-          .then(res => {
-            this.like = res.data.isLiked
+          .then(response => {
+            this.like = response.data.isLiked
           })
         if (this.like == false) {
           this.likeCount += 1
@@ -154,26 +154,26 @@
     mounted() {
       const requestHeader = this.$store.getters.requestHeader
       axios.get("/travels/all_theme/", requestHeader)
-        .then(res => {
-          this.themeArr = res.data.all_theme
+        .then(response => {
+          this.themeArr = response.data.all_theme
           this.themeName = this.themeArr[this.themeId - 1].name
-          var dateTime = res.data.all_theme[this.themeId - 1].created_at
+          var dateTime = response.data.all_theme[this.themeId - 1].created_at
           this.date = dateTime.substr(0, 10)
           this.time = dateTime.substr(11, 5)
         })
 
       axios.get(`/travels/destinations/${this.themeId}/0/`, requestHeader)
-        .then(res => {
-          this.destinations = res.data.destinations
+        .then(response => {
+          this.destinations = response.data.destinations
         })
 
       axios.get(`/travels/like/${this.themeId}/`, requestHeader)
-        .then(res => {
-          this.likeCount = res.data.like_users_count
-          this.like = res.data.did_user_like
+        .then(response => {
+          this.likeCount = response.data.like_users_count
+          this.like = response.data.did_user_like
         })
       
-      document.querySelector("#footer").style.display = 'block'
+      document.querySelector("#footer").style.display = "block"
     }
   }
 </script>
