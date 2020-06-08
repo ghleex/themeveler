@@ -5,7 +5,7 @@
       :right="false" :permanent="true" :src="bg" absolute dark
     > -->
     <v-navigation-drawer
-      v-model="drawer" class="deep-purple accent-4" expand-on-hover="true" :mini-variant.sync="miniVariant"
+      v-model="drawer" class="deep-purple accent-4" :expand-on-hover="true" :mini-variant.sync="miniVariant"
       :right="false" :permanent="true" absolute dark
     >
       <v-list dense nav class="py-0">
