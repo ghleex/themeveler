@@ -153,6 +153,7 @@
       }
     },
     mounted() {
+      document.scrollingElement.scrollTop = 0
       const requestHeader = this.$store.getters.requestHeader
       axios.get("/travels/all_theme/", requestHeader)
         .then(response => {
