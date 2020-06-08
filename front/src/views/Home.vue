@@ -78,7 +78,7 @@
                       <v-card class="ma-4 popTheme-sub-img" height="123" width="120">
                         <!-- 이미지 -->
                         <v-img height="123" @click="openCardModal(dest)"
-                          :src="`${baseURL}/uploads/destination/${dest.name}.jpg`"></v-img>
+                          :src="`${baseURL}/${dest.image}`"></v-img>
                         <v-row class="fill-height" align="center" justify="center">
                         </v-row>
                       </v-card>
@@ -91,7 +91,7 @@
                           #.{{ dests.id }} {{ dests.name }}
                           <v-btn x-large icon @click="dialog = false"><i class="far fa-times-circle text-light" style="font-style: 50px"></i></v-btn>
                         </v-card-title>
-                        <v-img height="80vh" :src="`${baseURL}/uploads/destination/${dests.name}.jpg`"></v-img>
+                        <v-img height="80vh" :src="`${baseURL}/${dests.image}`"></v-img>
                       </v-card>
                     </v-dialog>
                   </v-slide-group>
