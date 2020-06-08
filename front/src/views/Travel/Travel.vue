@@ -19,15 +19,16 @@
     <div class="pop-box">
       <div class="main-section">
         <h2 class="home-h2-title text-center ml-0"><i class="fas fa-book mr-4"></i>어디로 떠날까요?</h2>
-        <v-sheet class="mr-auto" max-width="90vw">
+        <v-sheet class="mx-auto theme-travel-box" max-width="100vw">
           <v-slide-group v-model="model" class="pa-4" center-active show-arrows>
             <v-slide-item v-for="theme in themeArr" :key="theme" v-slot:default="{ active, toggle }">
-              <v-card class="home-destination-card" min-height="290px" max-height="30vw" min-width="218px" width="30vw" @click="toggle">
+              <v-card class="home-destination-card" min-height="290px" max-height="30vw" min-width="218px" width="30vw"
+                @click="toggle">
                 <div>
                   <div class="home-card-destination-header">
                     <div class="home-card-title">
                       <i class="fas fa-book mr-1"></i>
-                      {{ theme.name }}.exe
+                      {{ theme.name }}.tm
                     </div>
                     <i class="fas fa-window-close"></i>
                   </div>
@@ -45,15 +46,21 @@
           </v-slide-group>
         </v-sheet>
 
-        <div class="mb-12" style="width: 90vw; margin: 1rem auto 3rem auto;">
+        <hr>
+
+        <!-- destination -->
+        <h3 class="home-h4-title text-center ml-0"><i class="fas fa-file-alt mr-4"></i>이 곳을 다닐거에요</h3>
+        <div class="mb-12 travel-dests-box">
           <v-row class="d-flex justify-content-center">
-            <v-col class="d-flex justify-content-center" v-for="dest in computedPageDestination" :key="dest.id" cols="12" lg="3" sm="6" xs="1">
-              <v-card class="home-destination-card row" min-height="290px" max-height="30vw" style="width: 100%;" @click="toggle">
-                <div style="width: 100%;" class="">
+            <v-col class="d-flex justify-content-center" v-for="dest in computedPageDestination" :key="dest.id"
+              cols="12" lg="3" sm="6" xs="1">
+              <v-card class="home-destination-card home-destination-card-sub row" min-height="290px" max-height="30vw"
+                style="width: 100%;" @click="destsModal(dest.image, dest.name)">
+                <div style="width: 100%;">
                   <div class="home-card-destination-header" style="width: 100%">
                     <div class="home-card-title">
                       <i class="fas fa-file-alt"></i>
-                      {{dest.name}}
+                      {{dest.name}}.ds
                     </div>
                     <i class="fas fa-window-close"></i>
                   </div>
@@ -69,6 +76,19 @@
           <v-pagination v-model="page" :length="pageLength" :total-visible="7"></v-pagination>
         </div>
       </div>
+
+      <!-- dests modal -->
+      <v-dialog v-model="dialog" max-width="350">
+        <v-card>
+          <v-card-title class="headline d-flex justify-content-between"
+            style="font-family: 'Cafe24Simplehae'!important; background: #2c3e50; color: white;">
+            <div>{{ destName }}</div>
+            <v-btn x-large icon @click="dialog = false"><i class="far fa-times-circle text-light"
+                style="font-style: 50px"></i></v-btn>
+          </v-card-title>
+          <v-img :src="`${baseURL}/${destImg}`" height="60vh"></v-img>
+        </v-card>
+      </v-dialog>
     </div>
   </div>
 </template>
@@ -80,7 +100,10 @@
     name: "Travel",
     data() {
       return {
+        dialog: false,
         themeArr: [],
+        destName: "",
+        destImg: "",
         paginationDest: [],
         pageLength: 0,
         model: null,
@@ -111,6 +134,13 @@
             this.paginationDest = response.data.page_destination
             this.pageLength = response.data.all_length
           })
+      },
+      destsModal(img, name) {
+        console.log(img)
+        console.log(name)
+        this.destImg = img
+        this.destName = name
+        this.dialog = true
       }
     },
     mounted() {
@@ -139,9 +169,38 @@
     padding-bottom: 5rem;
   }
 
+  .travel-dests-box {
+    width: 90vw;
+    margin: 1rem auto 3rem auto;
+  }
+
+  @media (max-width: 275px) {
+    .travel-dests-box {
+      width: 85vw;
+    }
+  }
+
+  .home-destination-card-sub {
+    margin-bottom: 2.5rem;
+  }
+
+  .home-destination-card-sub:hover {
+    opacity: .8;
+  }
+
+  .home-h4-title {
+    font-family: 'Cafe24Simplehae';
+    margin-top: 2rem;
+    font-size: 35px;
+  }
+
+  .theme-travel-box {
+    margin-bottom: 3rem;
+  }
+
   .travel-img-font {
     position: absolute;
-    top: 8%;
+    top: 4%;
     left: 51%;
     z-index: 2;
     font-size: 8vw;
@@ -152,7 +211,7 @@
     text-shadow: black 1px 1px 1px;
   }
 
-  .pop-box{
+  .pop-box {
     margin-top: 32px;
     margin-bottom: 32px;
   }

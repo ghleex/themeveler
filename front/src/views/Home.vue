@@ -65,7 +65,7 @@
             class="home-pop-theme-subBox mx-auto">
             <div class="pop-theme-disc">
               <!-- true인 id값의 eachContext만 가져오는 -->
-              <v-text v-if="toggle == active ? cardBypopThemeContext(model):false"></v-text>
+              <v-text v-if="toggle == active ? cardBypopThemeContext(model) : false"></v-text>
               <div class="popTheme-context">
                 "{{ eachContext }}"
               </div>
