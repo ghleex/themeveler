@@ -113,18 +113,17 @@ class VisitedDest(APIView):
         user = get_user(request.headers['Authorization'].split(' '))
         try:
             dests = user.dests.all()
-            req_dests = request.data.get('visited_dests').split(', ')
+            req_dests = request.data.get('destination')
             message = {
                 'message': '',
             }
-            for rd in req_dests:
-                if dests.filter(pk=rd).exists():
-                    user.dests.remove(rd)
-                    message['message'] = f'{user.username} is removed from visitors'
-                else:
-                    user.dests.add(rd)
-                    message['message'] = f'{user.username} is added to visitors'
-                return Response(message, status=status.HTTP_200_OK)
+            if dests.filter(pk=req_dests).exists():
+                user.dests.remove(req_dests)
+                message['message'] = f'{user.username} is removed from visitors'
+            else:
+                user.dests.add(req_dests)
+                message['message'] = f'{user.username} is added to visitors'
+            return Response(message, status=status.HTTP_200_OK)
         except:
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
@@ -137,8 +136,8 @@ class VisitedDest(APIView):
             rd = DestinationVisitors.objects.get(user_id=user.id, destination_id=req_dests[idx])
             rd.visited_at = update_dates[idx]
             rd.save()
-            return Response({'message':['사용자가 방문한 장소에 날짜를 업데이트하였습니다.']}, status=status.HTTP_200_OK)
-        return Response({'message':['사용자가 방문한 장소에 날짜를 업데이트하는대 실패하였습니다.']}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'message': '방문일자 업데이트에 성공하였습니다.'}, status=status.HTTP_200_OK)
+        return Response({'message': '방문일자 업데이트에 실패하였습니다.'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @permission_classes((IsAuthenticated,))
