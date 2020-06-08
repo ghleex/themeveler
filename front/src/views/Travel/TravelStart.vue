@@ -58,9 +58,15 @@
       <v-stepper-items>
         <v-stepper-content height="auto" v-for="n in steps" :key="`${n}-content`" :step="n">
           <div class="travel-start-text holder mt-5" data-aos="fade-up" data-aos-duration="3000" v-for="i in content"
-            :key="i.text">
-            <v-card class="holder stepper-text-box" color="rgb(248, 248, 246)">
+            :key="i.id">
+            <v-card v-if="i.text && i.image" class="holder stepper-text-box" color="rgb(248, 248, 246)">
               {{ i.text }}
+            </v-card>
+            <v-card v-else-if="i.text" class="holder stepper-text-box" color="rgb(248, 248, 246)">
+              {{ i.text }}
+            </v-card>
+            <v-card v-else class="holder stepper-text-box">
+              <v-img :src="`${baseURL}/${i.image}`"></v-img>
             </v-card>
             <div class="text-gray mt-3">
               *이미지 자료
@@ -131,7 +137,8 @@
         dialog: false,
         progress: 0,
         mapUrl: "",
-        mapStatus: 0
+        mapStatus: 0,
+        baseURL: process.env.VUE_APP_IP
       }
     },
     methods: {
