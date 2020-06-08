@@ -36,9 +36,13 @@
           <v-btn class="my-3" rounded color="#ECEFF1">🚩 {{ progress }}%</v-btn>
           </div>
         </v-card-text>
+        <object
+          id="naviMap"
+          type="text/html"
+          :data="mapUrl"
+          >
+        </object>
       </v-card>
-      <iframe id="navigationModal" :src="mapUrl">
-      </iframe>
     </v-dialog>
 
     <!-- stepper -->
@@ -62,14 +66,14 @@
           <div class="travel-start-text holder mt-5" data-aos="fade-up" data-aos-duration="3000" v-for="i in content"
             :key="i.id">
             <v-card v-if="i.text && i.image" class="holder stepper-text-box" color="rgb(248, 248, 246)">
-              <v-img :src="`${baseURL}${i.image}`"></v-img>
+              <v-img :src="`${baseURL}/${i.image}`"></v-img>
               <b>{{ i.text }}</b>
             </v-card>
             <v-card v-else-if="i.text" class="holder stepper-text-box" color="rgb(248, 248, 246)">
               {{ i.text }}
             </v-card>
             <v-card v-else class="holder stepper-text-box">
-              <v-img :src="`${baseURL}${i.image}`"></v-img>
+              <v-img :src="`${baseURL}/${i.image}`"></v-img>
             </v-card>
           </div>
 
@@ -78,7 +82,7 @@
               <i class="fas fa-map-marker-alt mr-1 text-danger"></i>
               다음 장소 {{dests[e1].name}}까지 길 찾기
             </v-btn>
-            
+
             <v-btn class="start-next-btn" v-if="e1 !== steps" color="red" dark @click="nextStep(n)">
               다음
               <i class="fas fa-chevron-circle-right ml-1"></i>
@@ -186,17 +190,31 @@
         var destLat = this.dests[this.e1-flag].latitude
         var destLong = this.dests[this.e1-flag].longitude
         var destName = this.dests[this.e1-flag].name
-
         if (this.isMobile()) {
-          this.mapUrl = `https://map.kakao.com/link/to/${destName},${destLat},${destLong}/`
+          this.mapUrl = `https://map.kakao.com/link/to/${destName},${destLat},${destLong}`
+          console.log(this.mapUrl)
         } else {
           var currentLat = position.coords.latitude
           var currentLong = position.coords.longitude
-          axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${currentLat},${currentLong}&key=${process.env.VUE_APP_GOOGLE_API_KEY}/`)
+          console.log(currentLat, currentLong)
+          axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${currentLat},${currentLong}&key=${process.env.VUE_APP_GOOGLE_API_KEY}`)
             .then(response => {
-              console.log(response)
-              var currentAddr = response.data.results[0].formatted_address
-              this.mapUrl = `https://map.kakao.com/?sName=${currentAddr}&eName=${destName}/`
+              console.log(response.data)
+              var addr = response.data.results[0].address_components
+              var start = addr.length-2
+              var currentAddr = addr[start].long_name
+              console.log(currentAddr)
+              if (currentAddr == "대한민국") {
+                for (var i = start-1; i >= 0; i--) {
+                  currentAddr = currentAddr.concat(" ",addr[i].long_name)
+                }
+              } else {
+                alert("지도를 사용할 수 없거나 인식할 수 없는 지역입니다.")
+                return
+              }
+              console.log(currentAddr)
+              this.mapUrl = `https://map.kakao.com/?sName=${currentAddr}&eName=${destName}`
+              
             }) 
         }
         this.dialog = true
@@ -314,6 +332,12 @@
     width: 290px;
     display: flex;
     flex-direction: column;
+  }
+
+  #naviMap {
+    width: 100%;
+    height: 90vh;
+    overflow: auto;
   }
 
   @media (max-width: 550px) {
