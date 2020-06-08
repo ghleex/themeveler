@@ -42,6 +42,7 @@ class MessageViewSerializer(serializers.ModelSerializer):
         model = Message
         fields = ('theme', )
 
+
 class ContentPageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ContentPage
