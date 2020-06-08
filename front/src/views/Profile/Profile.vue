@@ -4,7 +4,7 @@
 
     <v-content id="profile-content">
       <h2 class="content-title">
-        <v-icon style="font-size: 32px; color: black;">mdi-view-dashboard</v-icon> 마이페이지
+        <v-icon style="font-size: 32px; color: #2c3e50;">mdi-view-dashboard</v-icon> 마이페이지
       </h2>
       <v-divider></v-divider>
       <v-row justify="center" class="content-body">
@@ -23,7 +23,9 @@
                   <v-list-item-title>{{ item.name }}</v-list-item-title>
                 </v-list-item-content>
                 <v-list-item-action style="margin-left: auto;">
-                  <v-btn icon :to="`/travel/${item.id}`"><v-icon color="grey lighten-1">mdi-information</v-icon></v-btn>
+                  <v-btn icon :to="`/travel/${item.id}`">
+                    <v-icon color="grey lighten-1">mdi-information</v-icon>
+                  </v-btn>
                 </v-list-item-action>
               </v-list-item>
             </v-list>
@@ -36,7 +38,7 @@
               <span>
                 방문했던 장소
                 <v-chip class="ma-2 px-2" small color="blue" text-color="white">{{ itemsDests.length }}</v-chip>
-                <v-btn class="ma-2" outlined fab x-small color="indigo" @click="updateDest">
+                <v-btn class="ma-2 mr-8" outlined fab x-small color="indigo" @click="updateDest">
                   <v-icon>mdi-pencil</v-icon>
                 </v-btn>
               </span>
@@ -65,6 +67,7 @@
 <script>
   import axios from 'axios'
   import Drawer from '@/components/Drawer.vue'
+  import Swal from 'sweetalert2'
 
   export default {
     name: "Profile",
@@ -103,15 +106,30 @@
             console.log(data)
             axios.put('/travels/visited_dests/', data, this.$store.getters.requestHeader)
               .then(() => {
-                alert("수정되었습니다.")
+                // alert("수정되었습니다.")
+                Swal.fire({
+                  text: "수정되었습니다.",
+                  icon: "success",
+                  timer: 3000
+                })
               })
               .catch(err => {
                 console.log(err)
-                alert("수정이 실패하였습니다. 잠시후 다시 시도해주세요.")
+                // alert("수정이 실패하였습니다. 잠시후 다시 시도해주세요.")
+                Swal.fire({
+                  text: "수정이 실패하였습니다. 잠시후 다시 시도해주세요.",
+                  icon: "error",
+                  timer: 3000
+                })
               })
-          } 
+          }
         } else {
-          alert("최소 한개의 장소를 선택해야 합니다.")
+          // alert("최소 한개의 장소를 선택해야 합니다.")
+          Swal.fire({
+            text: "최소 한개의 장소를 선택해야 합니다.",
+            icon: "error",
+            timer: 3000
+          })
         }
       }
     },
@@ -123,7 +141,7 @@
         })
         .catch(err => {
           console.log(err)
-        })  
+        })
 
       axios.get('/travels/visited_dests/', requestHeader)
         .then(response => {
@@ -141,11 +159,19 @@
     margin-top: 64px;
     background-color: rgba(245, 245, 245, 0.5);
     /* padding-right: 10vw; */
+    height: 100%;
+    font-family: 'Cafe24Simplehae';
+    color: #2c3e50;
   }
 
   #profile-content {
-    margin-left: 256px;
+    /* margin-left: 256px; */
+    margin-left: 10%;
     width: 80%;
+  }
+
+  .content-title {
+    margin-top: 2rem;
   }
 
   @media (max-width: 600px) {
@@ -159,7 +185,7 @@
   .content-title {
     text-align: left;
     margin-left: 20px;
-    margin-top: 8px;
+    /* margin-top: 8px; */
   }
 
   .content-body {
@@ -188,6 +214,6 @@
   }
 
   .v-list::-webkit-scrollbar {
-    display:none;
+    display: none;
   }
 </style>
