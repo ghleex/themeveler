@@ -189,6 +189,7 @@ class Like(APIView):
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
 
+@permission_classes((IsAuthenticated,))
 class Chat(APIView):
     @swagger_auto_schema(query_serializer=MessageSerializer)
     def post(self, request, theme_pk, format=None):
@@ -248,6 +249,7 @@ class AllTheme(APIView):
         return Response(data)
 
 
+@permission_classes((IsAuthenticated,))
 class Destinations(APIView):
     """
     Theme의 모든 destination 정보, Theme의 like 정보를 return합니다.
@@ -302,6 +304,7 @@ class Destinations(APIView):
             return Response(data) if destinations else Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
 
+@permission_classes((IsAuthenticated,))
 class DestinationContent(APIView):
     """
     destination의 content를 return합니다.
