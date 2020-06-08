@@ -151,7 +151,6 @@
         scrollHeight: 0,
         chatLoading: false,
         newChat: false,
-        baseURL: "",
         chatDate: [],
         moreData: true
       }
@@ -182,8 +181,7 @@
       })
     },
     mounted() {
-      this.baseURL = process.env.VUE_APP_IP
-      axios.get(this.baseURL + `/travels/chat/${this.themeId}/${this.chatPage}/`, this.$store.getters.requestHeader)
+      axios.get(`/travels/chat/${this.themeId}/${this.chatPage}/`, this.$store.getters.requestHeader)
         .then(res => {
           this.addMemories(res.data)
         })
@@ -262,7 +260,7 @@
           }, 100)
           setTimeout(() => {
             this.chatPage += 1
-            axios.get(this.baseURL + `/travels/chat/${this.themeId}/${this.chatPage}/`, this.$store.getters.requestHeader)
+            axios.get(`/travels/chat/${this.themeId}/${this.chatPage}/`, this.$store.getters.requestHeader)
               .then(res => {
                 this.addMemories(res.data)
                 setTimeout(() => {
@@ -309,7 +307,7 @@
           let data = {
             "message": message
           }
-          axios.post(this.baseURL + `/travels/chat/${this.themeId}/`, data, this.$store.getters.requestHeader)
+          axios.post(`/travels/chat/${this.themeId}/`, data, this.$store.getters.requestHeader)
             .then(res => {
               this.$socket.emit("sendMessage", {
                 theme: this.themeId,
@@ -356,7 +354,7 @@
 
   .chat-write {
     // position: fixed;
-    bottom: 4rem;
+    // bottom: 4rem;
     // width: 310px;
   }
 
@@ -388,16 +386,14 @@
   }
 
   .chatbot-title {
-    // position: fixed;
     background-color: #2c3e50;
     color: white;
-    // width: 310px;
     top: 6%;
   }
 
   .chatbot-card {
     overflow-y: scroll;
-    height: 24rem;
+    height: 23rem;
   }
 
   .chatbot-card::-webkit-scrollbar {

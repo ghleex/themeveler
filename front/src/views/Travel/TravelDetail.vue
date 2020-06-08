@@ -2,7 +2,7 @@
   <div class="theme-detail-origin-box">
     <div class="themeDetail-box">
       <div class="theme-detail-left">
-        <v-img :src="`${baseURL}/uploads/theme/${themeArr[themeId-1].name}.jpg`" width="inherit" height="inherit">
+        <v-img :src="`${baseURL}/${themeArr[themeId-1].image}`" width="inherit" height="inherit">
         </v-img>
       </div>
       <div class="theme-detail-right">
@@ -65,11 +65,11 @@
         <v-slide-item v-for="(destination, index) in destinations" :key="destination.title"
           v-slot:default="{ active, toggle }">
           <v-card class="ma-4" height="200" width="180" @click="toggle">
-            <v-card-title @click="toggleDestination(destination.id)" class="detail-destination-title text-light">
+            <v-card-title @click="toggleDestination(destination)" class="detail-destination-title text-light">
               <b>{{ index + 1 }}.</b> {{ destination.name }}
             </v-card-title>
             <v-img @click="toggleDestination(destination.id)"
-              :src="`${baseURL}/uploads/destination/${destination.name}.jpg`" width="100%" height="100%">
+              :src="`${baseURL}/${destination.image}`" width="100%" height="100%">
             </v-img>
             <v-row class="fill-height" align="center" justify="center">
             </v-row>
@@ -140,7 +140,7 @@
       },
       toggleDestination(id) {
         this.destsName = this.destinations[id-1].name
-        this.destImg = `${this.baseURL}/uploads/destination/${name}.jpg`
+        this.destImg = `${this.baseURL}/${this.destinations[id-1].image}`
         this.dialog = true
       },
       goThemeStory() {
@@ -215,6 +215,8 @@
     background: rgba(0, 0, 0, 0.6); 
     font-family: 'Cafe24Simplehae';
     font-size: 15px;
+    border-top-right-radius: 0 !important;
+    border-top-left-radius: 0 !important;
   }
 
   .btn-round-num {
@@ -285,7 +287,7 @@
     width: 95%;
   }
 
-  @media (max-width: 1230px) {
+  @media (max-width: 1320px) {
     .themeDetail-box {
       flex-direction: column;
     }
