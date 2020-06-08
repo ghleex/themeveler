@@ -13,13 +13,15 @@
             <v-container class="py-0">
               <v-row>
                 <v-col cols="12" md="12" class="content-col">
-                  <v-text-field v-model="currentPassword" label="Current Password" type="password" class="purple-input" />
+                  <v-text-field v-model="currentPassword" label="Current Password" type="password"
+                    class="purple-input" />
                 </v-col>
                 <v-col cols="12" md="6" class="content-col">
                   <v-text-field v-model="newPassword" label="New Password" type="password" class="purple-input" />
                 </v-col>
                 <v-col cols="12" md="6" class="content-col">
-                  <v-text-field v-model="confirmPassword" label="Confirm Password" type="password" class="purple-input" />
+                  <v-text-field v-model="confirmPassword" label="Confirm Password" type="password"
+                    class="purple-input" />
                 </v-col>
                 <v-col cols="4" md="6" class="text-left">
                 </v-col>
@@ -51,6 +53,7 @@
 <script>
   import axios from 'axios'
   import Drawer from '@/components/Drawer.vue'
+  import Swal from 'sweetalert2'
   var jwt = require('jwt-simple')
 
   export default {
@@ -87,16 +90,24 @@
               .catch(err => {
                 console.log(err)
               })
+          } else {
+            // alert("비밀번호는 8자리이상이여야 합니다.")
+            Swal.fire({
+              text: "비밀번호는 8자리이상이여야 합니다.",
+              icon: "error",
+              timer: 3000
+            })
           }
-          else {
-            alert("비밀번호는 8자리이상이여야 합니다.")
-          }
-        }
-        else {
-          alert("비밀번호가 일치하지 않습니다.")
+        } else {
+          // alert("비밀번호가 일치하지 않습니다.")
+          Swal.fire({
+            text: "비밀번호가 일치하지 않습니다.",
+            icon: "error",
+            timer: 3000
+          })
         }
       },
-      updatecancel () {
+      updatecancel() {
         this.$router.push({
           path: '/profiles'
         })

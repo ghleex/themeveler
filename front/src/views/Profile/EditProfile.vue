@@ -109,19 +109,29 @@
         form.append("nickname", this.nickname)
         axios.put('/accounts/usermgmt/', form, this.$store.getters.requestHeader)
           .then(() => {
-            alert("회원 정보가 성공적으로 변경되었습니다.")
+            // alert("회원 정보가 성공적으로 변경되었습니다.")
+            Swal.fire({
+              text: "회원 정보가 성공적으로 변경되었습니다.",
+              icon: "success",
+              timer: 3000
+            })
             this.$session.set("nickname", this.nickname)
             this.$store.dispatch("changeNickname", this.nickname)
             this.$router.push({
               path: '/profiles'
             })
           })
-          .catch(err =>{
+          .catch(err => {
             console.log(err)
-            alert("회원 정보 변경이 실패하였습니다. 잠시후 다시 시도해주십시오.")
+            // alert("회원 정보 변경이 실패하였습니다. 잠시후 다시 시도해주십시오.")
+            Swal.fire({
+              text: "회원 정보 변경이 실패하였습니다. 잠시후 다시 시도해주십시오.",
+              icon: "error",
+              timer: 3000
+            })
           })
       },
-      updatecancel () {
+      updatecancel() {
         this.$router.push({
           path: '/profiles'
         })

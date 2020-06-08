@@ -67,6 +67,7 @@
 <script>
   import axios from 'axios'
   import Drawer from '@/components/Drawer.vue'
+  import Swal from 'sweetalert2'
 
   export default {
     name: "Profile",
@@ -105,15 +106,30 @@
             console.log(data)
             axios.put('/travels/visited_dests/', data, this.$store.getters.requestHeader)
               .then(() => {
-                alert("수정되었습니다.")
+                // alert("수정되었습니다.")
+                Swal.fire({
+                  text: "수정되었습니다.",
+                  icon: "success",
+                  timer: 3000
+                })
               })
               .catch(err => {
                 console.log(err)
-                alert("수정이 실패하였습니다. 잠시후 다시 시도해주세요.")
+                // alert("수정이 실패하였습니다. 잠시후 다시 시도해주세요.")
+                Swal.fire({
+                  text: "수정이 실패하였습니다. 잠시후 다시 시도해주세요.",
+                  icon: "error",
+                  timer: 3000
+                })
               })
           }
         } else {
-          alert("최소 한개의 장소를 선택해야 합니다.")
+          // alert("최소 한개의 장소를 선택해야 합니다.")
+          Swal.fire({
+            text: "최소 한개의 장소를 선택해야 합니다.",
+            icon: "error",
+            timer: 3000
+          })
         }
       }
     },
