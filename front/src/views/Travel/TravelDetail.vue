@@ -65,7 +65,7 @@
         <v-slide-item v-for="(destination, index) in destinations" :key="destination.title"
           v-slot:default="{ active, toggle }">
           <v-card class="ma-4" height="200" width="180" @click="toggle">
-            <v-card-title @click="toggleDestination(destination.id)" class="detail-destination-title text-light">
+            <v-card-title @click="toggleDestination(destination)" class="detail-destination-title text-light">
               <b>{{ index + 1 }}.</b> {{ destination.name }}
             </v-card-title>
             <v-img @click="toggleDestination(destination.id)"
