@@ -65,17 +65,15 @@
           <div class="travel-start-text holder mt-5" data-aos="fade-up" data-aos-duration="3000" v-for="i in content"
             :key="i.id">
             <v-card v-if="i.text && i.image" class="holder stepper-text-box" color="rgb(248, 248, 246)">
-              {{ i.text }}
+              <v-img :src="`${baseURL}${i.image}`"></v-img>
+              <b>{{ i.text }}</b>
             </v-card>
             <v-card v-else-if="i.text" class="holder stepper-text-box" color="rgb(248, 248, 246)">
               {{ i.text }}
             </v-card>
             <v-card v-else class="holder stepper-text-box">
-              <v-img :src="`${baseURL}/${i.image}`"></v-img>
+              <v-img :src="`${baseURL}${i.image}`"></v-img>
             </v-card>
-            <div class="text-gray mt-3">
-              *이미지 자료
-            </div>
           </div>
 
           <div class="start-next-btn-box" v-if="e1 < dests.length" >
@@ -192,14 +190,15 @@
         var destName = this.dests[this.e1-flag].name
 
         if (this.isMobile()) {
-          this.mapUrl = `https://map.kakao.com/link/to/${destName},${destLat},${destLong}`
+          this.mapUrl = `https://map.kakao.com/link/to/${destName},${destLat},${destLong}/`
         } else {
           var currentLat = position.coords.latitude
           var currentLong = position.coords.longitude
-          axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${currentLat},${currentLong}&key=${process.env.VUE_APP_GOOGLE_API_KEY}`)
+          axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${currentLat},${currentLong}&key=${process.env.VUE_APP_GOOGLE_API_KEY}/`)
             .then(response => {
+              console.log(response)
               var currentAddr = response.data.results[0].formatted_address
-              this.mapUrl = `https://map.kakao.com/?sName=${currentAddr}&eName=${destName}`
+              this.mapUrl = `https://map.kakao.com/?sName=${currentAddr}&eName=${destName}/`
             }) 
         }
         this.dialog = true
