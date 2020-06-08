@@ -4,7 +4,7 @@
 
     <v-content id="profile-content">
       <h2 class="content-title">
-        <v-icon style="font-size: 40px; color: black;">mdi-view-dashboard</v-icon>마이페이지
+        <v-icon style="font-size: 32px; color: black;">mdi-view-dashboard</v-icon> 마이페이지
       </h2>
       <v-divider></v-divider>
       <v-row justify="center" class="content-body">

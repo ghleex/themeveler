@@ -140,7 +140,7 @@
       },
       toggleDestination(id) {
         this.destsName = this.destinations[id-1].name
-        this.destImg = `${baseURL}/uploads/destination/${name}.jpg`
+        this.destImg = `${this.baseURL}/uploads/destination/${name}.jpg`
         this.dialog = true
       },
       goThemeStory() {
