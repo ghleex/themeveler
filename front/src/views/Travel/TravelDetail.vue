@@ -65,10 +65,10 @@
         <v-slide-item v-for="(destination, index) in destinations" :key="destination.title"
           v-slot:default="{ active, toggle }">
           <v-card class="ma-4" height="200" width="180" @click="toggle">
-            <v-card-title @click="toggleDestination(destination.id)" class="detail-destination-title text-light">
+            <v-card-title @click="toggleDestination(destination)" class="detail-destination-title text-light">
               <b>{{ index + 1 }}.</b> {{ destination.name }}
             </v-card-title>
-            <v-img @click="toggleDestination(destination.id)"
+            <v-img @click="toggleDestination(destination)"
               :src="`${baseURL}/uploads/destination/${destination.name}.jpg`" width="100%" height="100%">
             </v-img>
             <v-row class="fill-height" align="center" justify="center">
@@ -138,9 +138,9 @@
           this.likeCount -= 1
         }
       },
-      toggleDestination(id) {
-        this.destsName = this.destinations[id-1].name
-        this.destImg = `${this.baseURL}/uploads/destination/${name}.jpg`
+      toggleDestination(destination) {
+        this.destsName = this.destinations[destination.id-1].name
+        this.destImg = `${this.baseURL}/uploads/destination/${destination.name}.jpg`
         this.dialog = true
       },
       goThemeStory() {
