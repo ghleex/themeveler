@@ -225,7 +225,7 @@ class ChatView(APIView):
                 * page_no: theme에 포함된 채팅 내역의 페이지입니다. 20개씩 제공됩니다.
         """
         try:
-            chat_page = Paginator(Message.objects.filter(theme=theme_pk).order_by('pk'), 20).page(page_no)            
+            chat_page = Paginator(Message.objects.filter(theme=theme_pk).order_by('-created_at'), 20).page(page_no) 
             serializer = MessageSerializer(chat_page, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except EmptyPage:
@@ -267,7 +267,7 @@ class Destinations(APIView):
                 if all_len % dest_per_page:
                     page += 1
 
-                if dest_per_page * (page_num) >= all_len:
+                if dest_per_page * (page_num-1) >= all_len:
                     return Response('Page is not exist', status=status.HTTP_404_NOT_FOUND)
 
                 start = dest_per_page * (page_num-1)

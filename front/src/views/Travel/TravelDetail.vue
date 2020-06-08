@@ -2,6 +2,8 @@
   <div class="theme-detail-origin-box">
     <div class="themeDetail-box">
       <div class="theme-detail-left">
+        <v-img :src="'http://localhost:8000/uploads/theme/theme_'+themeArr[themeId-1].name+'.jpg'" width="inherit" height="inherit">
+        </v-img>
       </div>
       <div class="theme-detail-right">
         <div class="theme-detail-title">
@@ -12,7 +14,6 @@
         <div class="theme-detail-content">
           <i class="fas fa-map-marker-alt mr-3"></i><b>지역</b><br>
           {{ themeArr[themeId-1].region }} <br><br>
-
           <i class="fas fa-thumbtack mr-2"></i><b>내용</b><br>
           {{ themeArr[themeId-1].content }} <br><br>
           <div class="text-center">
@@ -21,45 +22,55 @@
           </div>
           <div class="like-theme text-center">
             {{ likeCount }} <br>
-            <i @click="likeTheme()" v-if="like == false" class="far fa-heart"></i>
-            <i @click="likeTheme()" v-else-if="like == true" class="fas fa-heart text-danger"></i>
+            <div v-if="isAuthenticated">
+              <i @click="likeTheme()" v-if="like == false" class="far fa-heart"></i>
+              <i @click="likeTheme()" v-else-if="like == true" class="fas fa-heart text-danger"></i>
+            </div>
+            <div v-else>
+              <i @click="requireLogin()" class="far fa-heart"></i>
+            </div>
           </div>
         </div>
         <div class="theme-detail-go text-end">
-          <v-btn color="red" @click="goThemeStory()" dark rounded><b>GO!</b><i class="fas fa-play-circle ml-1"></i>
-          </v-btn>
+          <div v-if="isAuthenticated">
+            <v-btn color="red" @click="goThemeStory()" dark rounded><b>GO!</b><i class="fas fa-play-circle ml-1"></i></v-btn>
+          </div>
+          <div v-else>
+            <v-btn color="red" @click="requireLogin()" dark rounded><b>GO!</b><i class="fas fa-play-circle ml-1"></i></v-btn>
+          </div>
         </div>
       </div>
-      <ChatBot :themeId=themeId :themeName=themeName />
+      <ChatBot :themeId=themeId :themeName=themeName v-if="isAuthenticated" />
+      <ChatBot v-else @click="requireLogin()" />
     </div>
     <v-btn class="my-5" to="/travel/" rounded dark color="#2c3e50">📃뒤로가기</v-btn>
 
     <!-- destinations -->
-    <div style="margin: 3rem 0 1rem 0">
+    <!-- <div style="margin: 3rem 0 1rem 0">
       <div v-if="model == null" class="text-gray text-center mb-4" style="font-size: 12px;">
         * 이미지를 클릭하면 장소를 알 수 있어요!
       </div>
       <div class="text-center" width="100%">
         <div class="d-flex justify-content-center">
-          <v-btn class="btn-round-num mr-2" v-model="destination" color="red" dark rounded v-if="model != null">
+          <v-btn class="btn-round-num mr-2" v-model="destsName" color="red" dark rounded v-if="model != null">
             {{ model + 1 }}
           </v-btn>
-          <div v-if="model >= 0">{{ destination }}</div>
+          <div v-if="model >= 0">{{ destsName }}</div>
         </div>
       </div>
-    </div>
+    </div> -->
 
-    <v-sheet class="theme-detail-destination mx-auto d-flex justify-content-center" max-width="100vw"
-      style="margin-bottom: 5rem;">
+    <v-sheet class="theme-detail-destination" max-width="100vw">
       <v-slide-group v-model="model" class="pa-4" center-active show-arrows>
-        <v-slide-item v-for="destination in destinations" :key="destination.title" v-slot:default="{ active, toggle }">
+        <v-slide-item v-for="(destination, index) in destinations" :key="destination.title"
+          v-slot:default="{ active, toggle }">
           <v-card class="ma-4" height="200" width="180" @click="toggle">
-            <!-- 이미지가 없으므로 임시 card -->
-            <v-sheet @click="toggleDestination(destination, destination.id)" class="d-flex justify-content-center align-items-center"
-              color="#37474F" width="100%" height="100%" style="border-radius: 0;">
-              <div class="text-light pb-8" style="font-family: 'Cafe24Simplehae'; font-size: 25px;">
-                #.{{ destination.id }} {{ destination.name }}</div>
-            </v-sheet>
+            <v-card-title @click="toggleDestination(destination.id)" class="detail-destination-title text-light">
+              <b>{{ index + 1 }}.</b> {{ destination.name }}
+            </v-card-title>
+            <v-img @click="toggleDestination(destination.id)"
+              :src="'http://localhost:8000/uploads/destination/destination_'+destination.name+'.jpg'" width="100%" height="100%">
+            </v-img>
             <v-row class="fill-height" align="center" justify="center">
             </v-row>
           </v-card>
@@ -68,23 +79,13 @@
     </v-sheet>
 
     <!-- detination modal -->
-    <v-dialog v-model="dialog" max-width="350">
+    <v-dialog content-class="dest-picture-modal" v-model="dialog" max-width="350">
       <v-card>
-        <v-card-title class="headline">
-          #{{ model + 1 }}. {{ destsName }}
+        <v-card-title class="headline d-flex justify-content-between" style="font-family: 'Cafe24Simplehae'!important; background: #2c3e50; color: white;">
+          <div>#{{ model + 1 }}. {{ destsName }}</div>
+          <v-btn x-large icon @click="dialog = false"><i class="far fa-times-circle text-light" style="font-style: 50px"></i></v-btn>
         </v-card-title>
-
-        <v-card-text>
-          댓글,, 어쩌구
-        </v-card-text>
-
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn rounded color="red" text @click="dialog = false" style="background: #FFEBEE;">
-            나가기
-            <i class="fas fa-sign-out-alt ml-1"></i>
-          </v-btn>
-        </v-card-actions>
+        <v-img :src="destImg" height="80vh"></v-img>
       </v-card>
     </v-dialog>
   </div>
@@ -97,18 +98,18 @@
   export default {
     name: "TravelDetail",
     components: {
-      ChatBot,
+      ChatBot
     },
     props: {
       themeId: Number,
-      themeName: String,
+      themeName: String
     },
     data() {
       return {
         toggle: false,
         themeArr: [{
           "name": "name"
-        }, ],
+        }],
         destinations: [],
         model: null,
         date: "",
@@ -119,14 +120,16 @@
         dialog: false,
         destId: 0,
         destsName: "",
+        destImg: "",
+        isAuthenticated: this.$session.get("jwt")
       }
     },
     methods: {
       likeTheme() {
         const requestHeader = this.$store.getters.requestHeader
         axios.post(`/travels/like/${this.themeId}/`, this.themeId, requestHeader)
-          .then(res => {
-            this.like = res.data.isLiked
+          .then(response => {
+            this.like = response.data.isLiked
           })
         if (this.like == false) {
           this.likeCount += 1
@@ -134,66 +137,81 @@
           this.likeCount -= 1
         }
       },
-      toggleDestination(destination, id) {
+      toggleDestination(id) {
+        this.destsName = this.destinations[id-1].name
+        this.destImg = "http://localhost:8000/uploads/destination/destination_"+name+".jpg"
         this.dialog = true
-        this.destsName = destination.name
-        this.destId = destination.id
-        console.log(this.destId)
-        console.log(id)
-        // axios.get("dests/comment/")
       },
       goThemeStory() {
-        this.$router.push(`/travel/${this.themeId}/start`)
+        this.$router.push({
+          path: `/travel/${this.themeId}/start`
+        })
+      },
+      requireLogin() {
+        alert("로그인 후 이용해주세요.")
       }
     },
     mounted() {
       const requestHeader = this.$store.getters.requestHeader
       axios.get("/travels/all_theme/", requestHeader)
-        .then(res => {
-          this.themeArr = res.data.all_theme
+        .then(response => {
+          this.themeArr = response.data.all_theme
           this.themeName = this.themeArr[this.themeId - 1].name
-          // console.log(this.themeName)
-
-          var dateTime = res.data.all_theme[this.themeId - 1].created_at
+          var dateTime = response.data.all_theme[this.themeId - 1].created_at
           this.date = dateTime.substr(0, 10)
           this.time = dateTime.substr(11, 5)
-          // console.log(this.date)
-          // console.log(this.time)
-
-          // console.log(this.themeArr)
         })
 
       axios.get(`/travels/destinations/${this.themeId}/0/`, requestHeader)
-        .then(res => {
-          this.destinations = res.data.destinations
-          console.log(this.destinations)
-          // console.log(res.data)
+        .then(response => {
+          this.destinations = response.data.destinations
         })
-      // .catch(err => {
-      //   console.log(err.response)
-      // })
 
       axios.get(`/travels/like/${this.themeId}/`, requestHeader)
-        .then(res => {
-          this.likeCount = res.data.like_users_count
-          this.like = res.data.did_user_like
+        .then(response => {
+          this.likeCount = response.data.like_users_count
+          this.like = response.data.did_user_like
         })
-      // .catch(err => {
-      //   console.log(err.response)
-      // })
-      document.querySelector("#footer").style.display = 'block'
+      
+      document.querySelector("#footer").style.display = "block"
     }
   }
 </script>
 
-<style lang="scss" scoped>
+<style>
+  .dest-picture-modal::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  .dest-picture-modal::-webkit-scrollbar-thumb {
+    background: #2c3e50;
+    border-radius: 10px;
+  }
+
   .theme-detail-origin-box {
     background-color: #ECEFF1;
     height: 100%;
   }
 
   .theme-detail-destination {
-    margin-bottom: 15rem !important;
+    display: flex;
+    justify-content: center;
+    margin: 3rem auto 3rem auto;
+  }
+
+  .detail-destination-title {
+    margin-left: auto;
+    margin-right: auto;
+    width: auto;
+    top: 35%;
+    left: 0;
+    right: 0; 
+    justify-content: center; 
+    position: absolute;
+    z-index: 5;
+    background: rgba(0, 0, 0, 0.6); 
+    font-family: 'Cafe24Simplehae';
+    font-size: 15px;
   }
 
   .btn-round-num {
@@ -218,7 +236,6 @@
     width: 55vw;
     height: 37vw;
     margin: 8rem 0 5rem 10%;
-    background-image: url("../../assets/image/daegu.jpg");
     background-size: cover;
     border-radius: 3px 0 0 3px;
     box-shadow: 1px 1px 3px 1px rgb(187, 184, 184);
@@ -242,7 +259,6 @@
   .theme-detail-title {
     display: flex;
     justify-content: center;
-    // align-items: center;
     background-color: #2c3e50;
     color: white;
     padding: .5rem .5rem 0 .5rem;

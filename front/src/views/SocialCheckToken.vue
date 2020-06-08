@@ -10,7 +10,7 @@
 
   export default {
     beforeRouteEnter(to, from, next) {
-      console.log(from)
+      // console.log(from)
       if (from.name) {
         alert("잘못된 접근입니다.")
       }
@@ -35,12 +35,12 @@
           this.$store.commit("setToken", token)
           this.$store.dispatch("changeNickname", jwtData.nickname)
           this.$store.dispatch("changeAnonymous", jwtData.anonymous)
-          this.$router.push({name:'home'})
+          this.$router.push({ name: "home" })
         })
         .catch(error => {
           console.log(error)
           alert("잘못된 접근입니다.")
-          this.$router.push({ name:'home' })
+          this.$router.push({ name: "home" })
         }) 
     }
   }
