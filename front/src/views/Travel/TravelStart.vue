@@ -100,7 +100,7 @@
             <v-btn rounded text color="red" @click="returnDetail(themeId)">닫기 <i class="fas fa-times-circle ml-1"></i>
             </v-btn>
           </div>
-          <div class="mb-5" v-else-if="e1 == dests.length">
+          <div class="d-flex justify-content-between mb-5" v-else-if="e1 == dests.length">
             <v-btn class="mr-3" v-if="e1 !== 1" @click="beforeStep(n)" rounded color="">
               이전
               <i class="fas fa-chevron-circle-left ml-1"></i>

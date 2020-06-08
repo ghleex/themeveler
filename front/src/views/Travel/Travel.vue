@@ -89,6 +89,19 @@
           </v-card>
         </v-dialog>
       </div>
+
+      <!-- dests modal -->
+      <v-dialog v-model="dialog" max-width="350">
+        <v-card>
+          <v-card-title class="headline d-flex justify-content-between"
+            style="font-family: 'Cafe24Simplehae'!important; background: #2c3e50; color: white;">
+            <div>{{ destName }}</div>
+            <v-btn x-large icon @click="dialog = false"><i class="far fa-times-circle text-light"
+                style="font-style: 50px"></i></v-btn>
+          </v-card-title>
+          <v-img :src="`${baseURL}/${destImg}`" height="60vh"></v-img>
+        </v-card>
+      </v-dialog>
     </div>
   </div>
 </template>
@@ -137,11 +150,11 @@
       },
       destsModal(img, name) {
         console.log(img)
-      console.log(name)
-      this.destImg = img
-      this.destName = name
-      this.dialog = true
-    },
+        console.log(name)
+        this.destImg = img
+        this.destName = name
+        this.dialog = true
+      }
     },
     mounted() {
       const token = this.$session.get("jwt")
@@ -174,7 +187,6 @@
     margin: 1rem auto 3rem auto;
   }
 
-
   @media (max-width: 275px) {
     .travel-dests-box {
       width: 85vw;
@@ -198,7 +210,6 @@
   .theme-travel-box {
     margin-bottom: 3rem;
   }
-
 
   .travel-img-font {
     position: absolute;
