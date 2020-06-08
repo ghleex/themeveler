@@ -18,7 +18,7 @@ require('dotenv').config()
 Vue.config.productionTip = false
 axios.defaults.baseURL = process.env.VUE_APP_IP+'/api'
 // URL = 'http://localhost:8000/api'
-// URL = 'https://k02b1031.p.ssafy.io:8000/api'
+// URL = 'https://k02b1031.p.ssafy.io/api'
 var options = {
   persist: true
 }

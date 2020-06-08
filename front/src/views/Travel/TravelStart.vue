@@ -6,7 +6,6 @@
       <h2 class="my-10">{{ e1 }} / {{ dests.length }}</h2>
     </div>
   
-
     <!-- 길 찾기 -->
     <div class="find-road-btn text-end">
       <v-btn dark color="#2c3e50" rounded @click.stop="navigationUrl(1)">
@@ -56,11 +55,9 @@
         </v-stepper-header>
       </v-slide-group>
 
-      
       <!-- stepper content -->
       <v-stepper-items>
         <v-img :src="`${baseURL}/${dests[e1-1].image}`"></v-img>
-        {{ baseURL }}
         <v-stepper-content height="auto" v-for="n in steps" :key="`${n}-content`" :step="n">
           <div class="travel-start-text holder mt-5" data-aos="fade-up" data-aos-duration="3000" v-for="i in content"
             :key="i.id">
@@ -95,7 +92,7 @@
               이전
               <i class="fas fa-chevron-circle-left ml-1"></i>
             </v-btn>
-            <v-btn roudned text color="blue" class="mr-4" @click="addDestList(dests[n-1].id)">방문장소에 추가 <i class="fas fa-plus-circle ml-1"></i>
+            <v-btn roudned text color="blue" class="mr-4" @click="addDestList(dests[n-1].id)">방문장소 <i class="fas fa-plus-circle ml-1"></i>
             </v-btn>
             <v-btn rounded text color="red" @click="returnDetail(themeId)">닫기 <i class="fas fa-times-circle ml-1"></i>
             </v-btn>
@@ -105,11 +102,11 @@
               이전
               <i class="fas fa-chevron-circle-left ml-1"></i>
             </v-btn>
-            <v-btn roudned text color="blue" class="mr-4" @click="addDestList(dests[n-1].id)">방문장소에 추가 <i class="fas fa-plus-circle ml-1"></i>
+            <v-btn roudned text color="blue" class="mr-4" @click="addDestList(dests[n-1].id)">방문장소 <i class="fas fa-plus-circle ml-1"></i>
             </v-btn>
           </div>
           <div v-else class="d-flex justify-content-end mb-5">
-            <v-btn roudned text color="blue" class="mr-4" @click="addDestList(dests[n-1].id)">방문장소에 추가 <i class="fas fa-plus-circle ml-1"></i>
+            <v-btn roudned text color="blue" class="mr-4" @click="addDestList(dests[n-1].id)">방문장소 <i class="fas fa-plus-circle ml-1"></i>
             </v-btn>
             <v-btn roudned text color="red" @click="returnDetail(themeId)">닫기 <i class="fas fa-times-circle ml-1"></i>
             </v-btn>
@@ -225,7 +222,19 @@
           "destination": dest_id
         }
         axios.post('/travels/visited_dests/', forms, requestHeader)
-          .then(() => {})
+          .then(() => {
+            axios.get('/travels/visited_dests/', requestHeader)
+              .then(response => {
+                var visitedDestsList = response.data.visited_dests
+                for (var i = 0; i < visitedDestsList.length; i++) {
+                  if (dest_id == visitedDestsList[i].id) {
+                    alert("방문장소에 추가되었습니다.")
+                    return
+                  }
+                }
+                alert("방문장소에서 제거되었습니다.")
+              })
+          })
       },
       isMobile() {
         return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
