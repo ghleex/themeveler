@@ -40,7 +40,6 @@ class SetVoiceCategory(APIView):
     """
         고객센터(관리자) - "요청 유형" 항목 조회/생성
 
-        ---
         # 내용
         ## 공통
             * categories: 전체 유형
@@ -79,7 +78,6 @@ class ChangeVoiceCategory(APIView):
     """
         고객센터(관리자) - "요청 유형" 항목 수정/삭제
 
-        ---
         # 내용
             * category: 요청 유형 QuerySet
         
@@ -117,7 +115,6 @@ class CustomersVoices(APIView):
     """
         고객센터(사용자) - 요청 글 조회/등록
 
-        ---
         # 내용
             * voices: 해당 유저의 고객센터 작성 글 QuerySet
         ## GET
@@ -160,8 +157,7 @@ class CustomersVoices(APIView):
 class CustomersVoiceChange(APIView):
     """
         고객센터(사용자) - 요청 글 상세 내용 확인/수정/삭제
-        
-        ---
+
         # 내용
             * voice: 고객센터 내에서 사용자가 선택한 글
         ## PUT
@@ -236,7 +232,6 @@ class ManagersReplying(APIView):
     """
         고객센터(관리자) - 처리 내용 등록
 
-        ---
         # 내용
             * manager: 관리자
     """
@@ -265,8 +260,7 @@ class ManagersReplying(APIView):
 class ManagersReplyChange(APIView):
     """
         고객센터(관리자) - 관리자의 답변 수정
-        
-        ---
+
         # 내용
             * manager: 관리자
             * reply: 답변
@@ -296,7 +290,6 @@ class SetNoticeCategory(APIView):
     """
         공지사항 유형 조회/생성
 
-        ---
         # 내용
         ## 공통
             * categories: 전체 유형
@@ -335,7 +328,6 @@ class ChangeNoticeCategory(APIView):
     """
         공지사항 유형 수정/삭제
 
-        ---
         # 내용
             * category: 요청 유형 QuerySet
         
@@ -373,7 +365,6 @@ class Notices(APIView):
     """
         전체 공지사항 - 목록과 게시
 
-        ---
         # 내용
           * isNoticeAll: True 인 것만 출력
     """
@@ -388,7 +379,6 @@ class NoticeView(APIView):
     """
         개별 공지사항 보기
 
-        ---
     """
     def get_object(self, notice_pk, format=None):
         return get_object_or_404(Notice, pk=notice_pk)
@@ -406,8 +396,6 @@ class NoticeView(APIView):
 class ThemeNoticesView(APIView):
     """
         코스 공지사항 전체 목록 - 사용자/관리자 공통
-
-        ---
 
     """
     def get_theme(self, theme_pk, format=None):
@@ -428,7 +416,6 @@ class ThemeNoticesPost(APIView):
     """
         코스 공지사항 작성 - 관리자 화면
 
-        ---
     """
     def post(self, request, format=None):
         try:
@@ -454,8 +441,7 @@ class ThemeNoticesPost(APIView):
 class ThemeNoticesChange(APIView):
     """
         코스 공지사항 - 세부 내용(공통) | 관리자의 수정/삭제    
-        
-        ---
+
     """
     def get_notices(self, notice_pk, format=None):
         return get_object_or_404(Notice, pk=notice_pk)        
@@ -517,7 +503,6 @@ class Search(APIView):
     """
         검색 - 테마, 여행지
 
-        ---
     """
     def get(self, request, searching_word, format=None):
         try:
@@ -545,7 +530,6 @@ class CommentSelf(APIView):
     """
         자신이 작성한 댓글 목록
 
-        ---
     """
     def get(self, request, user_pk, format=None):
         user = get_user(request.headers['Authorization'].split(' '))
@@ -562,7 +546,6 @@ class Comments(APIView):
     """
         댓글 - 목록과 작성
 
-        ---
     """
     def get_dest(self, dest_pk, format=None):
         return get_object_or_404(Destination, pk=dest_pk)
@@ -601,7 +584,6 @@ class CommentChange(APIView):
     """
         댓글 - 수정과 삭제
 
-        ---
     """
     def get_comment(self, comment_pk, format=None):
         return get_object_or_404(Comment, pk=comment_pk)
@@ -645,7 +627,6 @@ class ReCommentSelf(APIView):
     """
         자신이 작성한 대댓글(댓글의 댓글) 목록
 
-        ---
     """
     def get(self, request, user_pk, format=None):
         user = get_user(request.headers['Authorization'].split(' '))
@@ -662,7 +643,6 @@ class ReComments(APIView):
     """
         대댓글 - 목록과 작성
 
-        ---
     """
     def get_comment(self, comment_pk, format=None):
         return get_object_or_404(Comment, pk=comment_pk)
@@ -698,7 +678,6 @@ class ReCommentChange(APIView):
     """
         대댓글 - 수정과 삭제
 
-        ---
     """
     def get_recomment(self, recomment_pk, format=None):
         return get_object_or_404(ReComment, pk=recomment_pk)
