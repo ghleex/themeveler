@@ -317,7 +317,7 @@
               this.addMessage(res.data)
             })
             .catch(err => {
-              console.log(err.response)
+              console.log(err)
               this.messages = [{
                 theme: "error",
                 nickname: "관리자",
@@ -386,10 +386,8 @@
   }
 
   .chatbot-title {
-    // position: fixed;
     background-color: #2c3e50;
     color: white;
-    // width: 310px;
     top: 6%;
   }
 
