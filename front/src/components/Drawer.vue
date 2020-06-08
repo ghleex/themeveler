@@ -53,12 +53,12 @@ export default {
         { title: '마이페이지', icon: 'mdi-view-dashboard', path: "/profiles" },
         { title: '비밀번호변경', icon: 'mdi-key-variant', path: "/editpassword" },
         { title: '회원정보수정', icon: 'mdi-account-edit', path: "/editprofile" },
-        { title: '댓글 활동', icon: 'mdi-comment-text', path: "/profile/comment" }
+        // { title: '댓글 활동', icon: 'mdi-comment-text', path: "/profile/comment" }
       ],
       items_social: [
         { title: '마이페이지', icon: 'mdi-view-dashboard', path: "/profiles" },
         { title: '회원정보수정', icon: 'mdi-account-edit', path: "/editprofile" },
-        { title: '댓글 활동', icon: 'mdi-comment-text', path: "/profile/comment" }
+        // { title: '댓글 활동', icon: 'mdi-comment-text', path: "/profile/comment" }
       ],
       color: "primary",
       miniVariant: false,
