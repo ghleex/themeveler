@@ -64,7 +64,7 @@
       <v-slide-group v-model="model" class="pa-4" center-active show-arrows>
         <v-slide-item v-for="(destination, index) in destinations" :key="destination.title" v-slot:default="{ active, toggle }">
           <v-card class="ma-4" height="200" width="180" @click="toggleDestination(index)">
-            <div @click="toggle">
+            <div @click="toggle" class="card-title-img">
               <v-card-title class="detail-destination-title text-light">
                 <b>{{ index + 1 }}.</b> {{ destination.name }}
               </v-card-title>
@@ -180,6 +180,11 @@
 </script>
 
 <style>
+  .card-title-img {
+    height: inherit;
+    width: inherit;
+  }
+
   .dest-picture-modal::-webkit-scrollbar {
     width: 5px;
   }
