@@ -46,7 +46,7 @@
             <div @click="cardBypopTheme(model)">
               <v-card class="ma-4" min-height="320px" max-height="35vw" min-width="238px" max-width="30vw"
                 @click="toggle">
-                <v-img width="100%" height="100%" :src="`${baseURL}/uploads/theme/${theme.name}.jpg`" min-height="260px"
+                <v-img width="100%" height="100%" :src="`${baseURL}/${theme.image}`" min-height="260px"
                   max-height="18vw" />
                 <v-card-title class="pop-card-title">
                   <div class="mx-auto text-light pop-theme-card-text">
