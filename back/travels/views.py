@@ -246,7 +246,7 @@ class AllTheme(APIView):
         return Response(data)
 
 
-@permission_classes((IsAuthenticated,))
+@permission_classes((AllowAny,))
 class Destinations(APIView):
     """
         테마 정보

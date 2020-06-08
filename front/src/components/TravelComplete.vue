@@ -32,7 +32,7 @@
     data() {
       return {
         dialog: false,
-        img: require('../assets/complete.png')
+        img: require("../assets/complete.png")
       }
     },
     props: {
