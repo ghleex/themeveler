@@ -87,7 +87,9 @@
               <i class="fas fa-chevron-circle-left ml-1"></i>
             </v-btn>
           </div>
-          <div v-else class="d-flex justify-content-end mb-5">
+          <div v-else class="d-flex justify-content-end mb-5">           
+            <v-btn roudned text color="blue" class="mr-4" @click="addDestList(dests[n-1].id)">방문장소에 추가 <i class="fas fa-plus-circle ml-1"></i>
+            </v-btn>
             <v-btn roudned text color="red" @click="returnDetail(themeId)">닫기 <i class="fas fa-times-circle ml-1"></i>
             </v-btn>
           </div>
@@ -173,6 +175,20 @@
           alert("위치 정보를 사용할 수 없습니다.")
           return false
         }
+      },
+      addDestList(dest_id) {
+        const token = this.$session.get("jwt")
+        const requestHeader = {
+          headers: {
+            Authorization: "JWT " + token
+          }
+        }
+        var form = {
+          "user": this.$store.getters.user_id,
+          "destination": dest_id
+        }
+        axios.post('/travels/visited_dests/', form, requestHeader)
+          .then(() => {})
       }
     },
     mounted() {
