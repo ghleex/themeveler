@@ -106,7 +106,6 @@
             console.log(data)
             axios.put('/travels/visited_dests/', data, this.$store.getters.requestHeader)
               .then(() => {
-                // alert("수정되었습니다.")
                 Swal.fire({
                   text: "수정되었습니다.",
                   icon: "success",
@@ -115,7 +114,6 @@
               })
               .catch(err => {
                 console.log(err)
-                // alert("수정이 실패하였습니다. 잠시후 다시 시도해주세요.")
                 Swal.fire({
                   text: "수정이 실패하였습니다. 잠시후 다시 시도해주세요.",
                   icon: "error",
@@ -124,7 +122,6 @@
               })
           }
         } else {
-          // alert("최소 한개의 장소를 선택해야 합니다.")
           Swal.fire({
             text: "최소 한개의 장소를 선택해야 합니다.",
             icon: "error",
@@ -158,20 +155,13 @@
   #profile {
     margin-top: 64px;
     background-color: rgba(245, 245, 245, 0.5);
-    /* padding-right: 10vw; */
     height: 100%;
-    font-family: 'Cafe24Simplehae';
-    color: #2c3e50;
   }
 
   #profile-content {
     /* margin-left: 256px; */
     margin-left: 10%;
     width: 80%;
-  }
-
-  .content-title {
-    margin-top: 2rem;
   }
 
   @media (max-width: 600px) {
@@ -186,6 +176,9 @@
     text-align: left;
     margin-left: 20px;
     /* margin-top: 8px; */
+    margin-top: 32px;
+    font-family: 'Cafe24Simplehae';
+    color: #2c3e50;
   }
 
   .content-body {

@@ -13,23 +13,23 @@
             <v-container class="py-0">
               <v-row>
                 <v-col cols="12" md="12" class="content-col">
-                  <v-text-field v-model="currentPassword" label="Current Password" type="password"
-                    class="purple-input" />
+                  <v-text-field v-model="currentPassword" label="Current Password" type="password" class="purple-input" />
                 </v-col>
                 <v-col cols="12" md="6" class="content-col">
                   <v-text-field v-model="newPassword" label="New Password" type="password" class="purple-input" />
                 </v-col>
                 <v-col cols="12" md="6" class="content-col">
-                  <v-text-field v-model="confirmPassword" label="Confirm Password" type="password"
-                    class="purple-input" />
+                  <v-text-field v-model="confirmPassword" label="Confirm Password" type="password" class="purple-input" />
                 </v-col>
                 <v-col cols="4" md="6" class="text-left">
                 </v-col>
                 <v-col cols="8" md="6" class="text-right">
                   <v-btn color="success" class="mr-4" @click="update">
-                    <i class="fas fa-check-circle mr-1"></i>수정</v-btn>
+                    <i class="fas fa-check-circle mr-1"></i>수정
+                  </v-btn>
                   <v-btn color="red" dark class="mr-0" @click="updatecancel">
-                    <i class="fas fa-times-circle mr-1"></i>취소</v-btn>
+                    <i class="fas fa-times-circle mr-1"></i>취소
+                  </v-btn>
                 </v-col>
               </v-row>
             </v-container>
@@ -91,7 +91,6 @@
                 console.log(err)
               })
           } else {
-            // alert("비밀번호는 8자리이상이여야 합니다.")
             Swal.fire({
               text: "비밀번호는 8자리이상이여야 합니다.",
               icon: "error",
@@ -99,7 +98,6 @@
             })
           }
         } else {
-          // alert("비밀번호가 일치하지 않습니다.")
           Swal.fire({
             text: "비밀번호가 일치하지 않습니다.",
             icon: "error",
@@ -121,18 +119,12 @@
     margin-top: 64px;
     background-color: rgba(245, 245, 245, 0.5);
     height: 100%;
-    font-family: 'Cafe24Simplehae';
-    color: #2c3e50;
   }
 
   #profile-content {
     /* margin-left: 256px; */
     margin-left: 10%;
     width: 80%;
-  }
-
-  .content-title {
-    margin-top: 2rem;
   }
 
   @media (max-width: 600px) {
@@ -146,6 +138,9 @@
     text-align: left;
     margin-left: 20px;
     /* margin-top: 8px; */
+    margin-top: 32px;
+    font-family: 'Cafe24Simplehae';
+    color: #2c3e50;
   }
 
   .content-col {

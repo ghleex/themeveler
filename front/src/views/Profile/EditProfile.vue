@@ -23,13 +23,16 @@
                 </v-col>
                 <v-col cols="4" md="6" class="text-left">
                   <v-btn color="red" class="mr-0 text-white" text @click="userdelete" style="border: 1px solid;">
-                    <i class="fas fa-user-slash mr-1"></i>회원탈퇴</v-btn>
+                    <i class="fas fa-user-slash mr-1"></i>회원탈퇴
+                  </v-btn>
                 </v-col>
                 <v-col cols="8" md="6" class="text-right">
                   <v-btn color="success" class="mr-4" @click="update">
-                    <i class="fas fa-check-circle mr-1"></i>수정</v-btn>
+                    <i class="fas fa-check-circle mr-1"></i>수정
+                  </v-btn>
                   <v-btn color="red" dark class="mr-0" @click="updatecancel">
-                    <i class="fas fa-times-circle mr-1"></i>취소</v-btn>
+                    <i class="fas fa-times-circle mr-1"></i>취소
+                  </v-btn>
                 </v-col>
               </v-row>
             </v-container>
@@ -109,7 +112,6 @@
         form.append("nickname", this.nickname)
         axios.put('/accounts/usermgmt/', form, this.$store.getters.requestHeader)
           .then(() => {
-            // alert("회원 정보가 성공적으로 변경되었습니다.")
             Swal.fire({
               text: "회원 정보가 성공적으로 변경되었습니다.",
               icon: "success",
@@ -123,7 +125,6 @@
           })
           .catch(err => {
             console.log(err)
-            // alert("회원 정보 변경이 실패하였습니다. 잠시후 다시 시도해주십시오.")
             Swal.fire({
               text: "회원 정보 변경이 실패하였습니다. 잠시후 다시 시도해주십시오.",
               icon: "error",
@@ -149,18 +150,12 @@
     margin-top: 64px;
     background-color: rgba(245, 245, 245, 0.5);
     height: 100%;
-    font-family: 'Cafe24Simplehae';
-    color: #2c3e50;
   }
 
   #profile-content {
     /* margin-left: 256px; */
     margin-left: 10%;
     width: 80%;
-  }
-
-  .content-title {
-    margin-top: 2rem;
   }
 
   @media (max-width: 600px) {
@@ -174,6 +169,9 @@
     text-align: left;
     margin-left: 20px;
     /* margin-top: 8px; */
+    margin-top: 32px;
+    font-family: 'Cafe24Simplehae';
+    color: #2c3e50;
   }
 
   .content-col {
