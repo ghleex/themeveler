@@ -1,6 +1,6 @@
 [TOC]
 
-![title](https://user-images.githubusercontent.com/52685206/83119054-31794f00-a10a-11ea-8db3-99f5ca4ced45.png)
+![title](https://user-images.githubusercontent.com/52685206/84097014-517c0d00-aa3e-11ea-948f-531a30fa9ca6.png)
 
 
 
@@ -192,5 +192,5 @@ $ node index.js
 
 # 팀 소개
 
-![팀_소개](https://user-images.githubusercontent.com/52685206/84013645-2a78f900-a9b4-11ea-8705-a0ed0809c6bb.png)
+![팀_소개](https://user-images.githubusercontent.com/52685206/84097016-53de6700-aa3e-11ea-979d-b7be9c120825.png)
 
