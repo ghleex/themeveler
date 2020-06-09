@@ -136,12 +136,7 @@
         })
       },
       getPaginationDestination() {
-        const token = this.$session.get("jwt")
-        const requestHeader = {
-          headers: {
-            Authorization: "JWT " + token
-          }
-        }
+        const requestHeader = this.$store.getters.requestHeader
         axios.get(`/travels/destinations/0/${this.page}/`, requestHeader)
           .then(response => {
             this.paginationDest = response.data.page_destination
@@ -158,12 +153,7 @@
       }
     },
     mounted() {
-      const token = this.$session.get("jwt")
-      const requestHeader = {
-        headers: {
-          Authorization: "JWT " + token
-        }
-      }
+      const requestHeader = this.$store.getters.requestHeader
       axios.get('/travels/all_theme/', requestHeader)
         .then(response => {
           this.themeArr = response.data.all_theme
