@@ -162,7 +162,9 @@
           .then(response => {
             this.content = response.data.pages
           })
-
+          .catch(err => {
+            console.log(err)
+          })
         document.getElementById(this.dests[n].id).tabIndex = -1;
         document.getElementById(this.dests[n].id).focus();
       },
@@ -174,6 +176,9 @@
         axios.get(`/travels/dest_content/${this.themeId}/${this.e1-1}/`, requestHeader)
           .then(response => {
             this.content = response.data.pages
+          })
+          .catch(err => {
+            console.log(err)
           })
 
         document.getElementById(this.dests[n - 1].id).tabIndex = -1;
@@ -209,8 +214,10 @@
                 return
               }
               this.mapUrl = `https://map.kakao.com/?sName=${currentAddr}&eName=${destName}`
-              
             }) 
+          .catch(err => {
+            console.log(err)
+          })
         }
         this.dialog = true
       },
@@ -247,6 +254,12 @@
                 }
                 alert("방문장소에서 제거되었습니다.")
               })
+              .catch(err => {
+                console.log(err)
+              })
+          })
+          .catch(err => {
+            console.log(err)
           })
       },
       isMobile() {
@@ -265,15 +278,23 @@
           this.dests = response.data.destinations
           this.steps = this.dests.length
         })
+        .catch(err => {
+          console.log(err)
+        })
       axios.get("/travels/all_theme/", requestHeader)
         .then(response => {
           this.themeArr = response.data.all_theme
+        })
+        .catch(err => {
+          console.log(err)
         })
       axios.get(`/travels/dest_content/${this.themeId}/${this.e1-1}/`, requestHeader)
         .then(response => {
           this.content = response.data.pages
         })
-
+        .catch(err => {
+          console.log(err)
+        })
       this.a()
     }
   }
