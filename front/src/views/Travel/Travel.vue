@@ -149,8 +149,6 @@
           })
       },
       destsModal(img, name) {
-        console.log(img)
-        console.log(name)
         this.destImg = img
         this.destName = name
         this.dialog = true

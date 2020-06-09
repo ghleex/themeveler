@@ -192,18 +192,14 @@
         var destName = this.dests[this.e1-flag].name
         if (this.isMobile()) {
           this.mapUrl = `https://map.kakao.com/link/to/${destName},${destLat},${destLong}`
-          console.log(this.mapUrl)
         } else {
           var currentLat = position.coords.latitude
           var currentLong = position.coords.longitude
-          console.log(currentLat, currentLong)
           axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${currentLat},${currentLong}&key=${process.env.VUE_APP_GOOGLE_API_KEY}`)
             .then(response => {
-              console.log(response.data)
               var addr = response.data.results[0].address_components
               var start = addr.length-2
               var currentAddr = addr[start].long_name
-              console.log(currentAddr)
               if (currentAddr == "대한민국") {
                 for (var i = start-1; i >= 0; i--) {
                   currentAddr = currentAddr.concat(" ",addr[i].long_name)
@@ -212,7 +208,6 @@
                 alert("지도를 사용할 수 없거나 인식할 수 없는 지역입니다.")
                 return
               }
-              console.log(currentAddr)
               this.mapUrl = `https://map.kakao.com/?sName=${currentAddr}&eName=${destName}`
               
             }) 
@@ -259,7 +254,6 @@
       }
     },
     mounted() {
-      console.log(this.isMobile())
       const token = this.$session.get("jwt")
       const requestHeader = {
         headers: {
@@ -269,7 +263,6 @@
       axios.get(`/travels/destinations/${this.themeId}/0/`, requestHeader)
         .then(response => {
           this.dests = response.data.destinations
-          console.log(this.dests)
           this.steps = this.dests.length
         })
       axios.get("/travels/all_theme/", requestHeader)
