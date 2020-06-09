@@ -231,12 +231,7 @@
         }
       },
       addDestList(dest_id) {
-        const token = this.$session.get("jwt")
-        const requestHeader = {
-          headers: {
-            Authorization: "JWT " + token
-          }
-        }
+        const requestHeader = this.$store.getters.requestHeader
         var forms = {
           "user": this.$store.getters.user_id,
           "destination": dest_id
@@ -267,12 +262,7 @@
       }
     },
     mounted() {
-      const token = this.$session.get("jwt")
-      const requestHeader = {
-        headers: {
-          Authorization: "JWT " + token
-        }
-      }
+      const requestHeader = this.$store.getters.requestHeader
       axios.get(`/travels/destinations/${this.themeId}/0/`, requestHeader)
         .then(response => {
           this.dests = response.data.destinations
