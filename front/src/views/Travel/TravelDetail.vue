@@ -41,7 +41,6 @@
         </div>
       </div>
       <ChatBot :themeId=themeId :themeName=themeName v-if="isAuthenticated" />
-      <ChatBot v-else @click="requireLogin()" />
     </div>
     <v-btn class="my-5" to="/travel/" rounded dark color="#2c3e50">📃뒤로가기</v-btn>
 
@@ -132,6 +131,9 @@
           .then(response => {
             this.like = response.data.isLiked
           })
+          .catch(err => {
+            console.log(err)
+          })
         if (this.like == false) {
           this.likeCount += 1
         } else {
@@ -163,16 +165,24 @@
           this.date = dateTime.substr(0, 10)
           this.time = dateTime.substr(11, 5)
         })
+        .catch(err => {
+          console.log(err)
+        })
 
       axios.get(`/travels/destinations/${this.themeId}/0/`, requestHeader)
         .then(response => {
           this.destinations = response.data.destinations
         })
-
+        .catch(err => {
+          console.log(err)
+        })
       axios.get(`/travels/like/${this.themeId}/`, requestHeader)
         .then(response => {
           this.likeCount = response.data.like_users_count
           this.like = response.data.did_user_like
+        })
+        .catch(err => {
+          console.log(err)
         })
 
       document.querySelector("#footer").style.display = "block"
