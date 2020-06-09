@@ -147,6 +147,9 @@
             this.paginationDest = response.data.page_destination
             this.pageLength = response.data.all_length
           })
+          .catch(err => {
+            console.log(err)
+          })
       },
       destsModal(img, name) {
         this.destImg = img
@@ -164,6 +167,9 @@
       axios.get('/travels/all_theme/', requestHeader)
         .then(response => {
           this.themeArr = response.data.all_theme
+        })
+        .catch(err => {
+          console.log(err)
         })
       this.getPaginationDestination()
     },
