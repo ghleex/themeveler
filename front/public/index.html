@@ -1,17 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <title><%= htmlWebpackPlugin.options.title %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,shrink-to-fit=no">
+    <title>Themeveler</title>
+    <link rel="icon" href="favicon.ico">
+    <link rel="shortcut icon" href="favicon.ico">
+
+    <!-- <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet"> -->
+    <!-- fontawsome -->
+    <!-- data-auto-add-css 기본값은 true, security policy를 위해서는 false 
+      data-auto-replace-svg="nest"를 사용함으로서 기존의 i가 svg로 변환되는 것을 사용할 수 있게끔 함 -->
+    <script src="https://use.fontawesome.com/releases/v5.13.0/js/all.js" data-auto-add-css="false" data-auto-replace-svg="nest"></script>
+    <!-- 이 link가 없으면 fontawsome 크기가 무자비해짐 위의 nest값과 아래의 link 둘 다 있어야 정상 크기, 정상 작동 -->
+    <link href="https://use.fontawesome.com/releases/v5.13.0/css/svg-with-js.css" rel="stylesheet" /> 
+    <!-- fontawsome-kit -->
+    <!-- <script src="https://kit.fontawesome.com/e7c9242ec2.js" crossorigin="anonymous" data-auto-add-css="false"></script> -->
+    <style>
+      @font-face {
+        font-family: 'Cafe24Simplehae';
+        src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.1/Cafe24Simplehae.woff') format('woff');
+        font-weight: normal;
+        font-style: normal;
+      }
+    </style>
   </head>
+
   <body>
     <noscript>
-      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+      <strong>We're sorry but Themeveler doesn't work properly without JavaScript enabled.
+        Please enable it to continue.</strong>
     </noscript>
     <div id="app"></div>
-    <!-- built files will be auto injected -->
+
   </body>
 </html>
