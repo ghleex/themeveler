@@ -191,33 +191,54 @@
         var destLat = this.dests[this.e1-flag].latitude
         var destLong = this.dests[this.e1-flag].longitude
         var destName = this.dests[this.e1-flag].name
+        var currentLat = position.coords.latitude
+        var currentLong = position.coords.longitude
+        console.log(destLat, destLong)
         if (this.isMobile()) {
-          this.mapUrl = `https://map.kakao.com/link/to/${destName},${destLat},${destLong}`
-          console.log(this.mapUrl)
-        } else {
-          var currentLat = position.coords.latitude
-          var currentLong = position.coords.longitude
-          console.log(currentLat, currentLong)
-          axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${currentLat},${currentLong}&key=${process.env.VUE_APP_GOOGLE_API_KEY}`)
-            .then(response => {
-              console.log(response.data)
-              var addr = response.data.results[0].address_components
-              var start = addr.length-2
-              var currentAddr = addr[start].long_name
-              console.log(currentAddr)
-              if (currentAddr == "대한민국") {
-                for (var i = start-1; i >= 0; i--) {
-                  currentAddr = currentAddr.concat(" ",addr[i].long_name)
-                }
-              } else {
-                alert("지도를 사용할 수 없거나 인식할 수 없는 지역입니다.")
-                return
-              }
-              console.log(currentAddr)
-              this.mapUrl = `https://map.kakao.com/?sName=${currentAddr}&eName=${destName}`
-              
-            }) 
+          // var destX = ""
+          // var destY = ""
+          // var startX = ""
+          // var startY = ""
+          const requestHeader = {
+            headers: {
+              Authorization: "KakaoAK " + process.env.VUE_APP_KAKAO_REST_API_KEY
+            }
+          }
+          axios.get(`https://dapi.kakao.com/v2/local/geo/transcoord.json?x=${destLong}&y=${destLat}&input_coord=WGS84&output_coord=WCONGNAMUL`, requestHeader)
+          .then(response => {
+            console.log(response.data)
+            var destX = response.data.documents[0].x
+            var destY = response.data.documents[0].y
+            console.log(destX, destY)
+            axios.get(`https://dapi.kakao.com/v2/local/geo/transcoord.json?x=${currentLong}&y=${currentLat}&input_coord=WGS84&output_coord=WCONGNAMUL`, requestHeader)
+            .then(response2 => {
+              console.log(response2.data)
+              var startX = response2.data.documents[0].x
+              var startY = response2.data.documents[0].y
+              // this.mapUrl = `https://m.map.kakao.com/actions/routeView?sxEnc=${startX}&syEnc=${startY}&exEnc=${destX}&eyEnc=${destY}&startLoc=현위치&endLoc=${destName}`
+              this.mapUrl = `https://map.kakao.com/?map_type=TYPE_MAP&target=car&rt=%2C%2C${destX}%2C${destY}&rt1=${currentAddr}&rt2=${destName}&rtIds=%2C&rtTypes=%2C`
+              console.log(this.mapUrl)
+            })
+            
+          })
         }
+        //   console.log(destX, destY)
+        //   axios.get(`https://dapi.kakao.com/v2/local/geo/transcoord.json?x=${currentLong}&y=${currentLat}&input_coord=WGS84&output_coord=WCONGNAMUL`, requestHeader)
+        //   .then(response => {
+        //     console.log(response.data)
+        //     startX = response.data.documents[0].x
+        //     startY = response.data.documents[0].y
+        //   })
+        //   console.log(destX, destY, startX, startY)
+        //   this.mapUrl = `https://m.map.kakao.com/actions/routeView?sX=${startX}&sY=${startY}&sName=현재위치&ex=${destX}&ey=${destY}&endLoc=${destName}&from=total`
+        //   console.log(this.mapUrl)
+        // } 
+        // else {
+     
+        //       this.mapUrl = `https://map.kakao.com/?sName=${currentAddr}&eName=${destName}`
+              
+        //     }) 
+        // }
         this.dialog = true
       },
       navigationUrl(status) {
@@ -248,7 +269,13 @@
       }
     },
     mounted() {
-      console.log(this.isMobile())
+      const script = document.createElement('script');
+      script.type="text/javascript" 
+      script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.VUE_APP_KAKAO_API_KEY}&autoload=false`;
+      document.head.appendChild(script);
+      script.src = `https://developers.kakao.com/sdk/js/kakao.js`
+      document.head.appendChild(script);
+
       const token = this.$session.get("jwt")
       const requestHeader = {
         headers: {
