@@ -186,6 +186,7 @@
       a() {
         document.querySelector("#footer").style.display = "none"
       },
+      //`https://map.kakao.com/?sName=${currentAddr}&eName=${destName}`
       success(position) {
         var flag = this.mapStatus
         var destLat = this.dests[this.e1-flag].latitude
@@ -193,53 +194,29 @@
         var destName = this.dests[this.e1-flag].name
         var currentLat = position.coords.latitude
         var currentLong = position.coords.longitude
-        console.log(destLat, destLong)
-        if (this.isMobile()) {
-          // var destX = ""
-          // var destY = ""
-          // var startX = ""
-          // var startY = ""
-          const requestHeader = {
-            headers: {
-              Authorization: "KakaoAK " + process.env.VUE_APP_KAKAO_REST_API_KEY
-            }
+        const requestHeader = {
+          headers: {
+            Authorization: "KakaoAK " + process.env.VUE_APP_KAKAO_REST_API_KEY
           }
-          axios.get(`https://dapi.kakao.com/v2/local/geo/transcoord.json?x=${destLong}&y=${destLat}&input_coord=WGS84&output_coord=WCONGNAMUL`, requestHeader)
-          .then(response => {
-            console.log(response.data)
-            var destX = response.data.documents[0].x
-            var destY = response.data.documents[0].y
-            console.log(destX, destY)
-            axios.get(`https://dapi.kakao.com/v2/local/geo/transcoord.json?x=${currentLong}&y=${currentLat}&input_coord=WGS84&output_coord=WCONGNAMUL`, requestHeader)
-            .then(response2 => {
-              console.log(response2.data)
-              var startX = response2.data.documents[0].x
-              var startY = response2.data.documents[0].y
-              // this.mapUrl = `https://m.map.kakao.com/actions/routeView?sxEnc=${startX}&syEnc=${startY}&exEnc=${destX}&eyEnc=${destY}&startLoc=현위치&endLoc=${destName}`
-              this.mapUrl = `https://map.kakao.com/?map_type=TYPE_MAP&target=car&rt=%2C%2C${destX}%2C${destY}&rt1=${currentAddr}&rt2=${destName}&rtIds=%2C&rtTypes=%2C`
-              console.log(this.mapUrl)
-            })
-            
-          })
         }
-        //   console.log(destX, destY)
-        //   axios.get(`https://dapi.kakao.com/v2/local/geo/transcoord.json?x=${currentLong}&y=${currentLat}&input_coord=WGS84&output_coord=WCONGNAMUL`, requestHeader)
-        //   .then(response => {
-        //     console.log(response.data)
-        //     startX = response.data.documents[0].x
-        //     startY = response.data.documents[0].y
-        //   })
-        //   console.log(destX, destY, startX, startY)
-        //   this.mapUrl = `https://m.map.kakao.com/actions/routeView?sX=${startX}&sY=${startY}&sName=현재위치&ex=${destX}&ey=${destY}&endLoc=${destName}&from=total`
-        //   console.log(this.mapUrl)
-        // } 
-        // else {
-     
-        //       this.mapUrl = `https://map.kakao.com/?sName=${currentAddr}&eName=${destName}`
-              
-        //     }) 
-        // }
-        this.dialog = true
+        axios.get(`https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${currentLong}&y=${currentLat}`, requestHeader)
+          .then(response2 => {
+            var currentAddr = response2.data.documents[0].address.address_name
+            if (this.isMobile()) {
+              axios.get(`https://dapi.kakao.com/v2/local/geo/transcoord.json?x=${destLong}&y=${destLat}&input_coord=WGS84&output_coord=WCONGNAMUL`, requestHeader)
+                .then(response => {
+                  console.log(response.data)
+                  var destX = response.data.documents[0].x
+                  var destY = response.data.documents[0].y
+                  this.mapUrl = `https://map.kakao.com/?map_type=TYPE_MAP&target=car&rt=%2C%2C${destX}%2C${destY}&rt1=${currentAddr}&rt2=${destName}&rtIds=%2C&rtTypes=%2C`
+                })
+
+            } else {
+                this.mapUrl = `https://map.kakao.com/?sName=${currentAddr}&eName=${destName}`
+            }
+            this.dialog = true
+          })
+        
       },
       navigationUrl(status) {
         this.mapStatus = status
