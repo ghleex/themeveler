@@ -41,7 +41,6 @@
         </div>
       </div>
       <ChatBot :themeId=themeId :themeName=themeName v-if="isAuthenticated" />
-      <ChatBot v-else @click="requireLogin()" />
     </div>
     <v-btn class="my-5" to="/travel/" rounded dark color="#2c3e50">📃뒤로가기</v-btn>
 
@@ -64,7 +63,7 @@
       <v-slide-group v-model="model" class="pa-4" center-active show-arrows>
         <v-slide-item v-for="(destination, index) in destinations" :key="destination.title" v-slot:default="{ active, toggle }">
           <v-card class="ma-4" height="200" width="180" @click="toggleDestination(index)">
-            <div @click="toggle">
+            <div @click="toggle" class="card-title-img">
               <v-card-title class="detail-destination-title text-light">
                 <b>{{ index + 1 }}.</b> {{ destination.name }}
               </v-card-title>
@@ -122,7 +121,7 @@
         destsName: "",
         destImg: "",
         isAuthenticated: this.$session.get("jwt"),
-        baseURL: ""
+        baseURL: process.env.VUE_APP_IP
       }
     },
     methods: {
@@ -131,6 +130,9 @@
         axios.post(`/travels/like/${this.themeId}/`, this.themeId, requestHeader)
           .then(response => {
             this.like = response.data.isLiked
+          })
+          .catch(err => {
+            console.log(err)
           })
         if (this.like == false) {
           this.likeCount += 1
@@ -153,6 +155,7 @@
       }
     },
     mounted() {
+      document.scrollingElement.scrollTop = 0
       const requestHeader = this.$store.getters.requestHeader
       axios.get("/travels/all_theme/", requestHeader)
         .then(response => {
@@ -162,19 +165,25 @@
           this.date = dateTime.substr(0, 10)
           this.time = dateTime.substr(11, 5)
         })
+        .catch(err => {
+          console.log(err)
+        })
 
       axios.get(`/travels/destinations/${this.themeId}/0/`, requestHeader)
         .then(response => {
           this.destinations = response.data.destinations
         })
-
+        .catch(err => {
+          console.log(err)
+        })
       axios.get(`/travels/like/${this.themeId}/`, requestHeader)
         .then(response => {
           this.likeCount = response.data.like_users_count
           this.like = response.data.did_user_like
         })
-      
-      this.baseURL = process.env.VUE_APP_IP
+        .catch(err => {
+          console.log(err)
+        })
 
       document.querySelector("#footer").style.display = "block"
     }
@@ -182,6 +191,11 @@
 </script>
 
 <style>
+  .card-title-img {
+    height: inherit;
+    width: inherit;
+  }
+
   .dest-picture-modal::-webkit-scrollbar {
     width: 5px;
   }

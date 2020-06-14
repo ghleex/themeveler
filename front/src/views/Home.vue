@@ -65,7 +65,7 @@
             class="home-pop-theme-subBox mx-auto">
             <div class="pop-theme-disc">
               <!-- true인 id값의 eachContext만 가져오는 -->
-              <v-text v-if="toggle == active ? cardBypopThemeContext(model):false"></v-text>
+              <v-text v-if="toggle == active ? cardBypopThemeContext(model) : false"></v-text>
               <div class="popTheme-context">
                 "{{ eachContext }}"
               </div>
@@ -144,7 +144,7 @@
         themeArr: [],
         destinations: [],
         ticket: require("../assets/themeveler.png"),
-        baseURL: ""
+        baseURL: process.env.VUE_APP_IP
       }
     },
     methods: {
@@ -152,14 +152,16 @@
         document.querySelector("#footer").style.display = 'block'
       },
       cardBypopTheme(id) {
-        const requestHeader = this.$store.getters.requestHeader
-        axios.get(`/travels/destinations/${id+1}/0/`, requestHeader)
-          .then(response => {
-            this.destinations = response.data.destinations
-          })
-          .catch(err => {
-            console.log(err)
-          })
+        if (id != null) {
+          const requestHeader = this.$store.getters.requestHeader
+          axios.get(`/travels/destinations/${id+1}/0/`, requestHeader)
+            .then(response => {
+              this.destinations = response.data.destinations
+            })
+            .catch(err => {
+              console.log(err)
+            })
+        }
       },
       cardBypopThemeContext(id) {
         this.eachContext = this.themeArr[id].content
@@ -185,8 +187,6 @@
         .catch(err => {
           console.log(err)
         })
-
-      this.baseURL = process.env.VUE_APP_IP
 
       this.a()
     }

@@ -189,26 +189,28 @@
           console.log(err)
         })
       this.messages = []
-      this.$socket.emit("startMessage", {
-        theme: this.themeId
-      })
-      this.$socket.on("joined", data => {
-        data["created_at"] = this.$moment(new Date()).format("YYYY-MM-DD LT")
-        data["message"] = `"${this.themeName}"방에 들어오셨습니다.`
-        this.messages = [data]
-        this.connected = true
-      })
-      if (this.$socket.connected) {
-        this.messages = [{
-          theme: "error",
-          nickname: "관리자",
-          message: "에러발생"
-        }]
-        this.connected = false
-      }
-      this.dialog = false
+      setTimeout(this.enterRoom, 300);
     },
     methods: {
+      enterRoom() {
+        this.$socket.emit("startMessage", {
+          theme: this.themeId
+        })
+        this.$socket.on("joined", data => {
+          data["created_at"] = this.$moment(new Date()).format("YYYY-MM-DD LT")
+          data["message"] = `"${this.themeName}"방에 들어오셨습니다.`
+          this.messages = [data]
+          this.connected = true
+        })
+        if (this.$socket.connected) {
+          this.messages = [{
+            theme: "error",
+            nickname: "관리자",
+            message: "에러발생"
+          }]
+          this.connected = false
+        }
+      },
       scrollDown() {
         let scroll = document.getElementsByClassName("chatbot-card")[0]
         scroll.scrollTop = scroll.scrollHeight
@@ -301,7 +303,7 @@
       checkConnected() {
         return this.$socket.connected
       },
-      sendMessage() {
+      async sendMessage() {
         if (this.message !== "") {
           var message = this.message
           this.message = ""
@@ -309,7 +311,7 @@
             let data = {
               "message": message
             }
-            axios.post(`/travels/chat/${this.themeId}/`, data, this.$store.getters.requestHeader)
+            await axios.post(`/travels/chat/${this.themeId}/`, data, this.$store.getters.requestHeader)
               .then(res => {
                 this.$socket.emit("sendMessage", {
                   theme: this.themeId,
@@ -333,7 +335,7 @@
               message: "에러발생"
             }]
           }   
-          setTimeout(this.scroll, 40)
+          setTimeout(this.scroll, 80)
         }
       }
     }

@@ -85,7 +85,6 @@ export default {
   mounted() {
     axios.get('/articles/notices/')
       .then(response => {
-        // console.log(response.data)
         this.noticeData = response.data
       })
       .catch(err => {

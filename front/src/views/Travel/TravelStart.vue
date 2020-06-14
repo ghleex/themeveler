@@ -6,7 +6,6 @@
       <h2 class="my-10">{{ e1 }} / {{ dests.length }}</h2>
     </div>
   
-
     <!-- 길 찾기 -->
     <div class="find-road-btn text-end">
       <v-btn dark color="#2c3e50" rounded @click.stop="navigationUrl(1)">
@@ -60,7 +59,6 @@
         </v-stepper-header>
       </v-slide-group>
 
-      
       <!-- stepper content -->
       <v-stepper-items>
         <v-img :src="`${baseURL}/${dests[e1-1].image}`"></v-img>
@@ -80,10 +78,7 @@
           </div>
 
           <div class="start-next-btn-box" v-if="e1 < dests.length" >
-            <v-btn
-              dark color="#2c3e50" 
-              rounded 
-              @click.stop="navigationUrl(0)">
+            <v-btn dark color="#2c3e50" rounded @click.stop="navigationUrl(0)">
               <i class="fas fa-map-marker-alt mr-1 text-danger"></i>
               다음 장소 {{dests[e1].name}}까지 길 찾기
             </v-btn>
@@ -101,17 +96,21 @@
               이전
               <i class="fas fa-chevron-circle-left ml-1"></i>
             </v-btn>
+            <v-btn roudned text color="blue" class="mr-4" @click="addDestList(dests[n-1].id)">방문장소 <i class="fas fa-plus-circle ml-1"></i>
+            </v-btn>
             <v-btn rounded text color="red" @click="returnDetail(themeId)">닫기 <i class="fas fa-times-circle ml-1"></i>
             </v-btn>
           </div>
-          <div class="mb-5" v-else-if="e1 == dests.length">
+          <div class="d-flex justify-content-between mb-5" v-else-if="e1 == dests.length">
             <v-btn class="mr-3" v-if="e1 !== 1" @click="beforeStep(n)" rounded color="">
               이전
               <i class="fas fa-chevron-circle-left ml-1"></i>
             </v-btn>
+            <v-btn roudned text color="blue" class="mr-4" @click="addDestList(dests[n-1].id)">방문장소 <i class="fas fa-plus-circle ml-1"></i>
+            </v-btn>
           </div>
-          <div v-else class="d-flex justify-content-end mb-5">           
-            <v-btn roudned text color="blue" class="mr-4" @click="addDestList(dests[n-1].id)">방문장소에 추가 <i class="fas fa-plus-circle ml-1"></i>
+          <div v-else class="d-flex justify-content-end mb-5">
+            <v-btn roudned text color="blue" class="mr-4" @click="addDestList(dests[n-1].id)">방문장소 <i class="fas fa-plus-circle ml-1"></i>
             </v-btn>
             <v-btn roudned text color="red" @click="returnDetail(themeId)">닫기 <i class="fas fa-times-circle ml-1"></i>
             </v-btn>
@@ -146,7 +145,7 @@
         progress: 0,
         mapUrl: "",
         mapStatus: 0,
-        baseURL: ""
+        baseURL: process.env.VUE_APP_IP
       }
     },
     methods: {
@@ -163,7 +162,9 @@
           .then(response => {
             this.content = response.data.pages
           })
-
+          .catch(err => {
+            console.log(err)
+          })
         document.getElementById(this.dests[n].id).tabIndex = -1;
         document.getElementById(this.dests[n].id).focus();
       },
@@ -175,6 +176,9 @@
         axios.get(`/travels/dest_content/${this.themeId}/${this.e1-1}/`, requestHeader)
           .then(response => {
             this.content = response.data.pages
+          })
+          .catch(err => {
+            console.log(err)
           })
 
         document.getElementById(this.dests[n - 1].id).tabIndex = -1;
@@ -227,18 +231,31 @@
         }
       },
       addDestList(dest_id) {
-        const token = this.$session.get("jwt")
-        const requestHeader = {
-          headers: {
-            Authorization: "JWT " + token
-          }
-        }
-        var form = {
+        const requestHeader = this.$store.getters.requestHeader
+        var forms = {
           "user": this.$store.getters.user_id,
           "destination": dest_id
         }
-        axios.post('/travels/visited_dests/', form, requestHeader)
-          .then(() => {})
+        axios.post('/travels/visited_dests/', forms, requestHeader)
+          .then(() => {
+            axios.get('/travels/visited_dests/', requestHeader)
+              .then(response => {
+                var visitedDestsList = response.data.visited_dests
+                for (var i = 0; i < visitedDestsList.length; i++) {
+                  if (dest_id == visitedDestsList[i].id) {
+                    alert("방문장소에 추가되었습니다.")
+                    return
+                  }
+                }
+                alert("방문장소에서 제거되었습니다.")
+              })
+              .catch(err => {
+                console.log(err)
+              })
+          })
+          .catch(err => {
+            console.log(err)
+          })
       },
       isMobile() {
         return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
@@ -261,18 +278,25 @@
       axios.get(`/travels/destinations/${this.themeId}/0/`, requestHeader)
         .then(response => {
           this.dests = response.data.destinations
-          console.log(this.dests)
           this.steps = this.dests.length
+        })
+        .catch(err => {
+          console.log(err)
         })
       axios.get("/travels/all_theme/", requestHeader)
         .then(response => {
           this.themeArr = response.data.all_theme
         })
+        .catch(err => {
+          console.log(err)
+        })
       axios.get(`/travels/dest_content/${this.themeId}/${this.e1-1}/`, requestHeader)
         .then(response => {
           this.content = response.data.pages
         })
-      this.baseURL = process.env.VUE_APP_IP
+        .catch(err => {
+          console.log(err)
+        })
       this.a()
     }
   }
