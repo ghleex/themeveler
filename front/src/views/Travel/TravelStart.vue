@@ -205,7 +205,6 @@
             if (this.isMobile()) {
               axios.get(`https://dapi.kakao.com/v2/local/geo/transcoord.json?x=${destLong}&y=${destLat}&input_coord=WGS84&output_coord=WCONGNAMUL`, requestHeader)
                 .then(response => {
-                  console.log(response.data)
                   var destX = response.data.documents[0].x
                   var destY = response.data.documents[0].y
                   this.mapUrl = `https://map.kakao.com/?map_type=TYPE_MAP&target=car&rt=%2C%2C${destX}%2C${destY}&rt1=${currentAddr}&rt2=${destName}&rtIds=%2C&rtTypes=%2C`
