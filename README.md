@@ -4,6 +4,31 @@
 
 
 
+# 기획 의도
+
+* 최근 여행 관련 서비스는 여행 일정에 초점을 맞추는 경우가 대부분이며, 여행지 자체에 대한 이야기를 다루는 경우는 적다.
+* 국내외 여행 정보 서비스는 단순한 장소 소개와 여행 일정 추천에 그치는 수준이다.
+* 여행은 특정 장소를 선정하고 이에 알맞게 동선과 일정을 계획하는 것만을 가리키지는 않는다.
+* 따라서 「Themeveler」 가 추구하는 방향은
+  * 우리 일상에서 무심코 지나쳐 왔던 장소들을 다시 한 번 지나며 알지 못했던 이야기를 살펴보고,
+  * 우리가 이미 알고 있던 장소에서 새로운 이야기를 만드는 공간이 되는 것이다.
+
+
+
+
+
+-----
+
+# 시스템 구성도
+
+![system_architecture](https://user-images.githubusercontent.com/52685206/83960368-0984ab00-a8c3-11ea-8d65-8aedfda66c53.png)
+
+
+
+
+
+----
+
 # Getting Started
 
 ## BACKEND(Django) 와 DB(MySQL)
@@ -137,24 +162,13 @@ $ node index.js
 
 
 
-# 기획 의도
-
-* 최근 여행 관련 서비스는 여행 일정에 초점을 맞추는 경우가 대부분이며, 여행지 자체에 대한 이야기를 다루는 경우는 적다.
-* 국내외 여행 정보 서비스는 단순한 장소 소개와 여행 일정 추천에 그치는 수준이다.
-* 여행은 특정 장소를 선정하고 이에 알맞게 동선과 일정을 계획하는 것만을 가리키지는 않는다.
-* 따라서 Themeveler 가 추구하는 방향은
-  * 우리 일상에서 무심코 지나쳐 왔던 장소들을 다시 한 번 지나며 알지 못했던 이야기를 살펴보고,
-  * 우리가 이미 알고 있던 장소에서 새로운 이야기를 만드는 공간이 되는 것이다.
-
-
-
-
+-----
 
 # 스크린샷
 
 * 메인 페이지
 
-  ![image](https://user-images.githubusercontent.com/52685206/84012779-0a950580-a9b3-11ea-854e-7ab8b96f3051.png)
+  ![1](https://user-images.githubusercontent.com/52685206/84647140-01211580-af3e-11ea-8d7c-8dbfb8b00c6c.PNG)
 
 * 로그인
 
@@ -164,31 +178,51 @@ $ node index.js
 
   ![image](https://user-images.githubusercontent.com/52685206/84015970-9577ff00-a9b7-11ea-8e53-5fba8fdce7d5.png)
 
+* How to use this service?
+
+  ![3](https://user-images.githubusercontent.com/52685206/84647190-0ed69b00-af3e-11ea-82fe-46ff8fadae7b.PNG)
+
 * 테마와 장소
 
-  ![image](https://user-images.githubusercontent.com/52685206/84013258-a58ddf80-a9b3-11ea-9b42-27e2456255db.png)
+  ![2](https://user-images.githubusercontent.com/52685206/84646792-98399d80-af3d-11ea-95d3-29fd43661232.PNG)
 
 * 테마 상세
 
-  ![image](https://user-images.githubusercontent.com/52685206/84013553-087f7680-a9b4-11ea-86f3-0e95dd3f33dd.png)
+  ![4](https://user-images.githubusercontent.com/52685206/84646013-71c73280-af3c-11ea-8b18-8ef095a9dca3.PNG)
 
-  ![image](https://user-images.githubusercontent.com/52685206/84013491-f30a4c80-a9b3-11ea-904c-9ec1c485180c.png)
+* Chat
+
+  ![chat](https://user-images.githubusercontent.com/52685206/84647855-fdda5980-af3e-11ea-833c-48ce10197ef6.PNG)
 
 * 여행하기
 
-  ![image](https://user-images.githubusercontent.com/52685206/84013786-5a280100-a9b4-11ea-847f-1591c1ea2d02.png)
+  ![5](https://user-images.githubusercontent.com/52685206/84646144-9ae7c300-af3c-11ea-9895-88550e3f692e.PNG)
+
+  * 여행을 마무리했을 때
+
+  ![6](https://user-images.githubusercontent.com/52685206/84646032-75f35000-af3c-11ea-82b5-40bb27346003.PNG)
+
+* Search
+
+  ![searching](https://user-images.githubusercontent.com/52685206/84647325-3c234900-af3e-11ea-8fec-a84362417cb8.PNG)
+
+* 공지사항
+
+  ![7](https://user-images.githubusercontent.com/52685206/84646037-768be680-af3c-11ea-8210-c4aeab99c117.PNG)
+
+* 고객센터
+
+  ![8](https://user-images.githubusercontent.com/52685206/84646039-77bd1380-af3c-11ea-92c0-b52619bbc59f.PNG)
+
+* 유저 페이지
+
+  ![9](https://user-images.githubusercontent.com/52685206/84646044-7855aa00-af3c-11ea-939f-c51126e92221.PNG)
 
 
 
 
 
-# 시스템 구성도
-
-![system_architecture](https://user-images.githubusercontent.com/52685206/83960368-0984ab00-a8c3-11ea-8d65-8aedfda66c53.png)
-
-
-
-
+----
 
 # 팀 소개
 
