@@ -115,10 +115,10 @@
 </template>
 
 <script>
-  import axios from 'axios'
-  import SearchBar from '@/components/SearchBar.vue'
-  import HowToUse from '@/components/HowToUse.vue'
-  import TopScroll from '@/components/TopScroll.vue'
+  import axios from "axios"
+  import SearchBar from "@/components/SearchBar.vue"
+  import HowToUse from "@/components/HowToUse.vue"
+  import TopScroll from "@/components/TopScroll.vue"
 
   export default {
     name: "Home",
@@ -149,7 +149,7 @@
     },
     methods: {
       a() {
-        document.querySelector("#footer").style.display = 'block'
+        document.querySelector("#footer").style.display = "block"
       },
       cardBypopTheme(id) {
         if (id != null) {
@@ -235,7 +235,7 @@
 
   .home-how-to {
     margin-bottom: 5rem;
-    font-family: 'Cafe24Simplehae';
+    font-family: "Cafe24Simplehae";
   }
 
   .slogan {
@@ -347,7 +347,7 @@
   .describe-right {
     width: 60%;
     height: 250px;
-    font-family: 'Cafe24Simplehae';
+    font-family: "Cafe24Simplehae";
     padding: 4.7%;
     background-color: rgb(250, 249, 249);
   }
@@ -425,7 +425,7 @@
   }
 
   .home-h2-title {
-    font-family: 'Cafe24Simplehae';
+    font-family: "Cafe24Simplehae";
     text-align: start;
     margin-left: 5rem;
   }
@@ -473,7 +473,7 @@
   }
 
   .popTheme-context {
-    font-family: 'Cafe24Simplehae';
+    font-family: "Cafe24Simplehae";
     font-size: 25px;
     font-style: italic;
     padding: 1rem 2rem 0 2rem;
@@ -483,7 +483,7 @@
     background: #2c3e50;
     font-size: 1.5vw;
     padding: .5rem;
-    font-family: 'Cafe24Simplehae';
+    font-family: "Cafe24Simplehae";
     white-space: nowrap;
   }
 
@@ -496,7 +496,7 @@
     .pop-theme-card-text {
       background: #2c3e50;
       font-size: 15px;
-      font-family: 'Cafe24Simplehae';
+      font-family: "Cafe24Simplehae";
       display: flex;
       padding: .5rem 0 .3rem 0;
     }

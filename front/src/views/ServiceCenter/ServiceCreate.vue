@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import axios from "axios"
 
 export default {
   name: "service-create",
@@ -58,7 +58,7 @@ export default {
         axios.post(`/articles/customer/${this.userId}/`, serviceCreateForms, requestHeader)
           .then(() => {
             this.$router.push({
-              path: '/service'
+              path: "/service"
             })
           })
           .catch(error => {
@@ -92,7 +92,7 @@ export default {
     },
     addcancel() {
       this.$router.push({
-        path: '/service'
+        path: "/service"
       })
     },
     updatecancel() {
@@ -124,7 +124,7 @@ export default {
           } else {
             alert("수정 권한이 없습니다.")
             this.$router.push({
-              path: '/service'
+              path: "/service"
             })
           }
         })
@@ -146,7 +146,7 @@ export default {
   }
 
   #service-create .service-center-title {
-    font-family: 'Cafe24Simplehae';
+    font-family: "Cafe24Simplehae";
     font-size: 40px;
     margin: 0 auto 0 auto;
     width: 50%;
@@ -170,7 +170,7 @@ export default {
   }
 
   .btn-create {
-    font-family: 'Cafe24Simplehae';
+    font-family: "Cafe24Simplehae";
     font-size: 18px;
   }
 

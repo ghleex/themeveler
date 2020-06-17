@@ -69,7 +69,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import axios from "axios"
 
 export default {
   name: "service-detail",
@@ -102,7 +102,7 @@ export default {
             }
             else {
               this.$router.push({
-                path: '/service'
+                path: "/service"
               })
             }
           })
@@ -124,7 +124,7 @@ export default {
     },
     back() {
       this.$router.push({
-        path: '/service'
+        path: "/service"
       })
     },
     checkLen() {
@@ -216,7 +216,7 @@ export default {
   }
 
   #service-detail .service-center-title {
-    font-family: 'Cafe24Simplehae';
+    font-family: "Cafe24Simplehae";
     font-size: 30px;
     background-color: rgb(255, 255, 255);
     margin: 80px auto 0 auto;
@@ -252,7 +252,7 @@ export default {
   }
 
   .service-detail-title {
-    font-family: 'Cafe24Simplehae';
+    font-family: "Cafe24Simplehae";
     font-size: 20px;
     font-weight: 700;
   }
@@ -295,7 +295,7 @@ export default {
 
   .btn-detail {
     font-size: 16px;
-    font-family: 'Cafe24Simplehae';
+    font-family: "Cafe24Simplehae";
   }
 
   .comment-header {
@@ -303,7 +303,7 @@ export default {
     background-color: #2c3e50;
     width: 110px;
     padding: .5rem 0 .2rem 0;
-    font-family: 'Cafe24Simplehae';
+    font-family: "Cafe24Simplehae";
     color: white;
     font-size: 20px;
     margin: 0 auto 0 12.5%;
@@ -350,7 +350,7 @@ export default {
   .service-comment-submitBtn {
     color: white;
     font-size: 19px;
-    font-family: 'Cafe24Simplehae';
+    font-family: "Cafe24Simplehae";
     margin: 0 1rem;
   }
 

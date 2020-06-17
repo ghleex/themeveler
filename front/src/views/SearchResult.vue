@@ -32,8 +32,8 @@
 </template>
 
 <script>
-  import axios from 'axios'
-  import SearchBar from '@/components/SearchBar.vue'
+  import axios from "axios"
+  import SearchBar from "@/components/SearchBar.vue"
 
   export default {
     name: "SearchResult",
@@ -104,7 +104,7 @@
     justify-content: center;
     align-items: center;
     font-weight: 700;
-    font-family: 'Cafe24Simplehae';
+    font-family: "Cafe24Simplehae";
     font-style: italic;
     font-size: 70px;
   }
@@ -122,7 +122,7 @@
   }
 
   .sresult-header-text {
-    font-family: 'Cafe24Simplehae';
+    font-family: "Cafe24Simplehae";
     text-align: left;
     margin:0 24px;
     border-bottom: 1px solid;
@@ -147,7 +147,7 @@
   }
 
   .sresult-type {
-    font-family: 'Cafe24Simplehae';
+    font-family: "Cafe24Simplehae";
     font-size: 25px;
   }
 

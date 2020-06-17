@@ -65,9 +65,9 @@
 </template>
 
 <script>
-  import axios from 'axios'
-  import Drawer from '@/components/Drawer.vue'
-  import Swal from 'sweetalert2'
+  import axios from "axios"
+  import Drawer from "@/components/Drawer.vue"
+  import Swal from "sweetalert2"
 
   export default {
     name: "Profile",
@@ -104,7 +104,7 @@
               update_dates: visited_at.join(", ")
             }
             console.log(data)
-            axios.put('/travels/visited_dests/', data, this.$store.getters.requestHeader)
+            axios.put("/travels/visited_dests/", data, this.$store.getters.requestHeader)
               .then(() => {
                 Swal.fire({
                   text: "수정되었습니다.",
@@ -132,7 +132,7 @@
     },
     mounted() {
       const requestHeader = this.$store.getters.requestHeader
-      axios.get('/travels/visited_themes/', requestHeader)
+      axios.get("/travels/visited_themes/", requestHeader)
         .then(response => {
           this.itemsThemes = response.data.favorite_themes
         })
@@ -140,7 +140,7 @@
           console.log(err)
         })
 
-      axios.get('/travels/visited_dests/', requestHeader)
+      axios.get("/travels/visited_dests/", requestHeader)
         .then(response => {
           this.itemsDests = response.data.visited_dests
         })
@@ -177,7 +177,7 @@
     margin-left: 20px;
     /* margin-top: 8px; */
     margin-top: 32px;
-    font-family: 'Cafe24Simplehae';
+    font-family: "Cafe24Simplehae";
     color: #2c3e50;
   }
 

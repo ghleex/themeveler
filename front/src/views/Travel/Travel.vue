@@ -34,11 +34,6 @@
                   </div>
                 </div>
                 <v-img @click="showDetail(theme.id)" :src="`${baseURL}/${theme.image}`" width="100%" height="100%" />
-                <!-- <v-sheet class="d-flex justify-content-center align-items-center" @click="showDetail(theme.id)"
-                  color="#546E7A" width="100%" height="100%" style="border-radius: 0;">
-                  <div class="text-light pb-12" style="font-family: 'Cafe24Simplehae'; font-size: 25px;">
-                    #.{{ theme.id }} {{ theme.region }}</div>
-                </v-sheet> -->
                 <v-row class="fill-height" align="center" justify="center">
                 </v-row>
               </v-card>
@@ -107,7 +102,7 @@
 </template>
 
 <script>
-  import axios from 'axios'
+  import axios from "axios"
 
   export default {
     name: "Travel",
@@ -154,7 +149,7 @@
     },
     mounted() {
       const requestHeader = this.$store.getters.requestHeader
-      axios.get('/travels/all_theme/', requestHeader)
+      axios.get("/travels/all_theme/", requestHeader)
         .then(response => {
           this.themeArr = response.data.all_theme
         })
@@ -196,7 +191,7 @@
   }
 
   .home-h4-title {
-    font-family: 'Cafe24Simplehae';
+    font-family: "Cafe24Simplehae";
     margin-top: 2rem;
     font-size: 35px;
   }
@@ -213,7 +208,7 @@
     font-size: 8vw;
     font-weight: 700;
     font-style: italic;
-    font-family: 'Cafe24Simplehae';
+    font-family: "Cafe24Simplehae";
     color: white;
     text-shadow: black 1px 1px 1px;
   }

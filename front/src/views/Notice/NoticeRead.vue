@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import axios from "axios"
 
 export default {
   name: "notice-read",
@@ -68,7 +68,7 @@ export default {
   methods: {
     write() {
       this.$router.push({
-        path: '/notice/create'
+        path: "/notice/create"
       })
     },
     detail(noticeId) {
@@ -83,7 +83,7 @@ export default {
     }
   },
   mounted() {
-    axios.get('/articles/notices/')
+    axios.get("/articles/notices/")
       .then(response => {
         this.noticeData = response.data
       })
@@ -109,7 +109,7 @@ export default {
   }
 
   .notice-title {
-    font-family: 'Cafe24Simplehae';
+    font-family: "Cafe24Simplehae";
     font-size: 40px;
     margin: 0 auto 0 auto;
     width: 80%;

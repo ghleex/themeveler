@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import axios from "axios"
 
 export default {
   name: "service-read",
@@ -74,7 +74,7 @@ export default {
   methods: {
     write() {
       this.$router.push({
-        path: '/service/create'
+        path: "/service/create"
       })
     },
     detail(serviceId) {
@@ -117,7 +117,7 @@ export default {
   }
 
   #service-read .service-center-title {
-    font-family: 'Cafe24Simplehae';
+    font-family: "Cafe24Simplehae";
     font-size: 40px;
     margin: 0 auto 0 auto;
     width: 80%;

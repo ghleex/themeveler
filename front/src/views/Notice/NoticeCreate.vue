@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import axios from "axios"
 
 export default {
   name: "notice-create",
@@ -54,10 +54,10 @@ export default {
           "isNoticeAll": 1
         }
         const requestHeader = this.$store.getters.requestHeader
-        axios.post('/articles/theme_notice/', noticeCreateForms, requestHeader)
+        axios.post("/articles/theme_notice/", noticeCreateForms, requestHeader)
           .then(() => {
             this.$router.push({
-              path: '/notice'
+              path: "/notice"
             })
           })
           .catch(err => {
@@ -91,7 +91,7 @@ export default {
     },
     addcancel() {
       this.$router.push({
-        path: '/notice'
+        path: "/notice"
       })
     },
     updatecancel() {
@@ -103,7 +103,7 @@ export default {
   mounted() {
     this.noticeId = this.$route.params.noticeId
     const requestHeader = this.$store.getters.requestHeader
-    axios.get('/articles/n_category/', requestHeader)
+    axios.get("/articles/n_category/", requestHeader)
       .then(response => {
         this.categorys = response.data
       })
@@ -122,7 +122,7 @@ export default {
           } else {
             alert("수정 권한이 없습니다.")
             this.$router.push({
-              path: '/notice'
+              path: "/notice"
             })
           }
         })
@@ -144,7 +144,7 @@ export default {
   }
 
   .notice-title {
-    font-family: 'Cafe24Simplehae';
+    font-family: "Cafe24Simplehae";
     font-size: 40px;
     margin: 0 auto 0 auto;
     width: 50%;
@@ -168,7 +168,7 @@ export default {
   }
 
   .btns {
-    font-family: 'Cafe24Simplehae';
+    font-family: "Cafe24Simplehae";
     font-size: 18px;
   }
 

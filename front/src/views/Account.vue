@@ -96,8 +96,8 @@
 </template>
 
 <script>
-  import axios from 'axios'
-  import Swal from 'sweetalert2'
+  import axios from "axios"
+  import Swal from "sweetalert2"
 
   export default {
     name: "Account",
@@ -192,7 +192,7 @@
             "password": this.credentials.pw,
             "nickname": this.credentials.nickname
           }
-          axios.post('/accounts/signup/', credentials)
+          axios.post("/accounts/signup/", credentials)
             .then(response => {
               if (response.status == 200) {
                 Swal.fire({
@@ -234,7 +234,7 @@
             .then(response => {
               if (response.status == 200) {
                 // 인증번호 전송
-                axios.post('/accounts/email/send/', {"username": this.credentials.email})
+                axios.post("/accounts/email/send/", {"username": this.credentials.email})
                   .then(() => {
                     Swal.fire({
                       title: "Success Secretkey",
@@ -453,14 +453,14 @@
   }
 
   // account card
-  @import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
+  @import url("https://fonts.googleapis.com/css?family=Montserrat:400,800");
 
   .account-div {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    font-family: 'Montserrat', sans-serif;
+    font-family: "Montserrat", sans-serif;
     height: 100vh;
     margin: 2rem .5rem 0 .5rem;
     overflow-y: hidden;

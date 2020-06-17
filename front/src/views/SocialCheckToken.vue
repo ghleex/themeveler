@@ -5,8 +5,8 @@
 </template>
 
 <script>
-  import axios from 'axios'
-  import jwtDecode from 'jwt-decode'
+  import axios from "axios"
+  import jwtDecode from "jwt-decode"
 
   export default {
     beforeRouteEnter(to, from, next) {

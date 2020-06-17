@@ -10,7 +10,7 @@
       </div>
       <div class="body2">
         <p class="notice-writer"><i class="fas fa-user"></i> {{ noticeData.writer_nickname }}</p>
-        <p class="notice-created-date"><i class="far fa-clock"></i> {{ noticeData.writed_at | moment('YYYY-MM-DD HH:mm') }}</p>
+        <p class="notice-created-date"><i class="far fa-clock"></i> {{ noticeData.writed_at | moment("YYYY-MM-DD HH:mm") }}</p>
       </div>
       <div class="body3">
         <div class="notice-content">{{ noticeData.content }}</div>
@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import axios from "axios"
 
 export default {
   name: "notice-detail",
@@ -44,7 +44,7 @@ export default {
         axios.delete(`/articles/theme_notice/${this.noticeId}/`, requestHeader)
           .then(() => {
             this.$router.push({
-              path: '/notice'
+              path: "/notice"
             })
           })
           .catch(err => {
@@ -65,7 +65,7 @@ export default {
     },
     back() {
       this.$router.push({
-        path: '/notice'
+        path: "/notice"
       })
     }
   },
@@ -92,7 +92,7 @@ export default {
     margin: 80px auto 0 auto;
     text-align: start;
     width: 80%;
-    font-family: 'Cafe24Simplehae';
+    font-family: "Cafe24Simplehae";
     font-size: 30px;
   }
 
@@ -114,7 +114,7 @@ export default {
   .notice-body-title {
     display: inline;
     margin-left: 8px;
-    font-family: 'Cafe24Simplehae';
+    font-family: "Cafe24Simplehae";
     font-size: 20px;
     font-weight: 700;
   }
@@ -152,6 +152,6 @@ export default {
 
   .btn-detail {
     font-size: 16px;
-    font-family: 'Cafe24Simplehae';
+    font-family: "Cafe24Simplehae";
   }
 </style>

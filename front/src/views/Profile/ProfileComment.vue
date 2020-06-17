@@ -61,8 +61,8 @@
 </template>
 
 <script>
-  import axios from 'axios'
-  import Drawer from '@/components/Drawer.vue'
+  import axios from "axios"
+  import Drawer from "@/components/Drawer.vue"
 
   export default {
     name: "ProfileComment",

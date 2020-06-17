@@ -122,8 +122,8 @@
 </template>
 
 <script>
-  import axios from 'axios'
-  import Complete from '@/components/TravelComplete.vue'
+  import axios from "axios"
+  import Complete from "@/components/TravelComplete.vue"
 
   export default {
     name: "TravelStart",
@@ -236,9 +236,9 @@
           "user": this.$store.getters.user_id,
           "destination": dest_id
         }
-        axios.post('/travels/visited_dests/', forms, requestHeader)
+        axios.post("/travels/visited_dests/", forms, requestHeader)
           .then(() => {
-            axios.get('/travels/visited_dests/', requestHeader)
+            axios.get("/travels/visited_dests/", requestHeader)
               .then(response => {
                 var visitedDestsList = response.data.visited_dests
                 for (var i = 0; i < visitedDestsList.length; i++) {
@@ -262,7 +262,7 @@
       }
     },
     mounted() {
-      const script = document.createElement('script');
+      const script = document.createElement("script");
       script.type="text/javascript" 
       script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.VUE_APP_KAKAO_API_KEY}&autoload=false`;
       document.head.appendChild(script);
@@ -384,6 +384,6 @@
     z-index: 900;
     background-color: #fff;
     height: 100%;
-    font-family: 'Cafe24Simplehae';
+    font-family: "Cafe24Simplehae";
   }
 </style>

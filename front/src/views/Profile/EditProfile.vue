@@ -54,9 +54,9 @@
 </template>
 
 <script>
-  import axios from 'axios'
-  import Drawer from '@/components/Drawer.vue'
-  import Swal from 'sweetalert2'
+  import axios from "axios"
+  import Drawer from "@/components/Drawer.vue"
+  import Swal from "sweetalert2"
 
   export default {
     name: "editprofile",
@@ -73,28 +73,28 @@
     methods: {
       userdelete() {
         Swal.fire({
-          title: '정말로 회원을 탈퇴하시겠습니까?',
+          title: "정말로 회원을 탈퇴하시겠습니까?",
           text: "탈퇴 후 해당 계정을 복원할 수 없습니다.",
-          icon: 'warning',
+          icon: "warning",
           showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'OK'
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "OK"
         }).then((result) => {
           if (result.value) {
-            axios.delete('/accounts/usermgmt/', this.$store.getters.requestHeader)
+            axios.delete("/accounts/usermgmt/", this.$store.getters.requestHeader)
               .then(() => {
                 if (this.$session.exists()) {
                   this.$session.destroy()
                 }
-                this.$store.dispatch('logout')
+                this.$store.dispatch("logout")
                 this.$router.push({
-                  path: '/'
+                  path: "/"
                 })
                 Swal.fire(
-                  '탈퇴 되었습니다!',
-                  '당신의 정보가 삭제되었습니다.',
-                  'success'
+                  "탈퇴 되었습니다!",
+                  "당신의 정보가 삭제되었습니다.",
+                  "success"
                 )
               })
               .catch(err => {
@@ -102,7 +102,7 @@
               })
           } else {
             this.$router.push({
-              path: '/profiles'
+              path: "/profiles"
             })
           }
         })
@@ -110,7 +110,7 @@
       update() {
         let form = new FormData()
         form.append("nickname", this.nickname)
-        axios.put('/accounts/usermgmt/', form, this.$store.getters.requestHeader)
+        axios.put("/accounts/usermgmt/", form, this.$store.getters.requestHeader)
           .then(() => {
             Swal.fire({
               text: "회원 정보가 성공적으로 변경되었습니다.",
@@ -120,7 +120,7 @@
             this.$session.set("nickname", this.nickname)
             this.$store.dispatch("changeNickname", this.nickname)
             this.$router.push({
-              path: '/profiles'
+              path: "/profiles"
             })
           })
           .catch(err => {
@@ -134,7 +134,7 @@
       },
       updatecancel() {
         this.$router.push({
-          path: '/profiles'
+          path: "/profiles"
         })
       }
     },
@@ -170,7 +170,7 @@
     margin-left: 20px;
     /* margin-top: 8px; */
     margin-top: 32px;
-    font-family: 'Cafe24Simplehae';
+    font-family: "Cafe24Simplehae";
     color: #2c3e50;
   }
 

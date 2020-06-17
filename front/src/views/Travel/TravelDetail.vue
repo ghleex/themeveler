@@ -91,8 +91,8 @@
 </template>
 
 <script>
-  import axios from 'axios'
-  import ChatBot from '@/components/ChatBot.vue'
+  import axios from "axios"
+  import ChatBot from "@/components/ChatBot.vue"
 
   export default {
     name: "TravelDetail",
@@ -227,7 +227,7 @@
     position: absolute;
     z-index: 5;
     background: rgba(0, 0, 0, 0.6); 
-    font-family: 'Cafe24Simplehae';
+    font-family: "Cafe24Simplehae";
     font-size: 15px;
     border-top-right-radius: 0 !important;
     border-top-left-radius: 0 !important;
@@ -247,7 +247,7 @@
 
   .themeDetail-box {
     display: flex;
-    font-family: 'Cafe24Simplehae';
+    font-family: "Cafe24Simplehae";
     z-index: 1;
   }
 

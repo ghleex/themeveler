@@ -51,10 +51,10 @@
 </template>
 
 <script>
-  import axios from 'axios'
-  import Drawer from '@/components/Drawer.vue'
-  import Swal from 'sweetalert2'
-  var jwt = require('jwt-simple')
+  import axios from "axios"
+  import Drawer from "@/components/Drawer.vue"
+  import Swal from "sweetalert2"
+  var jwt = require("jwt-simple")
 
   export default {
     name: "editprofile",
@@ -81,10 +81,10 @@
             let form = new FormData()
             form.append("data", token)
             const requestHeader = this.$store.getters.requestHeader
-            axios.put('/accounts/password/', form, requestHeader)
+            axios.put("/accounts/password/", form, requestHeader)
               .then(() => {
                 this.$router.push({
-                  path: '/profiles'
+                  path: "/profiles"
                 })
               })
               .catch(err => {
@@ -107,7 +107,7 @@
       },
       updatecancel() {
         this.$router.push({
-          path: '/profiles'
+          path: "/profiles"
         })
       }
     }
@@ -139,7 +139,7 @@
     margin-left: 20px;
     /* margin-top: 8px; */
     margin-top: 32px;
-    font-family: 'Cafe24Simplehae';
+    font-family: "Cafe24Simplehae";
     color: #2c3e50;
   }
 
