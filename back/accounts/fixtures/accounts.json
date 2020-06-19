@@ -1,0 +1,309 @@
+[
+{
+  "model": "accounts.user",
+  "pk": 2,
+  "fields": {
+    "password": "pbkdf2_sha256$180000$ikyo5Ipp4K2J$XTVqiRJBnsaj+tprKsMPT1SW84XnaCQTNhc+y5iELlI=",
+    "last_login": null,
+    "is_superuser": false,
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2020-06-04T07:06:53.414",
+    "username": "zetcar54@gmail.com",
+    "nickname": "park",
+    "anonymous": "\ubd80\uc9c0\ub7f0\ud55c \uc6d0\uc22d\uc774 2",
+    "banning_period": null,
+    "groups": [],
+    "user_permissions": [],
+    "favorite_themes": [],
+    "favorite_destinations": []
+  }
+},
+{
+  "model": "accounts.user",
+  "pk": 4,
+  "fields": {
+    "password": "pbkdf2_sha256$180000$PELkwPS1eXi4$gLvWvHYkeZPC70As9YAHXe1kNGi8bnGo3s+KB62PpFU=",
+    "last_login": "2020-06-08T01:27:55.467",
+    "is_superuser": true,
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2020-06-08T01:27:32.243",
+    "username": "admin@admin.com",
+    "nickname": "admin",
+    "anonymous": "admin",
+    "banning_period": null,
+    "groups": [],
+    "user_permissions": [],
+    "favorite_themes": [],
+    "favorite_destinations": []
+  }
+},
+{
+  "model": "accounts.user",
+  "pk": 5,
+  "fields": {
+    "password": "pbkdf2_sha256$180000$6D9qmwX1o5kl$HNvcQOCpyDREhbgt/hXQG6cSMg+0a6ENIwtlQZDjUtQ=",
+    "last_login": null,
+    "is_superuser": false,
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2020-06-08T03:59:55.869",
+    "username": "koi4553@gmail.com",
+    "nickname": "Hae",
+    "anonymous": "\uc18c\ud658\ub41c \uac1c\ubbf8\ud565\uae30 5",
+    "banning_period": null,
+    "groups": [],
+    "user_permissions": [],
+    "favorite_themes": [
+      1,
+      2
+    ],
+    "favorite_destinations": []
+  }
+},
+{
+  "model": "accounts.user",
+  "pk": 6,
+  "fields": {
+    "password": "pbkdf2_sha256$180000$VkafKsRjJ4qv$8QH0LSCn3B8x+QJ7t2xg09PBjopnkeFDZd0NtOYWARw=",
+    "last_login": null,
+    "is_superuser": false,
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2020-06-08T11:10:03.943",
+    "username": "gagle637@gmail.com",
+    "nickname": "gagle",
+    "anonymous": "\uc608\uc05c \ud638\ub791\uc774 6",
+    "banning_period": null,
+    "groups": [],
+    "user_permissions": [],
+    "favorite_themes": [
+      4
+    ],
+    "favorite_destinations": []
+  }
+},
+{
+  "model": "accounts.user",
+  "pk": 7,
+  "fields": {
+    "password": "pbkdf2_sha256$180000$GSVOqUMEESB7$sCni2oGdrMrPp2Cbzj+hGtCvAsMSk4lkyMjsJ/Mmgpo=",
+    "last_login": "2020-06-15T19:31:00.481",
+    "is_superuser": true,
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2020-06-08T11:10:16.880",
+    "username": "themeveler@gmail.com",
+    "nickname": "\uad00\ub9ac\uc790",
+    "anonymous": "\uae30\ubd80\ub2c8\uac00\uc88b\uc740\uad00\ub9ac\uc790",
+    "banning_period": null,
+    "groups": [],
+    "user_permissions": [],
+    "favorite_themes": [
+      3
+    ],
+    "favorite_destinations": []
+  }
+},
+{
+  "model": "accounts.user",
+  "pk": 8,
+  "fields": {
+    "password": "pbkdf2_sha256$180000$YffMSkSVYfF2$BpDd9KOzh+dtr+FSubnGpK/XAjJNTkY8VsnlaU06iuI=",
+    "last_login": null,
+    "is_superuser": false,
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2020-06-08T11:13:11.178",
+    "username": "johh201200@gmail.com",
+    "nickname": "hyun",
+    "anonymous": "\uc544\ub9ac\ub530\uc6b4 \ud3ad\uadc4 8",
+    "banning_period": null,
+    "groups": [],
+    "user_permissions": [],
+    "favorite_themes": [
+      1,
+      2
+    ],
+    "favorite_destinations": []
+  }
+},
+{
+  "model": "accounts.user",
+  "pk": 10,
+  "fields": {
+    "password": "!uhNrRonB1MTwvIXRun4QKGDP3wgsNFmD1CYCSiZJ",
+    "last_login": null,
+    "is_superuser": false,
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2020-06-08T11:27:35.979",
+    "username": "themevler@gmail.com",
+    "nickname": "GOOGLE \uc720\uc800 10",
+    "anonymous": "\ucf8c\ud65c\ud55c \uce58\ud0c0 10",
+    "banning_period": null,
+    "groups": [],
+    "user_permissions": [],
+    "favorite_themes": [
+      3
+    ],
+    "favorite_destinations": []
+  }
+},
+{
+  "model": "accounts.user",
+  "pk": 11,
+  "fields": {
+    "password": "pbkdf2_sha256$180000$c28X7ywVPyW3$gnd5XFo0HKYh4Hlma2Q0j7/3nbb+buWr1eA8WZvG5fc=",
+    "last_login": null,
+    "is_superuser": false,
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2020-06-08T20:28:20.190",
+    "username": "sehyunteg@naver.com",
+    "nickname": "\ud0dd\uc774",
+    "anonymous": "\uc720\ucf8c\ud55c \uc0c1\uc5b4 11",
+    "banning_period": null,
+    "groups": [],
+    "user_permissions": [],
+    "favorite_themes": [],
+    "favorite_destinations": []
+  }
+},
+{
+  "model": "accounts.user",
+  "pk": 15,
+  "fields": {
+    "password": "pbkdf2_sha256$180000$bhJedsKoWcuO$GPAYoPjG8M18B16ry5cKJo/NtVDIG9Rp20DLEZAcmes=",
+    "last_login": null,
+    "is_superuser": true,
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2020-06-09T09:22:20.288",
+    "username": "admin@themeveler.com",
+    "nickname": "ADMINISTRATOR",
+    "anonymous": "\uae30\ubd84\uc88b\uc740\uad00\ub9ac\uc790",
+    "banning_period": null,
+    "groups": [],
+    "user_permissions": [],
+    "favorite_themes": [
+      2,
+      3
+    ],
+    "favorite_destinations": []
+  }
+},
+{
+  "model": "accounts.user",
+  "pk": 17,
+  "fields": {
+    "password": "!0jagZxvIFf0kmTmL5LqDHAsIPuRqiieL5xB1WKu2",
+    "last_login": null,
+    "is_superuser": false,
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2020-06-09T09:45:08.264",
+    "username": "wnsgh829@gmail.com",
+    "nickname": "GOOGLE \uc720\uc800 17",
+    "anonymous": "\ubb34\uc11c\uc6b4 \uace0\uc591\uc774 17",
+    "banning_period": null,
+    "groups": [],
+    "user_permissions": [],
+    "favorite_themes": [
+      1
+    ],
+    "favorite_destinations": []
+  }
+},
+{
+  "model": "accounts.waiting",
+  "pk": 1,
+  "fields": {
+    "username": "zetcar54@gmail.com",
+    "is_confirm": true,
+    "confirm_code": null,
+    "updated_at": "2020-06-04T07:05:40.415"
+  }
+},
+{
+  "model": "accounts.waiting",
+  "pk": 2,
+  "fields": {
+    "username": "koi4553@gmail.com",
+    "is_confirm": true,
+    "confirm_code": null,
+    "updated_at": "2020-06-08T03:59:37.070"
+  }
+},
+{
+  "model": "accounts.waiting",
+  "pk": 5,
+  "fields": {
+    "username": "gagle637@gmail.com",
+    "is_confirm": true,
+    "confirm_code": null,
+    "updated_at": "2020-06-08T11:09:51.474"
+  }
+},
+{
+  "model": "accounts.waiting",
+  "pk": 6,
+  "fields": {
+    "username": "johh201200@gmail.com",
+    "is_confirm": true,
+    "confirm_code": null,
+    "updated_at": "2020-06-08T11:12:49.365"
+  }
+},
+{
+  "model": "accounts.waiting",
+  "pk": 8,
+  "fields": {
+    "username": "wnsgh434@naver.com",
+    "is_confirm": true,
+    "confirm_code": null,
+    "updated_at": "2020-06-09T09:23:54.426"
+  }
+},
+{
+  "model": "accounts.waiting",
+  "pk": 9,
+  "fields": {
+    "username": "sehyunteg@naver.com",
+    "is_confirm": true,
+    "confirm_code": null,
+    "updated_at": "2020-06-08T20:28:02.737"
+  }
+}
+]
