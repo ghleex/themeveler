@@ -19,7 +19,7 @@
     "bootstrap": "^4.5.0",
     "core-js": "^3.6.5",
     "dotenv": "^8.2.0",
-    "elliptic": "6.5.3",
+    "elliptic": "^6.5.3",
     "jquery": "^3.5.1",
     "jwt-decode": "^2.2.0",
     "jwt-simple": "^0.5.6",
