@@ -15,7 +15,7 @@
     "@mdi/font": "^5.8.55",
     "@terwanerik/scrolltrigger": "^1.0.5",
     "aos": "^2.3.4",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "bl": "2.2.1",
     "bootstrap": "^4.5.3",
     "core-js": "^3.8.1",
