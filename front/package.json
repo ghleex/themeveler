@@ -26,6 +26,7 @@
     "jwt-decode": "^2.2.0",
     "jwt-simple": "^0.5.6",
     "load-script-once": "^2.0.1",
+    "normalize-url": "^6.0.1",
     "popper.js": "^1.16.1",
     "postcss": "^8.3.0",
     "socket.io-client": "^4.1.2",
